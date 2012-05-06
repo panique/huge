@@ -18,28 +18,32 @@ class Login {
     public      $messages   = array();              // collection of success / neutral messages
     
     
-    public function __construct() {
+    public function __construct() {        
         
-        $this->checkDatabase();                     // check for database connection
-        session_start();                            // create session
-        
-        if ($this->logout()) {                      // checking for logout, performing login            
-            // do nothing, you are logged out now   // this if construction just exists to prevent unnecessary method calls
-        } elseif ($this->loginWithSessionData()) {
-            $this->logged_in = true;
-        } elseif ($this->loginWithPostData()) {
-            $this->logged_in = true;
+        if ($this->checkDatabase()) {                    // check for database connection
+            
+            session_start();                            // create session
+
+            if ($this->logout()) {                      // checking for logout, performing login            
+                // do nothing, you are logged out now   // this if construction just exists to prevent unnecessary method calls
+            } elseif ($this->loginWithSessionData()) {
+                $this->logged_in = true;
+            } elseif ($this->loginWithPostData()) {
+                $this->logged_in = true;
+            }        
+
+            $this->registerNewUser();                   // check for registration data            
+        } else {
+            $this->errors[] = "No MySQL connection.";
         }        
-        
-        $this->registerNewUser();                   // check for registration data
-        
     }    
     
     
     private function checkDatabase() {
         if (!$this->db) {                                                       // does db connection exist ?
             include_once("config/db.php");                                      // include database constants
-            $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);        // create db connection in $this->db
+            $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);         // create db connection     
+            return (!$this->db->connect_errno ? true : false);                  // if no connect errors return true else false
         }
     }
     
