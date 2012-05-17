@@ -1,0 +1,26 @@
+If you don't want to import the .sql file via phpmyadmin, you can also create the database and the table via these commands:
+
+CREATE DATABASE `demo` /*!40100 DEFAULT CHARACTER SET utf8 */
+
+CREATE TABLE `users` (  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing user_id of each user, unique index',  `user_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s name',  `user_password` varchar(32) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s password in md5 hash format',  `user_email` text COLLATE utf8_unicode_ci COMMENT 'user''s email',  PRIMARY KEY (`user_id`),  UNIQUE KEY `user_name` (`user_name`),  KEY `user_password` (`user_password`)) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data'
+
+INSERT INTO `demo`.`users` (
+`user_id` ,
+`user_name` ,
+`user_password` ,
+`user_email`
+)
+VALUES (
+NULL , 'chris', '202cb962ac59075b964b07152d234b70', 'chris@test.com'
+);
+
+
+INSERT INTO `demo`.`users` (
+`user_id` ,
+`user_name` ,
+`user_password` ,
+`user_email`
+)
+VALUES (
+NULL , 'tom', '202cb962ac59075b964b07152d234b70', 'tom@test.com'
+);
