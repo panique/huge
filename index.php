@@ -9,36 +9,27 @@
  * pro: works with $_SESSION, which means minimal database load
  * con: works with $_SESSION, which is problematic in cloud apps (as clouds share one database, but not one filesystem)
  * 
- * @author Christian Lavie <panique@web.de>
+ * @author Panique <panique@web.de>
  * @version 1.0
  * 
  */
 
-// autoloader (classes)
-//function __autoload($class) {
-//    include 'classes/' . $class . '.class.php';
-//}
-
+// class autoloader
 spl_autoload_register(function($class) {
     include 'classes/' . $class . '.class.php';
 });
 
-
 // login
 $login = new Login();
 
+// are we logged in ?
 if ($login->isLoggedIn()) {
     include("views/login/logged_in.php");
+    // further stuff here
 } else {
     include("views/login/login_form.php");
 }
 
-    /*
-    if (isset($_GET["action"]) && $_GET["action"]=="register") {
-        include("views/login/register.php");
-    } else {
-        include("views/login/login_form.php");
-    }
-    */
+// registering of new users coming up
 
 ?>
