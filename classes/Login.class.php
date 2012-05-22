@@ -5,17 +5,17 @@
  * 
  * creates db connection, logs in the user, creates session
  * 
- * @author Christian Lavie <panique@web.de>
+ * @author Panique <panique@web.de>
  * @version 1.0
  * @package login
  */
 
 class Login {
 
-    protected   $db         = null;                 // database connection
-    private     $logged_in  = false;                // status of login    
-    public      $errors     = array();              // collection of error messages
-    public      $messages   = array();              // collection of success / neutral messages
+    protected   $db         = null;                     // database connection
+    private     $logged_in  = false;                    // status of login    
+    public      $errors     = array();                  // collection of error messages
+    public      $messages   = array();                  // collection of success / neutral messages
     
     
     public function __construct() {        
