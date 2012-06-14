@@ -1,9 +1,8 @@
-PHP-Login
-=========
+# Sexy simple PHP Login #
 
-A sexy, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script
+*A sexy, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script*
 
-###HOW TO INSTALL
+## HOW TO INSTALL ##
 
 * 1a. import sql/users.sql into a mySQL database called "demo".
 OR
