@@ -61,8 +61,8 @@ class Login {
         
         if(isset($_POST["login"]) && !empty($_POST['user_name']) && !empty($_POST['user_password'])) {
             
-            $user_name = $this->db->real_escape_string($_POST['user_name']);            
-            $checklogin = $this->db->query("SELECT user_name, user_email, user_salt, user_password FROM users WHERE user_name = '".$user_name."';");
+            $this->user_name = $this->db->real_escape_string($_POST['user_name']);            
+            $checklogin = $this->db->query("SELECT user_name, user_email, user_salt, user_password FROM users WHERE user_name = '".$this->user_name."';");
             
             if($checklogin->num_rows == 1) {
                 $result_row = $checklogin->fetch_object();                
@@ -86,7 +86,7 @@ class Login {
     }
     
     
-    public function logout() {
+    public function logout() {  
         
         if (isset($_GET["action"]) && $_GET["action"]=="logout") {
             $_SESSION = array();
@@ -97,15 +97,9 @@ class Login {
     
     
     public function isLoggedIn() {
-        /*  
-         * SHORTHAND SYNTAX, as usual not documented by shitty php.net manual
-         * $var = ($var > 2 ? true : false); // returns true/false
-         * @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-         * 
-         * this line simply says:   if ($this->logged_in == 1) { return true; }
-         *                          else { return false; }
-        */
-        return $this->logged_in == 1;
+        
+        return $this->logged_in;
+        
     }
 
 
@@ -113,22 +107,22 @@ class Login {
 
         if(isset($_POST["register"]) && !empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
-                $user_name = $this->db->real_escape_string($_POST['user_name']);
-                $user_password = $this->db->real_escape_string($_POST['user_password']);
-                $user_email = $this->db->real_escape_string($_POST['user_email']);
+                $this->user_name = $this->db->real_escape_string($_POST['user_name']);
+                $this->user_password = $this->db->real_escape_string($_POST['user_password']);
+                $this->user_email = $this->db->real_escape_string($_POST['user_email']);
                 
                 // generate 64 char long random string "salt", a string to "encrypt" the password hash
                 // this is a basic salt, you might replace this with a more advanced function
                 // @see http://en.wikipedia.org/wiki/Salt_(cryptography)
-                $user_salt = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 0, 64);
+                $this->user_salt = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 0, 64);
                 // double md5 hash the plain password + salt
                 //$user_password_hashed = md5(md5($_POST['user_password'].$user_salt));
                 
                 // hash the combined string of password+salt via the sha256 algorithm, result is a 64 char string                 
-                $user_password_hashed = hash("sha256", $user_password.$user_salt);
+                $this->user_password_hashed = hash("sha256", $this->user_password.$this->user_salt);
                 
 
-                $query_check_user_name = $this->db->query("SELECT * FROM users WHERE user_name = '".$user_name."'");
+                $query_check_user_name = $this->db->query("SELECT * FROM users WHERE user_name = '".$this->user_name."'");
 
                 if($query_check_user_name->num_rows == 1)
                 {
@@ -136,7 +130,7 @@ class Login {
                 }
                 else
                 {
-                    $query_new_user_insert = $this->db->query("INSERT INTO users (user_name, user_salt, user_password, user_email) VALUES('".$user_name."', '".$user_salt."', '".$user_password_hashed."', '".$user_email."')");
+                    $query_new_user_insert = $this->db->query("INSERT INTO users (user_name, user_salt, user_password, user_email) VALUES('".$this->user_name."', '".$this->user_salt."', '".$this->user_password_hashed."', '".$this->user_email."')");
                     if($query_new_user_insert)
                     {
                         $this->messages[] = "<p>Your account was successfully created. Please <a href='index.php'>click here to login</a>.</p>";
