@@ -1,26 +1,17 @@
-If you don't want to import the .sql file via phpmyadmin, you can also create the database and the table via these commands:
+If you don't want to import the .sql file (with demo users) via phpmyadmin etc,
+you can also create the EMPTY database and the table via these commands:
 
-CREATE DATABASE `demo` /*!40100 DEFAULT CHARACTER SET utf8 */
-
-CREATE TABLE `users` (  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing user_id of each user, unique index',  `user_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s name',  `user_password` varchar(32) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s password in md5 hash format',  `user_email` text COLLATE utf8_unicode_ci COMMENT 'user''s email',  PRIMARY KEY (`user_id`),  UNIQUE KEY `user_name` (`user_name`),  KEY `user_password` (`user_password`)) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data'
-
-INSERT INTO `demo`.`users` (
-`user_id` ,
-`user_name` ,
-`user_password` ,
-`user_email`
-)
-VALUES (
-NULL , 'chris', '202cb962ac59075b964b07152d234b70', 'chris@test.com'
-);
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing user_id of each user, unique index',
+  `user_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s name',
+  `user_salt` char(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s automaticly generated SALT (key to protect the password)',
+  `user_password` char(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s password in salted and sha256 hashed format',
+  `user_email` text COLLATE utf8_unicode_ci COMMENT 'user''s email',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data' AUTO_INCREMENT=3 ;
 
 
-INSERT INTO `demo`.`users` (
-`user_id` ,
-`user_name` ,
-`user_password` ,
-`user_email`
-)
-VALUES (
-NULL , 'tom', '202cb962ac59075b964b07152d234b70', 'tom@test.com'
-);
+INSERT INTO `users` (`user_id`, `user_name`, `user_salt`, `user_password`, `user_email`) VALUES
+(1, 'chris', 'QBtqND625ndKUvuVRyzpIfeTME8GZA3Lx1WCOr40iSog9Pawk7JXYjbFsmlchH', 'ef346424a283027fe39830156e0289769c8d230f7a46143dd77c4cf190d90c23', 'chris@test.com'),
+(2, 'tom', 'AOjRJE1qU8730FBKxvTZo94bmQwCcIpfYgMPdrHWnslDXkzGL5NSViey6huat2', 'c6973e81dda5199ac96bd33c514e0bc7d3036e38294d32fae291d717f8ea4e64', 'tom@test.com');

@@ -13,7 +13,6 @@ OR
 
 ###HOW TO USE
 
-* nothing to explain here ;)
 * Demo user 1 is "chris" with password "123".
 * Demo user 2 is "tom" with password "123".
 
@@ -21,10 +20,11 @@ OR
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
-###TROUBLESHOOTING
+###REQUIREMENTS / TROUBLESHOOTING
 
-* do you have PHP 5.3 ?
-* do you have a modern version of mySQL ?
-* do you have the php mysqli (last letter is an "i") extension activated (standard) ?
+* needs PHP 5.3+ or PHP 5.4+
+* needs mySQL 5.1+
+* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) ?
 * are the database connection infos in config/db.php correct ?
+* have you created a database named "demo" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?

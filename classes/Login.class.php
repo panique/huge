@@ -58,26 +58,24 @@ class Login {
     
 
     private function loginWithPostData() {
-
+        
         if(isset($_POST["login"]) && !empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-
-            $user_name = $this->db->real_escape_string($_POST['user_name']);
-            $user_password = md5($this->db->real_escape_string($_POST['user_password']));
-
-            $checklogin = $this->db->query("SELECT user_name, user_email FROM users WHERE user_name = '".$user_name."' AND user_password = '".$user_password."';");
-
+            
+            $user_name = $this->db->real_escape_string($_POST['user_name']);            
+            $checklogin = $this->db->query("SELECT user_name, user_email, user_salt, user_password FROM users WHERE user_name = '".$user_name."';");
+            
             if($checklogin->num_rows == 1) {
-                
-                $result_row = $checklogin->fetch_object();
-
-                $_SESSION['user_name'] = $result_row->user_name;;
-                $_SESSION['user_email'] = $result_row->user_email;
-                $_SESSION['user_logged_in'] = 1;
-
-                return true;
-                
-            } else {
-                
+                $result_row = $checklogin->fetch_object();                
+                if (hash("sha256", $_POST["user_password"].$result_row->user_salt) == $result_row->user_password) {
+                    $_SESSION['user_name'] = $result_row->user_name;;
+                    $_SESSION['user_email'] = $result_row->user_email;
+                    $_SESSION['user_logged_in'] = 1;                    
+                    return true;                    
+                } else {
+                    $this->errors[] = "Username and/or password wrong.";
+                    return false;                    
+                }                
+            } else {                
                 $this->errors[] = "Username and/or password wrong.";
                 return false;
             }
@@ -116,8 +114,19 @@ class Login {
         if(isset($_POST["register"]) && !empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
                 $user_name = $this->db->real_escape_string($_POST['user_name']);
-                $user_password = md5($this->db->real_escape_string($_POST['user_password']));
+                $user_password = $this->db->real_escape_string($_POST['user_password']);
                 $user_email = $this->db->real_escape_string($_POST['user_email']);
+                
+                // generate 64 char long random string "salt", a string to "encrypt" the password hash
+                // this is a basic salt, you might replace this with a more advanced function
+                // @see http://en.wikipedia.org/wiki/Salt_(cryptography)
+                $user_salt = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 0, 64);
+                // double md5 hash the plain password + salt
+                //$user_password_hashed = md5(md5($_POST['user_password'].$user_salt));
+                
+                // hash the combined string of password+salt via the sha256 algorithm, result is a 64 char string                 
+                $user_password_hashed = hash("sha256", $user_password.$user_salt);
+                
 
                 $query_check_user_name = $this->db->query("SELECT * FROM users WHERE user_name = '".$user_name."'");
 
@@ -127,7 +136,7 @@ class Login {
                 }
                 else
                 {
-                    $query_new_user_insert = $this->db->query("INSERT INTO users (user_name, user_password, user_email) VALUES('".$user_name."', '".$user_password."', '".$user_email."')");
+                    $query_new_user_insert = $this->db->query("INSERT INTO users (user_name, user_salt, user_password, user_email) VALUES('".$user_name."', '".$user_salt."', '".$user_password_hashed."', '".$user_email."')");
                     if($query_new_user_insert)
                     {
                         $this->messages[] = "<p>Your account was successfully created. Please <a href='index.php'>click here to login</a>.</p>";

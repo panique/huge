@@ -19,3 +19,8 @@ if ($login->errors) {
         <input type="submit" name="login" id="login" value="Login" />
     </fieldset>
 </form>
+
+
+<a href="index.php?action=register">
+    Register new user
+</a>

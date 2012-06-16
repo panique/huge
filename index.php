@@ -22,14 +22,18 @@ spl_autoload_register(function($class) {
 // login
 $login = new Login();
 
-// are we logged in ?
-if ($login->isLoggedIn()) {
-    include("views/login/logged_in.php");
-    // further stuff here
+// base structure
+if (isset($_GET["action"]) && $_GET["action"]=="register") {
+        include("views/login/register.php");
 } else {
-    include("views/login/login_form.php");
+    // are we logged in ?
+    if ($login->isLoggedIn()) {
+        include("views/login/logged_in.php");
+        // further stuff here
+    } else {
+        // not logged in, showing the login form
+        include("views/login/login_form.php");
+    }
 }
-
-// registering of new users coming up
 
 ?>
