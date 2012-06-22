@@ -12,15 +12,23 @@
 
 class Login {
 
-    protected   $db         = null;                     // database connection
-    private     $logged_in  = false;                    // status of login    
-    public      $errors     = array();                  // collection of error messages
-    public      $messages   = array();                  // collection of success / neutral messages
+    protected   $db                     = null;                     // database connection
+    private     $logged_in              = false;                    // status of login    
+    public      $errors                 = array();                  // collection of error messages
+    public      $messages               = array();                  // collection of success / neutral messages
+    
+    private     $user_name              = "";                       // user's name
+    private     $user_email             = "";                       // user's email
+    private     $user_password          = "";                       // user's password (what comes from POST)
+    private     $user_password_hashed   = "";                       // user's hashed and saltes password
+    private     $user_salt              = "";                       // user's personal salt
     
     
-    public function __construct() {        
+    public function __construct() {
         
-        if ($this->checkDatabase()) {                    // check for database connection
+        include_once("config/db.php");                  // include database constants        
+        
+        if ($this->checkDatabase()) {                   // check for database connection
             
             session_start();                            // create session
 
@@ -41,7 +49,6 @@ class Login {
     
     private function checkDatabase() {
         if (!$this->db) {                                                       // does db connection exist ?
-            include_once("config/db.php");                                      // include database constants
             $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);         // create db connection     
             return (!$this->db->connect_errno ? true : false);                  // if no connect errors return true else false
         }
