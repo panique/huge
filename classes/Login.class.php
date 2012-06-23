@@ -79,11 +79,11 @@ class Login {
                     $_SESSION['user_logged_in'] = 1;                    
                     return true;                    
                 } else {
-                    $this->errors[] = "Username and/or password wrong.";
+                    $this->errors[] = "Password was wrong.";
                     return false;                    
                 }                
             } else {                
-                $this->errors[] = "Username and/or password wrong.";
+                $this->errors[] = "This user does not exist.";
                 return false;
             }
         } elseif (isset($_POST["login"]) && !empty($_POST['user_name']) && empty($_POST['user_password'])) {
