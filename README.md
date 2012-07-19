@@ -1,6 +1,6 @@
 # Sexy simple PHP Login #
 
-Always find the latest version, a documention and other stuff on the project's home page:
+Always find the latest version, a documentation and other stuff on the project website:
 http://www.php-login.net
 
 *A sexy, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script*
