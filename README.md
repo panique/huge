@@ -31,3 +31,7 @@ OR
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "demo" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
+
+### USAGE WITH OLDER PHP VERSIONS (older than 5.3)
+
+* delete the autoload function in index.php lines 14-16 and replace it with a simple include("classes/Login.class.php");
