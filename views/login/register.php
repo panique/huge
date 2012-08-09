@@ -121,9 +121,9 @@ if ($login->messages) {
 
 ?>                
                 
-                <input type="text" name="user_name" value="Username"  onClick="this.value='';" /><br />
-                <input type="text" name="user_password" value="Password"  onClick="this.value='';" /><br />
-                <input type="text" name="user_email" value="E-Mail"  onClick="this.value='';" /><br />
+                <input type="text" name="user_name" value="Username" onfocus="if(this.value=='Username') this.value='';" onblur="if(this.value=='') this.value='Username';" /><br />
+                <input type="text" name="user_password" value="Password" onfocus="if(this.value=='Password') this.value='';" onblur="if(this.value=='') this.value='Password';" /><br />
+                <input type="text" name="user_email" value="E-Mail" onfocus="if(this.value=='E-Mail') this.value='';" onblur="if(this.value=='') this.value='E-Mail';" /><br />
                 <input type="submit" name="register" value="Register" />
             </fieldset>
         </form>
