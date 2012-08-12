@@ -7,7 +7,7 @@
  * 
  * @author Panique <panique@web.de>
  * @version 1.0
- * @package login
+ * @package SimplePHPLogin
  */
 
 class Login {
@@ -48,19 +48,23 @@ class Login {
     
     
     private function checkDatabase() {
+        
         if (!$this->db) {                                                       // does db connection exist ?
             $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);         // create db connection     
             return (!$this->db->connect_errno ? true : false);                  // if no connect errors return true else false
         }
+        
     }
     
 
     private function loginWithSessionData() {
+        
         if (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in']==1)) {
             return true;
         } else {
             return false;
         }
+        
     }
     
 
@@ -106,6 +110,21 @@ class Login {
     public function isLoggedIn() {
         
         return $this->logged_in;
+        
+    }
+    
+    
+    public function checkForRegisterPage() {
+        
+        if (isset($_GET["action"]) && $_GET["action"]=="register") {
+            
+            return true;
+            
+        } else {
+            
+            return false;
+            
+        }
         
     }
 
