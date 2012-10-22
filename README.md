@@ -9,9 +9,9 @@ http://www.php-login.net
 
 *A sexy, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script*
 
-![Screenshot 1](Panique.github.com/PHP-Login/_screenshots/php_login_script_01.png)
+![Screenshot 1](https://raw.github.com/Panique/PHP-Login/master/_screenshots/php_login_script_01.png)
 
-![Screenshot 2](Panique.github.com/PHP-Login/_screenshots/php_login_script_02.png)
+![Screenshot 2](https://raw.github.com/Panique/PHP-Login/master/_screenshots/php_login_script_02.png)
 
 
 ## HOW TO INSTALL ##
