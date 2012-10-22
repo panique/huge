@@ -1,134 +1,75 @@
-<!-- this style stuff is just for demonstration. nice people put this in .css files -->
-<style>
-    
-    #login_wrapper {
-        margin:100px;
-        width:200px;
-    }
-    
-    #login {
-        font-family: Arial;
-        text-align: center;
-    }
-    
-    #login a {
-        color: #555;
-        text-decoration: none;
-        font-size: 11px;
-    }
-    
-    #login a:hover {
-        text-decoration:underline;
-    }
+<?php include('views/header/header.php'); ?>
 
-    .headline {
-        font-size: 24px;
-        color:#555;
-        margin-bottom: 10px;
-    }
-    
-    fieldset {
-        
-        border:1px solid #999;
-        border-radius: 5px;
-        padding:10px;
-        box-shadow: 0px 0px 3px 2px rgba(200,200,200, 0.3);
-    }
-    
-    input {
-        border:1px solid #bbb;
-        border-radius: 5px;
-        padding:6px 8px;        
-        width:100%;
-        color:#555;
-        font-size:11px;
-        box-shadow: 1px 1px 3px 2px rgba(200,200,200, 0.2) inset;
-    }
-    
-    input[type="text"],
-    input[type="password"] {
-        margin-bottom: 5px;
-        color:#999;
-    }
-    
-    input[type="submit"] {
-        border-color: #999;  
-        cursor: pointer;
-        background: -webkit-linear-gradient(top, white, #E0E0E0);
-        background:    -moz-linear-gradient(top, white, #E0E0E0);
-        background:     -ms-linear-gradient(top, white, #E0E0E0);
-        background:      -o-linear-gradient(top, white, #E0E0E0);
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.25), inset 0 0 3px #fff;
-        -moz-box-shadow:    0 1px 2px rgba(0,0,0,0.25), inset 0 0 3px #fff;
-        box-shadow:         0 1px 2px rgba(0,0,0,0.25), inset 0 0 3px #fff;
-        margin-top: 5px;
-    }
-    
-    input[type="submit"]:hover {
-        background: -webkit-linear-gradient(bottom, white, #E0E0E0);
-        background:    -moz-linear-gradient(bottom, white, #E0E0E0);
-        background:     -ms-linear-gradient(bottom, white, #E0E0E0);
-        background:      -o-linear-gradient(bottom, white, #E0E0E0);
-    }
-    
-    .message_success {
-        border:1px solid #58BA36;
-        border-radius: 5px;
-        background-color: #E9F9E5;
-        padding:6px 8px; 
-        color:#58BA36;
-        font-size:11px;
-        margin-bottom: 10px;
-    }
-    
-    .message_error {
-        border:1px solid #C83E16;
-        border-radius: 5px;
-        background-color: #F9E5E6;
-        padding:6px 8px; 
-        color:#C83E16;
-        font-size:11px;
-        -webkit-box-shadow: 0 2px 3px rgba(62,120,170,0.25);
-        -moz-box-shadow:    0 2px 3px rgba(62,120,170,0.25);
-        box-shadow:         0 2px 3px rgba(62,120,170,0.25);
-        margin-bottom: 10px;
-    }    
-    
-</style>
+<div class="login_wrapper">
+    <?php
 
-<div id="login_wrapper">
-    <div id="login">
-        
-        <div class="headline">Create new user</div>
-        <a href="index.php">Back to login</a><br/><br/>
-
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?action=register" name="registerform" id="registerform">
-            <fieldset>
-                
-<?php
-
-if ($login->errors) {
-    foreach ($login->errors as $error) {
-        echo '<div class="message_error">'.$error.'</div>'; 
-    }
-}
-
-if ($login->messages) {
-    foreach ($login->messages as $message) {
-        echo '<div class="message_success">'.$message.'</div>'; 
-    }
-}
-
-?>                
-                
-                <input type="text" name="user_name" value="Username" onfocus="if(this.value=='Username') this.value='';" onblur="if(this.value=='') this.value='Username';" /><br />
-                <input type="text" name="user_password" value="Password" onfocus="if(this.value=='Password') this.value='';" onblur="if(this.value=='') this.value='Password';" /><br />
-                <input type="text" name="user_email" value="E-Mail" onfocus="if(this.value=='E-Mail') this.value='';" onblur="if(this.value=='') this.value='E-Mail';" /><br />
-                <input type="submit" name="register" value="Register" />
-            </fieldset>
-        </form>
-   
+    if ($login->errors) {
+        foreach ($login->errors as $error) {
+            
+    ?>              
+    <div class="login_message error">
+        <?php echo $error; ?>
     </div>
+    <?php
+    
+        }
+    }
+    
+    if ($login->messages) {
+        foreach ($login->messages as $message) {
+    ?>
+    <div class="login_message success">
+        <?php echo $message; ?>
+    </div>              
+    <?php
+    
+        }
+    }
+
+    ?>    
+    
+    <?php if (!$login->registration_successful) { ?>
+    
+    <form method="post" action="index.php?register" name="registerform" id="registerform">
+    <div class="login" style="height:250px;">
+        <div id="login_avatar_wrapper" style="width: 125px; height: 250px; float:left; margin:0;">
+            <div id="login_avatar" class="standard_avatar" style="width: 125px; height: 125px; float:left; margin:0;">
+                <!--<img id="login_avatar" src="views/img/ani_avatar_static_01.png" style="width:125px; height:125px;" />-->
+            </div>
+            <div style="width: 124px; height: 125px; float:right; margin:0; border-right: 1px solid #e6e6e6;">
+            </div>
+        </div>
+        <div style="width: 250px; height: 125px; float:left; margin:0;">
+            <div style="width: 250px; height: 62px; float:left; margin:0; border-bottom: 1px solid #e6e6e6;">
+                <input id="login_input_username" class="login_input" type="text" name="user_name" value="Username" />
+            </div>
+            <div style="width: 250px; height: 61px; float:left; margin:0; border-bottom: 1px solid #e6e6e6;">
+                <input id="login_input_email" class="login_input" type="text" name="user_email" value="eMail" />
+            </div>
+            <div style="width: 250px; height: 62px; float:left; margin:0; border-bottom: 1px solid #e6e6e6;">
+                <input id="login_input_password_new_label" class="login_input" type="text" value="Password" />
+                <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" autocomplete="off" />
+            </div>            
+            <div style="width: 250px; height: 61px; float:left; margin:0; border-bottom: 1px solid #e6e6e6;">
+                <input id="login_input_password_repeat_label" class="login_input" type="text" value="Repeat Password" />
+                <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" autocomplete="off" />
+            </div>          
+        </div>
+        <div style="width: 124px; height: 250px; float:left; margin:0; border-left: 1px solid #e6e6e6;">
+            <div class="login_submit_register">
+                <input type="submit"  name="register" style="width:124px; height:250px; padding-top: 60px;  text-align: center; font-size:11px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" value="Register" />            
+            </div>        
+        </div>
+    </div>    
+    <div style="width:500px; height: 40px; line-height: 40px; text-align: right; color:#ccc; font-size:11px; font-family: 'Droid Sans', sans-serif; ">
+        <a class="login_link" href="index.php">Back to Login Page</a>
+    </div>
+    </form>
+    
+    <?php } ?>
+    
 </div>
 
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
+
+<?php include('views/footer/footer.php'); ?>
