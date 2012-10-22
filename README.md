@@ -2,7 +2,7 @@
 
 **THIS IS A GITHUB PREVIEW ! WHAT YOU SEE IS NOT READY TO RELEASE ! IT'S A PREVIEW!**
 
-TODO: Legal rights for demo avatar pictures, full docs, no inline css, alternative theme, prepared statements
+TODO: Clear legal rights for demo avatar pictures, full docs, no inline css, alternative theme, prepared statements
 
 Always find the latest version, a documentation and other stuff on the project website:
 http://www.php-login.net
