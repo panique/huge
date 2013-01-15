@@ -30,7 +30,7 @@ class Login {
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
      */    
-    public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
+    public function __construct(Database $db, $allow_register = true) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
         
         $this->connection = $db->getDatabaseConnection();                   // get the database connection
         
@@ -39,9 +39,11 @@ class Login {
             session_start();                                        // create/read session
             
             if (isset($_POST["register"])) {
-                
-                $this->registerNewUser();
-                
+                if ($allow_register) {
+                    $this->registerNewUser();
+                }else{
+                    $this->errors[] = "Registering is disabled.";
+                }
             } elseif (isset($_GET["logout"])) {
                 
                 $this->doLogout();
