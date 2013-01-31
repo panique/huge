@@ -30,7 +30,7 @@ class Login {
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
      */    
-    public function __construct(Database $db, $allow_register = true) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
+    public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
         
         $this->connection = $db->getDatabaseConnection();                   // get the database connection
         
@@ -38,13 +38,7 @@ class Login {
             
             session_start();                                        // create/read session
             
-            if (isset($_POST["register"])) {
-                if ($allow_register) {
-                    $this->registerNewUser();
-                }else{
-                    $this->errors[] = "Registering is disabled.";
-                }
-            } elseif (isset($_GET["logout"])) {
+            if (isset($_GET["logout"])) {
                 
                 $this->doLogout();
                             
@@ -69,6 +63,17 @@ class Login {
                 }
                 
             }
+            
+            if (isset($_POST["register"] )) {
+ 		        if (  PUBLIC_REGISTER !== TRUE &&  ! $this->user_is_logged_in ) {
+                     $this->errors[] = "Registering is disabled.";
+					 return false;
+                }     
+                $this->registerNewUser();
+            }
+			
+			
+			
             
         } else {
             
@@ -244,7 +249,7 @@ class Login {
                     
                     if ($query_new_user_insert) {
                         
-                        $this->messages[] = "Your account was successfully created.<br/>Please <a href='index.php' class='green_link'>click here to login</a>.";
+                        $this->messages[] = "Your account was successfully created.<br/>Please <a href='".$_SERVER["SCRIPT_NAME"]."' class='green_link'>click here to login</a>.";
                         $this->registration_successful = true;
                         
                     } else {

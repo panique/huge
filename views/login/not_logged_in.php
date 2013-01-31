@@ -1,4 +1,3 @@
-<?php include('views/header/header.php'); ?>
 
 <div class="login_wrapper">    
     <?php
@@ -27,7 +26,7 @@
     }
 
     ?>             
-    <form method="post" action="index.php" name="loginform" id="loginform">
+    <form method="post" action="<?=$_SERVER["SCRIPT_NAME"]?>" name="loginform" id="loginform">
     <div class="login">
         <div id="login_avatar" style="background-image: url('<?php echo $login->avatar_url; ?>');">
             <!--<img id="login_avatar" src="views/img/ani_avatar_static_01.png" style="width:125px; height:125px;" />-->
@@ -50,11 +49,10 @@
         </div>
     </div>    
     <div style="width:500px; height: 40px; line-height: 40px; text-align: right; color:#ccc; font-size:11px; font-family: 'Droid Sans', sans-serif; ">
-        <a class="login_link" href="index.php?register">Create new Account</a>
+     <?php if (PUBLIC_REGISTER) { echo '<a class="login_link" href="'.$_SERVER["SCRIPT_NAME"].'?register">Create new Account</a>'; } ?>        
     </div>
     </form>
 </div>
 
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
 
-<?php include('views/footer/footer.php'); ?>

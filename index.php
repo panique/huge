@@ -26,7 +26,7 @@
 /**
  * include the configs / constants for the database connection
  */
-require_once("config/db.php");
+require_once("config/config.php");
 
 // class autoloader function, this includes all the classes that are needed by the script
 // you can remove this stuff if you want to include your files manually
@@ -45,6 +45,11 @@ $db    = new Database();
 // start this baby and give it the database connection
 $login = new Login($db);
 
+
+
+
+include('views/header/header.php'); 
+
 // base structure
 if ($login->displayRegisterPage()) {
         include("views/login/register.php");
@@ -58,3 +63,5 @@ if ($login->displayRegisterPage()) {
         include("views/login/not_logged_in.php");
     }
 }
+
+include('views/footer/footer.php'); 
