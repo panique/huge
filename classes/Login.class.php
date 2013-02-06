@@ -9,7 +9,7 @@
  */
 class Login {
 
-    private     $connection                         = null;                     // database connection   
+    private     $connection                 = null;                     // database connection   
     
     private     $user_name                  = "";                       // user's name
     private     $user_email                 = "";                       // user's email
@@ -19,8 +19,8 @@ class Login {
     
     public      $registration_successful    = false;
     
-    public      $view_user_name           = "";
-    public      $view_user_email          = "";
+    public      $view_user_name             = "";
+    public      $view_user_email            = "";
 
     public      $errors                     = array();                  // collection of error messages
     public      $messages                   = array();                  // collection of success / neutral messages
@@ -31,27 +31,25 @@ class Login {
      * you know, when you do "$login = new Login();"
      */    
     public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
+       
+    session_start();                                        // create/read session
+
+    if (isset($_GET["logout"])) {            
+		var_dump($_SESSION);
+		$this->doLogout();
+	}	         
         
-        $this->connection = $db->getDatabaseConnection();                   // get the database connection
-        
-        if ($this->connection) {                                            // check for database connection
-            
-            session_start();                                        // create/read session
-            
-            if (isset($_GET["logout"])) {
-                
-                $this->doLogout();
-                            
-            } elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
-                
-                $this->loginWithSessionData();                
-                
-            } elseif (isset($_POST["login"])) {
+                        
+    	if (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
+		        if ($this->connect_to_db($db)) {
+		        	$this->loginWithSessionData();                
+				}            
+        }elseif (isset($_POST["login"])) {
                 
                 if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-                    
-                    $this->loginWithPostData();
-                
+                    if ($this->connect_to_db($db)) {	
+                    	$this->loginWithPostData();
+                	}
                 } elseif (empty($_POST['user_name'])) {
                     
                     $this->errors[] = "Username field was empty.";
@@ -68,17 +66,14 @@ class Login {
  		        if (  PUBLIC_REGISTER !== TRUE &&  ! $this->user_is_logged_in ) {
                      $this->errors[] = "Registering is disabled.";
 					 return false;
-                }     
-                $this->registerNewUser();
-            }
+                }else{
+                	if ($this->connect_to_db($db)) {     
+	                	$this->registerNewUser();
+					}
+				}
+			}
 			
 			
-			
-            
-        } else {
-            
-            $this->errors[] = "No MySQL connection.";
-        }
         
         // cookie handling user name
         if (isset($_COOKIE['user_name'])) {
@@ -134,14 +129,16 @@ class Login {
                     
                 } else {
                     
-                    $this->errors[] = "Wrong password. Try again.";
+                    $this->errors[] = "Wrong password or username. Try again.";
+                    $this->login_delay();
                     return false;  
                     
                 }                
                 
             } else {
                 
-                $this->errors[] = "This user does not exist.";
+                $this->errors[] = "Wrong password or username. Try again.";
+                $this->login_delay();
                 return false;
             }        
     }
@@ -149,7 +146,7 @@ class Login {
     
     public function doLogout() {
         
-            $_SESSION = array();
+            $_SESSION = NULL;
             session_destroy();
             $this->user_is_logged_in = false;
             $this->messages[] = "You have been logged out.";
@@ -260,6 +257,24 @@ class Login {
                 }
         }
     }
+
+
+
+	private function login_delay(){
+		sleep(LOGIN_FAIL_DELAY);
+	}
+	
+	
+	private  function connect_to_db($db){
+		if ($this->connection === NULL){
+			$this->connection = $db->getDatabaseConnection();       
+			if ($this->connection == FALSE) {
+	            $this->errors[] = "No MySQL connection.";
+			} 
+		}
+		return $this->connection;
+	}            
+
 
 
 }
