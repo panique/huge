@@ -32,17 +32,15 @@ class Login {
      */    
     public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
        
-    session_start();                                        // create/read session
-
-    if (isset($_GET["logout"])) {            
-		var_dump($_SESSION);
-		$this->doLogout();
-	}	         
-        
+	    session_start();                                            // create/read session
+	
+	    if (isset($_GET["logout"])) {            
+			$this->doLogout();
+		}	         
                         
-    	if (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
+    	if ($_SESSION['user_logged_in'] == 1) {
 		        if ($this->connect_to_db($db)) {
-		        	$this->loginWithSessionData();                
+		        	$this->validate_user_logged();                
 				}            
         }elseif (isset($_POST["login"])) {
                 
@@ -93,14 +91,18 @@ class Login {
     }    
     
 
-    private function loginWithSessionData() {
-        
-        $this->user_is_logged_in = true;
-        
+    private function validate_user_logged() {
+        // verification
+       if ( ( $_SESSION['agent'] == $_SERVER['HTTP_USER_AGENT'] ) && ($_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) ) {
+           	session_regenerate_id();
+        	$this->user_is_logged_in = true;
+       }else{
+       	$this->doLogout();
+       }	
     }
     
 
-    private function loginWithPostData() {
+    private function loginWithPostData() { // Login with the form content
             
             $this->user_name = $this->connection->real_escape_string($_POST['user_name']);            
             $checklogin = $this->connection->query("SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = '".$this->user_name."';");
@@ -117,7 +119,13 @@ class Login {
                     $_SESSION['user_name'] = $result_row->user_name;
                     $_SESSION['user_email'] = $result_row->user_email;
                     $_SESSION['user_logged_in'] = 1;
+                    $_SESSION['user_name'] = $result_row->user_name;
                     
+					// session security
+                    $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'] ;
+					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+					$_SESSION['count'] = 0; 
+										 
                     /**
                      *  write user data into COOKIE [a file in user's browser]
                      */
