@@ -9,13 +9,9 @@ if (! defined('PHPLOGIN_LOCATION')){
 //load configs. 
 require_once(PHPLOGIN_LOCATION.'config/config.php');
 
-// class inclusion can also be made manually.
-function autoload($class){
-    require(PHPLOGIN_LOCATION.'classes/' . $class . '.class.php');
-}
-
-// automatically loads all needed classes, when they are needed
-spl_autoload_register("autoload");
+// class inclusion. 
+  require(PHPLOGIN_LOCATION.'classes/Database.class.php');
+  require(PHPLOGIN_LOCATION.'classes/Login.class.php');
 
 //create a database connection
 $db    = new Database();
