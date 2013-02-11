@@ -38,7 +38,7 @@ class Login {
 			$this->doLogout();
 		}	         
                         
-    	if ($_SESSION['user_logged_in'] == 1) {
+     	if ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
 		        if ($this->connect_to_db($db)) {
 		        	$this->validate_user_logged();                
 				}            
