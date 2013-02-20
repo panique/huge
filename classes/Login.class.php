@@ -33,15 +33,19 @@ class Login {
     public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
        
 	    session_start();                                            // create/read session
-	
+		// First, logout
 	    if (isset($_GET["logout"])) {            
 			$this->doLogout();
+			return true;
 		}	         
-                        
+             
+			 
+		// Validate if user is login. If not: logout!	            
      	if ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
 		        if ($this->connect_to_db($db)) {
 		        	$this->validate_user_logged();                
-				}            
+				}
+				            
         }elseif (isset($_POST["login"])) {
                 
                 if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {

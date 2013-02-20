@@ -1,9 +1,10 @@
 <?php
 //This file is designed to be include in every page of your site before header is send.
+// phpLogin() is designed to be call after '<body>' and BEFORE sensitive data. 
+
 
 if (! defined('PHPLOGIN_LOCATION')){
-	define('PHPLOGIN_LOCATION', '');
-	
+	define('PHPLOGIN_LOCATION', '');	
 }
 
 //load configs. 
@@ -27,12 +28,15 @@ function phpLogin(){
 	     include(PHPLOGIN_LOCATION.'views/login/register.php');
 	 	 echo "</body></html>".PHP_EOL;
 		exit(0);
-		
+
 	} elseif (! $login->isUserLoggedIn()) {
 		 include(PHPLOGIN_LOCATION.'views/header/PHP-login-style.php');
 		 include(PHPLOGIN_LOCATION.'views/login/not_logged_in.php');
 	 	 echo "</body></html>".PHP_EOL;
 		 exit(0);
+	} elseif ($login->isUserLoggedIn() === TRUE) {
+		include(PHPLOGIN_LOCATION.'views/header/PHP-login-style.php');
+		include(PHPLOGIN_LOCATION.'views/login/logged_in.php');
 	}
 }
 
