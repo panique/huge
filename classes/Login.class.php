@@ -59,8 +59,10 @@ class Login {
 			 
 		// if user pretend to be logged in.	            
      	}elseif ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
-	        if ( $this->connect_to_db($db)) {
-	        	$this->validate_user_logged();                
+			 
+			        if ( $this->connect_to_db($db)) {
+			        	$this->validate_user_logged();                
+					}
 			}
 				       
 		// if user try to loggin (sending login form data)				    
@@ -96,7 +98,6 @@ class Login {
    //TODO remove other error display around views pages
     function __destruct(){
 	   	global $nonce;
-			var_dump($_SESSION);
 		if ( strlen($nonce->getError()) !== 0 ){
 			$this->errors[] = $nonce->getError();					
 		}
