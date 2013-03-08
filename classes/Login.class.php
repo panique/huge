@@ -7,6 +7,7 @@
  * @author Panique <panique@web.de>
  * @version 1.1
  */
+
 class Login {
 
     private     $connection                 = null;                     // database connection   
@@ -31,53 +32,11 @@ class Login {
      * you know, when you do "$login = new Login();"
      */    
     public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
-       
-	    session_start();                                            // create/read session
-		// First, logout
-	    if (isset($_GET["logout"])) {            
-			$this->doLogout();
-			return true;
-		}	         
-             
-			 
-		// Validate if user is login. If not: logout!	            
-     	if ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
-		        if ($this->connect_to_db($db)) {
-		        	$this->validate_user_logged();                
-				}
-				            
-        }elseif (isset($_POST["login"])) {
-                
-                if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-                    if ($this->connect_to_db($db)) {	
-                    	$this->loginWithPostData();
-                	}
-                } elseif (empty($_POST['user_name'])) {
-                    
-                    $this->errors[] = "Username field was empty.";
-                    
-                } elseif (empty($_POST['user_password'])) {
-                    
-                    $this->errors[] = "Password field was empty.";
-                    
-                }
-                
-            }
-            
-            if (isset($_POST["register"] )) {
- 		        if (  PUBLIC_REGISTER !== TRUE &&  ! $this->user_is_logged_in ) {
-                     $this->errors[] = "Registering is disabled.";
-					 return false;
-                }else{
-                	if ($this->connect_to_db($db)) {     
-	                	$this->registerNewUser();
-					}
-				}
-			}
-			
-			
-        
-        // cookie handling user name
+        global $nonce;
+	    session_start();        
+
+//COOKIE
+     	      // cookie handling user name
         if (isset($_COOKIE['user_name'])) {
             $this->view_user_name = strip_tags($_COOKIE["user_name"]);
         } else {
@@ -92,8 +51,73 @@ class Login {
             $this->avatar_url = "http://www.gravatar.com/avatar/" . md5("xxxxxx@xxxxxxxxxx.com") . "?d=mm&s=125";
         }
         
-    }    
-    
+		
+// LOOK FOR REQUESTS
+		// First, logout request
+	    if (isset($_GET["logout"])) {
+			$this->doLogout();						
+			 
+		// if user pretend to be logged in.	            
+     	}elseif ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
+	        if ( $this->connect_to_db($db)) {
+	        	$this->validate_user_logged();                
+			}
+				       
+		// if user try to loggin (sending login form data)				    
+        if ( isset($_POST["login"])) {
+
+        	if (empty($_POST['user_name']) || empty($_POST['user_password'])) {
+				$this->errors[] = " Username or Password field was empty.";
+            	$this->doLogout();
+			}elseif ( $nonce->isValid() ) {
+         	        if ($this->connect_to_db($db)) {	
+                    	$this->loginWithPostData();
+                	}
+			}else{
+            	$this->doLogout();			
+				}
+		
+		// if user try to register ( sending login form data)
+		}elseif( isset($_POST["register"] )) {
+ 		    if (  PUBLIC_REGISTER !== TRUE &&  ! $this->user_is_logged_in ) {
+                 $this->errors[] = "Registering is disabled.";
+				 return ;
+            }elseif( $nonce->isValid() ){
+            	if ($this->connect_to_db($db)) {     
+                	$this->registerNewUser();
+				}
+			}else{
+				$this->doLogout();
+			}
+		}       
+     } 
+
+
+   //TODO remove other error display around views pages
+    function __destruct(){
+	   	global $nonce;
+			var_dump($_SESSION);
+		if ( strlen($nonce->getError()) !== 0 ){
+			$this->errors[] = $nonce->getError();					
+		}
+	
+	    if ($this->errors) {
+	        foreach ($this->errors as $error) {
+	    		echo '<div class="login_message error">'.PHP_EOL;
+	        	echo $error.PHP_EOL; 
+	    		echo '</div>'.PHP_EOL;            
+	        }
+	    }
+	    
+	    if ($this->messages) {
+	        foreach ($this->messages as $message) {
+	     	    echo '<div class="login_message success">'.PHP_EOL;
+	            echo $message.PHP_EOL; 
+	   		 echo '</div>'.PHP_EOL;              
+	        }
+	    }    
+    }
+
 
     private function validate_user_logged() {
         // verification
@@ -135,20 +159,16 @@ class Login {
                      */
                     setcookie("user_name", $result_row->user_name, time() + (3600*24*100));
                     setcookie("user_email", $result_row->user_email, time() + (3600*24*100));
-                    
                     $this->user_is_logged_in = true;
                     return true;          
                     
                 } else {
-                    
                     $this->errors[] = "Wrong password or username. Try again.";
                     $this->login_delay();
                     return false;  
-                    
                 }                
                 
             } else {
-                
                 $this->errors[] = "Wrong password or username. Try again.";
                 $this->login_delay();
                 return false;
@@ -156,34 +176,29 @@ class Login {
     }
     
     
+	
     public function doLogout() {
-        
-            $_SESSION = NULL;
-            session_destroy();
-            $this->user_is_logged_in = false;
-            $this->messages[] = "You have been logged out.";
+		if(isset($_SESSION)){
+            $_SESSION = array();
+			session_regenerate_id();
+		}
+        $this->user_is_logged_in = false;			
     }
     
     
-    public function isUserLoggedIn() {
-        
+	
+    public function isUserLoggedIn() {    
         return $this->user_is_logged_in;
-        
     }
+    
     
     
     public function displayRegisterPage() {
-        
         if (isset($_GET["register"])) {
-            
             return true;
-            
         } else {
-            
             return false;
-            
         }
-        
     }
 
 

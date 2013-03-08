@@ -1,32 +1,8 @@
 
 <div class="login_wrapper">    
-    <?php
-
-    if ($login->errors) {
-        foreach ($login->errors as $error) {
-            
-    ?>              
-    <div class="login_message error">
-        <?php echo $error; ?>
-    </div>            
-    <?php
-    
-        }
-    }
-    
-    if ($login->messages) {
-        foreach ($login->messages as $message) {
-    ?>
-    <div class="login_message success">
-        <?php echo $message; ?>
-    </div>              
-    <?php
-    
-        }
-    }
-
-    ?>             
+   
     <form method="post" action="<?=$_SERVER["SCRIPT_NAME"]?>" name="loginform" id="loginform">
+    <?=$nonce->getNewHiddenInput('login')?>
     <div class="login">
         <div id="login_avatar" style="background-image: url('<?php echo $login->avatar_url; ?>');">
             <!--<img id="login_avatar" src="views/img/ani_avatar_static_01.png" style="width:125px; height:125px;" />-->
@@ -49,7 +25,7 @@
         </div>
     </div>    
     <div style="width:500px; height: 40px; line-height: 40px; text-align: right; color:#ccc; font-size:11px; font-family: 'Droid Sans', sans-serif; ">
-     <?php if (PUBLIC_REGISTER) { echo '<a class="login_link" href="'.$_SERVER["SCRIPT_NAME"].'?register">Create new Account</a>'; } ?>        
+     <?php if (PUBLIC_REGISTER) { echo '<a class="login_link" href="'.$_SERVER["SCRIPT_NAME"].'?'.$nonce->getNew('register').'&register">Create new Account</a>'; } ?>        
     </div>
     </form>
 </div>

@@ -31,6 +31,7 @@
     <?php if (!$login->registration_successful) { ?>
     
     <form method="post" action="?register" name="registerform" id="registerform">
+     <?=$nonce->getNewHiddenInput('Register')?>
     <div class="login" style="height:250px;">
         <div id="login_avatar_wrapper" style="width: 125px; height: 250px; float:left; margin:0;">
             <div id="login_avatar" class="standard_avatar" style="width: 125px; height: 125px; float:left; margin:0;">

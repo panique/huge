@@ -42,10 +42,11 @@ spl_autoload_register("autoload");
 //create a database connection
 $db    = new Database();
 
+// start the nonce tools with database connection
+$nonce = new Nonce($db);
+
 // start this baby and give it the database connection
 $login = new Login($db);
-
-
 
 
 include('views/header/header.php'); 
