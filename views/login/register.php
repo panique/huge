@@ -2,18 +2,6 @@
 
 <div class="login_wrapper">
     <?php
-
-    if ($login->errors) {
-        foreach ($login->errors as $error) {
-            
-    ?>              
-    <div class="login_message error">
-        <?php echo $error; ?>
-    </div>
-    <?php
-    
-        }
-    }
     
     if ($login->messages) {
         foreach ($login->messages as $message) {

@@ -104,17 +104,7 @@
         <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="loginform" id="loginform">
             <fieldset>
                 
-        <?php
-
-        if ($login->errors) {
-            foreach ($login->errors as $error) {
-            	if (strlen($error) != 0 ) {
-                	echo '<div class="message_error">'.$error.'</div>';                
-				}
-            }
-        }
-        
-        ?>       
+   
         		         
                 <?=$nonce->getNewHiddenInput('logout')?>
                 <input type="text" name="user_name" value="Username" onfocus="if(this.value=='Username') this.value='';" onblur="if(this.value=='') this.value='Username';" /><br />
