@@ -30,7 +30,7 @@ require_once("config/db.php");
 
 // class autoloader function, this includes all the classes that are needed by the script
 // you can remove this stuff if you want to include your files manually
-function autoload($class)
+function __autoload($class)
 {
     require('classes/' . $class . '.class.php');
 }
