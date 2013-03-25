@@ -26,7 +26,8 @@ define( 'NONCE_UNIQUE_KEY' , '' );
 /// delay before a link or form become outdated and cause a logout
 define( 'NONCE_DURATION' , 300 ); // 300 makes link or form good for 5 minutes from time of generation
 
-
+/// force pages to use https
+define( 'FORCE_HTTPS' , true ); //true or false
 
 
 

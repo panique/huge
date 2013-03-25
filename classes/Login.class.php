@@ -32,11 +32,20 @@ class Login {
      * you know, when you do "$login = new Login();"
      */    
     public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
+
+// CHECK FOR HTTPS     
+		if( FORCE_HTTPS  && $_SERVER["HTTPS"] != "on") {// if you are not using apache server you may have to change the $_SERVER["HTTPS"] variable
+		   header("HTTP/1.1 301 Moved Permanently"); // Search engines loves 301 redirect.
+		   header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
+		   exit();
+		}
+    
+// START SESSION    
         global $nonce;
 	    session_start();        
 
 //COOKIE
-     	      // cookie handling user name
+     	// cookie handling user name
         if (isset($_COOKIE['user_name'])) {
             $this->view_user_name = strip_tags($_COOKIE["user_name"]);
         } else {
@@ -49,8 +58,7 @@ class Login {
         } else {
             // override 
             $this->avatar_url = "http://www.gravatar.com/avatar/" . md5("xxxxxx@xxxxxxxxxx.com") . "?d=mm&s=125";
-        }
-        
+        }      
 		
 // LOOK FOR REQUESTS
 		// First, logout request
