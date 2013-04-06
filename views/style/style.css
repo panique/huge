@@ -57,8 +57,8 @@ Simple PHP Login related CSS stuff
 */
     
 body {
-    background-image: url("../img/bg_black_metal_01.jpg");
-    /*background-image: url("../img/bg_black_holes.jpg");*/
+    background-image: url("img/bg_black_metal_01.jpg");
+    /*background-image: url("img/bg_black_holes.jpg");*/
     /*background-repeat: no-repeat;*/
     background-size: 100%;
 }
@@ -85,7 +85,7 @@ body {
 }
 
 .login_submit {
-    width: 124px; height: 125px; background-image: url('../img/icon_lock.png'); background-position: center 20px; background-repeat: no-repeat; opacity: 0.5;
+    width: 124px; height: 125px; background-image: url('img/icon_lock.png'); background-position: center 20px; background-repeat: no-repeat; opacity: 0.5;
     cursor: pointer;
     transition: opacity 1s;
     -moz-transition: opacity 1s; /* Firefox 4 */
@@ -99,7 +99,7 @@ body {
 }
 
 .login_submit_register {
-    width: 124px; height: 250px; background-image: url('../img/icon_register.png'); background-position: center 90px; background-repeat: no-repeat; opacity: 0.5;
+    width: 124px; height: 250px; background-image: url('img/icon_register.png'); background-position: center 90px; background-repeat: no-repeat; opacity: 0.5;
     cursor: pointer;
     transition: opacity 1s;
     -moz-transition: opacity 1s; /* Firefox 4 */
@@ -116,7 +116,7 @@ body {
 
 .login_logout {
     float:right;
-    width: 49px; height: 50px; background-image: url('../img/icon_logout.png'); background-position: center 7px; background-repeat: no-repeat; opacity: 0.5;
+    width: 49px; height: 50px; background-image: url('img/icon_logout.png'); background-position: center 7px; background-repeat: no-repeat; opacity: 0.5;
     cursor: pointer;
     border-left: 1px solid #e6e6e6;
     transition: opacity 1s;
@@ -171,15 +171,15 @@ input.login_input.active {
     height: 125px;
     float:left;
     margin:0; 
-    /*background-image: url("../img/avatar_standard.jpg");*/
-    background-image: url("../img/avatar_01.png");
-    /*background-image: url("../img/avatar_default_woman_125x125.jpg");*/
+    /*background-image: url("img/avatar_standard.jpg");*/
+    background-image: url("img/avatar_01.png");
+    /*background-image: url("img/avatar_default_woman_125x125.jpg");*/
     background-size: 100%;
     
 }
 
 #login_avatar.standard_avatar {
-    background-image: url("../img/avatar_standard.jpg");
+    background-image: url("img/avatar_standard.jpg");
 }
 
 

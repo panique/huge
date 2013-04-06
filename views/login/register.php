@@ -1,25 +1,12 @@
 
 
 <div class="login_wrapper">
-    <?php
+   
     
-    if ($login->messages) {
-        foreach ($login->messages as $message) {
-    ?>
-    <div class="login_message success">
-        <?php echo $message; ?>
-    </div>              
-    <?php
-    
-        }
-    }
-
-    ?>    
-    
-    <?php if (!$login->registration_successful) { ?>
+    <?php if (!$this->login->registration_successful) { ?>
     
     <form method="post" action="?register" name="registerform" id="registerform">
-     <?=$nonce->getNewHiddenInput('Register')?>
+     <?=$this->nonce->getNewHiddenInput('Register')?>
     <div class="login" style="height:250px;">
         <div id="login_avatar_wrapper" style="width: 125px; height: 250px; float:left; margin:0;">
             <div id="login_avatar" class="standard_avatar" style="width: 125px; height: 125px; float:left; margin:0;">

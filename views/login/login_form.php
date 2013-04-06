@@ -106,14 +106,14 @@
                 
    
         		         
-                <?=$nonce->getNewHiddenInput('logout')?>
+                <?=$this->nonce->getNewHiddenInput('logout')?>
                 <input type="text" name="user_name" value="Username" onfocus="if(this.value=='Username') this.value='';" onblur="if(this.value=='') this.value='Username';" /><br />
                 <input type="password" name="user_password" value="Password" onfocus="if(this.value=='Password') this.value='';" onblur="if(this.value=='') this.value='Password';" /><br />
                 <input type="submit" name="login" value="Login" />
             </fieldset>
         </form>
 
-        <a href="index.php?<?=$nonce->getNew('register')?>&action=register">
+        <a href="index.php?<?=$this->nonce->getNew('register')?>&action=register">
             Register new user
         </a>
 

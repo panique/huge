@@ -29,19 +29,18 @@ class Login {
     
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$login = new Login();"
      */    
-    public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
+    public function __construct($db, $nonce) {
 
-// CHECK FOR HTTPS     
-		if( FORCE_HTTPS  && $_SERVER["HTTPS"] != "on") {// if you are not using apache server you may have to change the $_SERVER["HTTPS"] variable
-		   header("HTTP/1.1 301 Moved Permanently"); // Search engines loves 301 redirect.
+
+// FORCE HTTPS     
+		if( FORCE_HTTPS  && $_SERVER["HTTPS"] != "on") {
+		   header("HTTP/1.1 301 Moved Permanently"); // Search engines love 301 redirect.
 		   header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
 		   exit();
 		}
     
 // START SESSION    
-        global $nonce;
 	    session_start();        
 
 //COOKIE
@@ -103,30 +102,7 @@ class Login {
      } 
 
 
-   //TODO remove other error display around views pages
-    function __destruct(){
-	   	global $nonce;
-		if ( strlen($nonce->getError()) !== 0 ){
-			$this->errors[] = $nonce->getError();					
-		}
-	
-	    if ($this->errors) {
-	        foreach ($this->errors as $error) {
-	    		echo '<div class="login_message error">'.PHP_EOL;
-	        	echo $error.PHP_EOL; 
-	    		echo '</div>'.PHP_EOL;            
-	        }
-	    }
-	    
-	    if ($this->messages) {
-	        foreach ($this->messages as $message) {
-	     	    echo '<div class="login_message success">'.PHP_EOL;
-	            echo $message.PHP_EOL; 
-	   		 echo '</div>'.PHP_EOL;              
-	        }
-	    }    
-    }
-
+ 
 
     private function validate_user_logged() {
         // verification

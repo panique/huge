@@ -2,7 +2,7 @@
 
 
 /*
- * Name: NONCE
+ * Name: Nonce
  * Created By: border0464111 (fredericguilbault@live.ca)
  * Created On: feb 2013
  */
@@ -30,25 +30,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //=== Nonce ==============================
 class Nonce{
 	
-	private $new_nonce = NULL;
-	private $user = NULL;
-	private $logged = FALSE;
-	private $errors = array();
+	private $new_nonce  = NULL;
+	private $user       = NULL;
+	private $logged     = FALSE;
 	private $connection = NULL;
+	public  $errors     = array();
 
 
 
-
-	private  function connect_to_db($db){
-		if ($this->connection === NULL){
-			$this->connection = $db->getDatabaseConnection();       
-			if ($this->connection == FALSE) {
-	            $this->errors[] = "No MySQL connection.";
-			} 
-		}
-		return $this->connection;
-	}            
-
+	function __construct($db){
+		$this->connection = $db->getDatabaseConnection();       
+		if ($this->connection == FALSE) {
+            $this->errors[] = "No MySQL connection.";
+		} 
+	}
+	            
 
 
 	private function getUsername(){
@@ -62,14 +58,13 @@ class Nonce{
 	
 	
 	public function getNew($action){
-		global $login;
 		$timestamp = time();
 		$entryid = '0464111'; //TODO GENERATE A RANDOM NUMBER 
 		$hash = md5($action.$entryid.$this->getUsername().$timestamp.NONCE_UNIQUE_KEY);         
 		if (isset($_SESSION)){ 
 			$_SESSION['nonce'][$hash]['timestamp'] = $timestamp;
-			$_SESSION['nonce'][$hash]['action'] = $action;
-			$_SESSION['nonce'][$hash]['entryid'] = $entryid;
+			$_SESSION['nonce'][$hash]['action']    = $action;
+			$_SESSION['nonce'][$hash]['entryid']   = $entryid;
 		return $hash;
 		}else{
 			$this->errors[] = 'need an active session to generate a new nonce.';
@@ -79,18 +74,7 @@ class Nonce{
 
 	public function getNewHiddenInput($action){
 	return'<input type="hidden" name="nonce" value="'.$this->getNew($action).'" >'.PHP_EOL;
-	}
-	
-	
-	public function getError(){
-		$buffer = '' ;
-		foreach ($this->errors as $error) {
-		 	if (strlen($error) != 0 ) {
-                 $buffer.= $error.'<br>'.PHP_EOL;                 
-			 }
-        }
-        return $buffer;
-	}					
+	}	
 	
 	
 	private function getOldHash(){
@@ -109,9 +93,9 @@ class Nonce{
 		$expire_point = time()-NONCE_DURATION;
 		// Recreate the nonce				
 		if ( isset($_SESSION['nonce'][$oldHash])) {
-			$old_timestamp = $_SESSION['nonce'][$oldHash]['timestamp'] ;
-			$old_action = $_SESSION['nonce'][$oldHash]['action'] ;
-			$old_entryid = $_SESSION['nonce'][$oldHash]['entryid'] ;
+			$old_timestamp  = $_SESSION['nonce'][$oldHash]['timestamp'] ;
+			$old_action     = $_SESSION['nonce'][$oldHash]['action'] ;
+			$old_entryid    = $_SESSION['nonce'][$oldHash]['entryid'] ;
 			$recreated_hash = md5($old_action.$old_entryid.$this->getUsername().$old_timestamp.NONCE_UNIQUE_KEY);
 		}else{
 			$this->errors[] = "Failed to recreate Hash.";
@@ -131,8 +115,6 @@ class Nonce{
 	
 	// TODO clean the $_SESSION['nonce']
 	private function mark_as_used($hash,$timestamp){
-		global $db;
-		$this->connect_to_db($db);
 		$hash = mysql_real_escape_string($hash);//never trust users	
 		$timestamp = mysql_real_escape_string($timestamp);//never trust users	
 		return $this->connection->query("INSERT INTO phplogin_nonce (timestamp, hash )     VALUES( '$timestamp', '$hash' )");
@@ -141,8 +123,6 @@ class Nonce{
 	
 	
 	private function check_if_used($hash,$timestamp){
-		global $db;
-		$this->connect_to_db($db);
 		$hash = mysql_real_escape_string($hash);//never trust users	
 		$timestamp = mysql_real_escape_string($timestamp);//never trust users	
 		
@@ -157,9 +137,6 @@ class Nonce{
 	
 	
 	private function clean_db(){
-		global $db;
-		$this->connect_to_db($db);
-			
 		$expire_point = time()-NONCE_DURATION-241920; // 241920 ~= one month
 		return $this->connection->query("DELETE FROM 'phplogin_nonce' WHERE 'timestamp' < '$expire_point' ");		
 	}
