@@ -1,4 +1,3 @@
-<?php include('views/header/header.php'); ?>
 
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
 
@@ -15,7 +14,7 @@
                 Hey, <?php echo $_SESSION['user_name']; ?>
             </div>
             <div class="login_logout">
-                <a href="index.php?logout" style="width:49px; height:19px; padding-top: 31px; display:block; text-align: center; font-size:10px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" >Logout</a>
+                <a href="<?=$_SERVER["SCRIPT_NAME"]?>?logout" style="width:49px; height:19px; padding-top: 31px; display:block; text-align: center; font-size:10px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" >Logout</a>
             </div>            
             
             
@@ -30,5 +29,3 @@
                 </div
                 -->
         </div>
-
-<?php include('views/footer/footer.php'); ?>

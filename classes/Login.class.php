@@ -7,9 +7,10 @@
  * @author Panique <panique@web.de>
  * @version 1.1
  */
+
 class Login {
 
-    private     $connection                         = null;                     // database connection   
+    private     $connection                 = null;                     // database connection   
     
     private     $user_name                  = "";                       // user's name
     private     $user_email                 = "";                       // user's email
@@ -19,8 +20,8 @@ class Login {
     
     public      $registration_successful    = false;
     
-    public      $view_user_name           = "";
-    public      $view_user_email          = "";
+    public      $view_user_name             = "";
+    public      $view_user_email            = "";
 
     public      $errors                     = array();                  // collection of error messages
     public      $messages                   = array();                  // collection of success / neutral messages
@@ -28,52 +29,22 @@ class Login {
     
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$login = new Login();"
      */    
-    public function __construct(Database $db) {                     // (Database $db) says: the _construct method expects a parameter, but it has to be an object of the class "Database"
-        
-        $this->connection = $db->getDatabaseConnection();                   // get the database connection
-        
-        if ($this->connection) {                                            // check for database connection
-            
-            session_start();                                        // create/read session
-            
-            if (isset($_POST["register"])) {
-                
-                $this->registerNewUser();
-                
-            } elseif (isset($_GET["logout"])) {
-                
-                $this->doLogout();
-                            
-            } elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
-                
-                $this->loginWithSessionData();                
-                
-            } elseif (isset($_POST["login"])) {
-                
-                if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-                    
-                    $this->loginWithPostData();
-                
-                } elseif (empty($_POST['user_name'])) {
-                    
-                    $this->errors[] = "Username field was empty.";
-                    
-                } elseif (empty($_POST['user_password'])) {
-                    
-                    $this->errors[] = "Password field was empty.";
-                    
-                }
-                
-            }
-            
-        } else {
-            
-            $this->errors[] = "No MySQL connection.";
-        }
-        
-        // cookie handling user name
+    public function __construct($db, $nonce) {
+
+
+// FORCE HTTPS     
+		if( FORCE_HTTPS  && $_SERVER["HTTPS"] != "on") {
+		   header("HTTP/1.1 301 Moved Permanently"); // Search engines love 301 redirect.
+		   header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
+		   exit();
+		}
+    
+// START SESSION    
+	    session_start();        
+
+//COOKIE
+     	// cookie handling user name
         if (isset($_COOKIE['user_name'])) {
             $this->view_user_name = strip_tags($_COOKIE["user_name"]);
         } else {
@@ -86,19 +57,65 @@ class Login {
         } else {
             // override 
             $this->avatar_url = "http://www.gravatar.com/avatar/" . md5("xxxxxx@xxxxxxxxxx.com") . "?d=mm&s=125";
-        }
-        
-    }    
-    
+        }      
+		
+// LOOK FOR REQUESTS
+		// First, logout request
+	    if (isset($_GET["logout"])) {
+			$this->doLogout();						
+			 
+		// if user pretend to be logged in.	            
+     	}elseif ((isset($_SESSION['user_logged_in'])) && ($_SESSION['user_logged_in'] == 1)) {
+			 
+			        if ( $this->connect_to_db($db)) {
+			        	$this->validate_user_logged();                
+					}
+			}
+				       
+		// if user try to loggin (sending login form data)				    
+        if ( isset($_POST["login"])) {
 
-    private function loginWithSessionData() {
-        
-        $this->user_is_logged_in = true;
-        
+        	if (empty($_POST['user_name']) || empty($_POST['user_password'])) {
+				$this->errors[] = " Username or Password field was empty.";
+            	$this->doLogout();
+			}elseif ( $nonce->isValid() ) {
+         	        if ($this->connect_to_db($db)) {	
+                    	$this->loginWithPostData();
+                	}
+			}else{
+            	$this->doLogout();			
+				}
+		
+		// if user try to register ( sending login form data)
+		}elseif( isset($_POST["register"] )) {
+ 		    if (  PUBLIC_REGISTER !== TRUE &&  ! $this->user_is_logged_in ) {
+                 $this->errors[] = "Registering is disabled.";
+				 return ;
+            }elseif( $nonce->isValid() ){
+            	if ($this->connect_to_db($db)) {     
+                	$this->registerNewUser();
+				}
+			}else{
+				$this->doLogout();
+			}
+		}       
+     } 
+
+
+ 
+
+    private function validate_user_logged() {
+        // verification
+       if ( ( $_SESSION['agent'] == $_SERVER['HTTP_USER_AGENT'] ) && ($_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) ) {
+           	session_regenerate_id();
+        	$this->user_is_logged_in = true;
+       }else{
+       	$this->doLogout();
+       }	
     }
     
 
-    private function loginWithPostData() {
+    private function loginWithPostData() { // Login with the form content
             
             $this->user_name = $this->connection->real_escape_string($_POST['user_name']);            
             $checklogin = $this->connection->query("SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = '".$this->user_name."';");
@@ -115,59 +132,58 @@ class Login {
                     $_SESSION['user_name'] = $result_row->user_name;
                     $_SESSION['user_email'] = $result_row->user_email;
                     $_SESSION['user_logged_in'] = 1;
+                    $_SESSION['user_name'] = $result_row->user_name;
                     
+					// session security
+                    $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'] ;
+					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+					$_SESSION['count'] = 0; 
+										 
                     /**
                      *  write user data into COOKIE [a file in user's browser]
                      */
                     setcookie("user_name", $result_row->user_name, time() + (3600*24*100));
                     setcookie("user_email", $result_row->user_email, time() + (3600*24*100));
-                    
                     $this->user_is_logged_in = true;
                     return true;          
                     
                 } else {
-                    
-                    $this->errors[] = "Wrong password. Try again.";
+                    $this->errors[] = "Wrong password or username. Try again.";
+                    $this->login_delay();
                     return false;  
-                    
                 }                
                 
             } else {
-                
-                $this->errors[] = "This user does not exist.";
+                $this->errors[] = "Wrong password or username. Try again.";
+                $this->login_delay();
                 return false;
             }        
     }
     
     
+	
     public function doLogout() {
-        
+		if(isset($_SESSION)){
             $_SESSION = array();
-            session_destroy();
-            $this->user_is_logged_in = false;
-            $this->messages[] = "You have been logged out.";
+			session_regenerate_id();
+		}
+        $this->user_is_logged_in = false;			
     }
     
     
-    public function isUserLoggedIn() {
-        
+	
+    public function isUserLoggedIn() {    
         return $this->user_is_logged_in;
-        
     }
+    
     
     
     public function displayRegisterPage() {
-        
         if (isset($_GET["register"])) {
-            
             return true;
-            
         } else {
-            
             return false;
-            
         }
-        
     }
 
 
@@ -242,7 +258,7 @@ class Login {
                     
                     if ($query_new_user_insert) {
                         
-                        $this->messages[] = "Your account was successfully created.<br/>Please <a href='index.php' class='green_link'>click here to login</a>.";
+                        $this->messages[] = "Your account was successfully created.<br/>Please <a href='".$_SERVER["SCRIPT_NAME"]."' class='green_link'>click here to login</a>.";
                         $this->registration_successful = true;
                         
                     } else {
@@ -253,6 +269,24 @@ class Login {
                 }
         }
     }
+
+
+
+	private function login_delay(){
+		sleep(LOGIN_FAIL_DELAY);
+	}
+	
+	
+	private  function connect_to_db($db){
+		if ($this->connection === NULL){
+			$this->connection = $db->getDatabaseConnection();       
+			if ($this->connection == FALSE) {
+	            $this->errors[] = "No MySQL connection.";
+			} 
+		}
+		return $this->connection;
+	}            
+
 
 
 }
