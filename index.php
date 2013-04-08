@@ -14,7 +14,7 @@
 
 
 <!-- message example-->
-<?
+<?php
 $PHPlogin->add_message('Green and happy message');
 $PHPlogin->add_error('Red and bad message');
 ?>
@@ -24,4 +24,4 @@ $PHPlogin->add_error('Red and bad message');
 
 
 
-<?include('views/footer/footer.php')?>
+<?php include('views/footer/footer.php'); ?>
