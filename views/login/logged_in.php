@@ -14,7 +14,7 @@
                 Hey, <?php echo $_SESSION['user_name']; ?>
             </div>
             <div class="login_logout">
-                <a href="<?=$_SERVER["SCRIPT_NAME"]?>?logout" style="width:49px; height:19px; padding-top: 31px; display:block; text-align: center; font-size:10px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" >Logout</a>
+                <a href="<?php =$_SERVER["SCRIPT_NAME"]; ?>?logout" style="width:49px; height:19px; padding-top: 31px; display:block; text-align: center; font-size:10px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" >Logout</a>
             </div>            
             
             
