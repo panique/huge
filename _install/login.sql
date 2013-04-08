@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 CREATE TABLE IF NOT EXISTS `phplogin_nonce` (
-  `timestamp` bigint(20) NOT NULL  COMMENT 'timestamp of the nonce creation',
+  `timestamp` bigint(20) NOT NULL COMMENT 'timestamp of the nonce creation',
   `hash` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'nonce hash',
-  PRIMARY KEY (`timestamp`),
+  PRIMARY KEY (`timestamp`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='nonce table' ;
 
 
