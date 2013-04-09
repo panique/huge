@@ -6,11 +6,11 @@
     <?php if (!$this->login->registration_successful) { ?>
     
     <form method="post" action="?register" name="registerform" id="registerform">
-     <?=$this->nonce->getNewHiddenInput('Register')?>
+     <?php echo $this->nonce->getNewHiddenInput('Register'); ?>
     <div class="login" style="height:250px;">
         <div id="login_avatar_wrapper" style="width: 125px; height: 250px; float:left; margin:0;">
             <div id="login_avatar" class="standard_avatar" style="width: 125px; height: 125px; float:left; margin:0;">
-                <!--<img id="login_avatar" src="views/img/ani_avatar_static_01.png" style="width:125px; height:125px;" />-->
+                <!--<img id="login_avatar" src="views/img/ani_avatar.png" style="width:125px; height:125px;" />-->
             </div>
             <div style="width: 124px; height: 125px; float:right; margin:0; border-right: 1px solid #e6e6e6;">
             </div>
@@ -38,7 +38,7 @@
         </div>
     </div>    
     <div style="width:500px; height: 40px; line-height: 40px; text-align: right; color:#ccc; font-size:11px; font-family: 'Droid Sans', sans-serif; ">
-        <a class="login_link" href="<?=$_SERVER['SCRIPT_NAME']?>">Back to Login Page</a>
+        <a class="login_link" href="<?php echo $_SERVER['SCRIPT_NAME']; ?>">Back to Login Page</a>
     </div>
     </form>
     

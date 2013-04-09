@@ -1,11 +1,11 @@
 
 <div class="login_wrapper">    
    
-    <form method="post" action="<?=$_SERVER["SCRIPT_NAME"]?>" name="loginform" id="loginform">
-    <?=$this->nonce->getNewHiddenInput('login')?>
+    <form method="post" action="<?php echo $_SERVER["SCRIPT_NAME"]; ?>" name="loginform" id="loginform">
+    <?php echo $this->nonce->getNewHiddenInput('login'); ?>
     <div class="login">
         <div id="login_avatar" style="background-image: url('<?php echo $this->login->avatar_url; ?>');">
-            <!--<img id="login_avatar" src="views/img/ani_avatar_static_01.png" style="width:125px; height:125px;" />-->
+            <!--<img id="login_avatar" src="views/img/ani_avatar.png" style="width:125px; height:125px;" />-->
         </div>
         <div style="width: 250px; height: 125px; float:left; margin:0;">
             <div style="width: 250px; height: 62px; float:left; margin:0; border-bottom: 1px solid #e6e6e6;">
