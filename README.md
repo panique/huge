@@ -17,11 +17,17 @@ http://www.php-login.net
 ## HOW TO INSTALL ##
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
-* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 2. change mySQL user and or mySQL password in config/config.php ("DB_USER" and "DB_PASS").
 
 ###CONFIGURE
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
+
+###USAGE
+You can PHP-Login where he is with the php-login/index.php .
+Or include it in your website with php-login/include/php-login.php
+(see integration example in php-login/include/example.php)
+
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
