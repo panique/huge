@@ -26,7 +26,9 @@
 // Public Outlines:
 //  $PHPlogin->add_message($message)
 //  $PHPlogin->add_error($error)
-
+//  $PHPlogin->userIsLogged()        // return boolean
+//  $PHPlogin->get_user_name()      // return username or NULL if not set
+//  $PHPlogin->get_user_email()     // return email or NULL if not set
 //=========================================================
 
 
@@ -52,6 +54,11 @@ class PHPlogin {
 		$this->db    = new Database();
 		$this->nonce = new Nonce($this->db); // nonces protect aganst replay attacks and semantic URL attacks
 		$this->login = new Login($this->db, $this->nonce); 
+	}
+
+
+public function userIsLogged(){
+		return $this->login->isUserLoggedIn();
 	}
 
 
@@ -115,6 +122,22 @@ class PHPlogin {
 	}
 
 
+public function get_user_name(){
+		if ($this->login->isUserLoggedIn()){
+			return  $this->login->view_user_name ;
+		}else{
+			return NULL ;
+		}
+	}
+
+
+	public function get_user_email(){
+		if ($this->login->isUserLoggedIn()){
+			return  $this->login->view_user_email ;
+		}else{
+			return NULL ;
+		}
+	}
 
 
 
