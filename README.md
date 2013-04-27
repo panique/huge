@@ -9,7 +9,7 @@ Available in 3 versions:
 
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. [coming up] advanced (much more possibilites, better organized code)
-3. [coming up] full
+3. [coming up] high-end (same like "advanced", but with css themes, javascript actions, ajax login etc.)
 
 ## HOW TO INSTALL ##
 
