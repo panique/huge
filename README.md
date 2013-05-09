@@ -1,4 +1,4 @@
-# A simple, clean and secure PHP & MySQL Login Script #
+# A simple PHP & MySQL Login Script #
 
 Always find the latest version, a documentation and other stuff on the project website:
 http://www.php-login.net
@@ -22,13 +22,14 @@ Available in 3 versions:
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
-* needs PHP 5.3+ or PHP 5.4+
+* needs PHP 5.3.2+, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
 * needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) ?
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 
-### USAGE WITH OLDER PHP VERSIONS (older than 5.3)
+### USAGE WITH OLDER PHP VERSIONS: older than 5.3.2
 
 Sorry, this makes no sense anymore. PHP 5.2 is outdated since 2009, so supporting this would be useless.
+PHP 5.3.2 is needed (as this introduces the SHA256 and SHA512 hashing algorithms used here)
