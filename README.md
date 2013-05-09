@@ -32,4 +32,4 @@ Available in 3 versions:
 ### USAGE WITH OLDER PHP VERSIONS: older than 5.3.2
 
 Sorry, this makes no sense anymore. PHP 5.2 is outdated since 2009, so supporting this would be useless.
-PHP 5.3.2 is needed (as this introduces the SHA256 and SHA512 hashing algorithms used here)
+PHP 5.3.2 is needed (as this introduces the hashing algorithms used here)
