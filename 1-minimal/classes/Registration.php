@@ -94,19 +94,19 @@ class Registration {
                     return $salt;
                 }
 
-                // using the standard php salt length
+                // getting the max salt length on your system (usually 123 characters on linux)
                 $max_salt = CRYPT_SALT_LENGTH;
 
                 // hard to explain, this part of the upcoming hash string is some kind of parameter, defining
-                // the intensity of calculation. we are using the blowfish algorithm here, please see
+                // the intensity of calculation. we are using the SHA-512 algorithm here, please see
                 // @see php.net/manual/en/function.crypt.php
                 // for more information.
-                $hashing_algorithm = '$2a$10$';
+                $hashing_algorithm = '$6$rounds=5000$';
 
                 //get the longest salt, could set to 22 crypt ignores extra data
                 $salt = get_salt($max_salt);
 
-                //append salt data to the password, and crypt using salt, results in a 60 char output
+                //append salt data to the password, and crypt using salt, results in a 118 character output
                 $this->user_password_hash = crypt($this->user_password, $hashing_algorithm.$salt);
 
                 // check if user already exists

@@ -1,6 +1,10 @@
 # CHANGELOG #
 
-##1.2##
+May 9, 2013
+* changed hashing algorithm from blowfish/SHA256 to SHA512
+* changed database creation files due to change to SHA512
+
+April 26, 2013
 * complete makeover, nearly all files have been touched
 * registration process is now in seperate class and seperate init file / view (register.php etc.)
 * massive reduction of the views: no css, no js, no unnecessary stuff. just pure naked basics

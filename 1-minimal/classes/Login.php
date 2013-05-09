@@ -67,7 +67,7 @@ class Login {
 
     private function loginWithPostData() {
         
-        // if POST data (from login form) contain non-empty user_name and non-empty user_password
+        // if POST data (from login form) contains non-empty user_name and non-empty user_password
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
             
             // create a database connection, using the constants from config/db.php (which we loaded in index.php)
