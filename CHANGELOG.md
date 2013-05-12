@@ -3,6 +3,8 @@
 May 12, 2013
 * changed hashing algorithm from blowfish/SHA256 to SHA512
 * changed database creation files (due to new SHA512 hashing algorithm)
+* changed database column "user_password_hash" from CHAR(60) to CHAR(118) [as hash is always 118 chars long]
+* added HTML5 attributes to views (type="email", required etc.)
 
 April 26, 2013
 * complete makeover, nearly all files have been touched
