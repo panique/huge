@@ -11,7 +11,8 @@
  * and gives the basic functions a proper login system needs.
  * 
  * Please remember: this is just the minimal version of the login script, so if you need a more
- * professional version, have a look on the github repo. buzzwords: MVC, dependency injected,
+ * advanced version, have a look on the github repo. there are / will be better versions, including
+ * more functions and/or much more complex code / file structure. buzzwords: MVC, dependency injected,
  * one shared database connection, PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style
  * 
  * @package php-login
@@ -20,11 +21,10 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-
 // include the configs / constants for the database connection
 require_once("config/db.php");
 
-//load the registration class
+// load the registration class
 require_once("classes/Registration.php");
 
 // create the registration object. when this object is created, it will do all registration stuff automaticly
