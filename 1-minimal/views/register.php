@@ -21,13 +21,13 @@ if ($registration->messages) {
 
 <!-- register form -->
 <form method="post" action="register.php" name="registerform">        
-    <label for="user_name">Username</label>
+    <label for="login_input_username">Username</label>
     <input id="login_input_username" class="login_input" type="text" name="user_name" />        
-    <label for="user_email">User's email</label>
+    <label for="login_input_email">User's email</label>
     <input id="login_input_email" class="login_input" type="text" name="user_email" />        
-    <label for="user_password_new">Password</label>
+    <label for="login_input_password_new">Password</label>
     <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" autocomplete="off" />        
-    <label for="user_password_repeat">Repeat password</label>
+    <label for="login_input_password_repeat">Repeat password</label>
     <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" autocomplete="off" />        
     <input type="submit"  name="register" value="Register" />
 </form>
