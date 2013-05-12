@@ -13,28 +13,28 @@ Available in 3 versions:
 
 ###DIFFERENT VERSIONS
 
-1. MINIMAL VERSION
-- users can register a new account with username, email and password
-- users can login (with username and password)
-- users can logout
-- 2 classes (Login & Registration)
-- 3 views (login form (=not logged in), logged in, registration form)
-- 1 simple database connection config file
-- simple, but effective, clean and easy to understand code/file structure
+MINIMAL VERSION
+* users can register a new account with username, email and password
+* users can login (with username and password)
+* users can logout
+* 2 classes (Login & Registration)
+* 3 views (login form (=not logged in), logged in, registration form)
+* 1 simple database connection config file
+* simple, but effective, clean and easy to understand code/file structure
 
-2. ADVANCED VERSION (same like minimal version, but additional functions)
-- users can edit their properties
-- users can delete their accounts
-- users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
-- users can have a role status (like normal user, premium user, super premium user)
-- basic captchas
+ADVANCED VERSION (same like minimal version, but additional functions)
+* users can edit their properties
+* users can delete their accounts
+* users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
+* users can have a role status (like normal user, premium user, super premium user)
+* basic captchas
 
-3. PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
-- biggest change: quite professional MVC file/code structure
-- URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
-- professional usage of controllers and actions
-- database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
-- ...
+PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
+* biggest change: quite professional MVC file/code structure
+* URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
+* professional usage of controllers and actions
+* database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
+* ...
 
 ###HOW TO INSTALL
 
