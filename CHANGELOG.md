@@ -1,8 +1,8 @@
 # CHANGELOG #
 
-May 9, 2013
+May 12, 2013
 * changed hashing algorithm from blowfish/SHA256 to SHA512
-* changed database creation files due to change to SHA512
+* changed database creation files (due to new SHA512 hashing algorithm)
 
 April 26, 2013
 * complete makeover, nearly all files have been touched
