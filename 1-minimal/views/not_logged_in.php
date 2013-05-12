@@ -29,4 +29,6 @@ if ($login->messages) {
     <input type="submit"  name="login" value="Log in" />
 </form>
 
+<a href="register.php">Register new account</a>
+
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
