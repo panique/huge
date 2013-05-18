@@ -53,9 +53,14 @@ class Registration {
             
         } elseif ($_POST['user_password_new'] != $_POST['user_password_repeat']) {
           
-            $this->errors[] = "Password and password repeat are not the same";            
+            $this->errors[] = "Password and password repeat are not the same";   
+            
+        } elseif (strlen($_POST['user_name']) > 64) {
+            
+            $this->errors[] = "Username cannot be longer than 64 characters";
                         
         } elseif (!empty($_POST['user_name'])
+                  && strlen($_POST['user_name']) <= 64
                   && !empty($_POST['user_password_new']) 
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] == $_POST['user_password_repeat'])) {
@@ -72,8 +77,8 @@ class Registration {
                 $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
 
                 // cut data down to max 64 chars
-                $this->user_name            = substr($this->user_name, 0, 64);
-                $this->user_password        = substr($this->user_password, 0, 64);
+                //$this->user_name            = substr($this->user_name, 0, 64);
+                $this->user_password        = substr($this->user_password, 0, 1024);
                 $this->user_email           = substr($this->user_email, 0, 64);
 
                 // generate random string "salt", a string to "encrypt" the password hash
