@@ -51,7 +51,7 @@ class Registration {
           
             $this->errors[] = "Empty Password";            
             
-        } elseif ($_POST['user_password_new'] != $_POST['user_password_repeat']) {
+        } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
           
             $this->errors[] = "Password and password repeat are not the same";   
             
@@ -83,7 +83,7 @@ class Registration {
                   && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
                   && !empty($_POST['user_password_new']) 
                   && !empty($_POST['user_password_repeat']) 
-                  && ($_POST['user_password_new'] == $_POST['user_password_repeat'])) {
+                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
             
             // TODO: the above check is redundand, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
