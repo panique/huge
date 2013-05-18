@@ -1,5 +1,14 @@
 # CHANGELOG #
 
+May 18, 2013
+* 1-minimal: html5 form attributs that (optionally) validate the input fields on client's browsers:
+* 1-minimal: min/max length for email input fields
+* 1-minimal: min/max length for username input field, additionally html5 string check (a-z, A-Z, 0-9)
+* 1-minimal: user need to provide email now, registration without email is not possible anymore
+* 1-minimal: PHP checks for username structure (a-z, A-Z, 0-9), email structure
+* 1-minimal: removed 64 char limit for password. passwords can now be 1024 chars
+* 1-minimal: login.sql (in "_install" folder) renamed to users.sql (as it is the name of the database table)
+
 May 12, 2013
 * changed hashing algorithm from blowfish/SHA256 to SHA512
 * changed database creation files (due to new SHA512 hashing algorithm)
