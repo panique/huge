@@ -59,11 +59,34 @@ class Registration {
             
             $this->errors[] = "Username cannot be longer than 64 characters";
                         
+        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
+            
+            $this->errors[] = "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters";
+            
+        } elseif (empty($_POST['user_email'])) {
+            
+            $this->errors[] = "Email cannot be empty";
+            
+        } elseif (strlen($_POST['user_email']) > 64) {
+            
+            $this->errors[] = "Email cannot be longer than 64 characters";
+            
+        } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+            
+            $this->errors[] = "Your email adress is not in a valid email format";
+        
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
+                  && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+                  && !empty($_POST['user_email'])
+                  && strlen($_POST['user_email']) <= 64
+                  && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
                   && !empty($_POST['user_password_new']) 
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] == $_POST['user_password_repeat'])) {
+            
+            // TODO: the above check is redundand, but from a developer's perspective it makes clear
+            // what exactly we want to reach to go into this if-block
 
             // creating a database connection
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -76,15 +99,15 @@ class Registration {
                 $this->user_password        = $this->db_connection->real_escape_string($_POST['user_password_new']);
                 $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
 
-                // cut data down to max 64 chars
-                //$this->user_name            = substr($this->user_name, 0, 64);
+                // cut password to 1024 chars to prevent too much calculation
                 $this->user_password        = substr($this->user_password, 0, 1024);
-                $this->user_email           = substr($this->user_email, 0, 64);
 
-                // generate random string "salt", a string to "encrypt" the password hash
-                // this is a basic salt, you might replace this with a more advanced function
-                // @see http://en.wikipedia.org/wiki/Salt_(cryptography)
-
+                /* 
+                 * get_salt()
+                 * generate random string "salt", a string to "encrypt" the password hash
+                 * this is a basic salt, you might replace this with a more advanced function
+                 * @see http://en.wikipedia.org/wiki/Salt_(cryptography)
+                 */
                 function get_salt($length) {
 
                     $options = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
@@ -141,6 +164,10 @@ class Registration {
                 $this->errors[] = "Sorry, no database connection.";
 
             }
+            
+        } else {
+            
+            $this->errors[] = "An unknown error occured.";
             
         }
         
