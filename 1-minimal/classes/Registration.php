@@ -69,13 +69,11 @@ class Registration {
                 // escapin' this
                 $this->user_name            = $this->db_connection->real_escape_string($_POST['user_name']);
                 $this->user_password        = $this->db_connection->real_escape_string($_POST['user_password_new']);
-                $this->user_password_repeat = $this->db_connection->real_escape_string($_POST['user_password_repeat']);
                 $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
 
                 // cut data down to max 64 chars
                 $this->user_name            = substr($this->user_name, 0, 64);
                 $this->user_password        = substr($this->user_password, 0, 64);
-                $this->user_password_repeat = substr($this->user_password_repeat, 0, 64);
                 $this->user_email           = substr($this->user_email, 0, 64);
 
                 // generate random string "salt", a string to "encrypt" the password hash
