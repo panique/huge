@@ -5,7 +5,7 @@
  * This is the place where your database login constants are saved
  * 
  * For more info about constants please @see http://php.net/manual/en/function.define.php
- * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/questions/2447791/define-vs-const
+ * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/q/2447791/1114320
  */
 
 
