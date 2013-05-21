@@ -29,6 +29,7 @@ ADVANCED VERSION (same like minimal version, but additional functions)
 * (TODO: users can delete their accounts)
 * (TODO: graphical captchas)
 * (TODO: users can reset their passwords)
+
 NOTE: this version needs the mail-function (and in upcoming versions also the graphic/GD functions of PHP).
 Usually naked servers don't have a mail server installed, that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder
