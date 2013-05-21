@@ -62,3 +62,9 @@ PROFESSIONAL VERSION (same functions like advanced version, but totally new code
 
 Sorry, this makes no sense anymore. PHP 5.2 is outdated since 2009, so supporting this would be useless.
 PHP 5.3.2 is needed (as this introduces the hashing algorithms used here)
+
+###DONATION###
+
+If you want to support this script, feel free to donate via paypal:
+
+Click here https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG
