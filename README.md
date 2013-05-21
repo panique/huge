@@ -24,10 +24,14 @@ MINIMAL VERSION
 
 ADVANCED VERSION (same like minimal version, but additional functions)
 * users can edit their properties
-* users can delete their accounts
 * users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
-* users can have a role status (like normal user, premium user, super premium user)
-* basic captchas
+* (TODO: users can have a role status (like normal user, premium user, super premium user))
+* (TODO: users can delete their accounts)
+* (TODO: graphical captchas)
+* (TODO: users can reset their passwords)
+NOTE: this version needs the mail-function (and in upcoming versions also the graphic/GD functions of PHP).
+Usually naked servers don't have a mail server installed, that will make it possible to send mail.
+In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder
 
 PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
 * biggest change: quite professional MVC file/code structure
