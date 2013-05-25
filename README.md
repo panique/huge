@@ -1,6 +1,6 @@
 # A simple PHP & MySQL Login Script #
 
-Always find the latest version, a documentation and other stuff on the project website:
+Always find the latest version, documentation and other stuff on the project website:
 http://www.php-login.net
 
 *A simple, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script. Uses ultramodern futureproof SHA512 hashing algorithm with a salt string.*
@@ -22,19 +22,19 @@ MINIMAL VERSION
 * 1 simple database connection config file
 * simple, but effective, clean and easy to understand code/file structure
 
-ADVANCED VERSION (same like minimal version, but additional functions)
+ADVANCED VERSION (same functions as minimal version, with the following additional functions)
 * users can edit their properties
-* users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
+* users need to provide an email in registration process, and they have to click on a mailed registration verification link to activate account
 * (TODO: users can have a role status (like normal user, premium user, super premium user))
 * (TODO: users can delete their accounts)
 * (TODO: graphical captchas)
 * (TODO: users can reset their passwords)
 
 NOTE: this version needs the mail-function (and in upcoming versions also the graphic/GD functions of PHP).
-Usually naked servers don't have a mail server installed, that will make it possible to send mail.
+Usually naked servers don't have a mail server installed, and would make it impossible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder
 
-PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
+PROFESSIONAL VERSION (same functions as advanced version, but totally new code/file structure)
 * biggest change: quite professional MVC file/code structure
 * URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
 * professional usage of controllers and actions
