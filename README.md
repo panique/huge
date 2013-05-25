@@ -22,7 +22,7 @@ MINIMAL VERSION
 * 1 simple database connection config file
 * simple, but effective, clean and easy to understand code/file structure
 
-ADVANCED VERSION (same like minimal version, but additional functions)
+ADVANCED VERSION (same like minimal version, but additional functions, you can find this version in the develop-branch)
 * users can edit their properties
 * users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
 * (TODO: users can have a role status (like normal user, premium user, super premium user))
