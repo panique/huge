@@ -41,6 +41,14 @@ PROFESSIONAL VERSION (same functions like advanced version, but totally new code
 * database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
 * ...
 
+###COMING UP
+
+* changing the entire hash/salt process, using the new PHP 5.5 hashing/salting functions. To make those functions also available in PHP 5.3 and PHP 5.4,
+we use the PHP password compatibility library (one file, here: https://github.com/ircmaxell/password_compat/blob/master/lib/password.php). This will be a
+bigger process, and will introduce changes in the database field structure and the login class code. But, once this is done, we'll have a very clean, very
+secure, perfectly standard fitting password hashing backend, that will not need any changes anymore. Those hashing functions are build futureproof and
+come directly from the PHP core, so your passwords are encrypted in one of the best ways possible.
+
 ###HOW TO INSTALL
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
