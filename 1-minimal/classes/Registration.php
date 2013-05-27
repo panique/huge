@@ -102,38 +102,8 @@ class Registration {
                 // cut password to 1024 chars to prevent too much calculation
                 $this->user_password        = substr($this->user_password, 0, 1024);
 
-                /* 
-                 * get_salt()
-                 * generate random string "salt", a string to "encrypt" the password hash
-                 * this is a basic salt, you might replace this with a more advanced function
-                 * @see http://en.wikipedia.org/wiki/Salt_(cryptography)
-                 */
-                function get_salt($length) {
-
-                    $options = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
-                    $salt = '';
-
-                    for ($i = 0; $i <= $length; $i ++) {
-                        $options = str_shuffle ( $options );
-                        $salt .= $options [rand ( 0, 63 )];
-                    }
-                    return $salt;
-                }
-
-                // getting the max salt length on your system (usually 123 characters on linux)
-                $max_salt = CRYPT_SALT_LENGTH;
-
-                // hard to explain, this part of the upcoming hash string is some kind of parameter, defining
-                // the intensity of calculation. we are using the SHA-512 algorithm here, please see
-                // @see php.net/manual/en/function.crypt.php
-                // for more information.
-                $hashing_algorithm = '$6$rounds=5000$';
-
-                //get the longest salt, could set to 22 crypt ignores extra data
-                $salt = get_salt($max_salt);
-
-                //append salt data to the password, and crypt using salt, results in a 118 character output
-                $this->user_password_hash = crypt($this->user_password, $hashing_algorithm.$salt);
+                // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT);
 
                 // check if user already exists
                 $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");

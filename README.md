@@ -1,14 +1,17 @@
 # A simple PHP & MySQL Login Script #
 
-Always find the latest version, a documentation and other stuff on the project website:
+Have a look on the official project website (but you'll always find the most current informations here on github):
 http://www.php-login.net
 
-*A simple, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script. Uses ultramodern futureproof SHA512 hashing algorithm with a salt string.*
+*A simple, secure, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script.
+Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility
+pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
+stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
 Available in 3 versions: 
 
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
-2. advanced (much more possibilites, better organized code)
+2. advanced (much more features)
 3. [coming up] high-end (same like "advanced", but with css themes, javascript actions, ajax login etc.)
 
 ###DIFFERENT VERSIONS
@@ -41,6 +44,13 @@ PROFESSIONAL VERSION (same functions like advanced version, but totally new code
 * database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
 * ...
 
+###HOW TO DOWNLOAD
+
+Here on github you'll always find a stable and secure master branch and the in-development develop branch.
+The master branch ist ready for production, the develop branch is not (as it just shows the current state of development,
+maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the upper left area of the
+github project header.
+
 ###HOW TO INSTALL
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
@@ -52,17 +62,19 @@ PROFESSIONAL VERSION (same functions like advanced version, but totally new code
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
-* needs PHP 5.3.2+, PHP 5.4+ or PHP 5.5+
+* needs PHP 5.3.7+, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
 * needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) ?
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 
-###USAGE WITH OLDER PHP VERSIONS: older than 5.3.2
+###USAGE WITH OLDER PHP VERSIONS: older than 5.3.7
 
 Sorry, this makes no sense anymore. PHP 5.2 is outdated since 2009, so supporting this would be useless.
-PHP 5.3.2 is needed (as this introduces the hashing algorithms used here)
+PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using an older version of PHP,
+especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
+a good target for criminals.
 
 ###DONATION###
 

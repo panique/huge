@@ -100,9 +100,8 @@ class Login {
                     // get result row (as an object)
                     $result_row = $checklogin->fetch_object();
 
-                    // using PHP's crypt function to 
-                    // this is currently (afaik) the best way to check passwords in login processes with PHP/SQL
-                    if (crypt($_POST['user_password'], $result_row->user_password_hash) == $result_row->user_password_hash) {
+                    // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
+                    if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
 
                         if ($result_row->user_active == 1) {
                         
@@ -197,15 +196,15 @@ class Login {
                 $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); // not really necessary, but just in case...
                 
                 // check if new username already exists
-                $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."'");
+                $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");
 
                 if ($query_check_user_name->num_rows == 1) {
 
-                    $this->errors[] = "Sorry, that user name is already taken.<br/>Please choose another one.";
+                    $this->errors[] = "Sorry, that username is already taken.<br/>Please choose another one.";
 
                 } else {
                     
-                    // write users new data into database
+                    // write user's new data into database
                     $query_edit_user_name = $this->db_connection->query("UPDATE users SET user_name = '$this->user_name' WHERE user_id = '$this->user_id';");
 
                     if ($query_edit_user_name) {
