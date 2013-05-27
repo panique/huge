@@ -76,6 +76,15 @@ PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using
 especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
 a good target for criminals.
 
+###THANKS TO###
+
+A big thanks goes out to Anthony Ferrara (ircmaxell) and Nikita Popov (nikic) for creating and documenting the wonderful PHP 5.5 password
+hashing/salting functions and the compatibility pack for PHP 5.3/5.4 ! I love it, when people create things, that make it much much easier
+and safer to use other things. You can find the official info on those functions on [php.net](https://wiki.php.net/rfc/password_hash), [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and
+[here]() and the official PHP 5.3/5.4 compatibility pack [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
+
+Also a big big "thank you" to the donators of this project, your tips gimme a good feeling and show that it's a useful project!
+
 ###DONATION###
 
 If you want to support this script, feel free to donate via paypal:
