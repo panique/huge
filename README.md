@@ -53,8 +53,13 @@ github project header.
 
 ###HOW TO INSTALL
 
+This script has been made to run out-of-the-box. Not more config stuff than necessary.
+
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* (3.) in the 2-advanced version, you'll EVENTUALLY need to set up a mail server on your linux server. that sounds crazy, but is
+something you can do within 60 seconds on your linux command line. Please have a look into the file "how to setup mail in PHP.txt"
+in the "_install" folder.
 
 ###CONFIGURE
 
