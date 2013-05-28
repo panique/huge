@@ -103,6 +103,8 @@ class Registration {
                 $this->user_password        = substr($this->user_password, 0, 1024);
 
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                // compatibility library                
                 $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT);
 
                 // check if user already exists
