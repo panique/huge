@@ -3,8 +3,10 @@
 May 28th, 2013
 * 1-minimal: changed the hash/salt and verification process to simply native PHP 5.5 functions (see readme for more info)
 * 1-minimal: added "libraries/password_compatibility_library", which contains those functions for PHP 5.3 and 5.4 (included in index.php etc.)
+* 1-minimal: changed the SQL table creation files (sorry, again): database column "user_password_hash" from CHAR(118) to CHAR(60)
 * 2-advanced: changed the hash/salt and verification process to simply native PHP 5.5 functions (see readme for more info)
 * 2-advanced: added "libraries/password_compatibility_library", which contains those functions for PHP 5.3 and 5.4 (included in index.php etc.)
+* 2-advanced: changed the SQL table creation files (sorry, again): database column "user_password_hash" from CHAR(118) to CHAR(60)
 
 May 18th, 2013
 * 1-minimal: html5 form attributs that (optionally) validate the input fields on client's browsers:
