@@ -1,5 +1,9 @@
 # CHANGELOG #
 
+May 29th, 2013
+* 1-minimal: removed unnecessary lines from registration class
+* 2-advanced: removed unnecessary lines from registration class
+
 May 28th, 2013
 * 1-minimal: changed the hash/salt and verification process to simply native PHP 5.5 functions (see readme for more info)
 * 1-minimal: added "libraries/password_compatibility_library", which contains those functions for PHP 5.3 and 5.4 (included in index.php etc.)
