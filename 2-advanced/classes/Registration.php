@@ -107,11 +107,7 @@ class Registration {
 
                 // escapin' this
                 $this->user_name            = $this->db_connection->real_escape_string($_POST['user_name']);
-                $this->user_password        = $this->db_connection->real_escape_string($_POST['user_password_new']);
                 $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
-
-                // cut password to 1024 chars to prevent too much calculation
-                $this->user_password        = substr($this->user_password, 0, 1024);
 
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
