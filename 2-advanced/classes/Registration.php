@@ -17,6 +17,8 @@ class Registration {
     private     $user_password_hash         = "";                       // user's hashed and salted password
     private     $user_activation_hash       = "";                       // user's random hash string, necessary for email activation
     
+    private     $hash_cost_factor           = array();                  // (optional) cost factor for the hash calculation
+    
     public      $registration_successful    = false;
 
     public      $errors                     = array();                  // collection of error messages
@@ -111,8 +113,15 @@ class Registration {
                 // cut password to 1024 chars to prevent too much calculation
                 $this->user_password        = substr($this->user_password, 0, 1024);
 
+                // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
+                // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
+                $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+                
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT);
+                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+                // want the paramter: as an array with, currently only used with 'cost' => XX.
+                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                 // check if user already exists
                 $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");

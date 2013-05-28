@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Configuration file for: Database Connection 
+ * Configuration file for: Database Connection
  * This is the place where your database login constants are saved
  * 
  * For more info about constants please @see http://php.net/manual/en/function.define.php

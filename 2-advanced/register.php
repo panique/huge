@@ -7,7 +7,7 @@
  * (check the website / github / facebook for other versions)
  * 
  * A simple PHP Login Script without all the nerd bullshit.
- * Uses PHP SESSIONS, modern SHA512-password-hashing and salting
+ * Uses PHP SESSIONS, modern password-hashing and salting
  * and gives the basic functions a proper login system needs.
  * 
  * @package php-login
@@ -22,6 +22,10 @@ require_once("libraries/password_compatibility_library.php");
 
 // include the configs / constants for the database connection
 require_once("config/db.php");
+
+// include the hashing cost factor (you can delete this line if you have never touched the cost factor,
+// the script will then use the standard value)
+require_once("config/hashing.php");
 
 // include the configs / constants for the verification URL
 require_once("config/email_verification.php");

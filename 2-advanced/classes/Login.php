@@ -111,8 +111,41 @@ class Login {
                             $_SESSION['user_email'] = $result_row->user_email;
                             $_SESSION['user_logged_in'] = 1;
 
-                            // set the login status to true
-                            $this->user_is_logged_in = true; 
+                            // declare user id, set the login status to true
+                            $this->user_id = $result_row->user_id;
+                            $this->user_is_logged_in = true;
+                            
+                            // OPTIONAL: recalculate the user's password hash
+                            // DELETE this if-block if you like, it only exists to recalculate users's hashes when you provide a cost factor,
+                            // by default the script will use a cost factor of 10 and never change it.
+                            // check if the have defined a cost factor in config/hashing.php
+                            if (defined('HASH_COST_FACTOR')) {
+                                
+                                // check if the hash needs to be rehashed
+                                if (password_needs_rehash($result_row->user_password_hash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
+                                    
+                                    // calculate new hash with new cost factor
+                                    $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
+                                    
+                                    // TODO: this should be put into another method !?
+                                    $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '$this->user_id';");
+                                    
+                                    if ($this->db_connection->affected_rows == 0) {
+
+                                        // writing new hash was successful. you should now output this to the user ;)
+
+                                    } else {
+
+                                        // writing new hash was NOT successful. you should now output this to the user ;)
+
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                            // TO CLARIFY: in future versions of the script: should we rehash every hash with standard cost factor
+                            // when the HASH_COST_FACTOR in config/hashing.php is commented out ?                            
                         
                         } else {
                             
