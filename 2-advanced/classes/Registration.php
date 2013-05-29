@@ -66,9 +66,9 @@ class Registration {
           
             $this->errors[] = "Password and password repeat are not the same";   
             
-        } elseif (strlen($_POST['user_name']) < 6) {
+        } elseif (strlen($_POST['user_password_new']) < 6) {
             
-            $this->errors[] = "Username has a minimum length of 6 characters";            
+            $this->errors[] = "Password has a minimum length of 6 characters";            
                         
         } elseif (strlen($_POST['user_name']) > 64) {
             
