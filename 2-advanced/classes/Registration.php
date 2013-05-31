@@ -109,10 +109,10 @@ class Registration {
 
             // if no connection errors (= working database connection)
             if (!$this->db_connection->connect_errno) {
-
-                // escapin' this
-                $this->user_name            = $this->db_connection->real_escape_string($_POST['user_name']);
-                $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
+               
+                // escapin' this, additionally removing everything that could be (html/javascript-) code
+                $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
+                $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
 
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null

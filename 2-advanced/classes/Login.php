@@ -224,7 +224,7 @@ class Login {
             if (!$this->db_connection->connect_errno) {
 
                 // escapin' this
-                $this->user_name = $this->db_connection->real_escape_string($_POST['user_name']);
+                $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
                 $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
                 $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); // TODO: is this really necessary ?
                 
@@ -283,9 +283,9 @@ class Login {
 
             // if no connection errors (= working database connection)
             if (!$this->db_connection->connect_errno) {
-
+                
                 // escapin' this
-                $this->user_email = $this->db_connection->real_escape_string($_POST['user_email']);
+                $this->user_email = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
                 // prevent database flooding
                 $this->user_email = substr($this->user_email, 0, 64); 
                 // not really necessary, but just in case...
