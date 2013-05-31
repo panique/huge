@@ -1,10 +1,17 @@
 # CHANGELOG #
 
-May 29th, 2013
+June 1st 2013
+* 1-minimal: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
+* 2-advanced: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
+* 1-minimal: additional username length check in backend (>= 2 characters)
+* 2-advanced: additional username length check in backend (>= 2 characters)
+* 2-advanced: additional username pattern/length check in edit.php via HTML5 attribute
+
+May 29th 2013
 * 1-minimal: removed unnecessary lines from registration class
 * 2-advanced: removed unnecessary lines from registration class
 
-May 28th, 2013
+May 28th 2013
 * 1-minimal: changed the hash/salt and verification process to simply native PHP 5.5 functions (see readme for more info)
 * 1-minimal: added "libraries/password_compatibility_library", which contains those functions for PHP 5.3 and 5.4 (included in index.php etc.)
 * 1-minimal: changed the SQL table creation files (sorry, again): database column "user_password_hash" from CHAR(118) to VARCHAR(255)
@@ -12,7 +19,7 @@ May 28th, 2013
 * 2-advanced: added "libraries/password_compatibility_library", which contains those functions for PHP 5.3 and 5.4 (included in index.php etc.)
 * 2-advanced: changed the SQL table creation files (sorry, again): database column "user_password_hash" from CHAR(118) to VARCHAR(255)
 
-May 18th, 2013
+May 18th 2013
 * 1-minimal: html5 form attributs that (optionally) validate the input fields on client's browsers:
 * 1-minimal: min/max length for email input fields
 * 1-minimal: min/max length for username input field, additionally html5 string check (a-z, A-Z, 0-9)
@@ -21,13 +28,13 @@ May 18th, 2013
 * 1-minimal: removed 64 char limit for password. passwords can now be 1024 chars
 * 1-minimal: login.sql (in "_install" folder) renamed to users.sql (as it is the name of the database table)
 
-May 12th, 2013
+May 12th 2013
 * changed hashing algorithm from blowfish/SHA256 to SHA512
 * changed database creation files (due to new SHA512 hashing algorithm)
 * changed database column "user_password_hash" from CHAR(60) to CHAR(118) [as hash is always 118 chars long]
 * added HTML5 attributes to views (type="email", required etc.)
 
-April 26th, 2013
+April 26th 2013
 * complete makeover, nearly all files have been touched
 * registration process is now in seperate class and seperate init file / view (register.php etc.)
 * massive reduction of the views: no css, no js, no unnecessary stuff. just pure naked basics
