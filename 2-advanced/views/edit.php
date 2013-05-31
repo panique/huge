@@ -27,7 +27,7 @@ if ($login->messages) {
 <!-- edit form for username / this form uses HTML5 attributes, like "required" and type="email" -->
 <form method="post" action="edit.php" name="user_edit_form_name">
     <label for="edit_input_username">New username (username cannot be empty and must be azAZ09 and 2-64 characters)</label><br/>
-    <input id="edit_input_username" class="login_input" type="text" name="user_name" required /> (currently: <?php echo $_SESSION['user_name']; ?>)<br/>
+    <input id="edit_input_username" class="login_input" type="text" name="user_name" pattern="[a-zA-Z0-9]{2,64}" required /> (currently: <?php echo $_SESSION['user_name']; ?>)<br/>
     <input type="submit"  name="user_edit_submit_name" value="Change username" />
 </form>
 
