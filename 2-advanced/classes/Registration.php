@@ -70,9 +70,9 @@ class Registration {
             
             $this->errors[] = "Password has a minimum length of 6 characters";            
                         
-        } elseif (strlen($_POST['user_name']) > 64) {
+        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
             
-            $this->errors[] = "Username cannot be longer than 64 characters";
+            $this->errors[] = "Username cannot be shorter than 2 or longer than 64 characters";
                         
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             
@@ -92,6 +92,7 @@ class Registration {
         
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
+                  && strlen($_POST['user_name']) >= 2
                   && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
                   && !empty($_POST['user_email'])
                   && strlen($_POST['user_email']) <= 64

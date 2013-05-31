@@ -214,8 +214,8 @@ class Login {
         
         } 
         // username cannot be empty and must be azAZ09 and 2-64 characters
+        // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
         elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
-            
             
             // creating a database connection
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -225,8 +225,8 @@ class Login {
 
                 // escapin' this
                 $this->user_name = $this->db_connection->real_escape_string($_POST['user_name']);
-                $this->user_name = substr($this->user_name, 0, 64);
-                $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); // not really necessary, but just in case...
+                $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
+                $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); // TODO: is this really necessary ?
                 
                 // check if new username already exists
                 $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");
