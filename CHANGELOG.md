@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+June 2nd 2013
+* 2-advanced: users can now edit their passwords (when being logged in and providing the password again)
+* 2-advanced: little beautifications & corrections
+
 June 1st 2013
 * 1-minimal: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
 * 1-minimal: additional username length check in backend (>= 2 characters)
