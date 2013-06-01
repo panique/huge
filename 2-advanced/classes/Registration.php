@@ -99,7 +99,7 @@ class Registration {
                   && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
                   && !empty($_POST['user_password_new']) 
                   && !empty($_POST['user_password_repeat']) 
-                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
+                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {            
             
             // TODO: the above check is redundant, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
@@ -113,6 +113,8 @@ class Registration {
                 // escapin' this, additionally removing everything that could be (html/javascript-) code
                 $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
                 $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
+                
+                $this->user_password = $_POST['user_password_new'];
 
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null

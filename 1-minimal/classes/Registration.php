@@ -102,6 +102,8 @@ class Registration {
                 // escapin' this, additionally removing everything that could be (html/javascript-) code
                 $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
                 $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
+                
+                $this->user_password = $_POST['user_password_new'];
 
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
                 // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
