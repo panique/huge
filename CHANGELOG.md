@@ -2,10 +2,13 @@
 
 June 1st 2013
 * 1-minimal: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
-* 2-advanced: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
 * 1-minimal: additional username length check in backend (>= 2 characters)
+* 1-minimal: simplified HTML5 password pattern in the views, removed oninvalid attribute due to odd behaviour
+* 2-advanced: all user submitted content is now filtered for html/javascript code (to prevent cross-site-scripting attacks)
 * 2-advanced: additional username length check in backend (>= 2 characters)
 * 2-advanced: additional username pattern/length check in edit.php via HTML5 attribute
+* 2-advanced: simplified HTML5 password pattern in the views, removed oninvalid attribute due to odd behaviour
+* entire project: big correction of spelling mistakes
 
 May 29th 2013
 * 1-minimal: removed unnecessary lines from registration class
