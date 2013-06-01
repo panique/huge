@@ -38,18 +38,19 @@ if ($login->messages) {
     <input type="submit"  name="user_edit_submit_email" value="Change email" />
 </form>
 
-    <!--
-    <label for="edit_input_email">New email</label>
-    <input id="edit_input_email" class="login_input" type="text" name="user_email" /> (currently: <?php echo $_SESSION['user_email'] ?: "none"; ?>)        
+<!-- edit form for user's password / this form uses the HTML5 attribute "required" -->
+<form method="post" action="edit.php" name="user_edit_form_password">
+    <label for="edit_input_password_old">Your OLD Password</label>
+    <input id="edit_input_password_old" class="login_input" type="password" name="user_password_old" autocomplete="off" />        
     <br/>
-    <label for="edit_input_password_new">Your NEW Password (leave blank if you don't want to change)</label>
+    <label for="edit_input_password_new">Your NEW Password</label>
     <input id="edit_input_password_new" class="login_input" type="password" name="user_password_new" autocomplete="off" />        
     <br/>
     <label for="edit_input_password_repeat">Repeat NEW password</label>
     <input id="edit_input_password_repeat" class="login_input" type="password" name="user_password_repeat" autocomplete="off" />        
     <br/>
-    -->
-
+    <input type="submit"  name="user_edit_submit_password" value="Change password" />
+</form>
 
 <!-- backlink -->
 <a href="index.php">Back to Index Page</a>

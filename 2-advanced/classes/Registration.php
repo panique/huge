@@ -17,7 +17,7 @@ class Registration {
     private     $user_password_hash         = "";                       // user's hashed and salted password
     private     $user_activation_hash       = "";                       // user's random hash string, necessary for email activation
     
-    private     $hash_cost_factor           = array();                  // (optional) cost factor for the hash calculation
+    private     $hash_cost_factor           = null;                     // (optional) cost factor for the hash calculation
     
     public      $registration_successful    = false;
 

@@ -10,7 +10,8 @@
 class Login {
 
     private     $db_connection              = null;                     // database connection
-    
+    private     $hash_cost_factor           = null;                     // (optional) cost factor for the hash calculation
+
     private     $user_id                    = null;                     // user's id
     private     $user_name                  = "";                       // user's name
     private     $user_email                 = "";                       // user's email
@@ -55,6 +56,10 @@ class Login {
             } elseif (isset($_POST["user_edit_submit_email"])) {
                 
                 $this->editUserEmail();
+                
+            } elseif (isset($_POST["user_edit_submit_password"])) {
+                
+                $this->editUserPassword();
                 
             } 
 
@@ -305,6 +310,10 @@ class Login {
 
                 }
                 
+            } else {
+                
+                $this->errors[] = "Sorry, no database connection.";
+                
             }
             
         } else {
@@ -312,6 +321,90 @@ class Login {
             $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
             
         }        
+        
+    }  
+    
+    /**
+     * edit the user's password, provided in the editing form
+     */
+    public function editUserPassword() {
+        
+        if (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat']) || empty($_POST['user_password_old'])) {
+          
+            $this->errors[] = "Empty Password";            
+            
+        } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
+          
+            $this->errors[] = "Password and password repeat are not the same";   
+            
+        } elseif (strlen($_POST['user_password_new']) < 6) {
+            
+            $this->errors[] = "Password has a minimum length of 6 characters";            
+                  
+        } else if (!empty($_POST['user_password_old'])
+                  && !empty($_POST['user_password_new']) 
+                  && !empty($_POST['user_password_repeat']) 
+                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
+                        
+            // creating a database connection
+            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+            // if no connection errors (= working database connection)
+            if (!$this->db_connection->connect_errno) {
+                        
+                // database query, getting hash of currently logged in user (to check with just provided password)
+                $check_for_right_password = $this->db_connection->query("SELECT user_password_hash FROM users WHERE user_id = '".$_SESSION['user_id']."';");
+
+                // if this user exists
+                if ($check_for_right_password->num_rows == 1) {
+
+                    // get result row (as an object)
+                    $result_row = $check_for_right_password->fetch_object();
+
+                    // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
+                    if (password_verify($_POST['user_password_old'], $result_row->user_password_hash)) {
+                        
+                        // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
+                        // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
+                        $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+
+                        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+                        // want the parameter: as an array with, currently only used with 'cost' => XX.
+                        $this->user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));                        
+                        
+                        // write users new hash into database
+                        $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '".$_SESSION['user_id']."';");
+
+                        // check if exactly one row was successfully changed:
+                        if ($this->db_connection->affected_rows == 1) {
+
+                            $this->messages[] = "Password sucessfully changed!";
+
+                        } else {
+
+                            $this->errors[] = "Sorry, your password changing failed.";
+
+                        }
+
+                    } else {
+
+                        $this->errors[] = "Your OLD password was wrong.";
+
+                    }                
+
+                } else {
+
+                    $this->errors[] = "This user does not exist.";
+                }
+                
+            } else {
+                
+                $this->errors[] = "Database connection problem.";
+            }            
+            
+        }
         
     }    
 
