@@ -101,7 +101,7 @@ class Registration {
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
             
-            // TODO: the above check is redundand, but from a developer's perspective it makes clear
+            // TODO: the above check is redundant, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
 
             // creating a database connection
@@ -121,7 +121,7 @@ class Registration {
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
                 // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
                 // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                // want the paramter: as an array with, currently only used with 'cost' => XX.
+                // want the parameter: as an array with, currently only used with 'cost' => XX.
                 $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                 // check if user already exists

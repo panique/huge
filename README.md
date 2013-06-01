@@ -47,7 +47,7 @@ PROFESSIONAL VERSION (same functions like advanced version, but totally new code
 ###HOW TO DOWNLOAD
 
 Here on github you'll always find a stable and secure master branch and the in-development develop branch.
-The master branch ist ready for production, the develop branch is not (as it just shows the current state of development,
+The master branch is ready for production, the develop branch is not (as it just shows the current state of development,
 maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the upper left area of the
 github project header.
 
@@ -76,7 +76,7 @@ in the "_install" folder.
 
 ###USAGE WITH OLDER PHP VERSIONS: older than 5.3.7
 
-Sorry, this makes no sense anymore. PHP 5.2 is outdated since 2009, so supporting this would be useless.
+Sorry, this makes no sense any more. PHP 5.2 is outdated since 2009, so supporting this would be useless.
 PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using an older version of PHP,
 especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
 a good target for criminals.
@@ -88,7 +88,7 @@ hashing/salting functions and the compatibility pack for PHP 5.3/5.4 ! I love it
 and safer to use other things. You can find the official info on those functions on [php.net](https://wiki.php.net/rfc/password_hash), [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and
 [here]() and the official PHP 5.3/5.4 compatibility pack [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
 
-Also a big big "thank you" to the donators of this project, your tips gimme a good feeling and show that it's a useful project!
+Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
 ###DONATION###
 

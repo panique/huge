@@ -90,7 +90,7 @@ class Registration {
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
             
-            // TODO: the above check is redundand, but from a developer's perspective it makes clear
+            // TODO: the above check is redundant, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
 
             // creating a database connection

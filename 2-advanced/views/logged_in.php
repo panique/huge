@@ -6,7 +6,7 @@
 </div>
 
 <div>
-    <!-- because people were asking: "index.php?logout" is just my simplicated form of "index.php?logout=true" -->
+    <!-- because people were asking: "index.php?logout" is just my simplified form of "index.php?logout=true" -->
     <a href="index.php?logout">Logout</a>
     
     <a href="edit.php">Edit user data</a>
