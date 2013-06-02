@@ -40,7 +40,7 @@ ADVANCED VERSION (same like minimal, but with additional features)
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
+[not published yet] PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
 * biggest change: quite professional MVC file/code structure
 * URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
 * professional usage of controllers and actions
