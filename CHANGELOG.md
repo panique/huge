@@ -2,6 +2,7 @@
 
 June 2nd 2013
 * 2-advanced: users can now edit their passwords (when being logged in and providing the password again)
+* 2-advanced: users can now request a password reset and provide a new one ("forgot my password" function)
 * 2-advanced: little beautifications & corrections
 
 June 1st 2013
