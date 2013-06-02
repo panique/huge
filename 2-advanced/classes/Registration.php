@@ -114,7 +114,8 @@ class Registration {
                 $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
                 $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
                 
-                $this->user_password = $_POST['user_password_new'];
+                // no need to escape as this is only used in the hash function
+                $this->user_password = $_POST['user_password_new']; 
 
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
@@ -193,7 +194,7 @@ class Registration {
         
         $link    = EMAIL_VERIFICATION_URL.'?email='.urlencode($this->user_email).'&verification_code='.urlencode($this->user_activation_hash);
         
-        // the link to your registration.php, please set this value in config/urls.php
+        // the link to your register.php, please set this value in config/email_verification.php
         $body = EMAIL_VERIFICATION_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
 
         // stuff for HTML mails, test this is you feel adventurous ;)

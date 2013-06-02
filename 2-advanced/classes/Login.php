@@ -9,17 +9,21 @@
  */
 class Login {
 
-    private     $db_connection              = null;                     // database connection
-    private     $hash_cost_factor           = null;                     // (optional) cost factor for the hash calculation
+    private     $db_connection                 = null;                  // database connection
+    private     $hash_cost_factor              = null;                  // (optional) cost factor for the hash calculation
 
-    private     $user_id                    = null;                     // user's id
-    private     $user_name                  = "";                       // user's name
-    private     $user_email                 = "";                       // user's email
-    private     $user_password_hash         = "";                       // user's hashed and salted password
-    private     $user_is_logged_in          = false;                    // status of login
+    private     $user_id                       = null;                  // user's id
+    private     $user_name                     = "";                    // user's name
+    private     $user_email                    = "";                    // user's email
+    private     $user_password_hash            = "";                    // user's hashed and salted password
+    private     $user_is_logged_in             = false;                 // status of login
+    private     $user_password_reset_hash      = "";                    // user's password reset hash
+    
+    private     $password_reset_link_is_valid  = false;                 // marker for view handling (TODO: this is kind of unintutive)
+    private     $password_reset_was_successful = false;                 // marker for view handling (TODO: this is kind of unintutive)
 
-    public      $errors                     = array();                  // collection of error messages
-    public      $messages                   = array();                  // collection of success / neutral messages
+    public      $errors                        = array();               // collection of error messages
+    public      $messages                      = array();               // collection of success / neutral messages
     
     
     /**
@@ -68,6 +72,21 @@ class Login {
 
                 $this->loginWithPostData();
                 
+        }
+        
+        // checking if user requested a password reset mail
+        if (isset($_POST["request_password_reset"])) {
+            
+            $this->setPasswordResetDatabaseTokenAndSendMail(); // maybe a little bit cheesy
+            
+        } elseif (isset($_GET["user_name"]) && isset($_GET["verification_code"])) {
+            
+            $this->checkIfEmailVerificationCodeIsValid();
+            
+        } elseif (isset($_POST["submit_new_password"])) {
+            
+            $this->editNewPassword();
+            
         }
         
     }    
@@ -406,6 +425,325 @@ class Login {
             
         }
         
+    }   
+    
+    /**
+     * 
+     */
+    public function setPasswordResetDatabaseTokenAndSendMail() {
+        
+        // set token (= a random hash string and a timestamp) into database, to see that THIS user really requested a password reset
+        if ($this->setPasswordResetDatabaseToken() == true) {
+        
+            // send a mail to the user, containing a link with that token hash string
+            $this->sendPasswordResetMail();
+            
+        }
+        
+    }
+    
+    /**
+     * 
+     */
+    public function setPasswordResetDatabaseToken() {
+        
+        if (empty($_POST['user_name'])) {
+          
+            $this->errors[] = "Empty username";
+            
+        } else {
+            
+            // generate timestamp (to see when exactly the user (or an attacker) requested the password reset mail)
+            // btw this is an integer ;)
+            $temporary_timestamp = time();
+            
+            // generate random hash for email password reset verification (40 char string)
+            $this->user_password_reset_hash = sha1(uniqid(mt_rand(), true));
+            
+            // creating a database connection
+            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+            // if no connection errors (= working database connection)
+            if (!$this->db_connection->connect_errno) {
+                
+                // TODO: this is not totally clean, as this is just the form provided username
+                $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));                
+                $query_get_user_data = $this->db_connection->query("SELECT user_id, user_email FROM users WHERE user_name = '".$this->user_name."';");
+                
+                // if this user exists
+                if ($query_get_user_data->num_rows == 1) {
+
+                    // get result row (as an object)
+                    $result_user_row = $query_get_user_data->fetch_object();
+                        
+                    // database query: 
+                    $this->db_connection->query("UPDATE users 
+                                                 SET user_password_reset_hash = '".$this->user_password_reset_hash."', 
+                                                     user_password_reset_timestamp = '".$temporary_timestamp."' 
+                                                 WHERE user_name = '".$this->user_name."';");
+
+                    // check if exactly one row was successfully changed:
+                    if ($this->db_connection->affected_rows == 1) {
+
+                        // define email
+                        $this->user_email = $result_user_row->user_email;
+
+                        return true;
+
+                    } else {
+
+                        $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
+
+                    }                    
+                        
+                } else {
+
+                    $this->errors[] = "This username does not exist.";
+
+                }
+                
+            } else {
+                
+                $this->errors[] = "Database connection problem.";
+            } 
+            
+        }
+        
+        // return false (this method only returns true when the database entry has been set successfully)
+        return false;        
+    }
+    
+    /**
+     * 
+     */
+    public function sendPasswordResetMail() {
+        
+        $to      = $this->user_name;
+        $subject = EMAIL_PASSWORDRESET_SUBJECT;
+        
+        $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($this->user_name).'&verification_code='.urlencode($this->user_password_reset_hash);
+        
+        // the link to your password_reset.php, please set this value in config/email_passwordreset.php
+        $body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
+
+        // stuff for HTML mails, test this is you feel adventurous ;)
+        $header  = 'MIME-Version: 1.0' . "\r\n";
+        $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        //$header .= "To: <$to>" . "\r\n";
+        $header .= 'From: '.EMAIL_PASSWORDRESET_FROM."\r\n";
+
+        if (mail($to, $subject, $body, $header)) {
+            
+            $this->messages[] = "Password reset mail successfully sent!";
+            return true;
+            
+        } else {
+            
+            $this->errors[] = "Password reset mail NOT successfully sent!";
+            return false;
+            
+        }
+        
+    }
+    
+    /**
+     * 
+     */
+    public function checkIfEmailVerificationCodeIsValid() {
+
+        if (!empty($_GET["user_name"]) && !empty($_GET["verification_code"])) {
+            
+            // creating a database connection
+            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+            // if no connection errors (= working database connection)
+            if (!$this->db_connection->connect_errno) {
+                
+                // TODO: this is not totally clean, as this is just the form provided username
+                $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_GET['user_name'], ENT_QUOTES));         
+                $this->user_password_reset_hash = $this->db_connection->real_escape_string(htmlentities($_GET['verification_code'], ENT_QUOTES));         
+                                
+                $query_get_user_data = $this->db_connection->query("SELECT user_id, user_password_reset_timestamp 
+                                                                    FROM users 
+                                                                    WHERE user_name = '".$this->user_name."' 
+                                                                       && user_password_reset_hash = '".$this->user_password_reset_hash."';");
+                
+                // if this user exists
+                if ($query_get_user_data->num_rows == 1) {
+
+                    // get result row (as an object)
+                    $result_user_row = $query_get_user_data->fetch_object();
+                    
+                    $timestamp_one_hour_ago = time() - 3600; // 3600 seconds are 1 hour
+                    
+                    if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
+                    
+                        // set the marker to true, making it possible to show the password reset edit form view
+                        $this->password_reset_link_is_valid = true;
+                        
+                    } else {
+                        
+                        $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
+                        
+                    }
+                                       
+                    
+                    /*    
+                    // database query: 
+                    $this->db_connection->query("UPDATE users 
+                                                 SET user_password_reset_hash = '".$this->user_password_reset_hash."', 
+                                                     user_password_reset_timestamp = '".$temporary_timestamp."' 
+                                                 WHERE user_name = '".$this->user_name."';");
+
+                    // check if exactly one row was successfully changed:
+                    if ($this->db_connection->affected_rows == 1) {
+
+                        // define email
+                        $this->user_email = $result_user_row->user_email;
+
+                        return true;
+
+                    } else {
+
+                        $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
+
+                    }     
+                    */
+                        
+                } else {
+
+                    $this->errors[] = "This username does not exist.";
+
+                }
+                
+            } else {
+                
+                $this->errors[] = "Database connection problem.";
+            } 
+            
+        } else {
+            
+            $this->errors[] = "Empty link parameter data.";
+            
+        }
+        
     }    
+    
+    /**
+     * 
+     */
+    public function editNewPassword() {
+        
+        // TODO: timestamp!
+        
+        if (!empty($_POST['user_name'])
+            && !empty($_POST['user_password_reset_hash'])
+            && !empty($_POST['user_password_new'])
+            && !empty($_POST['user_password_repeat'])) {
+                
+            if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
+         
+                if ($_POST['user_password_new'] <= 6) {
+                    
+                    // creating a database connection
+                    $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                    // if no connection errors (= working database connection)
+                    if (!$this->db_connection->connect_errno) {
+
+                        // escapin' this, additionally removing everything that could be (html/javascript-) code
+                        $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
+                        $this->user_password_reset_hash = $this->db_connection->real_escape_string(htmlentities($_POST['user_password_reset_hash'], ENT_QUOTES));
+                        
+                        // no need to escape as this is only used in the hash function
+                        $this->user_password = $_POST['user_password_new'];
+
+                        // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
+                        // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
+                        $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+
+                        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+                        // want the parameter: as an array with, currently only used with 'cost' => XX.
+                        $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
+
+                        // write users new hash into database
+                        $this->db_connection->query("UPDATE users
+                                                     SET user_password_hash = '$this->user_password_hash', 
+                                                         user_password_reset_hash = NULL, 
+                                                         user_password_reset_timestamp = NULL
+                                                     WHERE user_name = '".$this->user_name."' 
+                                                        && user_password_reset_hash = '".$this->user_password_reset_hash."';");
+
+                        // check if exactly one row was successfully changed:
+                        if ($this->db_connection->affected_rows == 1) {
+
+                            $this->password_reset_was_successful = true;
+                            $this->messages[] = "Password sucessfully changed!";
+
+                        } else {
+
+                            $this->errors[] = "Sorry, your password changing failed.";
+
+                        }
+
+
+                    } else {
+
+                        $this->errors[] = "Sorry, no database connection.";
+
+                    }
+                    
+                } else {
+                    
+                    $this->errors[] = "Password too short, please request a new password reset.";
+                    
+                }
+                
+            } else {
+                
+                $this->errors[] = "Passwords dont match, please request a new password reset.";
+                
+            }
+                
+        }        
+        
+    }
+    
+    /**
+     * 
+     * @return boolean
+     */
+    public function passwordResetLinkIsValid() {       
+        
+        return $this->password_reset_link_is_valid;
+    }
+        
+    /**
+     * 
+     * @return boolean
+     */
+    public function passwordResetWasSuccessful() {        
+        
+        return $this->password_reset_was_successful;
+    }
+    
+    /**
+     * 
+     */
+    public function getUsername() {
+        
+        return $this->user_name;
+        
+    }   
+    
+    /**
+     * 
+     */
+    public function getPasswordResetHash() {
+        
+        return $this->user_password_reset_hash;
+    }
 
 }

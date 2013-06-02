@@ -30,5 +30,6 @@ if ($login->messages) {
 </form>
 
 <a href="register.php">Register new account</a>
+<a href="password_reset.php">I forgot my password</a>
 
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
