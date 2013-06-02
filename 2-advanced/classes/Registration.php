@@ -153,7 +153,7 @@ class Registration {
                             
                         } else {
 
-                            // delete this users account immediatly, as we could not send a verification email
+                            // delete this users account immediately, as we could not send a verification email
                             // the row (which will be deleted) is identified by mySQLi's insert_id property (= the last inserted row)
                             // @see php.net/manual/en/mysqli.insert-id.php
                             $this->db_connection->query("DELETE FROM users WHERE user_id = '".$this->db_connection->insert_id."';");
@@ -184,7 +184,7 @@ class Registration {
 
     /*
      * sendVerificationEmail()
-     * sends an email to the provided email adress
+     * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
     public function sendVerificationEmail() {
