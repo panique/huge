@@ -643,7 +643,7 @@ class Login {
                 
             if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
          
-                if ($_POST['user_password_new'] <= 6) {
+                if ($_POST['user_password_new'] >= 6) {
                     
                     // creating a database connection
                     $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
