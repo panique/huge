@@ -88,7 +88,7 @@ class Registration {
             
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             
-            $this->errors[] = "Your email adress is not in a valid email format";
+            $this->errors[] = "Your email address is not in a valid email format";
         
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
@@ -115,7 +115,7 @@ class Registration {
                 $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
                 
                 // no need to escape as this is only used in the hash function
-                $this->user_password = $_POST['user_password_new']; 
+                $this->user_password = $_POST['user_password_new'];
 
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
@@ -132,7 +132,7 @@ class Registration {
 
                 if ($query_check_user_name->num_rows == 1) {
 
-                    $this->errors[] = "Sorry, that user name is already taken.<br/>Please choose another one.";
+                    $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
 
                 } else {
                     

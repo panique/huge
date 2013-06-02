@@ -37,7 +37,7 @@ class Login {
 
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
-        // 2. login via session data (happens each time user opens a page on your php project AFTER he has sucessfully logged in via the login form)
+        // 2. login via session data (happens each time user opens a page on your php project AFTER he has successfully logged in via the login form)
         // 3. login via post data, which means simply logging in via the login form. after the user has submit his login/password successfully, his
         //    logged-in-status is written into his session data on the server. this is the typical behaviour of common login scripts.
         
@@ -234,7 +234,7 @@ class Login {
         
         if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
             
-            $this->errors[] = "Sorry, that user name is the same like your current one.<br/>Please choose another one.";
+            $this->errors[] = "Sorry, that username is the same as your current one. Please choose another one.";
         
         } 
         // username cannot be empty and must be azAZ09 and 2-64 characters
@@ -257,7 +257,7 @@ class Login {
 
                 if ($query_check_user_name->num_rows == 1) {
 
-                    $this->errors[] = "Sorry, that username is already taken.<br/>Please choose another one.";
+                    $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
 
                 } else {
                     
@@ -267,7 +267,7 @@ class Login {
                     if ($query_edit_user_name) {
 
                         $_SESSION['user_name'] = $this->user_name;
-                        $this->messages[] = "Your username has been changed sucessfully. New username is $this->user_name.";
+                        $this->messages[] = "Your username has been changed successfully. New username is " . $this->user_name . ".";
 
                     } else {
 
@@ -276,6 +276,10 @@ class Login {
                     }
                     
                 }
+                
+            } else {
+                
+                $this->errors[] = "Sorry, no database connection.";
                 
             }
             
@@ -295,7 +299,7 @@ class Login {
         
         if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
             
-            $this->errors[] = "Sorry, that email is the same like your current one.<br/>Please choose another one.";
+            $this->errors[] = "Sorry, that email address is the same as your current one. Please choose another one.";
         
         } 
         // user mail cannot be empty and must be in email format
@@ -321,7 +325,7 @@ class Login {
                 if ($query_edit_user_email) {
 
                     $_SESSION['user_email'] = $this->user_email;
-                    $this->messages[] = "Your email adress has been changed sucessfully. New email adress is $this->user_email.";
+                    $this->messages[] = "Your email address has been changed successfully. New email address is " . $this->user_email . ".";
 
                 } else {
 
