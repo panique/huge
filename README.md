@@ -17,25 +17,28 @@ Available in 3 versions:
 ###DIFFERENT VERSIONS
 
 MINIMAL VERSION
-* users can register a new account with username, email and password
-* users can login (with username and password)
-* users can logout
-* 2 classes (Login & Registration)
-* 3 views (login form (=not logged in), logged in, registration form)
-* 1 simple database connection config file
-* simple, but effective, clean and easy to understand code/file structure
 
-ADVANCED VERSION (same like minimal version, but additional functions)
-* users can edit their properties
-* users need to provide an email in registration process, and they have to click on a mailed registration verify link to active account
-* (TODO: users can have a role status (like normal user, premium user, super premium user))
-* (TODO: users can delete their accounts)
-* (TODO: graphical captchas)
-* (TODO: users can reset their passwords)
+- main features: user can register, log in and log out
+- feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
+- feature: username must fit the azAZ09 pattern (checked in PHP and client-side in HTML5)
+- feature: email must be provided, email must fit email format (checked in PHP and client-side in HTML5)
+- feature: password and password repeat check need to be the same (strict php string check ===)
+- security: SQL injection prevention: everything is escaped with real_escape_string()
+- security: passwords are hashed and salted using the offical PHP 5.5 password hashing functions
+- security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
+- security: user input is cleaned, your php app is protected against XSS attacks
 
-NOTE: this version needs the mail-function (and in upcoming versions also the graphic/GD functions of PHP).
-Usually naked servers don't have a mail server installed, that will make it possible to send mail.
-In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder
+ADVANCED VERSION (same like minimal, but with additional features)
+
+- main feature: username can be changed by user
+- main feature: email can be changed by user
+- main feature: user gets email after registration, has to click on verification link (one-time hash-check)
+- main feature: user can edit password (need to provide password again to prevent account takeovers when keeping browser open)
+- main feature: user can request password reset ("i forgot my password" function)
+
+*NOTE: this version needs the mail()-function (and in upcoming versions also the graphic/GD functions) of PHP.
+Usually naked servers don't have a mail server installed that will make it possible to send mail.
+In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
 PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
 * biggest change: quite professional MVC file/code structure
