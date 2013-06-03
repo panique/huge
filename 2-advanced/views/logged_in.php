@@ -5,13 +5,13 @@
     Hey, <?php echo $_SESSION['user_name']; ?>. You are logged in.<br />
     Try to close this browser tab and open it again. Still logged in! ;)<br />
     And here's your profile picture (from gravatar):<br />
+    <?php //echo $login->user_gravatar_image_url; ?>
     <?php echo $login->user_gravatar_image_tag; ?>
 </div>
 
 <div>
     <!-- because people were asking: "index.php?logout" is just my simplified form of "index.php?logout=true" -->
-    <a href="index.php?logout">Logout</a>
-    
+    <a href="index.php?logout">Logout</a>    
     <a href="edit.php">Edit user data</a>
 </div>
 
