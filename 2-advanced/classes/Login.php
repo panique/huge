@@ -590,29 +590,6 @@ class Login {
                         $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
                         
                     }
-                                       
-                    
-                    /*    
-                    // database query: 
-                    $this->db_connection->query("UPDATE users 
-                                                 SET user_password_reset_hash = '".$this->user_password_reset_hash."', 
-                                                     user_password_reset_timestamp = '".$temporary_timestamp."' 
-                                                 WHERE user_name = '".$this->user_name."';");
-
-                    // check if exactly one row was successfully changed:
-                    if ($this->db_connection->affected_rows == 1) {
-
-                        // define email
-                        $this->user_email = $result_user_row->user_email;
-
-                        return true;
-
-                    } else {
-
-                        $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
-
-                    }     
-                    */
                         
                 } else {
 
