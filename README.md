@@ -1,7 +1,8 @@
 # A simple PHP & MySQL Login Script #
 
 Have a look on the official project website (but you'll always find the most current informations here on github):
-http://www.php-login.net
+http://www.php-login.net or follow via [Twitter](https://twitter.com/simplephplogin), [Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)
+or [Google+](https://plus.google.com/104110071861201951660).
 
 *A simple, secure, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script.
 Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility
@@ -67,7 +68,8 @@ in the "_install" folder.
 
 ###CONFIGURE
 
-* you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
+* you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
+in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
@@ -89,8 +91,9 @@ a good target for criminals.
 
 A big thanks goes out to Anthony Ferrara (ircmaxell) and Nikita Popov (nikic) for creating and documenting the wonderful PHP 5.5 password
 hashing/salting functions and the compatibility pack for PHP 5.3/5.4 ! I love it, when people create things, that make it much much easier
-and safer to use other things. You can find the official info on those functions on [php.net](https://wiki.php.net/rfc/password_hash), [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and
-[here]() and the official PHP 5.3/5.4 compatibility pack [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
+and safer to use other things. You can find the official info on those functions on [php.net](https://wiki.php.net/rfc/password_hash) and
+[here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and the official PHP 5.3/5.4 compatibility pack
+[here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
