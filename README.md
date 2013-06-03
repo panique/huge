@@ -35,6 +35,7 @@ ADVANCED VERSION (same like minimal, but with additional features)
 - main feature: user gets email after registration, has to click on verification link (one-time hash-check)
 - main feature: user can edit password (need to provide password again to prevent account takeovers when keeping browser open)
 - main feature: user can request password reset ("i forgot my password" function)
+- main feature: gravatar profile pic support
 
 *NOTE: this version needs the mail()-function (and in upcoming versions also the graphic/GD functions) of PHP.
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
