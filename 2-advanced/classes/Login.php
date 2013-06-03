@@ -19,6 +19,9 @@ class Login {
     private     $user_is_logged_in             = false;                 // status of login
     private     $user_password_reset_hash      = "";                    // user's password reset hash
     
+    public      $user_gravatar_image_url       = "";                    // user's gravatar profile pic url (or a default one)
+    public      $user_gravatar_image_tag       = "";                    // user's gravatar profile pic url with <img ... /> around
+    
     private     $password_reset_link_is_valid  = false;                 // marker for view handling (TODO: this is kind of unintutive)
     private     $password_reset_was_successful = false;                 // marker for view handling (TODO: this is kind of unintutive)
 
@@ -86,6 +89,13 @@ class Login {
         } elseif (isset($_POST["submit_new_password"])) {
             
             $this->editNewPassword();
+            
+        }
+        
+        // get gravatar profile picture if user is logged in
+        if ($this->isUserLoggedIn() == true) {
+            
+            $this->getGravatarImageUrl($this->user_email);
             
         }
         
@@ -726,5 +736,41 @@ class Login {
         
         return $this->user_password_reset_hash;
     }
+    
+    /**
+     * Get either a Gravatar URL or complete image tag for a specified email address.
+     * Gravatar is the #1 (free) provider for email address based global avatar hosting.
+     * The URL (or image) returns always a .jpg file !
+     * For deeper info on the different parameter possibilities:
+     * @see http://de.gravatar.com/site/implement/images/
+     *
+     * @param string $email The email address
+     * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
+     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
+     * @param array $atts Optional, additional key/value attributes to include in the IMG tag
+     * @source http://gravatar.com/site/implement/images/php/
+     */
+    public function getGravatarImageUrl($email, $s = 80, $d = 'mm', $r = 'g', $atts = array() ) {
+        
+        $url = 'http://www.gravatar.com/avatar/';
+        $url .= md5( strtolower( trim( $email ) ) );
+        $url .= "?s=$s&d=$d&r=$r&f=y";
+        
+        // the image url (on gravatarr servers), will return in something like
+        // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
+        // note: the url does NOT have something like .jpg
+        $this->user_gravatar_image_url = $url;        
+
+        // build img tag around
+        $url = '<img src="' . $url . '"';
+        foreach ( $atts as $key => $val )
+            $url .= ' ' . $key . '="' . $val . '"';
+        $url .= ' />';            
+ 
+        // the image url like above but with an additional <img src .. /> around
+        $this->user_gravatar_image_tag = $url;
+        
+    }    
 
 }
