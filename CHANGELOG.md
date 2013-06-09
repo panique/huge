@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+June 9th 2013
+* merged develop branch into master branch, all new features are now released! yeah.
+
 June 3rd 2013
 * 2-advanced: basic gravatar profile pic support
 
