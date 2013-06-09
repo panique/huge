@@ -3,17 +3,12 @@
 /**
  * A simple, clean and secure PHP Login Script
  * 
- * MINIMAL VERSION
+ * ADVANCED VERSION
  * (check the website / github / facebook for other versions)
  * 
  * A simple PHP Login Script without all the nerd bullshit.
  * Uses PHP SESSIONS, modern password-hashing and salting
  * and gives the basic functions a proper login system needs.
- * 
- * Please remember: this is just the minimal version of the login script, so if you need a more
- * advanced version, have a look on the github repo. there are / will be better versions, including
- * more functions and/or much more complex code / file structure. buzzwords: MVC, dependency injected,
- * one shared database connection, PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style
  * 
  * @package php-login
  * @author Panique <panique@web.de>
@@ -28,10 +23,17 @@ require_once("libraries/password_compatibility_library.php");
 // include the configs / constants for the database connection
 require_once("config/db.php");
 
-// load the registration class
+// include the hashing cost factor (you can delete this line if you have never touched the cost factor,
+// the script will then use the standard value)
+require_once("config/hashing.php");
+
+// include the configs / constants for the verification URL
+require_once("config/email_verification.php");
+
+//load the registration class
 require_once("classes/Registration.php");
 
-// create the registration object. when this object is created, it will do all registration stuff automaticly
+// create the registration object. when this object is created, it will do all registration stuff automatically
 // so this single line handles the entire registration process.
 $registration = new Registration();
 

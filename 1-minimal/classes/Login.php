@@ -87,9 +87,8 @@ class Login {
                     // get result row (as an object)
                     $result_row = $checklogin->fetch_object();
 
-                    // using PHP's crypt function to 
-                    // this is currently (afaik) the best way to check passwords in login processes with PHP/SQL
-                    if (crypt($_POST['user_password'], $result_row->user_password_hash) == $result_row->user_password_hash) {
+                    // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
+                    if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
 
                         // write user data into PHP SESSION [a file on your server]
                         $_SESSION['user_name'] = $result_row->user_name;

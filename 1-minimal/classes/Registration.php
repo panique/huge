@@ -55,9 +55,13 @@ class Registration {
           
             $this->errors[] = "Password and password repeat are not the same";   
             
-        } elseif (strlen($_POST['user_name']) > 64) {
+        } elseif (strlen($_POST['user_password_new']) < 6) {
             
-            $this->errors[] = "Username cannot be longer than 64 characters";
+            $this->errors[] = "Password has a minimum length of 6 characters";            
+            
+        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
+            
+            $this->errors[] = "Username cannot be shorter than 2 or longer than 64 characters";
                         
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             
@@ -77,6 +81,7 @@ class Registration {
         
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
+                  && strlen($_POST['user_name']) >= 2
                   && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
                   && !empty($_POST['user_email'])
                   && strlen($_POST['user_email']) <= 64
@@ -85,7 +90,7 @@ class Registration {
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
             
-            // TODO: the above check is redundand, but from a developer's perspective it makes clear
+            // TODO: the above check is redundant, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
 
             // creating a database connection
@@ -94,46 +99,16 @@ class Registration {
             // if no connection errors (= working database connection)
             if (!$this->db_connection->connect_errno) {
 
-                // escapin' this
-                $this->user_name            = $this->db_connection->real_escape_string($_POST['user_name']);
-                $this->user_password        = $this->db_connection->real_escape_string($_POST['user_password_new']);
-                $this->user_email           = $this->db_connection->real_escape_string($_POST['user_email']);
+                // escapin' this, additionally removing everything that could be (html/javascript-) code
+                $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
+                $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
+                
+                $this->user_password = $_POST['user_password_new'];
 
-                // cut password to 1024 chars to prevent too much calculation
-                $this->user_password        = substr($this->user_password, 0, 1024);
-
-                /* 
-                 * get_salt()
-                 * generate random string "salt", a string to "encrypt" the password hash
-                 * this is a basic salt, you might replace this with a more advanced function
-                 * @see http://en.wikipedia.org/wiki/Salt_(cryptography)
-                 */
-                function get_salt($length) {
-
-                    $options = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
-                    $salt = '';
-
-                    for ($i = 0; $i <= $length; $i ++) {
-                        $options = str_shuffle ( $options );
-                        $salt .= $options [rand ( 0, 63 )];
-                    }
-                    return $salt;
-                }
-
-                // getting the max salt length on your system (usually 123 characters on linux)
-                $max_salt = CRYPT_SALT_LENGTH;
-
-                // hard to explain, this part of the upcoming hash string is some kind of parameter, defining
-                // the intensity of calculation. we are using the SHA-512 algorithm here, please see
-                // @see php.net/manual/en/function.crypt.php
-                // for more information.
-                $hashing_algorithm = '$6$rounds=5000$';
-
-                //get the longest salt, could set to 22 crypt ignores extra data
-                $salt = get_salt($max_salt);
-
-                //append salt data to the password, and crypt using salt, results in a 118 character output
-                $this->user_password_hash = crypt($this->user_password, $hashing_algorithm.$salt);
+                // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                // compatibility library                
+                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT);
 
                 // check if user already exists
                 $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");

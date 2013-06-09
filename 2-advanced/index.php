@@ -3,17 +3,12 @@
 /**
  * A simple, clean and secure PHP Login Script
  * 
- * MINIMAL VERSION
+ * ADVANCED VERSION
  * (check the website / github / facebook for other versions)
  * 
  * A simple PHP Login Script without all the nerd bullshit.
- * Uses PHP SESSIONS, modern password-hashing and salting
+ * Uses PHP SESSIONS, modern SHA512-password-hashing and salting
  * and gives the basic functions a proper login system needs.
- * 
- * Please remember: this is just the minimal version of the login script, so if you need a more
- * advanced version, have a look on the github repo. there are / will be better versions, including
- * more functions and/or much more complex code / file structure. buzzwords: MVC, dependency injected,
- * one shared database connection, PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style
  * 
  * @package php-login
  * @author Panique <panique@web.de>
@@ -28,15 +23,19 @@ require_once("libraries/password_compatibility_library.php");
 // include the configs / constants for the database connection
 require_once("config/db.php");
 
+// include the hashing cost factor (you can delete this line if you have never touched the cost factor,
+// the script will then use the standard value)
+require_once("config/hashing.php");
+
 // load the login class
 require_once("classes/Login.php");
 
 // create a login object. when this object is created, it will do all login/logout stuff automatically
-// so this single line handles the entire login process. in consequence, you can simply ...
+// so this single line handles the entire login process.
 $login = new Login();
 
 // ... ask if we are logged in here:
-if ($login->isUserLoggedIn() == true) {    
+if ($login->isUserLoggedIn() == true) {
     // the user is logged in. you can do whatever you want here.
     // for demonstration purposes, we simply show the "you are logged in" view.
     include("views/logged_in.php");
