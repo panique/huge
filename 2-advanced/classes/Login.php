@@ -532,7 +532,7 @@ class Login {
      */
     public function sendPasswordResetMail() {
         
-        $to      = $this->user_name;
+        $to      = $this->user_email;
         $subject = EMAIL_PASSWORDRESET_SUBJECT;
         
         $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($this->user_name).'&verification_code='.urlencode($this->user_password_reset_hash);
