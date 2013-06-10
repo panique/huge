@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+June 10th 2013
+* 2-advanced: password reset fix for wrong password length check
+* 2-advanced: password reset fix for missing/wrong email adress
+
 June 3rd 2013
 * 2-advanced: basic gravatar profile pic support
 
