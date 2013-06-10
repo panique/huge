@@ -1,7 +1,8 @@
 # CHANGE LOG #
 
-June 9th 2013
-* merged develop branch into master branch, all new features are now released! yeah.
+June 10th 2013
+* 2-advanced: password reset fix for wrong password length check
+* 2-advanced: password reset fix for missing/wrong email adress
 
 June 3rd 2013
 * 2-advanced: basic gravatar profile pic support
