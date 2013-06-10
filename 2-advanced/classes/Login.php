@@ -532,7 +532,7 @@ class Login {
      */
     public function sendPasswordResetMail() {
         
-        $to      = $this->user_name;
+        $to      = $this->user_email;
         $subject = EMAIL_PASSWORDRESET_SUBJECT;
         
         $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($this->user_name).'&verification_code='.urlencode($this->user_password_reset_hash);
@@ -543,7 +543,7 @@ class Login {
         // stuff for HTML mails, test this is you feel adventurous ;)
         $header  = 'MIME-Version: 1.0' . "\r\n";
         $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        //$header .= "To: <$to>" . "\r\n";
+        $header .= "To: <$to>" . "\r\n";
         $header .= 'From: '.EMAIL_PASSWORDRESET_FROM."\r\n";
 
         if (mail($to, $subject, $body, $header)) {
@@ -634,7 +634,7 @@ class Login {
                 
             if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
          
-                if ($_POST['user_password_new'] >= 6) {
+                if (strlen($_POST['user_password_new']) >= 6) {
                     
                     // creating a database connection
                     $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
