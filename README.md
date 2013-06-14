@@ -75,7 +75,7 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
 * needs PHP 5.3.7+, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
-* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) ?
+* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
@@ -102,3 +102,7 @@ Also a big big "thank you" to the donors of this project, your tips gimme a good
 If you want to support this script, feel free to donate via paypal:
 
 Click here https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG
+
+###AVAILABLE FOR HIRE###
+
+I'm available for freelance work. Remote worldwide or locally around Central Europe. Drop me a line.
