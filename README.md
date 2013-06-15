@@ -9,15 +9,16 @@ Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions
 pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
 stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
-Available in 3 versions: 
+Available in 4 versions: 
 
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
-3. [coming up] high-end (same like "advanced", but with css themes, javascript actions, ajax login etc.)
+3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
+4. [coming up] full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
 
 ###DIFFERENT VERSIONS
 
-MINIMAL VERSION
+1. MINIMAL VERSION
 
 - main features: user can register, log in and log out
 - feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
@@ -29,7 +30,7 @@ MINIMAL VERSION
 - security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
 - security: user input is cleaned, your php app is protected against XSS attacks
 
-ADVANCED VERSION (same like minimal, but with additional features)
+2. ADVANCED VERSION (same like minimal, but with additional features)
 
 - main feature: username can be changed by user
 - main feature: email can be changed by user
@@ -42,12 +43,21 @@ ADVANCED VERSION (same like minimal, but with additional features)
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-[not published yet] PROFESSIONAL VERSION (same functions like advanced version, but totally new code/file structure)
-* biggest change: quite professional MVC file/code structure
-* URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
-* professional usage of controllers and actions
-* database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
-* ...
+3. STYLED/THEMED [not published yet]
+
+- same like 2., but with additional css/js stylings
+- several styling to choose
+
+4. FULL-MVC-FRAMEWORK [not published yet]
+
+- same functions like advanced version, but totally new code/file structure)
+- biggest change: quite professional MVC file/code structure
+- URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
+- professional usage of controllers and actions
+- database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
+- perfect for building big apps
+- build for humans, build for non-experts. everything should be easy and self-explaining.
+- ...
 
 ###HOW TO DOWNLOAD
 
@@ -75,7 +85,7 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
 * needs PHP 5.3.7+, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
-* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) ?
+* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
@@ -97,8 +107,13 @@ and safer to use other things. You can find the official info on those functions
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATION###
+###DONATE 1$+ IF YOU USE THIS SCRIPT###
 
-If you want to support this script, feel free to donate via paypal:
+If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
+then donating a small amount would be very cool.
 
-Click here https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG
+[Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
+
+###AVAILABLE FOR HIRE###
+
+I'm available for freelance work. Remote worldwide or locally around Central Europe. Drop me a line.
