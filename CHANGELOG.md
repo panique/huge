@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+June 15th 2013
+* 2-advanced: testwise changed property comments to official phpDocumentor syntax
+* readme: better declaration of versions, call to donation
+
 June 10th 2013
 * 2-advanced: password reset fix for wrong password length check
 * 2-advanced: password reset fix for missing/wrong email adress
