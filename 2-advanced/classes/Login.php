@@ -5,28 +5,52 @@
  * handles the user login/logout/session
  * 
  * @author Panique <panique@web.de>
- * @version 1.2
  */
 class Login {
-
-    private     $db_connection                 = null;                  // database connection
-    private     $hash_cost_factor              = null;                  // (optional) cost factor for the hash calculation
-
-    private     $user_id                       = null;                  // user's id
-    private     $user_name                     = "";                    // user's name
-    private     $user_email                    = "";                    // user's email
-    private     $user_password_hash            = "";                    // user's hashed and salted password
-    private     $user_is_logged_in             = false;                 // status of login
-    private     $user_password_reset_hash      = "";                    // user's password reset hash
     
-    public      $user_gravatar_image_url       = "";                    // user's gravatar profile pic url (or a default one)
-    public      $user_gravatar_image_tag       = "";                    // user's gravatar profile pic url with <img ... /> around
-    
-    private     $password_reset_link_is_valid  = false;                 // marker for view handling (TODO: this is kind of unintutive)
-    private     $password_reset_was_successful = false;                 // marker for view handling (TODO: this is kind of unintutive)
+    // TODO: initialize strings with "" or null ?
 
-    public      $errors                        = array();               // collection of error messages
-    public      $messages                      = array();               // collection of success / neutral messages
+    /** @var object $db_connection The database connection */
+    private $db_connection = null;
+    
+    /** @var int $hash_cost_factor The (optional) cost factor for the hash calculation */
+    private $hash_cost_factor = null;
+
+    /** @var int $user_id The user's id */
+    private $user_id = null;
+    
+    /** @var string $user_name The user's name */
+    private $user_name = "";
+    
+    /** @var string $user_email The user's mail */
+    private $user_email = "";
+    
+    /** @var string $user_password_hash The user's hashed and salted password */
+    private $user_password_hash = "";
+    
+    /** @var boolean $user_is_logged_in The user's login status */
+    private $user_is_logged_in = false;
+    
+    /** @var string $user_password_reset_hash The user's password reset hash */
+    private $user_password_reset_hash = "";
+    
+    /** @var string $user_gravatar_image_url The user's gravatar profile pic url (or a default one) */
+    public $user_gravatar_image_url = "";
+    
+    /** @var string $user_gravatar_image_tag The user's gravatar profile pic url with <img ... /> around */
+    public $user_gravatar_image_tag = "";
+    
+    /** @var boolean $password_reset_link_is_valid Marker for view handling */
+    private $password_reset_link_is_valid  = false;
+    
+    /** @var boolean $password_reset_was_successful Marker for view handling */
+    private $password_reset_was_successful = false;
+
+    /** @var array $errors Collection of error messages */
+    public $errors = array();
+    
+    /** @var array $messages Collection of success / neutral messages */
+    public $messages = array();
     
     
     /**
