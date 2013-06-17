@@ -18,7 +18,7 @@ Available in 4 versions:
 
 ###DIFFERENT VERSIONS
 
-1. MINIMAL VERSION
+####MINIMAL VERSION
 
 - main features: user can register, log in and log out
 - feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
@@ -30,7 +30,7 @@ Available in 4 versions:
 - security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
 - security: user input is cleaned, your php app is protected against XSS attacks
 
-2. ADVANCED VERSION (same like minimal, but with additional features)
+####ADVANCED VERSION (same like minimal, but with additional features)
 
 - main feature: username can be changed by user
 - main feature: email can be changed by user
@@ -43,12 +43,12 @@ Available in 4 versions:
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-3. STYLED/THEMED [not published yet]
+####STYLED/THEMED [not published yet]
 
 - same like 2., but with additional css/js stylings
-- several styling to choose
+- several stylings to choose
 
-4. FULL-MVC-FRAMEWORK [not published yet]
+####FULL-MVC-FRAMEWORK [not published yet]
 
 - same functions like advanced version, but totally new code/file structure)
 - biggest change: quite professional MVC file/code structure
