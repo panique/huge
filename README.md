@@ -97,6 +97,10 @@ PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using
 especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
 a good target for criminals.
 
+###MORE INFO IN THE WIKI
+
+See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
+
 ###THANKS TO###
 
 A big thanks goes out to Anthony Ferrara (ircmaxell) and Nikita Popov (nikic) for creating and documenting the wonderful PHP 5.5 password
