@@ -99,7 +99,7 @@ a good target for criminals.
 
 ###MORE INFO IN THE WIKI
 
-See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff: 
+See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
 
 ###THANKS TO###
 
