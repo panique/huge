@@ -1,0 +1,29 @@
+body {
+    background-color: #fff;
+    font-family: Georgia;
+    font-size: 1em;
+    color: #000;
+}
+
+.header {
+    border: 1px solid #999;
+    padding: 20px;
+    margin:20px 10px;
+}
+
+.header a {
+    color: #000;
+    margin-right: 10px;
+}
+
+.content {
+    border: 1px solid #999;
+    padding: 20px;
+    margin:20px 10px;
+}
+
+.footer {
+    border: 1px solid #999;
+    padding: 20px;
+    margin:20px 10px;
+}
