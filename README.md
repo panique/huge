@@ -43,21 +43,25 @@ Available in 4 versions:
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-####STYLED/THEMED [not published yet]
+####STYLED/THEMED [not published yet. coming up in late 2013]
 
 - same like 2., but with additional css/js stylings
 - several stylings to choose
 
-####FULL-MVC-FRAMEWORK [not published yet]
+####FULL-MVC-FRAMEWORK [currently only a preview, full version needs some weeks]
 
-- same functions like advanced version, but totally new code/file structure)
-- biggest change: quite professional MVC file/code structure
-- URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
-- professional usage of controllers and actions
-- database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
-- perfect for building big apps
-- build for humans, build for non-experts. everything should be easy and self-explaining.
-- ...
+- same functions like advanced version, but totally new code/file structure
+- perfect for building REAL applications
+- main feature: URL rewriting (beautiful URLs)
+- main feature: professional usage of controllers and actions
+- main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
+- COMING UP: PDF/Tutorial that shows how to use this framework
+
+BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
+The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
+"Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic
+and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site,
+they are excellent and very sympathic.
 
 ###HOW TO DOWNLOAD
 
@@ -104,6 +108,9 @@ hashing/salting functions and the compatibility pack for PHP 5.3/5.4 ! I love it
 and safer to use other things. You can find the official info on those functions on [php.net](https://wiki.php.net/rfc/password_hash) and
 [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and the official PHP 5.3/5.4 compatibility pack
 [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
+
+I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
+MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
