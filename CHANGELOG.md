@@ -1,5 +1,10 @@
 # CHANGE LOG #
 
+June 28th 2013
+* 1-minimal: minimum php version checker
+* 2-advanced: minimum php version checker
+* 4-full-mvc-framework: first commit of the new login framework (still only a preview, there will be lot of changes!)
+
 June 15th 2013
 * 2-advanced: testwise changed property comments to official phpDocumentor syntax
 * readme: better declaration of versions, call to donation
