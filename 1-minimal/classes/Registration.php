@@ -26,7 +26,7 @@ class Registration
             die("Sorry, no database connection.");
         }
 
-        $this->$is_registration_ok = $this->registerNewUser();
+        $this->is_registration_ok = $this->registerNewUser();
     }
 
     public function getErrors($name = null)
