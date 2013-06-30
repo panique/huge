@@ -33,7 +33,7 @@ class Registration
  
     public function __construct() 
     {
-        $this->$is_registration_ok = $this->registerNewUser();
+        $this->is_registration_ok = $this->registerNewUser();
     }
 
     public function getErrors($name = null)
