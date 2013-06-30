@@ -62,7 +62,7 @@ class Registration
     {
         $this->errors = array();
         $this->messages = array();
-        if (filter_has_var(INPUT_POST, 'register')) {
+        if (! filter_has_var(INPUT_POST, 'register')) {
             return false;
         }
 
