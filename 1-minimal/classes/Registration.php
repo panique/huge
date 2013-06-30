@@ -54,17 +54,25 @@ class Registration
     private function registerNewUser() 
     {
         $this->errors = array();
-        $this->messages = array();
         if (filter_has_var(INPUT_POST, 'register')) {
             return false;
         }
 
         //1 - Form filtering
         $arguments = array(
-            'user_name' => array('filter' => FILTER_VALIDATE_REGEXP, 'options' => array('regexp' => '/^[a-z0-9]{2,64}$/i')),
+            'user_name' => array(
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => array('regexp' => '/^[a-z0-9]{2,64}$/i')
+            ),
             'user_email' => FILTER_VALIDATE_EMAIL,
-            'user_password_new' => array('filter' => FILTER_VALIDATE_REGEXP, 'options' => array('regexp' => '/^.{6,}$/')),
-            'user_password_repeat' => array('filter' => FILTER_VALIDATE_REGEXP, 'options' => array('regexp' => '/^.{6,}$/')),
+            'user_password_new' => array(
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => array('regexp' => '/^.{6,}$/')
+            ),
+            'user_password_repeat' => array(
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => array('regexp' => '/^.{6,}$/')
+            ),
         );
         $params = filter_input_array(INPUT_POST, $arguments);
         if (! $params) {
@@ -97,7 +105,7 @@ class Registration
         );
 
         if ($res->num_rows > 0) {
-            $this->errors['uniqueness'] = self::USER_EXISTS
+            $this->errors['uniqueness'] = self::USER_EXISTS;
             return false;
         }
 
