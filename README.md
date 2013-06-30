@@ -59,7 +59,8 @@ In order to use this version of the script, please install a mail server by foll
 
 To install the script, please change the RewriteBase in .htaccess to the folder your code is in. You can delete this line
 if index.php is in the root of your web folder. If you have put your stuff into /myfolder/, then please change
-the RewriteBase to /myfolder/ !
+the RewriteBase to /myfolder/ ! Additionally, please fill your settings into config/config.php, otherwise your app will not
+run properly.
 
 BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
 The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
