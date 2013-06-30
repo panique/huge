@@ -57,6 +57,10 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
 - COMING UP: PDF/Tutorial that shows how to use this framework
 
+To install the script, please change the RewriteBase in .htaccess to the folder your code is in. You can delete this line
+if index.php is in the root of your web folder. If you have put your stuff into /myfolder/, then please change
+the RewriteBase to /myfolder/ !
+
 BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
 The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
 "Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic
