@@ -96,10 +96,11 @@ class Registration
 
         //2 - DB Connection
         $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        if ($this->db_connection->connect_errno) {
+        if ($this->db_connection->connect_errno || ! $this->db_connection->set_charset(DB_CHARSET)) {
             $this->errors['connection'] = "Sorry, no database connection.";
             return false;
         }
+
 
         //data prepare and sanitaze for db inclusion
         $params['user_password'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
