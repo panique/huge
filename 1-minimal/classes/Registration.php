@@ -73,10 +73,9 @@ class Registration
         }
 
         foreach (array_keys($arguments) as $keys) {
-            $value = $params[$keys];
-            if (is_null($value)) {
+            if (is_null($params[$keys])) {
                 $this->errors[$keys] = self::DATA_MISSING;
-            } elseif (! $value) {
+            } elseif (! $params[$keys]) {
                 $this->errors[$keys] = self::DATA_INVALID;
             }
         }
