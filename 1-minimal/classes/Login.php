@@ -51,7 +51,7 @@ class Login extends Auth
     * simply return the current state of the user's login
     * @return boolean user's login status
     */
-    public function isUserLoggedIn()
+    public  function isUserLoggedIn()
     {
         return $this->is_logged_in;
     }
@@ -59,7 +59,7 @@ class Login extends Auth
     /**
     * Connect a user depending on his session data
     */  
-    public function loginWithSessionData()
+    private function loginWithSessionData()
     {
         if (! $this->isValidateToken($_SESSION['user_token'])) {
             $this->errors['user_token'] = self::DATA_INVALID;
@@ -91,7 +91,7 @@ class Login extends Auth
      * 
      * @return boolean
      */
-    public function loginWithPostData()
+    private function loginWithPostData()
     {
         $this->errors = array();
         $params = filter_input_array(
@@ -141,51 +141,4 @@ class Login extends Auth
         $_SESSION['user_token'] = $this->generateToken($user['user_name']);
         return true;
     }
-
-    /**
-     * return the user data 
-     * @param  str $login the user name
-     * @return array      the user info
-     */
-    private function getUserByName($login)
-    {
-        $login = $this->conn->real_escape_string($login);
-        $res = $this->conn->query("SELECT * FROM users WHERE user_name = '$login'");
-        if ($res->num_rows != 1) {
-            return array();
-        }
-        return $res->fetch_assoc();
-    }
-
-    /**
-     * generate a unique token 
-     * @param  string $login a string to generate the token with
-     * @return string        the generated token
-     */
-    private function generateToken($login)
-    {
-        $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $timestamp = time();
-        $secret = sha1($login.'|'.self::SECRET_KEY.'|'.$userAgent.'|'.$timestamp);
-        return $login.'|'.$timestamp.'|'.$secret;
-    }
-
-    /**
-     * validate a token
-     * @param  string $str the token to be validated
-     * @return boolean
-     */
-    private function isValidateToken($str)
-    {
-        list($login, $timestamp, $secret) = explode('|', $str);
-        $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        if (
-            sha1($login.'|'.self::SECRET_KEY.'|'.$userAgent.'|'.$timestamp) != $secret ||
-            strtotime('NOW - 30 MINUTES') > $timestamp
-        ) {
-            return false;
-        }
-        return true;
-    }
-
 }
