@@ -74,7 +74,7 @@ class Registration extends Auth
            }
        }
        if (empty($this->errors) && ($params['user_password_new'] != $params['user_password_repeat'])) {
-           $this->errors['user_password'] = self::DATA_MISMATCH;
+           $this->errors['user_password_repeat'] = self::DATA_MISMATCH;
        }
        if (count($this->errors)) {
            return false;
