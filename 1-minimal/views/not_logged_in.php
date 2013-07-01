@@ -3,21 +3,15 @@
 <!-- errors & messages --->
 
 <?php
-
+/**
 // show negative messages
-if ($login->errors) {
-    foreach ($login->errors as $error) {
-        echo $error;    
+$errors = $login->getErrors();
+if (count($errors)) {
+    foreach ($errors as $key => $value) {
+        echo $key .':' . $error;    
     }
 }
-
-// show positive messages
-if ($login->messages) {
-    foreach ($login->messages as $message) {
-        echo $message;
-    }
-}
-
+*/
 ?>             
 
 <!-- login form box -->
