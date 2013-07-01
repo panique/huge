@@ -61,6 +61,8 @@ class Login extends Auth
 
     /**
     * Connect a user depending on his session data
+    * 
+    * @return boolean
     */
     private function loginWithSessionData()
     {
