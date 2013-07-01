@@ -97,14 +97,8 @@ class Login extends Auth
         $params = filter_input_array(
             INPUT_POST,
             array(
-                'user_name' => array(
-                    'filter' => FILTER_CALLBACK,
-                    'options' => array('Auth::isValidUserName')
-                ),
-                'user_password' => array(
-                    'filter' => FILTER_CALLBACK,
-                    'options' => array('Auth::isValidPassword')
-                ),
+                'user_name' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidUserName')),
+                'user_password' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
             )
         );
 
