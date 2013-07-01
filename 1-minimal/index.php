@@ -36,14 +36,14 @@ require "classes/Login.php";
 
 // by default the user is not logged in. you can do whatever you want here.
 // for demonstration purposes, we simply show the "you are not logged in" view.
-$view = "not_logged_in";
+$view = "views/not_logged_in.php";
 
 // create a login object. when this object is created, it will do all login/logout stuff automatically
 // so this single line handles the entire login process. in consequence, you can simply ...
-$login = new Login();
-if ($login->isUserLoggedIn()) {    
+$login = new Login;
+if ($login->isUserLoggedIn()) {
     // the user is logged in. you can do whatever you want here.
     // for demonstration purposes, we simply show the "you are logged in" view.
-    $view = "logged_in";
+    $view = "views/logged_in.php";
 }
-include 'views/'.$view.'.php';
+include $view;
