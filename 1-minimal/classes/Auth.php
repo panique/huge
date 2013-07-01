@@ -9,19 +9,42 @@
 */
 class Auth
 {
-   private $conn; // database connection  
-   private $errors = array();  // collection of error messages
+   /**
+   * Database connection
+   * @var MySQLi
+   */
+   private $conn;
+   
+   /**
+    * Collection of error messages
+    * @var array
+    */
+   private $errors = array();
+   
+   /**
+    * Collection of regular expressions to validate user data
+    * @var array
+    */
    public static final $regexp = array(
       'user_name' => '^[a-zA-Z0-9]{2,64}$',
       'user_password' => '^.{6,}$'
    );
 
-   const DATA_MISSING = 1;
-   const DATA_INVALID = 2;
-   const DATA_MISMATCH = 3;
-   const REGISTRATION_FAILED = 1;
-   const USER_EXISTS = 1;
-   const USER_UNKNOWN = 2;
+   /********************************************************
+    * Possible Error using Constants to enable localization 
+    ********************************************************/
+   const DATA_MISSING = 1;  //data is missing
+   const DATA_INVALID = 2;  //data is invalid
+   const DATA_MISMATCH = 3; //string mismatch between 2 string
+   const REGISTRATION_FAILED = 1; //registration failed (db error)
+   const USER_EXISTS = 1; //user submitted already exists in database
+   const USER_UNKNOWN = 2;  //user unknown (user name OR password Error)
+   
+   /**
+    * Used to generated a unique token for each user
+    * @var string
+    */
+   private $secretKey = 'This is my hidden secret key'; //you should change this phrase
    
    /**
     * The Constructor initialize the db connection
@@ -35,7 +58,7 @@ class Auth
    }
 
    /**
-    * Return the errors
+    * Return the regular expressions (can be use to match PHP and HTML5 regular expression)
     * @param  string $name an specified regular expression
     * @return mixed
     */
@@ -99,7 +122,7 @@ class Auth
          FILTER_VALIDATE_REGEXP,
          array(
             'options' => array(
-               'regexp' => '/'.self::regexp['user_password'].'/'
+               'regexp' => '/'.self::$regexp['user_password'].'/'
             )
          )
       );
@@ -125,7 +148,7 @@ class Auth
          FILTER_VALIDATE_REGEXP,
          array(
             'options' => array(
-               'regexp' => '/'.self::regexp['user_name'].'/'
+               'regexp' => '/'.self::$regexp['user_name'].'/'
             )
          )
       );
@@ -151,4 +174,55 @@ class Auth
         }
         return $res->fetch_assoc();
     }
+ 
+    /**
+    * is a user already with the given login OR email exists in the database
+    * @param str $login the user name
+    * @param str $email the user email
+    * 
+    * @return boolean
+    */
+    private function isUserExists($login, $email)
+    {
+        $login = $this->conn->real_escape_string($login);
+        $email = $this->conn->real_escape_string($email);
+        $res = $this->conn->query(
+            "SELECT COUNT(user_id) AS nb FROM users WHERE user_name = '$login' OR user_email = '$email'"
+        );
+        $nb = $res->fetch_assoc();
+        return (bool) $nb['nb'];
+    }
+    
+    /**
+     * generate a unique token 
+     * @param  string $login a string to generate the token with
+     * @return string        the generated token
+     */
+    private function generateToken($login)
+    {
+        $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $timestamp = time();
+        $secret = sha1($login.'|'.$this->secretKey.'|'.$userAgent.'|'.$timestamp);
+        return $login.'|'.$timestamp.'|'.$secret;
+    }
+
+    /**
+     * validate a token against itself and against time 
+     * which makes session timeout possible
+     * @param  string $str the token to be validated
+     * @return boolean
+     */
+    private function isValidateToken($str)
+    {
+        list($login, $timestamp, $secret) = explode('|', $str);
+        $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        if (
+            sha1($login.'|'.$this->secretKey.'|'.$userAgent.'|'.$timestamp) != $secret ||
+            strtotime('NOW - 30 MINUTES') > $timestamp
+        ) {
+            return false;
+        }
+        return true;
+    }
+    
 }
