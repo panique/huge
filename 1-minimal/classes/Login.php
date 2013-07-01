@@ -67,7 +67,7 @@ class Login extends Auth
         }
 
         list($login, ) = explode('|', $_SESSION['user_token');
-        $login = filter_var($_SESSION['user_name'], FILTER_CALLBACK, array($this, 'isValidUserName'));
+        $login = filter_var($_SESSION['user_name'], FILTER_CALLBACK, array('options' => 'Auth::isValidUserName'));
         if (! $login) {
             $this->errors['user_name'] = self::DATA_INVALID;
             return false;
@@ -99,11 +99,11 @@ class Login extends Auth
             array(
                 'user_name' => array(
                     'filter' => FILTER_CALLBACK,
-                    'options' => array($this, 'isValidUserName')
+                    'options' => array('Auth::isValidUserName')
                 ),
                 'user_password' => array(
                     'filter' => FILTER_CALLBACK,
-                    'options' => array($this, 'isValidPassword')
+                    'options' => array('Auth::isValidPassword')
                 ),
             )
         );
