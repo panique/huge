@@ -11,7 +11,7 @@ class Auth
 {
    private $conn; // database connection  
    private $errors = array();  // collection of error messages
-   private $regexp = array(
+   public static final $regexp = array(
       'user_name' => '^[a-zA-Z0-9]{2,64}$',
       'user_password' => '^.{6,}$'
    );
@@ -23,6 +23,9 @@ class Auth
    const USER_EXISTS = 1;
    const USER_UNKNOWN = 2;
    
+   /**
+    * The Constructor initialize the db connection
+    */
    public function __construct()
    {
        $this->conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -31,6 +34,27 @@ class Auth
        }
    }
 
+   /**
+    * Return the errors
+    * @param  string $name an specified regular expression
+    * @return mixed
+    */
+   public function getRegexp($name = null)
+   {
+       if (is_null($name)) {
+           return self::$regexp;
+       }
+       if (isset(self::$regexp[$name])) {
+           return self::$regexp[$name];
+       }
+       return null;
+   }
+
+   /**
+    * Return the errors
+    * @param  string $name an specified error
+    * @return mixed
+    */
    public function getErrors($name = null)
    {
        if (is_null($name)) {
@@ -42,7 +66,12 @@ class Auth
        return null;
    }
 
-   protected function isValidEmail($str = null)
+   /**
+    * check to see if the email is valid
+    * @param  string  $str  the email to test
+    * @return mixed  return the status to work with filter_* function 
+    */
+   public static function isValidEmail($str = null)
    {
       if (is_null($str)) {
          return null;
@@ -55,7 +84,12 @@ class Auth
       return $str;
    }
 
-   protected function isValidPassword($str = null)
+   /**
+    * check to see if the password is valid
+    * @param  string  $str the password to test
+    * @return mixed        the status to work with filter_* function 
+    */
+   public static function isValidPassword($str = null)
    {
       if (is_null($str)) {
          return null;
@@ -65,7 +99,7 @@ class Auth
          FILTER_VALIDATE_REGEXP,
          array(
             'options' => array(
-               'regexp' => '/'.$this->regexp['user_password'].'/'
+               'regexp' => '/'.self::regexp['user_password'].'/'
             )
          )
       );
@@ -76,7 +110,12 @@ class Auth
       return $str;
    }
 
-   protected function isValidUserName($str = null)
+   /**
+    * check to see if the username is valid
+    * @param  string  $str the username to test
+    * @return mixed        the status to work with filter_* function 
+    */
+   public static function isValidUserName($str = null)
    {
       if (is_null($str)) {
          return null;
@@ -86,7 +125,7 @@ class Auth
          FILTER_VALIDATE_REGEXP,
          array(
             'options' => array(
-               'regexp' => '/'.$this->regexp['user_name'].'/'
+               'regexp' => '/'.self::regexp['user_name'].'/'
             )
          )
       );
@@ -95,7 +134,21 @@ class Auth
       }
       
       return $str;
-      
    }
 
+    /**
+    * return the user data
+    * @param str $login the user name
+    * 
+    * @return array the user info
+    */
+    private function getUserByName($login)
+    {
+        $login = $this->conn->real_escape_string($login);
+        $res = $this->conn->query("SELECT * FROM users WHERE user_name = '$login'");
+        if ($res->num_rows != 1) {
+            return array();
+        }
+        return $res->fetch_assoc();
+    }
 }
