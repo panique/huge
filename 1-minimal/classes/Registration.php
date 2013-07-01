@@ -73,29 +73,23 @@ class Registration extends Auth
                $this->errors[$keys] = self::DATA_INVALID;
            }
        }
+       
        if (empty($this->errors) && ($params['user_password_new'] != $params['user_password_repeat'])) {
            $this->errors['user_password_repeat'] = self::DATA_MISMATCH;
        }
+       
+       if ($this->isUserExists($params['user_name'], $params['user_email'])) {
+          $this->errors['user_name'] = self::USER_EXISTS;
+       }
+       
        if (count($this->errors)) {
            return false;
        }
 
-       //3 - data prepared and sanitized for db inclusion
+       //3 - write new user data into database
        $params['user_password'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
        unset($params['user_password_new'], $params['user_password_repeat']);
        $params = array_map(array($this->conn, 'real_escape_string'), $params);
-
-       //4 - check if user already in the table
-       $res = $this->conn->query(
-           "SELECT * FROM users WHERE user_name = '{$params['user_name']}' OR user_email = '{$params['user_email']}'"
-       );
-
-       if ($res->num_rows > 0) {
-           $this->errors['user_name'] = self::USER_EXISTS;
-           return false;
-       }
-
-       //5 - write new user data into database
        $res = $this->conn->query(
            "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('."implode("','", $params)".')"
        );
