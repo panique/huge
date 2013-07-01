@@ -6,14 +6,14 @@
 // show negative messages
 if ($registration->errors) {
     foreach ($registration->errors as $error) {
-        echo $error;    
+        echo $error . " ";    
     }
 }
 
 // show positive messages
 if ($registration->messages) {
     foreach ($registration->messages as $message) {
-        echo $message;
+        echo $message . " ";
     }
 }
 
