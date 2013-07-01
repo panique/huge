@@ -9,6 +9,10 @@
 */
 class Registration extends Auth
 {
+   /**
+    *  Registration Status
+    * 
+    */
    private $is_registration_ok = false;
 
    /**
@@ -52,10 +56,10 @@ class Registration extends Auth
 
        //2 - Input Filtering and Validation
        $arguments = array(
-           'user_name' => array('filter' => FILTER_CALLBACK, 'options' => array($this, 'isValidUserName')),
-           'user_email' => array('filter' => FILTER_CALLBACK, 'options' => array($this, 'isValidEmail')),
-           'user_password_new' => array('filter' => FILTER_CALLBACK, 'options' => array($this, 'isValidPassword')),
-           'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => array($this, 'isValidPassword')),
+           'user_name' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidUserName')),
+           'user_email' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidEmail')),
+           'user_password_new' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
+           'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
        );
        $params = filter_input_array(INPUT_POST, $arguments);
        if (! $params) {
@@ -91,7 +95,7 @@ class Registration extends Auth
            return false;
        }
 
-       //4 - write new users data into database
+       //5 - write new user data into database
        $res = $this->conn->query(
            "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('."implode("','", $params)".')"
        );
