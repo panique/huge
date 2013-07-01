@@ -2,21 +2,15 @@
 
 <!-- errors & messages --->
 <?php
-
+/*
 // show negative messages
-if ($registration->errors) {
-    foreach ($registration->errors as $error) {
-        echo $error;    
+$errors = $registration->getErrors();
+if (count($errors)) {
+    foreach ($errors as $key => $value) {
+        echo $key . ' : '. $value;    
     }
 }
-
-// show positive messages
-if ($registration->messages) {
-    foreach ($registration->messages as $message) {
-        echo $message;
-    }
-}
-
+*/
 ?>   
 
 <!-- register form -->
@@ -35,7 +29,7 @@ if ($registration->messages) {
     
     <label for="login_input_password_repeat">Repeat password</label>
     <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".<?php echo Auth::$regexp['user_password']; ?>" required autocomplete="off" />        
-    <input type="submit"  name="register" value="Register" />
+    <input type="submit" name="register" value="Register" />
     
 </form>
 
