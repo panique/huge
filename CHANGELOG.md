@@ -1,5 +1,12 @@
 # CHANGE LOG #
 
+July 2nd 2013
+* 4-full-mvc-framework: better navigation with active-view-checker
+* 4-full-mvc-framework: new jQuery version
+
+July 1st 2013
+* 4-full-mvc-framework: better navigation with active-view-checker
+
 June 28th 2013
 * 1-minimal: minimum php version checker
 * 2-advanced: minimum php version checker
