@@ -1,7 +1,5 @@
 <!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
 
-<!-- errors & messages -->
-
 <?php
 $errors = array();
 if (! $login->isUserLoggedIn()) {
