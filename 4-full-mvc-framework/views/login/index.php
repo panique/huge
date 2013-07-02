@@ -21,4 +21,8 @@
             <label></label><input type="submit" />
     </form>
     
+    <a href="<?php echo URL; ?>login/register">Register</a>
+    |
+    <a href="<?php echo URL; ?>login/requestpasswordreset">Forgot my Password</a>
+    
 </div>

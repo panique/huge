@@ -418,7 +418,7 @@ class Login_Model extends Model
      * @param array $atts Optional, additional key/value attributes to include in the IMG tag
      * @source http://gravatar.com/site/implement/images/php/
      */
-    public function setGravatarImageUrl($email, $s = 50, $d = 'mm', $r = 'pg', $atts = array() ) {
+    public function setGravatarImageUrl($email, $s = 39, $d = 'mm', $r = 'pg', $atts = array() ) {
         
         $url = 'http://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );

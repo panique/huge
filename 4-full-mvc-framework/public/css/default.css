@@ -13,7 +13,21 @@ body {
 
 .header a {
     color: #000;
-    margin-right: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #fff;
+}
+
+.header a.active,
+.header a.active:hover {
+    color: #fff;
+    background-color: #222;
+}
+
+.header a:hover {
+    color: #fff;
+    background-color: #999;
 }
 
 .content {
@@ -26,4 +40,83 @@ body {
     border: 1px solid #999;
     padding: 20px;
     margin:20px 10px;
+}
+
+
+
+
+/*Initialize*/
+ul#menu, ul#menu ul.sub-menu {
+    padding:0;
+    margin: 0;
+}
+ul#menu li, ul#menu ul.sub-menu li {
+    list-style-type: none;
+    display: inline-block;
+}
+/*Link Appearance*/
+ul#menu li a {
+    /*background: transparent;*/
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px 15px;    
+}
+
+ul#menu li a, ul#menu li ul.sub-menu li a {
+    text-decoration: none;
+    /*color: #000;*/
+    /*background: #eee;*/
+    /*padding: 5px;*/
+    display:inline-block;
+    white-space: nowrap; /* prevents line breaks */    
+}
+
+ul#menu li a.active {
+    background-color: #222;
+    color: #fff;
+}
+ul#menu li a.active ul.sub-menu li a {
+    color: #fff;    
+}
+
+ul#menu li a:hover {
+    color: #fff;
+}
+
+
+ul#menu li ul.sub-menu li a:hover {
+    background-color: #999;
+    color: #fff;
+}
+
+/*Make the parent of sub-menu relative*/
+ul#menu li {
+    position: relative;
+}
+/*sub menu*/
+ul#menu li ul.sub-menu {
+    display:none;
+    position: absolute;
+    top: 39px; /* dirty! */
+    left: 0;
+    width: 150px;
+    
+}
+ul#menu li:hover ul.sub-menu {
+    display:block;
+}
+
+.header .namebox {
+    float: right;
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px 15px;  
+}
+
+.header .avatar {
+    float: right;
+    width: 39px;
+    height: 39px;    
 }
