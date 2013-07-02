@@ -230,7 +230,7 @@ class Auth
      * @param  mixed $str the value to valid
      * @return int
      */
-    protected function isDataValid($value = null)
+    public static function isDataValid($value = null)
     {
         if (is_null($value)) {
             return self::DATA_MISSING;
