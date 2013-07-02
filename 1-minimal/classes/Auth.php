@@ -13,13 +13,13 @@ class Auth
     * Database connection
     * @var MySQLi
     */
-    private $conn;
+    protected $conn;
 
     /**
     * Collection of error messages
     * @var array
     */
-    private $errors = array();
+    protected $errors = array();
 
     /**
     * Collection of regular expressions to validate user data
@@ -30,21 +30,28 @@ class Auth
         'user_password' => '^.{6,}$'
     );
 
+    /**
+    * action to be taken
+    * @var string
+    */
+    protected $action;
+
     /********************************************************
     * Possible Error using Constants to enable localization
     ********************************************************/
+    const DATA_OK = 128;           //data is ok
     const DATA_MISSING = 1;        //data is missing
     const DATA_INVALID = 2;        //data is invalid
     const DATA_MISMATCH = 3;       //string mismatch between 2 string
-    const REGISTRATION_FAILED = 1; //registration failed (db error)
-    const USER_EXISTS = 1;         //user submitted already exists in database
-    const USER_UNKNOWN = 2;        //user unknown (user name OR password Error)
+    const REGISTRATION_FAILED = 4; //registration failed (db error)
+    const USER_EXISTS = 5;         //user submitted already exists in database
+    const USER_UNKNOWN = 6;        //user unknown (user name OR password Error)
 
     /**
     * Used to generated a unique token for each user
     * @var string
     */
-    private $secretKey = 'This is my hidden secret key'; //you should change this phrase
+    protected $secretKey = 'This is my hidden secret key'; //you should change this phrase
 
     /**
     * The Constructor initialize the db connection
@@ -100,7 +107,7 @@ class Auth
             return null;
         }
         $str = filter_var($str, FILTER_VALIDATE_EMAIL);
-        if (! $str || 64 > strlen($str)) {
+        if (! $str || 64 < strlen($str)) {
             return false;
         }
 
@@ -157,7 +164,7 @@ class Auth
     *
     * @return array the user info
     */
-    private function getUserByName($login)
+    protected function getUserByName($login)
     {
         $login = $this->conn->real_escape_string($login);
         $res = $this->conn->query("SELECT * FROM users WHERE user_name = '$login'");
@@ -174,7 +181,7 @@ class Auth
     *
     * @return boolean
     */
-    private function isUserExists($login, $email)
+    protected function isUserExists($login, $email)
     {
         $login = $this->conn->real_escape_string($login);
         $email = $this->conn->real_escape_string($email);
@@ -182,7 +189,7 @@ class Auth
             "SELECT COUNT(user_id) AS nb FROM users WHERE user_name = '$login' OR user_email = '$email'"
         );
         $count = $res->fetch_assoc();
-        return (bool) $count['nb'];
+        return (int) $count['nb'];
     }
 
     /**
@@ -190,7 +197,7 @@ class Auth
      * @param  string $login a string to generate the token with
      * @return string        the generated token
      */
-    private function generateToken($login)
+    protected function generateToken($login)
     {
         $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $timestamp = time();
@@ -204,16 +211,32 @@ class Auth
      * @param  string $str the token to be validated
      * @return boolean
      */
-    private function isValidateToken($str)
+    protected function isValidToken($str)
     {
-        list($login, $timestamp, $secret) = explode('|', $str);
+        $auth = explode('|', $str);
         $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
         if (
-            sha1($login.'|'.$this->secretKey.'|'.$userAgent.'|'.$timestamp) != $secret ||
-            strtotime('NOW - 30 MINUTES') > $timestamp
+            count($auth) != 3 ||
+            strtotime('NOW - 30 MINUTES') > $auth[1] ||
+            sha1($auth[0].'|'.$this->secretKey.'|'.$userAgent.'|'.$auth[1]) != $auth[2]
         ) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * tell if a value is null, false or set
+     * @param  mixed $str the value to valid
+     * @return int
+     */
+    protected function isDataValid($value = null)
+    {
+        if (is_null($value)) {
+            return self::DATA_MISSING;
+        } elseif (! $value) {
+            return self::DATA_INVALID;
+        }
+        return self::DATA_OK;
     }
 }
