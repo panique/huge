@@ -1,151 +1,105 @@
 <?php
 
 /**
- * class Registration
- * handles the user registration
- * 
- * @author Panique <panique@web.de>
- * @version 1.0
- */
-class Registration {
-
-    private     $db_connection              = null;                     // database connection   
-    
-    private     $user_name                  = "";                       // user's name
-    private     $user_email                 = "";                       // user's email
-    private     $user_password              = "";                       // user's password (what comes from POST)
-    private     $user_password_hash         = "";                       // user's hashed and salted password
-    
-    public      $registration_successful    = false;
-
-    public      $errors                     = array();                  // collection of error messages
-    public      $messages                   = array();                  // collection of success / neutral messages
-    
-    
+* class Registration
+* handles the user registration
+*
+* @author Panique <panique@web.de>
+* @version 1.0
+*/
+class Registration extends Auth
+{
     /**
-     * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$login = new Login();"
-     */    
-    public function __construct() {
-        
-            if (isset($_POST["register"])) {
-                
-                $this->registerNewUser();
-                
-            }        
-    }
+    *  Registration Status
+    *  @var  boolean
+    */
+    private $is_registration_ok = false;
 
     /**
-     * registerNewUser
-     * 
-     * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
-     * everything is fine
-     */
-    private function registerNewUser() {
-        
-        if (empty($_POST['user_name'])) {
-          
-            $this->errors[] = "Empty Username";
+    *  The constructor execute the registration on set the registration status
+    */
+    public function __construct()
+    {
+        parent::__construct();
 
-        } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
-          
-            $this->errors[] = "Empty Password";            
-            
-        } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-          
-            $this->errors[] = "Password and password repeat are not the same";   
-            
-        } elseif (strlen($_POST['user_password_new']) < 6) {
-            
-            $this->errors[] = "Password has a minimum length of 6 characters";            
-            
-        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-            
-            $this->errors[] = "Username cannot be shorter than 2 or longer than 64 characters";
-                        
-        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-            
-            $this->errors[] = "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters";
-            
-        } elseif (empty($_POST['user_email'])) {
-            
-            $this->errors[] = "Email cannot be empty";
-            
-        } elseif (strlen($_POST['user_email']) > 64) {
-            
-            $this->errors[] = "Email cannot be longer than 64 characters";
-            
-        } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            
-            $this->errors[] = "Your email adress is not in a valid email format";
-        
-        } elseif (!empty($_POST['user_name'])
-                  && strlen($_POST['user_name']) <= 64
-                  && strlen($_POST['user_name']) >= 2
-                  && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
-                  && !empty($_POST['user_email'])
-                  && strlen($_POST['user_email']) <= 64
-                  && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
-                  && !empty($_POST['user_password_new']) 
-                  && !empty($_POST['user_password_repeat']) 
-                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
-            
-            // TODO: the above check is redundant, but from a developer's perspective it makes clear
-            // what exactly we want to reach to go into this if-block
+        $action = filter_input(
+            INPUT_GET,
+            'action',
+            FILTER_SANITIZE_STRING,
+            FILTER_REQUIRE_SCALAR|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH
+        );
 
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
-
-                // escapin' this, additionally removing everything that could be (html/javascript-) code
-                $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
-                $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
-                
-                $this->user_password = $_POST['user_password_new'];
-
-                // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                // compatibility library                
-                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT);
-
-                // check if user already exists
-                $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");
-
-                if ($query_check_user_name->num_rows == 1) {
-
-                    $this->errors[] = "Sorry, that user name is already taken.<br/>Please choose another one.";
-
-                } else {
-
-                    // write new users data into database
-                    $query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."');");
-
-                    if ($query_new_user_insert) {
-
-                        $this->messages[] = "Your account has been created successfully. You can now log in.";
-                        $this->registration_successful = true;
-
-                    } else {
-
-                        $this->errors[] = "Sorry, your registration failed. Please go back and try again.";
-
-                    }
-                }
-
-            } else {
-
-                $this->errors[] = "Sorry, no database connection.";
-
-            }
-            
-        } else {
-            
-            $this->errors[] = "An unknown error occured.";
-            
+        if ('register' == $action) {
+            $this->is_registration_ok = $this->registerNewUser();
         }
-        
     }
 
+    /**
+    *  return the registration status
+    * 
+    *  @return boolean
+    */
+    public function isRegistrationSuccessful()
+    {
+        return $this->is_registration_ok;
+    }
+
+    /**
+    * registerNewUser
+    *
+    * handles the entire registration process. 
+    * checks all error possibilities, 
+    * and creates a new user in the database if
+    * everything is fine
+    * 
+    * @return boolean
+    * 
+    */
+    private function registerNewUser()
+    {
+        //1 - Input Filtering and Validation
+        $arguments = array(
+            'user_name' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidUserName'),
+            'user_email' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidEmail'),
+            'user_password_new' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
+            'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
+        );
+        $params = filter_input_array(INPUT_POST, $arguments);
+        $this->errors = array_map(array($this, 'isDataValid'), $params);
+        foreach ($this->errors as $key => $value) {
+            if ($value == self::DATA_OK) {
+                unset($this->errors[$key]);
+            }
+        }
+
+        if (! isset($this->errors['user_password_new'], $this->errors['user_password_repeat']) &&
+            ($params['user_password_new'] != $params['user_password_repeat'])
+        ) {
+            $this->errors['user_password_repeat'] = self::DATA_MISMATCH;
+        }
+
+        if (! isset($this->errors['user_name'], $this->errors['user_email']) &&
+            $this->isUserExists($params['user_name'], $params['user_email'])
+        ) {
+            $this->errors['user_name'] = self::USER_EXISTS;
+        }
+
+        if (count($this->errors)) {
+            return false;
+        }
+
+        //2 - write new user data into database
+        $params['user_password_hash'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
+        unset($params['user_password_new'], $params['user_password_repeat']);
+        $params = array_map(array($this->conn, 'real_escape_string'), $params);
+        $res = $this->conn->query(
+            "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('".implode("','", $params)."')"
+        );
+        if (! $res) {
+            $this->errors['user_name'] = self::REGISTRATION_FAILED;
+            return false;
+        }
+
+        return true;
+    }
 }
