@@ -30,11 +30,10 @@ class View {
      * ...
      * TODO
      */
-    private function activeNavigationElementChecker($filename, $navigation_controller) {
+    private function checkForActiveController($filename, $navigation_controller) {
         
         $splitted_filename = explode("/", $filename);
         $active_controller = $splitted_filename[0];
-        //$active_action = $splitted_filename[1];
         
         if ($active_controller == $navigation_controller) {
             
@@ -46,5 +45,42 @@ class View {
         }
         
     }
+    
+    private function checkForActiveAction($filename, $navigation_action) {
+        
+        $splitted_filename = explode("/", $filename);
+        $active_action = $splitted_filename[1];
+        
+        if ($active_action == $navigation_action) {
+            
+            return true;
+            
+        } else {
+            
+            return false;
+        }
+        
+    }    
+    
+    private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action) {
+        
+        $splitted_filename = explode("/", $filename);
+        $active_controller = $splitted_filename[0];
+        $active_action = $splitted_filename[1];
+        
+        $splitted_filename = explode("/", $navigation_controller_and_action);
+        $navigation_controller = $splitted_filename[0];
+        $navigation_action = $splitted_filename[1];        
+        
+        if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
+            
+            return true;
+            
+        } else {
+            
+            return false;
+        }
+        
+    }    
 
 }
