@@ -431,8 +431,9 @@ class Login_Model extends Model
 
         // build img tag around
         $url_with_tag = '<img src="' . $url . '"';
-        foreach ( $atts as $key => $val )
+        foreach ( $atts as $key => $val ) {
             $url_with_tag .= ' ' . $key . '="' . $val . '"';
+        }
         $url_with_tag .= ' />';            
  
         // the image url like above but with an additional <img src .. /> around
