@@ -16,7 +16,7 @@ class Registration extends Auth
     private $is_registration_ok = false;
 
     /**
-    *  The constructor execute the registration on set the registration status
+    *  The constructor execute the registration and set the registration status
     */
     public function __construct()
     {
@@ -65,7 +65,7 @@ class Registration extends Auth
             'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
         );
         $params = filter_input_array(INPUT_POST, $arguments);
-        $this->errors = array_map(array($this, 'isDataValid'), $params);
+        $this->errors = array_map('Auth::isDataValid', $params);
         foreach ($this->errors as $key => $value) {
             if ($value == self::DATA_OK) {
                 unset($this->errors[$key]);
