@@ -21,7 +21,15 @@ class Registration extends Auth
     public function __construct()
     {
         parent::__construct();
-        if (filter_has_var(INPUT_POST, 'register')) {
+
+        $action = filter_input(
+            INPUT_GET,
+            'action',
+            FILTER_SANITIZE_STRING,
+            FILTER_REQUIRE_SCALAR|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH
+        );
+
+        if ('register' == $action) {
             $this->is_registration_ok = $this->registerNewUser();
         }
     }
@@ -51,25 +59,28 @@ class Registration extends Auth
     {
         //1 - Input Filtering and Validation
         $arguments = array(
-            'user_name' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidUserName')),
-            'user_email' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidEmail')),
-            'user_password_new' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
-            'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
+            'user_name' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidUserName'),
+            'user_email' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidEmail'),
+            'user_password_new' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
+            'user_password_repeat' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
         );
         $params = filter_input_array(INPUT_POST, $arguments);
-        foreach (array_keys($arguments) as $keys) {
-            if (is_null($params[$keys])) {
-                $this->errors[$keys] = self::DATA_MISSING;
-            } elseif (! $params[$keys]) {
-                $this->errors[$keys] = self::DATA_INVALID;
+        $this->errors = array_map(array($this, 'isDataValid'), $params);
+        foreach ($this->errors as $key => $value) {
+            if ($value == self::DATA_OK) {
+                unset($this->errors[$key]);
             }
         }
 
-        if (! $this->errors && ($params['user_password_new'] != $params['user_password_repeat'])) {
+        if (! isset($this->errors['user_password_new'], $this->errors['user_password_repeat']) &&
+            ($params['user_password_new'] != $params['user_password_repeat'])
+        ) {
             $this->errors['user_password_repeat'] = self::DATA_MISMATCH;
         }
 
-        if (! $this->errors && $this->isUserExists($params['user_name'], $params['user_email'])) {
+        if (! isset($this->errors['user_name'], $this->errors['user_email']) &&
+            $this->isUserExists($params['user_name'], $params['user_email'])
+        ) {
             $this->errors['user_name'] = self::USER_EXISTS;
         }
 
@@ -78,13 +89,12 @@ class Registration extends Auth
         }
 
         //2 - write new user data into database
-        $params['user_password'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
+        $params['user_password_hash'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
         unset($params['user_password_new'], $params['user_password_repeat']);
         $params = array_map(array($this->conn, 'real_escape_string'), $params);
         $res = $this->conn->query(
             "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('".implode("','", $params)."')"
         );
-
         if (! $res) {
             $this->errors['user_name'] = self::REGISTRATION_FAILED;
             return false;

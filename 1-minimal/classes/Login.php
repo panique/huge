@@ -28,10 +28,17 @@ class Login extends Auth
             session_start();
         }
 
-        $this->is_logged_in = false;
-        if (isset($_SESSION['session_token'])) {
+        //the action to take
+        $action = filter_input(
+            INPUT_GET,
+            'action',
+            FILTER_SANITIZE_STRING,
+            FILTER_REQUIRE_SCALAR|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH
+        );
+
+        if (isset($_SESSION['user_token'])) {
             $this->is_logged_in = $this->loginWithSessionData();
-        } elseif (filter_has_var(INPUT_POST, 'login')) {
+        } elseif ('login' == $action) {
             $this->is_logged_in = $this->loginWithPostData();
         }
 
@@ -45,6 +52,7 @@ class Login extends Auth
     */
     public function doLogout()
     {
+        $this->is_logged_in = false;
         $_SESSION = array();
         session_destroy();
     }
@@ -66,7 +74,7 @@ class Login extends Auth
     {
         $this->errors = array();
         //1 - Input Filtering and Validation
-        if (! $this->isValidateToken($_SESSION['user_token'])) {
+        if (! $this->isValidToken($_SESSION['user_token'])) {
             $this->errors['user_token'] = self::DATA_INVALID;
             return false;
         }
@@ -77,19 +85,13 @@ class Login extends Auth
         if (! $login) {
             $this->errors['user_name'] = self::DATA_INVALID;
             return false;
-        }
-
-        $user = $this->getUserByName($login);
-        if (! $user) {
+        } elseif (! ($user = $this->getUserByName($login))) {
             $this->errors['user_name'] = self::USER_UNKNOWN;
             return false;
         }
 
         //3 - Session Update
-        foreach ($user as $key => $value) {
-            $_SESSION[$key] = $value;
-        }
-        $_SESSION['user_token'] = $this->generateToken($user['user_name']);
+        $this->loadSession($user);
         return true;
     }
 
@@ -102,38 +104,47 @@ class Login extends Auth
     {
 
         $this->errors = array();
+
         //1 - Input Filtering and Validation
         $arguments = array(
-            'user_name' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidUserName')),
-            'user_password' => array('filter' => FILTER_CALLBACK, 'options' => array('Auth::isValidPassword')),
+            'user_name' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidUserName'),
+            'user_password' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
         );
         $params = filter_input_array(INPUT_POST, $arguments);
-        foreach (array_keys($arguments) as $key) {
-            if (! is_null($params[$key])) {
-                $this->errors[$key] = self::DATA_MISSING;
-            } else if (! $params[$key]) {
-                $this->errors[$key] = self::DATA_INVALID;
+        $this->errors = array_map(array($this, 'isDataValid'), $params);
+        foreach ($this->errors as $keys => $value) {
+            if ($value == self::DATA_OK) {
+                unset($this->errors[$keys]);
             }
         }
         if (count($this->errors)) {
             return false;
         }
+
         //2 - User Authentification
         $user = $this->getUserByName($params['user_name']);
         if (! $user) {
-            $this->errors['user'] = self::USER_UNKNOWN;
+            $this->errors['user_name'] = self::USER_UNKNOWN;
+            return false;
+        } elseif (! password_verify($params['user_password'], $user['user_password_hash'])) {
+            $this->errors['user_password'] = self::DATA_INVALID;
             return false;
         }
 
-        if (! password_verify($params['user_password'], $user['user_password_hash'])) {
-            $this->errors['password'] = self::DATA_INVALID;
-            return false;
-        }
         //3 - Session Update
+        $this->loadSession($user);
+        return true;
+    }
+
+    /**
+     * load User Data into the session
+     * @return void
+     */
+    private function loadSession(array $user)
+    {
         foreach ($user as $key => $value) {
             $_SESSION[$key] = $value;
         }
         $_SESSION['user_token'] = $this->generateToken($user['user_name']);
-        return true;
     }
 }

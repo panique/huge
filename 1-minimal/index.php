@@ -21,6 +21,7 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
+
 // if you are using PHP 5.3 or PHP 5.4 you have to include the password_api_compatibility_library.php
 // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
 require "libraries/password_compatibility_library.php";
