@@ -43,6 +43,11 @@ body {
 }
 
 
+h1 {
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
 
 
 /*Initialize*/
@@ -112,7 +117,7 @@ ul#menu li:hover ul.sub-menu {
     color: #000;
     text-transform: uppercase;
     text-decoration: none;
-    padding: 10px 15px;  
+    padding: 10px 15px;
 }
 
 .header .avatar {
