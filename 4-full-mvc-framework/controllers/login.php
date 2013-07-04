@@ -25,8 +25,9 @@ class Login extends Controller {
         if ($login_successful) {
             
             // if YES, then move user to dashboard/index
-            //header('location: ' . URL . '/dashboard/index');
-            $this->view->render('dashboard/index');
+            // please note: this is a browser-relocater, not a rendered view
+            header('location: ' . URL . 'dashboard/index');
+            //$this->view->render('dashboard/index');
             
         } else {
             
