@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+July 4th 2013
+* 4-full-mvc-framework: several smaller improvements
+
 July 2nd 2013
 * 4-full-mvc-framework: better navigation with active-view-checker
 * 4-full-mvc-framework: new jQuery version
