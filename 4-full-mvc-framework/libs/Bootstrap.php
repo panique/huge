@@ -167,7 +167,9 @@ class Bootstrap {
         require $this->_controllerPath . $this->_errorFile;
         $this->_controller = new Error();
         $this->_controller->index();
-        return false;
+        // TODO: how to do this better ? exit; is not really good...
+        exit;
+        //return false;
     }
 
 }
