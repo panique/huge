@@ -1,5 +1,11 @@
 # CHANGE LOG #
 
+July 5th 2013
+* 4-full-mvc-framework: full frontend interface
+* 4-full-mvc-framework: basic responsive version of the entire framework
+* 4-full-mvc-framework: new way of handling the registration routing
+* 4-full-mvc-framework: litte tutorial for this version in TUTORIAL.md
+
 July 4th 2013
 * 4-full-mvc-framework: several smaller improvements
 
