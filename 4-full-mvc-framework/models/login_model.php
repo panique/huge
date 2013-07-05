@@ -204,6 +204,7 @@ class Login_Model extends Model
      * 
      * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
      * everything is fine
+     * @return boolean Gives back the success status of the registration
      */
     public function registerNewUser() {
         
@@ -294,7 +295,7 @@ class Login_Model extends Model
                     $sth = $this->db->prepare("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES(:user_name, :user_password_hash, :user_email, :user_activation_hash) ;");
                     $sth->execute(array(':user_name' => $this->user_name, ':user_password_hash' => $this->user_password_hash, ':user_email' => $this->user_email, ':user_activation_hash' => $this->user_activation_hash));                    
                     
-                    $count =  $sth->rowCount();            
+                    $count =  $sth->rowCount();
 
                     if ($count == 1) {
                         
@@ -304,6 +305,7 @@ class Login_Model extends Model
                             // when mail has been send successfully
                             $this->messages[] = "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail.";
                             $this->registration_successful = true;
+                            return true;
                             
                         } else {
 
@@ -330,7 +332,10 @@ class Login_Model extends Model
             
             $this->errors[] = "An unknown error occured.";
             
-        }                
+        }          
+        
+        // standard return. returns only true of really successful (see above)
+        return false;
     }
     
     /*
@@ -418,7 +423,7 @@ class Login_Model extends Model
      * @param array $atts Optional, additional key/value attributes to include in the IMG tag
      * @source http://gravatar.com/site/implement/images/php/
      */
-    public function setGravatarImageUrl($email, $s = 39, $d = 'mm', $r = 'pg', $atts = array() ) {
+    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() ) {
         
         $url = 'http://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );

@@ -1,7 +1,6 @@
-</div>
 
     <div class="footer">
-        FOOTER
+        Footer
     </div>
 
 </body>

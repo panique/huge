@@ -7,7 +7,7 @@
     if (isset($this->errors)) {
 
         foreach ($this->errors as $error) {
-            echo '<h3>'.$error.'</h3>';
+            echo '<div class="system_message">'.$error.'</div>';
         }
 
     }

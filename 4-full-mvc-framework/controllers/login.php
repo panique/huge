@@ -78,16 +78,29 @@ class Login extends Controller {
         $this->view->render('login/edituseremail');        
         
     }  
-    
-    function register() {
+
+    // register page
+    function register() {    
         
-        $this->model->registerNewUser();
+        $this->view->render('login/register');
+        
+    }
+    
+    // real registration action
+    function register_action() {
+        
+        $registration_successful = $this->model->registerNewUser();
 
         // TODO: find a better solution than always doing this by hand
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/register');
+        if ($registration_successful == true) {
+            $this->view->render('login/index');
+        } else {
+            $this->view->render('login/register');
+        }
+        
         
     }
     
