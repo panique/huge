@@ -64,6 +64,14 @@ The **PHP Login Framework** is build using code from JReam's framework (I took t
 and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site,
 they are excellent and very sympathic.
 
+*Screenshot (desktop) from the 4-full-mvc-framework:*
+
+![Screenshot desktop](http://imageshack.us/a/img14/536/ndd.png)
+
+*Screenshot (mobile) from the 4-full-mvc-framework:*
+
+![Screenshot mobile](http://img59.imageshack.us/img59/9750/fbvk.png)
+
 ###HOW TO DOWNLOAD
 
 Here on github you'll always find a stable and secure master branch and the in-development develop branch.
