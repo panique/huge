@@ -5,6 +5,7 @@ July 5th 2013
 * 4-full-mvc-framework: basic responsive version of the entire framework
 * 4-full-mvc-framework: new way of handling the registration routing
 * 4-full-mvc-framework: litte tutorial for this version in TUTORIAL.md
+* 4-full-mvc-framework is now available for public in master branch
 
 July 4th 2013
 * 4-full-mvc-framework: several smaller improvements
