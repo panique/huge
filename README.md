@@ -55,6 +55,7 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: URL rewriting (beautiful URLs)
 - main feature: professional usage of controllers and actions
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
+- main feature: mail sending via local linux mail tool OR SMTP account
 - COMING UP: PDF/Tutorial that shows how to use this framework
 
 BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
@@ -98,6 +99,7 @@ RewriteBase /myapp/
 * 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
+* 7. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
 
