@@ -18,7 +18,7 @@ Available in 4 versions:
 
 ###DIFFERENT VERSIONS
 
-####MINIMAL VERSION
+#####MINIMAL VERSION
 
 - main features: user can register, log in and log out
 - feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
@@ -30,7 +30,7 @@ Available in 4 versions:
 - security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
 - security: user input is cleaned, your php app is protected against XSS attacks
 
-####ADVANCED VERSION (same like minimal, but with additional features)
+#####ADVANCED VERSION (same like minimal, but with additional features)
 
 - main feature: username can be changed by user
 - main feature: email can be changed by user
@@ -43,12 +43,12 @@ Available in 4 versions:
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-####STYLED/THEMED [not published yet. coming up in late 2013]
+#####STYLED/THEMED [not published yet. coming up in late 2013]
 
 - same like 2., but with additional css/js stylings
 - several stylings to choose
 
-####FULL-MVC-FRAMEWORK [currently only a preview, full version needs some weeks]
+#####FULL-MVC-FRAMEWORK [currently only a preview, full version needs some weeks]
 
 - same functions like advanced version, but totally new code/file structure
 - perfect for building REAL applications
@@ -56,11 +56,6 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: professional usage of controllers and actions
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
 - COMING UP: PDF/Tutorial that shows how to use this framework
-
-To install the script, please change the RewriteBase in .htaccess to the folder your code is in. You can delete this line
-if index.php is in the root of your web folder. If you have put your stuff into /myfolder/, then please change
-the RewriteBase to /myfolder/ ! Additionally, please fill your settings into config/config.php, otherwise your app will not
-run properly.
 
 BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
 The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
