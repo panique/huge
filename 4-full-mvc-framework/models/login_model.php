@@ -58,12 +58,12 @@ class Login_Model extends Model
 
                     } else {
 
-                        $this->errors[] = "Password wrong";
+                        $this->errors[] = "Password was wrong.";
                         return false;
                     }
 
             } else {
-                    $this->errors[] = "No such username";
+                    $this->errors[] = "This user does not exists.";
                     return false;
             }
 

@@ -65,6 +65,11 @@ p {
     min-height: 250px;
 }
 
+.content a {
+    text-decoration: underline;
+    color: #2C2F3B;
+}
+
 .footer {
     background-color: #42444f;
     color: #acadb1;
@@ -229,6 +234,13 @@ ul#menu li:hover ul.sub-menu {
 }
 
 /* input boxes */
+/* html5 reset. this is necessary to properly align input fields in html5 */
+input, select, textarea {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
 label {
     display: block;
     margin-bottom: 5px;
@@ -261,7 +273,7 @@ input[type="password"] {
 
 input[type="submit"] {
     border: 0;
-    background-color: #333;
+    background-color: #2C2F3B;
     color: #fff;
     font-weight: bold;
     /*padding: 10px;*/

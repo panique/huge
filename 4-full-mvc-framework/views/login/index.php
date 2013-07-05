@@ -16,9 +16,12 @@
 
     <form action="login/login" method="post">
 
-            <label>Login</label><input type="text" name="user_name" /><br />
-            <label>Password</label><input type="password" name="user_password" /><br />
+            <label>Username</label>
+            <input type="text" name="user_name" />
+            
+            <label>Password</label><input type="password" name="user_password" />
             <label></label><input type="submit" />
+            
     </form>
     
     <a href="<?php echo URL; ?>login/register">Register</a>
