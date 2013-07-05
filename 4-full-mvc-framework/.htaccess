@@ -1,0 +1,10 @@
+RewriteEngine On
+
+#When using the script within a subfolder, put this path here, like /mysubfolder/
+RewriteBase /php-login/4-full-mvc-framework/
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]

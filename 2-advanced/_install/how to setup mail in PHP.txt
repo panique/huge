@@ -11,10 +11,15 @@ ON LINUX (Ubuntu 12.04 LTS):
 After you have installed Apache, PHP etc, also install sendmail:
 sudo apt-get install sendmail
 
+Type this to display the path where sendmail has been installed:
+which sendmail
+
 After that, edit the php.ini (usually in etc/php5/apache2/php.ini) and search for this line: 
 ;sendmail_path = 
 
 and change it to this:
+sendmail_path = "THE SENDMAIL PATH -t -i"
+which means something like this:
 sendmail_path = "/usr/sbin/sendmail -t -i"
 
 Important: Remove the ";" in front of the line!

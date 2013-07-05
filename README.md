@@ -18,7 +18,7 @@ Available in 4 versions:
 
 ###DIFFERENT VERSIONS
 
-1. MINIMAL VERSION
+#####MINIMAL VERSION
 
 - main features: user can register, log in and log out
 - feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
@@ -30,7 +30,7 @@ Available in 4 versions:
 - security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
 - security: user input is cleaned, your php app is protected against XSS attacks
 
-2. ADVANCED VERSION (same like minimal, but with additional features)
+#####ADVANCED VERSION (same like minimal, but with additional features)
 
 - main feature: username can be changed by user
 - main feature: email can be changed by user
@@ -43,21 +43,34 @@ Available in 4 versions:
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
 In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
 
-3. STYLED/THEMED [not published yet]
+#####STYLED/THEMED [not published yet. coming up in late 2013]
 
 - same like 2., but with additional css/js stylings
-- several styling to choose
+- several stylings to choose
 
-4. FULL-MVC-FRAMEWORK [not published yet]
+#####FULL-MVC-FRAMEWORK [currently only a preview, full version needs some weeks]
 
-- same functions like advanced version, but totally new code/file structure)
-- biggest change: quite professional MVC file/code structure
-- URL rewriting (/index.php?controller=user&action=edit becomes /user/edit)
-- professional usage of controllers and actions
-- database object, that is shared within all classes (dependency injection. no usage of bad bad bad ;) singleton. good thing!)
-- perfect for building big apps
-- build for humans, build for non-experts. everything should be easy and self-explaining.
-- ...
+- same functions like advanced version, but totally new code/file structure
+- perfect for building REAL applications
+- main feature: URL rewriting (beautiful URLs)
+- main feature: professional usage of controllers and actions
+- main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
+- main feature: mail sending via local linux mail tool OR SMTP account
+- COMING UP: PDF/Tutorial that shows how to use this framework
+
+BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
+The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
+"Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic
+and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site,
+they are excellent and very sympathic.
+
+*Screenshot (desktop) from the 4-full-mvc-framework:*
+
+![Screenshot desktop](http://imageshack.us/a/img14/536/ndd.png)
+
+*Screenshot (mobile) from the 4-full-mvc-framework:*
+
+![Screenshot mobile](http://img59.imageshack.us/img59/9750/fbvk.png)
 
 ###HOW TO DOWNLOAD
 
@@ -70,11 +83,31 @@ github project header.
 
 This script has been made to run out-of-the-box. Not more config stuff than necessary.
 
+#####HOW TO INSTALL 1-MINIMAL VERSION
+
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
-* (3.) in the 2-advanced version, you'll EVENTUALLY need to set up a mail server on your linux server. that sounds crazy, but is
-something you can do within 60 seconds on your linux command line. Please have a look into the file "how to setup mail in PHP.txt"
-in the "_install" folder.
+
+#####HOW TO INSTALL 2-ADVANCED VERSION
+
+* 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
+* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 3. as this version uses email sending, you'll need to install a mail server tool on your server [SMTP via PHPMailer coming up].
+Maybe a mail server is already installed on your server. This is something you can do within 60 seconds on your linux command line.
+Please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
+
+#####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
+
+* 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
+* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 3. change the LIB constant in config/config.php to the URL (not path!) of your app.
+* 4. change the RewriteBase in .htaccess to the subfolder of your web/ht_docs/www directory (not path!, not URL!) where your app is in.
+If your app is in the root of your web folder, then pleae delete this line. If it's in var/www/myapp, then your line should look like
+RewriteBase /myapp/
+* 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
+then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
+* 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
+* 7. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
 
@@ -89,13 +122,18 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
+* please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
 
 ###USAGE WITH OLDER PHP VERSIONS: older than 5.3.7
 
 Sorry, this makes no sense any more. PHP 5.2 is outdated since 2009, so supporting this would be useless.
 PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using an older version of PHP,
 especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
-a good target for criminals.
+a good target for attacks.
+
+###MORE INFO IN THE WIKI
+
+See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
 
 ###MORE INFO IN THE WIKI
 
@@ -109,9 +147,12 @@ and safer to use other things. You can find the official info on those functions
 [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and the official PHP 5.3/5.4 compatibility pack
 [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
 
+I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
+MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
+
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATE 1$+ IF YOU USE THIS SCRIPT###
+###DONATE 5$+ IF YOU REALLY USE THIS SCRIPT###
 
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.

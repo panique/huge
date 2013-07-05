@@ -1,5 +1,26 @@
 # CHANGE LOG #
 
+July 5th 2013
+* 4-full-mvc-framework: full frontend interface
+* 4-full-mvc-framework: basic responsive version of the entire framework
+* 4-full-mvc-framework: new way of handling the registration routing
+* 4-full-mvc-framework: litte tutorial for this version in TUTORIAL.md
+
+July 4th 2013
+* 4-full-mvc-framework: several smaller improvements
+
+July 2nd 2013
+* 4-full-mvc-framework: better navigation with active-view-checker
+* 4-full-mvc-framework: new jQuery version
+
+July 1st 2013
+* 4-full-mvc-framework: better navigation with active-view-checker
+
+June 28th 2013
+* 1-minimal: minimum php version checker
+* 2-advanced: minimum php version checker
+* 4-full-mvc-framework: first commit of the new login framework (still only a preview, there will be lot of changes!)
+
 June 15th 2013
 * 2-advanced: testwise changed property comments to official phpDocumentor syntax
 * readme: better declaration of versions, call to donation
