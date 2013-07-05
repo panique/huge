@@ -79,11 +79,30 @@ github project header.
 
 This script has been made to run out-of-the-box. Not more config stuff than necessary.
 
+#####HOW TO INSTALL 1-MINIMAL VERSION
+
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
-* (3.) in the 2-advanced version, you'll EVENTUALLY need to set up a mail server on your linux server. that sounds crazy, but is
-something you can do within 60 seconds on your linux command line. Please have a look into the file "how to setup mail in PHP.txt"
-in the "_install" folder.
+
+#####HOW TO INSTALL 2-ADVANCED VERSION
+
+* 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
+* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 3. as this version uses email sending, you'll need to install a mail server tool on your server [SMTP via PHPMailer coming up].
+Maybe a mail server is already installed on your server. This is something you can do within 60 seconds on your linux command line.
+Please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
+
+#####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
+
+* 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
+* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 3. change the LIB constant in config/config.php to the URL (not path!) of your app.
+* 4. change the RewriteBase in .htaccess to the subfolder of your web/ht_docs/www directory (not path!, not URL!) where your app is in.
+If your app is in the root of your web folder, then pleae delete this line. If it's in var/www/myapp, then your line should look like
+RewriteBase /myapp/
+* 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
+then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
+* 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
 
 ###CONFIGURE
 
@@ -98,13 +117,14 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
+* please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
 
 ###USAGE WITH OLDER PHP VERSIONS: older than 5.3.7
 
 Sorry, this makes no sense any more. PHP 5.2 is outdated since 2009, so supporting this would be useless.
 PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using an older version of PHP,
 especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
-a good target for criminals.
+a good target for attacks.
 
 ###MORE INFO IN THE WIKI
 
