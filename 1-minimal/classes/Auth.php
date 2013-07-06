@@ -203,7 +203,7 @@ class Auth
             "SELECT COUNT(user_id) FROM users WHERE user_email = '$email'"
         );
         $count = $res->fetch_array(MYSQLI_NUM);
-        return (int) $count['nb'];
+        return (int) $count[0];
     }
 
     /**
@@ -221,7 +221,7 @@ class Auth
             "SELECT COUNT(user_id) FROM users WHERE user_name = '$login' OR user_email = '$email'"
         );
         $count = $res->fetch_array(MYSQLI_NUM);
-        return (int) $count['nb'];
+        return (int) $count[0];
     }
 
     /**
