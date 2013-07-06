@@ -175,6 +175,38 @@ class Auth
     }
 
     /**
+    * check if the user_name is unique in the users table
+    * @param str $login the user name
+    *
+    * @return boolean
+    */
+    protected function isUniqueUsername($login)
+    {
+        $login = $this->conn->real_escape_string($login);
+        $res = $this->conn->query(
+            "SELECT COUNT(user_id) FROM users WHERE user_name = '$login'"
+        );
+        $count = $res->fetch_array(MYSQLI_NUM);
+        return (int) $count[0];   
+    }
+
+    /**
+    * check if the email is unique in the users table
+    * @param str $login the user name
+    *
+    * @return boolean
+    */
+    protected function isUniqueEmail($email)
+    {
+        $email = $this->conn->real_escape_string($email);
+        $res = $this->conn->query(
+            "SELECT COUNT(user_id) FROM users WHERE user_email = '$email'"
+        );
+        $count = $res->fetch_array(MYSQLI_NUM);
+        return (int) $count['nb'];
+    }
+
+    /**
     * is a user already with the given login OR email exists in the database
     * @param str $login the user name
     * @param str $email the user email
@@ -186,9 +218,9 @@ class Auth
         $login = $this->conn->real_escape_string($login);
         $email = $this->conn->real_escape_string($email);
         $res = $this->conn->query(
-            "SELECT COUNT(user_id) AS nb FROM users WHERE user_name = '$login' OR user_email = '$email'"
+            "SELECT COUNT(user_id) FROM users WHERE user_name = '$login' OR user_email = '$email'"
         );
-        $count = $res->fetch_assoc();
+        $count = $res->fetch_array(MYSQLI_NUM);
         return (int) $count['nb'];
     }
 
