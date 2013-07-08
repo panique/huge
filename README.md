@@ -79,8 +79,8 @@ they are excellent and very sympathic.
 
 Here on github you'll always find a stable and secure master branch and the in-development develop branch.
 The master branch is ready for production, the develop branch is not (as it just shows the current state of development,
-maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the upper left area of the
-github project header.
+maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the right
+upper sidebar here on this page.
 
 ###HOW TO INSTALL
 
