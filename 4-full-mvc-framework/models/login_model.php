@@ -366,9 +366,9 @@ class Login_Model extends Model
             $mail->IsMail();            
         }
         
-        $mail->From = EMAIL_VERIFICATION_FROM;
+        $mail->From = EMAIL_VERIFICATION_FROM_EMAIL;
+        $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
         $mail->AddAddress($this->user_email);
-
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
         $mail->Body    = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($this->user_email).'/'.urlencode($this->user_activation_hash);
 
@@ -537,7 +537,8 @@ class Login_Model extends Model
             $mail->IsMail();            
         }
         
-        $mail->From = EMAIL_PASSWORDRESET_FROM;
+        $mail->From = EMAIL_PASSWORDRESET_FROM_EMAIL;
+        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
         $mail->AddAddress($this->user_email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
         
