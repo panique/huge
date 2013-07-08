@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+July 8th 2013
+* 4-full-mvc-framework: added SMTP email sender name support
+
 July 6th 2013
 * all versions: direct access of view files forbidden via .htaccess
 
