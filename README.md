@@ -119,7 +119,7 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
-* needs PHP 5.3.7+, PHP 5.4+ or PHP 5.5+
+* needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
 * needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
 * are the database connection infos in config/db.php correct ?
@@ -127,12 +127,13 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 * please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
 
-###USAGE WITH OLDER PHP VERSIONS: older than 5.3.7
+###USAGE WITH OLDER PHP VERSIONS: 
 
-Sorry, this makes no sense any more. PHP 5.2 is outdated since 2009, so supporting this would be useless.
-PHP 5.3.7 is needed (as this introduces the hashing algorithms used here). Using an older version of PHP,
-especially older than the latest PHP 5.3.x is totally unprofessional and makes you, your server and your data
-a good target for attacks.
+This script needs PHP 5.3.7 or higher. PHP 5.2 is outdated since 2009, so supporting this would be contra-productive (and is impossible btw).
+**PHP 5.3.7 is REALLY needed** (as this version introduced modern password hashing algorithms). There is no way to work around
+this. For your own security: Please don't use several years old versions of PHP ! This makes you an excellent target
+for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
+active version of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
 
 ###MORE INFO IN THE WIKI
 
