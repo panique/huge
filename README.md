@@ -157,10 +157,6 @@ active version of PHP, please have a look [on wikipedia](https://en.wikipedia.or
 
 See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
 
-###MORE INFO IN THE WIKI
-
-See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
-
 ###THANKS TO###
 
 A big thanks goes out to Anthony Ferrara (ircmaxell) and Nikita Popov (nikic) for creating and documenting the wonderful PHP 5.5 password
