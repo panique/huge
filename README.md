@@ -101,7 +101,7 @@ Please have a look into the file "how to setup mail in PHP.txt" in the "_install
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
-**ON YOUR SERVER**
+*ON YOUR SERVER*
 * 1. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 2. usually the mod_rewrite module will not work (this is why i hate linux), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
@@ -114,7 +114,7 @@ http://www.jarrodoberto.com/articles/2011/11/enabling-mod-rewrite-on-ubuntu
 And a general StackOverflow discussion about the activation of mod_rewrite (and troubleshooting) here:
 http://stackoverflow.com/q/869092/1114320
 
-**IN THE CODE**
+*IN THE CODE*
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
