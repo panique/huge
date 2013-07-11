@@ -103,10 +103,13 @@ Please have a look into the file "how to setup mail in PHP.txt" in the "_install
 
 *ON YOUR SERVER*
 * 1. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
-* 2. usually the mod_rewrite module will not work (this is why i hate linux), so you have to edit
+* 2. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
-* 3. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` (this is just a basic
-introduction for beginners)
+* 3. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
+
+Please note: I really don't understand why it's so goddamn complicated to set up the most simple features on a linux server.
+But we have to live with that. If you keep running into problems with that mod_rewrite shit, then please send me an email, 
+open a github issue or get a server that is ready-to-go with mod_rewrite already activated.
 
 You can also find this intro on mod_rewrite here:
 http://www.jarrodoberto.com/articles/2011/11/enabling-mod-rewrite-on-ubuntu
