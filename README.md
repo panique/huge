@@ -170,7 +170,7 @@ MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watc
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATE 5$+ IF YOU REALLY USE THIS SCRIPT###
+###DONATE 10$+ IF YOU REALLY USE THIS SCRIPT###
 
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.
