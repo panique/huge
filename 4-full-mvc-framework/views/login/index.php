@@ -14,7 +14,7 @@
 
     ?>
     
-    <form action="<?php echo URL."/login/login"; ?>" method="post">
+    <form action="<?php echo URL; ?>/login/login" method="post">
 
             <label>Username</label>
             <input type="text" name="user_name" />
