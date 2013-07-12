@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+July 13th 2013
+* 4-full-mvc-framework: captcha support (check the register page) !
+
 July 8th 2013
 * 4-full-mvc-framework: added SMTP email sender name support
 

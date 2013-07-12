@@ -1,7 +1,4 @@
-- captcha
 - account deletion (via verification email link)
 - login attack prevention: http://www.codedevelopr.com/articles/throttle-user-login-attempts-in-php/
 - users can upgrade/downgrade their account status, like standard/premium etc.
 - possibility to deactivate features (like captchas)
-
-- install: .htaccess needs URL 

@@ -50,12 +50,13 @@ In order to use this version of the script, please install a mail server by foll
 
 #####FULL-MVC-FRAMEWORK (early version!)
 
-- same functions like advanced version, but totally new code/file structure
+- same functions like advanced version (and currently also captchas), but totally new code/file structure
 - perfect for building REAL applications
 - main feature: URL rewriting (beautiful URLs)
 - main feature: professional usage of controllers and actions
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
 - main feature: mail sending via local linux mail tool OR SMTP account
+- main feature: captchas
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
