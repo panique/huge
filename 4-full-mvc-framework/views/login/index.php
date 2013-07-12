@@ -13,16 +13,18 @@
     }
 
     ?>
-
-    <form action="login/login" method="post">
+    
+    <form action="<?php echo URL."/login/login"; ?>" method="post">
 
             <label>Username</label>
             <input type="text" name="user_name" />
             
-            <label>Password</label><input type="password" name="user_password" />
-            <label></label><input type="submit" />
+            <label>Password</label>
+            <input type="password" name="user_password" />
             
-    </form>
+            <label></label><input type="submit" />            
+            
+    </form>    
     
     <a href="<?php echo URL; ?>login/register">Register</a>
     |
