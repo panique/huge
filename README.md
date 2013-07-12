@@ -145,6 +145,11 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 * please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
+* the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
+Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
+mails with an SMTP account.
+* the 4-full-mvc-framework version uses the PHP GD graphic functions, so you need to have them enabled. That's standard on most
+php installations.
 
 ###USAGE WITH OLDER PHP VERSIONS: 
 
