@@ -14,7 +14,7 @@ Available in 4 versions:
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
 3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
-4. [coming up] full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
+4. full-MVC-framework (same features like 1./2./3. + captchas, but professional MVC-framework code structure)
 
 ###DIFFERENT VERSIONS
 
