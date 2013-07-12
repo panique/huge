@@ -3,8 +3,11 @@
 /*
  * The Captcha class
  * 
- * creates, renders and checks the captcha
- * This class is inspired by https://github.com/dgmike/captcha
+ * Creates, renders and checks the captcha.
+ * This class uses the free, "dirty" Times New Yorker font
+ * @see http://www.dafont.com/times-new-yorker.font
+ * 
+ * This class is also inspired by https://github.com/dgmike/captcha
  * 
  */
 class Captcha {
