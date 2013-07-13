@@ -158,7 +158,7 @@ This script needs PHP 5.3.7 or higher. PHP 5.2 is outdated since 2009, so suppor
 **PHP 5.3.7 is REALLY needed** (as this version introduced modern password hashing algorithms). There is no way to work around
 this. For your own security: Please don't use several years old versions of PHP ! This makes you an excellent target
 for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
-active version of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
+active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
 
 ###MORE INFO IN THE WIKI
 
