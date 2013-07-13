@@ -14,7 +14,7 @@ Available in 4 versions:
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
 3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
-4. [coming up] full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
+4. full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
 
 ###DIFFERENT VERSIONS
 
@@ -38,6 +38,7 @@ Available in 4 versions:
 - main feature: user can edit password (need to provide password again to prevent account takeovers when keeping browser open)
 - main feature: user can request password reset ("i forgot my password" function)
 - main feature: gravatar profile pic support
+- main feature: captcha
 
 *NOTE: this version needs the mail()-function (and in upcoming versions also the graphic/GD functions) of PHP.
 Usually naked servers don't have a mail server installed that will make it possible to send mail.
@@ -48,14 +49,15 @@ In order to use this version of the script, please install a mail server by foll
 - same like 2., but with additional css/js stylings
 - several stylings to choose
 
-#####FULL-MVC-FRAMEWORK (early version!)
+#####FULL-MVC-FRAMEWORK
 
-- same functions like advanced version, but totally new code/file structure
+- same functions like advanced version (and currently also captchas), but totally new code/file structure
 - perfect for building REAL applications
 - main feature: URL rewriting (beautiful URLs)
 - main feature: professional usage of controllers and actions
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
 - main feature: mail sending via local linux mail tool OR SMTP account
+- main feature: captcha
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
@@ -144,6 +146,11 @@ in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 * please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
+* the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
+Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
+mails with an SMTP account.
+* the 2-advanced and 4-full-mvc-framework version use the PHP GD graphic functions, so you need to have them enabled. That's standard on most
+php installations.
 
 ###USAGE WITH OLDER PHP VERSIONS: 
 
@@ -151,7 +158,7 @@ This script needs PHP 5.3.7 or higher. PHP 5.2 is outdated since 2009, so suppor
 **PHP 5.3.7 is REALLY needed** (as this version introduced modern password hashing algorithms). There is no way to work around
 this. For your own security: Please don't use several years old versions of PHP ! This makes you an excellent target
 for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
-active version of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
+active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
 
 ###MORE INFO IN THE WIKI
 

@@ -175,5 +175,19 @@ class Login extends Controller {
         }
         
     }    
+    
+    /**
+     * special helper method:
+     * showCaptcha() returns an image, so we can use it in img tags in the views, like
+     * <img src="......./login/showCaptcha" />
+     */    
+    function showCaptcha() {
+        
+            $captcha = new Captcha();
+            // generate new string with captcha characters and write them into $_SESSION['captcha']
+            $captcha->generateCaptcha();
+            // render a img showing the characters (=the captcha)
+            $captcha->showCaptcha();
+    }    
 
 }

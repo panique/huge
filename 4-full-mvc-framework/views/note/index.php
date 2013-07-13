@@ -5,7 +5,7 @@
 
     <form method="post" action="<?php echo URL;?>note/create">
         <label>Text of new note: </label><input type="text" name="note_text" />
-        <input type="submit" value='Create this note' />
+        <input type="submit" value='Create this note' autocomplete="off" />
     </form>
 
     <h1 style="margin-top: 50px;">List of your notes</h1>

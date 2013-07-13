@@ -14,7 +14,7 @@
 
     ?>
 
-    <form action="editusername_action" method="post">
+    <form action="<?php echo URL; ?>login/editusername_action" method="post">
         <label>New username</label>
         <input type="text" name="user_name" />
         <input type="submit" value="Submit" />

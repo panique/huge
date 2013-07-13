@@ -20,6 +20,7 @@
 
 // dev error reporting
 error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 // checking for minimum PHP version
 if (version_compare(PHP_VERSION, '5.3.7', '<') ) {

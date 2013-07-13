@@ -15,7 +15,7 @@
     ?>
 
     <!-- register form -->
-    <form method="post" action="register_action" name="registerform">   
+    <form method="post" action="<?php echo URL; ?>login/register_action" name="registerform">
 
         <!-- the user name input field uses a HTML5 pattern check -->
         <label for="login_input_username">
@@ -33,6 +33,14 @@
 
         <label for="login_input_password_repeat">Repeat password</label>
         <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
+        
+        <!-- show the captcha by calling the login/showCaptcha-method in the src attribute of the img tag -->
+        <!-- to avoid weird with-slash-without-slash issues: simply always use the URL constant here -->
+        <img src="<?php echo URL; ?>login/showCaptcha" />
+
+        <label>Please enter those characters</label>
+        <input type="text" name="captcha" />           
+        
         <input type="submit"  name="register" value="Register" />
         
     </form>

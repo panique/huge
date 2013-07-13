@@ -19,6 +19,8 @@ if ($registration->messages) {
 
 ?>   
 
+<?php if (!$registration->registration_successful && !$registration->verification_successful) { ?>
+
 <!-- register form -->
 <form method="post" action="register.php" name="registerform">   
     
@@ -35,9 +37,18 @@ if ($registration->messages) {
     
     <label for="login_input_password_repeat">Repeat password</label>
     <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />        
+    
+    <!-- generate and display a captcha and write the captcha string into session -->
+    <img src="tools/showCaptcha.php" />
+    
+    <label>Please enter those characters</label>
+    <input type="text" name="captcha" />      
+    
     <input type="submit"  name="register" value="Register" />
     
 </form>
+
+<?php } ?>
 
 <!-- backlink -->
 <a href="index.php">Back to Login Page</a>

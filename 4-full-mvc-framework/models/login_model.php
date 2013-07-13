@@ -17,7 +17,7 @@ class Login_Model extends Model
     }
 
     public function login() {
-
+        
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
             $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active 
@@ -79,7 +79,7 @@ class Login_Model extends Model
         } elseif (empty($_POST['user_password'])) {
 
             $this->errors[] = "Password field was empty.";
-        }   
+        }
 
     }
 	
@@ -208,7 +208,13 @@ class Login_Model extends Model
      */
     public function registerNewUser() {
         
-        if (empty($_POST['user_name'])) {
+        $captcha = new Captcha();
+        
+        if (!$captcha->checkCaptcha()) {
+        
+            $this->errors[] = "The entered captcha security characters were wrong!";
+            
+        } elseif (empty($_POST['user_name'])) {
           
             $this->errors[] = "Empty Username";
 
