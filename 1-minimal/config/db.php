@@ -8,19 +8,32 @@
  * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/q/2447791/1114320
  */
 
+/**
+ * MySQL hostname
+ * usually it's "127.0.0.1" or "localhost", some servers also need port info, like "127.0.0.1:8080"
+ */
+define('DB_HOST', 'host_here');
 
-/** database host, usually it's "127.0.0.1" or "localhost", some servers also need port info, like "127.0.0.1:8080" */
-const DB_HOST = "127.0.0.1";
+/**
+ * MySQL database name
+ * name of the database. please note: database and database table are not the same thing!
+ */
+define('DB_NAME', 'databasename_here');
 
-/** name of the database. please note: database and database table are not the same thing! */
-const DB_NAME = "test";
+/**
+ * MySQL database username
+ * user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT.
+ */
+define('DB_USER', 'username_here');
 
-/** user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT.
-/** By the way, it's bad style to use "root", but for development it will work */
-const DB_USER = "root";
+/** 
+ * MySQL database password
+ * The password of the above user
+ */
+define('DB_PASS', 'password_here');
 
-/** The password of the above user */
-const DB_PASS = "troldbois";
-
-/** Required to better sanitize your data before DB insertion */
-const DB_CHARSET = 'utf8';
+/** 
+ * Mysql database charset
+ * Used when connecting to the database to better sanitize your data before insertion
+ */
+define('DB_CHARSET', 'utf8');
