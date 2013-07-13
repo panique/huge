@@ -20,6 +20,7 @@ class Registration {
     private     $hash_cost_factor           = null;                     // (optional) cost factor for the hash calculation
     
     public      $registration_successful    = false;
+    public      $verification_successful    = false;
 
     public      $errors                     = array();                  // collection of error messages
     public      $messages                   = array();                  // collection of success / neutral messages
@@ -31,12 +32,14 @@ class Registration {
      */    
     public function __construct() {
         
+            session_start();
+        
             // if we have such a POST request, call the registerNewUser() method
             if (isset($_POST["register"])) {
                 
                 $this->registerNewUser();
                 
-            }        
+            } 
             
             // if we have such a GET request, call the verifyNewUser() method
             if (isset($_GET["email"]) && isset($_GET["verification_code"])) {
@@ -54,7 +57,11 @@ class Registration {
      */
     private function registerNewUser() {
         
-        if (empty($_POST['user_name'])) {
+        if ($_POST["captcha"] != $_SESSION['captcha']) {
+        
+            $this->errors[] = "Captcha was wrong!";
+            
+        } elseif (empty($_POST['user_name'])) {
           
             $this->errors[] = "Empty Username";
 
@@ -237,7 +244,8 @@ class Registration {
             
             if ($this->db_connection->affected_rows > 0) {
                 
-                $this->messages[] = "Activation was successful! You can now log in!";
+                $this->verification_successful = true;
+                $this->messages[] = "Activation was successful! You can now log in!";                
                 
             } else {
             
@@ -250,8 +258,6 @@ class Registration {
             $this->errors[] = "Sorry, no database connection.";
 
         }
-        
-
         
     }
     
