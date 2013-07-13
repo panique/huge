@@ -15,7 +15,7 @@
     ?>
 
     <!-- request password reset form box -->
-    <form method="post" action="<?php echo URL; ?>/login/requestpasswordreset_action" name="password_reset_form">
+    <form method="post" action="<?php echo URL; ?>login/requestpasswordreset_action" name="password_reset_form">
         <label for="password_reset_input_username">
             Enter your username and you'll get a mail with instructions:
         </label>

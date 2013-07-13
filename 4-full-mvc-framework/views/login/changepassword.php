@@ -15,7 +15,7 @@
     ?>
 
     <!-- new password form box -->
-    <form method="post" action="<?php echo URL; ?>/login/setnewpassword" name="new_password_form">
+    <form method="post" action="<?php echo URL; ?>login/setnewpassword" name="new_password_form">
 
         <input type='hidden' name='user_name' value='<?php echo $this->user_name; ?>' />
         <input type='hidden' name='user_password_reset_hash' value='<?php echo $this->user_password_reset_hash; ?>' />
@@ -28,6 +28,6 @@
         <input type="submit"  name="submit_new_password" value="Submit new password" />
     </form>
 
-    <a href="index.php">Back to Login Page</a>
+    <a href="<?php echo URL; ?>login/index">Back to Login Page</a>
     
 </div>

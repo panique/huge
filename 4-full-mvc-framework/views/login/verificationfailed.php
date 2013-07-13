@@ -14,6 +14,6 @@
     
     ?>
     
-    <a href="<?php echo URL; ?>/login">Go to login</a>
+    <a href="<?php echo URL; ?>login/index">Go to login</a>
     
 </div>
