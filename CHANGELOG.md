@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+July 16th 2013
+* 4-full-mvc-framework: captcha is now case-insensitive
+* 2-advanced: captcha is now case-insensitive
+
 July 13th 2013
 * 4-full-mvc-framework: captcha support (check the register page) !
 * 2-advanced: captcha support (check the register page) !
