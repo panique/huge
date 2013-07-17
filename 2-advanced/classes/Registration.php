@@ -57,7 +57,7 @@ class Registration {
      */
     private function registerNewUser() {
         
-        if ($_POST["captcha"] != $_SESSION['captcha']) {
+        if (strtolower($_POST["captcha"]) != strtolower($_SESSION['captcha'])) {
         
             $this->errors[] = "Captcha was wrong!";
             
