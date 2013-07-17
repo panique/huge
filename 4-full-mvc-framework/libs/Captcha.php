@@ -94,7 +94,7 @@ class Captcha {
         
         // a little bit simple, but it will work for a basic captcha system
         // TODO: write stuff like that simpler with ternary operators
-        if ($_POST["captcha"] == $_SESSION['captcha']) {
+        if (strtolower($_POST["captcha"]) == strtolower($_SESSION['captcha'])) {
             
             return true;            
             
