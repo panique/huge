@@ -103,6 +103,9 @@ Please have a look into the file "how to setup mail in PHP.txt" in the "_install
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
+Usually this script works out-of-the-box. Simply copy the script to your server's web folder (/var/www/ maybe) and change
+the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
+
 *ON YOUR SERVER*
 * 1. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 2. usually the mod_rewrite module will not work now (why?), so you have to edit
