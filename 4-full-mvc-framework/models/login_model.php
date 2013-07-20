@@ -305,6 +305,8 @@ class Login_Model extends Model
 
                     if ($count == 1) {
                         
+                        $this->user_id = $this->db->lastInsertId();                      
+                        
                         // send a verification email
                         if ($this->sendVerificationEmail()) {
                             
@@ -376,7 +378,7 @@ class Login_Model extends Model
         $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
         $mail->AddAddress($this->user_email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
-        $mail->Body    = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($this->user_email).'/'.urlencode($this->user_activation_hash);
+        $mail->Body    = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($this->user_id).'/'.urlencode($this->user_activation_hash);
 
         if(!$mail->Send()) {
             
@@ -396,10 +398,10 @@ class Login_Model extends Model
      * verifyNewUser()
      * checks the email/verification code combination and set the user's activation status to true (=1) in the database
      */
-    public function verifyNewUser($user_email, $user_verification_code) {
+    public function verifyNewUser($user_id, $user_verification_code) {
 
-        $sth = $this->db->prepare("UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_email = :user_email AND user_activation_hash = :user_activation_hash ;");
-        $sth->execute(array(':user_email' => $user_email, ':user_activation_hash' => $user_verification_code));                                  
+        $sth = $this->db->prepare("UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash ;");
+        $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
         if ($sth->rowCount() > 0) {
 
@@ -407,7 +409,7 @@ class Login_Model extends Model
 
         } else {
 
-            $this->errors[] = "Sorry, no such email/verification code combination here...";
+            $this->errors[] = "Sorry, no such id/verification code combination here...";
 
         }
         

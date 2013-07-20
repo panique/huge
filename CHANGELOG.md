@@ -3,6 +3,9 @@
 July 20th 2013
 * removed netbeans files from repo ;)
 * comment fixes
+* 4-full-mvc-framework: new user verification mail does no work with user_id, not user_email (to
+prevent weird URL encoding problems with special email adresses)
+
 
 July 16th 2013
 * 4-full-mvc-framework: captcha is now case-insensitive
