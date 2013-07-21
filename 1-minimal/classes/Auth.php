@@ -175,6 +175,21 @@ class Auth
     }
 
     /**
+    * add a new user into the user table
+    * @param array $params the table field to add
+    *
+    * @return boolean 
+    */
+    protected function addUser(array $params)
+    {
+        $params['user_password_hash'] = password_hash($params['user_password'], PASSWORD_DEFAULT);
+        $params = array_map(array($this->conn, 'real_escape_string'), $params);
+        return $this->conn->query(
+            "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('".implode("','", $params)."')"
+        );
+    }
+
+    /**
     * check if the user_name is unique in the users table
     * @param str $login the user name
     *
