@@ -7,20 +7,26 @@
 * @author Panique <panique@web.de>
 * @version 1.0
 */
-class Registration extends Auth
+class Registration
 {
     /**
     *  Registration Status
     *  @var  boolean
     */
     private $is_registration_ok = false;
+    
+    /**
+    *  Auth Object
+    *  @var Auth
+    */    
+    private $auth;
 
     /**
     *  The constructor execute the registration and set the registration status
     */
     public function __construct()
     {
-        parent::__construct();
+        $this->auth = new Auth();
 
         $action = filter_input(
             INPUT_GET,
@@ -67,7 +73,7 @@ class Registration extends Auth
         $params = filter_input_array(INPUT_POST, $arguments);
         $this->errors = array_map('Auth::isDataValid', $params);
         foreach ($this->errors as $key => $value) {
-            if ($value == self::DATA_OK) {
+            if ($value == Auth::DATA_OK) {
                 unset($this->errors[$key]);
             }
         }
@@ -75,13 +81,13 @@ class Registration extends Auth
         if (! isset($this->errors['user_password_new'], $this->errors['user_password_repeat']) &&
             ($params['user_password_new'] != $params['user_password_repeat'])
         ) {
-            $this->errors['user_password_repeat'] = self::DATA_MISMATCH;
+            $this->errors['user_password_repeat'] = Auth::DATA_MISMATCH;
         }
 
         if (! isset($this->errors['user_name'], $this->errors['user_email']) &&
-            $this->isUserExists($params['user_name'], $params['user_email'])
+            $this->auth->isUserExists($params['user_name'], $params['user_email'])
         ) {
-            $this->errors['user_name'] = self::USER_EXISTS;
+            $this->errors['user_name'] = Auth::USER_EXISTS;
         }
 
         if (count($this->errors)) {
@@ -89,14 +95,10 @@ class Registration extends Auth
         }
 
         //2 - write new user data into database
-        $params['user_password_hash'] = password_hash($params['user_password_new'], PASSWORD_DEFAULT);
+        $params['user_password'] = $params['user_password_new'];
         unset($params['user_password_new'], $params['user_password_repeat']);
-        $params = array_map(array($this->conn, 'real_escape_string'), $params);
-        $res = $this->conn->query(
-            "INSERT INTO users (".implode(',', array_keys($params)).") VALUES ('".implode("','", $params)."')"
-        );
-        if (! $res) {
-            $this->errors['user_name'] = self::REGISTRATION_FAILED;
+        if (! $this->auth->addUser($params)) {
+            $this->errors['user_name'] = Auth::REGISTRATION_FAILED;
             return false;
         }
 
