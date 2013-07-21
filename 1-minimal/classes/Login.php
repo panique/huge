@@ -7,20 +7,26 @@
 * @author Panique <panique@web.de>
 * @version 1.2
 */
-class Login extends Auth
+class Login
 {
     /**
      * the User status
      * @var boolean
      */
     private $is_logged_in = false; // status of login
+    
+    /**
+    * Auth Object
+    * @var Auth
+    */
+    private $auth;
 
     /**
     * The constructor handles login/logout action
     */
     public function __construct()
     {
-        parent::__construct();
+        $this->auth = new Auth();
         
         // create/read session
         $sessionId = session_id();
@@ -74,8 +80,8 @@ class Login extends Auth
     {
         $this->errors = array();
         //1 - Input Filtering and Validation
-        if (! $this->isValidToken($_SESSION['user_token'])) {
-            $this->errors['user_token'] = self::DATA_INVALID;
+        if (! $this->auth->isValidToken($_SESSION['user_token'])) {
+            $this->errors['user_token'] = Auth::DATA_INVALID;
             return false;
         }
 
@@ -83,10 +89,10 @@ class Login extends Auth
         $auth = explode('|', $_SESSION['user_token']);
         $login = filter_var($auth[0], FILTER_CALLBACK, array('options' => 'Auth::isValidUserName'));
         if (! $login) {
-            $this->errors['user_name'] = self::DATA_INVALID;
+            $this->errors['user_name'] = Auth::DATA_INVALID;
             return false;
         } elseif (! ($user = $this->getUserByName($login))) {
-            $this->errors['user_name'] = self::USER_UNKNOWN;
+            $this->errors['user_name'] = Auth::USER_UNKNOWN;
             return false;
         }
 
@@ -111,10 +117,10 @@ class Login extends Auth
             'user_password' => array('filter' => FILTER_CALLBACK, 'options' => 'Auth::isValidPassword'),
         );
         $params = filter_input_array(INPUT_POST, $arguments);
-        $this->errors = array_map(array($this, 'isDataValid'), $params);
-        foreach ($this->errors as $keys => $value) {
-            if ($value == self::DATA_OK) {
-                unset($this->errors[$keys]);
+        $this->errors = array_map('Auth::isDataValid', $params);
+        foreach ($this->errors as $key => $value) {
+            if ($value == Auth::DATA_OK) {
+                unset($this->errors[$key]);
             }
         }
         if (count($this->errors)) {
@@ -122,12 +128,12 @@ class Login extends Auth
         }
 
         //2 - User Authentification
-        $user = $this->getUserByName($params['user_name']);
+        $user = $this->auth->getUserByName($params['user_name']);
         if (! $user) {
-            $this->errors['user_name'] = self::USER_UNKNOWN;
+            $this->errors['user_name'] = Auth::USER_UNKNOWN;
             return false;
         } elseif (! password_verify($params['user_password'], $user['user_password_hash'])) {
-            $this->errors['user_password'] = self::DATA_INVALID;
+            $this->errors['user_password'] = Auth::DATA_INVALID;
             return false;
         }
 
@@ -145,6 +151,6 @@ class Login extends Auth
         foreach ($user as $key => $value) {
             $_SESSION[$key] = $value;
         }
-        $_SESSION['user_token'] = $this->generateToken($user['user_name']);
+        $_SESSION['user_token'] = $this->auth->generateToken($user['user_name']);
     }
 }
