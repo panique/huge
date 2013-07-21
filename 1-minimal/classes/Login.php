@@ -44,13 +44,16 @@ class Login
 
         if (isset($_SESSION['user_token'])) {
             $this->is_logged_in = $this->loginWithSessionData();
+            if (! $this->is_logged_in || filter_has_var(INPUT_GET, 'logout')) {
+                $this->doLogout();
+            }
         } elseif ('login' == $action) {
             $this->is_logged_in = $this->loginWithPostData();
+            if (! $this->is_logged_in) {
+                $this->doLogout();
+            }
         }
 
-        if (! $this->is_logged_in || filter_has_var(INPUT_GET, 'logout')) {
-            $this->doLogout();
-        }
     }
 
     /**
