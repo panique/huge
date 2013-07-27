@@ -104,9 +104,9 @@ class Login extends Controller {
         
     }
     
-    function verify($user_email, $user_verification_code) {
+    function verify($user_id, $user_verification_code) {
         
-        $this->model->verifyNewUser($user_email, $user_verification_code);
+        $this->model->verifyNewUser($user_id, $user_verification_code);
 
         // TODO: find a better solution than always doing this by hand
         // put the errors from the login model into the view (so we can display them in the view)

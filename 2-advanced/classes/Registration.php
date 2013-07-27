@@ -42,7 +42,7 @@ class Registration {
             } 
             
             // if we have such a GET request, call the verifyNewUser() method
-            if (isset($_GET["email"]) && isset($_GET["verification_code"])) {
+            if (isset($_GET["id"]) && isset($_GET["verification_code"])) {
                 
                 $this->verifyNewUser();
                 
@@ -148,7 +148,12 @@ class Registration {
 
                     // write new users data into database
                     $query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."', '".$this->user_activation_hash."');");
-
+                    
+                    // id of new user
+                    // mySQLi's insert_id property (= the last inserted row)
+                    // @see php.net/manual/en/mysqli.insert-id.php
+                    $this->user_id = $this->db_connection->insert_id;
+                    
                     if ($query_new_user_insert) {
                         
                         // send a verification email
@@ -199,7 +204,7 @@ class Registration {
         $to      = $this->user_email;
         $subject = EMAIL_VERIFICATION_SUBJECT;
         
-        $link    = EMAIL_VERIFICATION_URL.'?email='.urlencode($this->user_email).'&verification_code='.urlencode($this->user_activation_hash);
+        $link    = EMAIL_VERIFICATION_URL.'?id='.urlencode($this->user_id).'&verification_code='.urlencode($this->user_activation_hash);
         
         // the link to your register.php, please set this value in config/email_verification.php
         $body = EMAIL_VERIFICATION_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
@@ -226,7 +231,7 @@ class Registration {
     
     /**
      * verifyNewUser()
-     * checks the email/verification code combination and set the user's activation status to true (=1) in the database
+     * checks the id/verification code combination and set the user's activation status to true (=1) in the database
      */
     public function verifyNewUser() {
         
@@ -236,11 +241,11 @@ class Registration {
         // if no connection errors (= working database connection)
         if (!$this->db_connection->connect_errno) {
             
-            $this->user_email           = $this->db_connection->real_escape_string($_GET['email']);
+            $this->user_id = $this->db_connection->real_escape_string($_GET['id']);
             $this->user_activation_hash = $this->db_connection->real_escape_string($_GET['verification_code']);
             
             //
-            $this->db_connection->query('UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_email = "'.$this->user_email.'" AND user_activation_hash = "'.$this->user_activation_hash.'";');
+            $this->db_connection->query('UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = "'.$this->user_id.'" AND user_activation_hash = "'.$this->user_activation_hash.'";');
             
             if ($this->db_connection->affected_rows > 0) {
                 
@@ -249,7 +254,7 @@ class Registration {
                 
             } else {
             
-                $this->errors[] = "Sorry, no such email/verification code combination here...";
+                $this->errors[] = "Sorry, no such id/verification code combination here...";
                 
             }
             
