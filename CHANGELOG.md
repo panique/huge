@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 5th 2013
+* all registration / password change views have a password pattern explaining notice now
+
 July 20th 2013
 * removed netbeans files from repo ;)
 * comment fixes
