@@ -4,7 +4,6 @@
 	<title>Test</title>
         <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css" />
-        <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,500,200,100,600,700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/custom.js"></script>
 </head>
