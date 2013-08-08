@@ -32,7 +32,10 @@ if ($registration->messages) {
     <label for="login_input_email">User's email</label>    
     <input id="login_input_email" class="login_input" type="email" name="user_email" required />
     
-    <label for="login_input_password_new">Password (min. 6 characters)</label>
+    <label for="login_input_password_new">
+        Password (min. 6 characters! Please note: using a long sentence as a password is much much safer then something like "!c00lPa$$w0rd"). 
+        Have a look on <a href="http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase">this interesting security.stackoverflow.com thread</a>.
+    </label>
     <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />  
     
     <label for="login_input_password_repeat">Repeat password</label>
