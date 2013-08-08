@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 8th 2013
+* 2-advanced: pull request merged: getUsername() now always returns username
+
 August 5th 2013
 * all registration / password change views have a password pattern explaining notice now
 
