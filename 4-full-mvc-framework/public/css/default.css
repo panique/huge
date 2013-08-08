@@ -280,6 +280,14 @@ input[type="submit"] {
     cursor: pointer;
 }
 
+.login-form-password-pattern-reminder {
+    display: block;
+    /*width: 200px;*/
+    color: #999;
+    font-size: 11px;
+    
+}
+
 
 /* basic responsive stuff */
 @media only screen and (max-width:800px) {
