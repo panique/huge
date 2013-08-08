@@ -2,6 +2,8 @@
 
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable
+* 4-full-mvc-framework: private user profile page
+* 4-full-mvc-framework: prevented access to views if user is not logged in
 
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username
