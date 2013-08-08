@@ -433,6 +433,8 @@ class Login_Model extends Model
      */
     public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() ) {
         
+        // TODO: why is this set when it's more a get ?
+        
         $url = 'http://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&d=$d&r=$r";
