@@ -14,8 +14,8 @@
         DEBUG HELPER: you are in the view: <?php echo $filename; ?>
     </div>
 
-    <div style='font-size: 25px; padding: 15px; background-color: #1e2029; color: #fff; font-weight: 700;'>
-        My Application
+    <div class='title-box'>
+        <a href="<?php echo URL; ?>">My Application</a>
     </div>
     
     <div class="header">

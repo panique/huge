@@ -21,6 +21,20 @@ p {
     line-height: 22px;
 }
 
+/* TODO: this should be part of the real header */
+.title-box {
+    font-size: 25px; 
+    padding: 15px; 
+    background-color: #1e2029; 
+    color: #fff; 
+    font-weight: 700;
+}
+
+.title-box a {
+    color: #fff; 
+    text-decoration: none;
+}
+
 .header {
     background-color: #42444f;
     /*margin:20px 10px 0 10px;*/
