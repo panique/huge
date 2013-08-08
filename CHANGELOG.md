@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 9th 2013
+* 4-full-mvc-framework: application title/logo is now clickable
+
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username
 * 2-advanced: basic formatting in views
