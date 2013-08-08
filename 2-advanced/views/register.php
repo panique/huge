@@ -24,30 +24,33 @@ if ($registration->messages) {
 <!-- register form -->
 <form method="post" action="register.php" name="registerform">   
     
+    <!-- NOTE: those <br/> are bad style and only there for basic formatting. remove them when you use real .css -->
+    
     <!-- the user name input field uses a HTML5 pattern check -->
-    <label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>
-    <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />
+    <label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label><br/>
+    <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required /><br/><br/>
     
     <!-- the email input field uses a HTML5 email type check -->
-    <label for="login_input_email">User's email</label>    
-    <input id="login_input_email" class="login_input" type="email" name="user_email" required />
+    <label for="login_input_email">User's email</label><br/>    
+    <input id="login_input_email" class="login_input" type="email" name="user_email" required /><br/><br/>
     
     <label for="login_input_password_new">
-        Password (min. 6 characters! Please note: using a long sentence as a password is much much safer then something like "!c00lPa$$w0rd"). 
+        Password (min. 6 characters!<br/>
+        Please note: using a long sentence as a password is much much safer then something like "!c00lPa$$w0rd").<br/> 
         Have a look on <a href="http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase">this interesting security.stackoverflow.com thread</a>.
-    </label>
-    <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />  
+    </label><br/>
+    <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" /><br/><br/>  
     
-    <label for="login_input_password_repeat">Repeat password</label>
-    <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />        
+    <label for="login_input_password_repeat">Repeat password</label><br/>
+    <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" /><br/><br/>        
     
     <!-- generate and display a captcha and write the captcha string into session -->
-    <img src="tools/showCaptcha.php" />
+    <img src="tools/showCaptcha.php" /><br/>
     
-    <label>Please enter those characters</label>
-    <input type="text" name="captcha" />      
+    <label>Please enter those characters</label><br/>
+    <input type="text" name="captcha" /><br/><br/>      
     
-    <input type="submit"  name="register" value="Register" />
+    <input type="submit"  name="register" value="Register" /><br/><br/>
     
 </form>
 
