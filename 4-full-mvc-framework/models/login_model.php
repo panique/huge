@@ -20,7 +20,13 @@ class Login_Model extends Model
         
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
-            $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active 
+            $sth = $this->db->prepare("SELECT user_id, 
+                                              user_name, 
+                                              user_email, 
+                                              user_password_hash, 
+                                              user_active, 
+                                              user_failed_logins, 
+                                              user_last_failed_login  
                                        FROM users
                                        WHERE user_name = :user_name ;");
             $sth->execute(array(':user_name' => $_POST['user_name']));
@@ -30,45 +36,54 @@ class Login_Model extends Model
 
                 // fetch one row (we only have one result)
                 $result = $sth->fetch();
+                
+                if ( ($result->user_failed_logins >= 2) && ($result->user_last_failed_login > (time()-30)) ) {
+                    
+                    $this->errors[] = "You have typed in a wrong password 3 or more times already. Please wait <span id='failed-login-countdown-value'>30</span> seconds to try again.";
+                    return false;                    
+                    
+                } else {
+                    
+                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
-                if (password_verify($_POST['user_password'], $result->user_password_hash)) {
+                        if ($result->user_active == 1) {
 
-                    if ($result->user_active == 1) {
+                            // login
+                            Session::init();
+                            Session::set('user_logged_in', true);
+                            Session::set('user_id', $result->user_id);
+                            Session::set('user_name', $result->user_name);
+                            Session::set('user_email', $result->user_email);
 
-                        // login
-                        Session::init();
-                        Session::set('user_logged_in', true);
-                        Session::set('user_id', $result->user_id);
-                        Session::set('user_name', $result->user_name);
-                        Session::set('user_email', $result->user_email);
+                            // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                            $this->setGravatarImageUrl($result->user_email);
 
-                        // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                        $this->setGravatarImageUrl($result->user_email);
+                            // reset the failed login counter for that user
+                            $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
+                            $sth->execute(array(':user_id' => $result->user_id));                            
 
-                        // reset the failed login counter for that user
-                        $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
-                        $sth->execute(array(':user_id' => $result->user_id));                            
+                            //header('location: ../dashboard');
+                            return true;                                
 
-                        //header('location: ../dashboard');
-                        return true;                                
+                        } else {
+
+                            $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
+                            return false;
+
+                        }
 
                     } else {
 
-                        $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
+                        // increment the failed login counter for that user
+                        $sth = $this->db->prepare("UPDATE users "
+                                . "SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login "
+                                . "WHERE user_name = :user_name");
+                        $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
+
+                        $this->errors[] = "Password was wrong.";
                         return false;
-
                     }
-
-                } else {
-
-                    // increment the failed login counter for that user
-                    $sth = $this->db->prepare("UPDATE users "
-                            . "SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login "
-                            . "WHERE user_name = :user_name");
-                    $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
-
-                    $this->errors[] = "Password was wrong.";
-                    return false;
+                    
                 }
 
             } else {
