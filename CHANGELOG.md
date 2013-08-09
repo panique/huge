@@ -5,6 +5,7 @@ August 9th 2013
 * 4-full-mvc-framework: private user profile page
 * 4-full-mvc-framework: prevented access to views if user is not logged in
 * 4-full-mvc-framework: Google Chrome messes up webfonts, so switchback to Arial :(
+* 4-full-mvc-framework: public user list
 
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username

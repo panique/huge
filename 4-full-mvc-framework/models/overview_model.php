@@ -6,6 +6,12 @@ class Overview_Model extends Model {
         parent::__construct();
     }
 
+    /**
+     * Gets an array that contains all the users in the database
+     * The array's keys are the user ids. Each array element is an object,
+     * containing a specific user's data.
+     * @return array
+     */
     public function getAllUsersProfiles() {
 
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active FROM users");
@@ -26,6 +32,11 @@ class Overview_Model extends Model {
         return $all_users_profiles;
     }    
     
+    /**
+     * Gets a user's profile data, according to the given $user_id
+     * @param int $user_id The user's id
+     * @return object
+     */
     public function getUserProfile($user_id) {
 
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active FROM users WHERE user_id = :user_id");
@@ -63,7 +74,6 @@ class Overview_Model extends Model {
         // note: the url does NOT have something like .jpg
         return $gravatar_image_link;
         
-    }    
-    
+    }
     
 }
