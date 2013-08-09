@@ -7,6 +7,7 @@ August 9th 2013
 * 4-full-mvc-framework: Google Chrome messes up webfonts, so switchback to Arial :(
 * 4-full-mvc-framework: public user list
 * 4-full-mvc-framework: better autoloader (LIB constant, splitting internal/external libs)
+* 4-full-mvc-framework: time delay after 3 failed logins
 
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username
