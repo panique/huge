@@ -12,7 +12,7 @@ class Login_Model extends Model
 
     public function __construct() {
         
-            parent::__construct();
+        parent::__construct();
             
     }
 
@@ -28,49 +28,54 @@ class Login_Model extends Model
             $count =  $sth->rowCount();
             if ($count == 1) {
 
-                    // fetch one row (we only have one result)
-                    $result = $sth->fetch();
+                // fetch one row (we only have one result)
+                $result = $sth->fetch();
 
-                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
+                if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
-                        if ($result->user_active == 1) {
+                    if ($result->user_active == 1) {
 
-                            // login
-                            Session::init();
-                            Session::set('user_logged_in', true);
-                            Session::set('user_id', $result->user_id);
-                            Session::set('user_name', $result->user_name);
-                            Session::set('user_email', $result->user_email);
-                            
-                            // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                            $this->setGravatarImageUrl($result->user_email);
-                            
-                            //header('location: ../dashboard');
-                            return true;                                
+                        // login
+                        Session::init();
+                        Session::set('user_logged_in', true);
+                        Session::set('user_id', $result->user_id);
+                        Session::set('user_name', $result->user_name);
+                        Session::set('user_email', $result->user_email);
 
-                        } else {
+                        // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                        $this->setGravatarImageUrl($result->user_email);
 
-                            $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
-                            return false;
+                        // reset the failed login counter for that user
+                        $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
+                        $sth->execute(array(':user_id' => $result->user_id));                            
 
-                        }   
-
+                        //header('location: ../dashboard');
+                        return true;                                
 
                     } else {
 
-                        $this->errors[] = "Password was wrong.";
+                        $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
                         return false;
+
                     }
 
-            } else {
-                    $this->errors[] = "This user does not exists.";
+                } else {
+
+                    // increment the failed login counter for that user
+                    $sth = $this->db->prepare("UPDATE users "
+                            . "SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login "
+                            . "WHERE user_name = :user_name");
+                    $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
+
+                    $this->errors[] = "Password was wrong.";
                     return false;
+                }
+
+            } else {
+                
+                $this->errors[] = "This user does not exists.";
+                return false;
             }
-
-            //if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
-
-
-            //$data = $sth->fetchAll();
 
         } elseif (empty($_POST['user_name'])) {
 
@@ -153,8 +158,7 @@ class Login_Model extends Model
     /**
      * edit the user's email, provided in the editing form
      */
-    public function editUserEmail() {
-        
+    public function editUserEmail() {        
         
         if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
             
