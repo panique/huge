@@ -303,6 +303,21 @@ input[type="submit"] {
 }
 
 
+/* overview pages */
+table.overview-table tr.inactive {
+    opacity: 0.3;
+}
+
+table.overview-table td {
+    padding: 6px 10px;
+    /*border: 1px solid #ccc;*/
+    vertical-align: middle;
+}
+table.overview-table td.avatar {
+    padding: 0 !important;
+}
+
+
 /* basic responsive stuff */
 @media only screen and (max-width:800px) {
     
