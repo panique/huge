@@ -30,7 +30,7 @@ if (version_compare(PHP_VERSION, '5.3.7', '<') ) {
 // loading config
 require 'config/config.php';
 
-require 'libs/PasswordCompatibilityLibrary.php';
+require 'libs/external/PasswordCompatibilityLibrary.php';
 
 // the autoloading function, which will be called every time a file "is missing"
 // NOTE: don't get confused, this is not "__autoload", the now deprecated function
@@ -38,7 +38,12 @@ require 'libs/PasswordCompatibilityLibrary.php';
 // standardized autoloader https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md, so we do:
 function autoload($class) {
 
-    require "libs/" . $class . ".php";
+    if (file_exists("libs/" . $class . ".php")) {
+        require "libs/" . $class . ".php";
+    } else {
+        require "libs/external/" . $class . ".php";
+    }
+    
 }
 
 // spl_autoload_register defines the function that is called every time a file is missing. as we created this
