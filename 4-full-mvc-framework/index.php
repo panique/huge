@@ -38,10 +38,12 @@ require 'libs/external/PasswordCompatibilityLibrary.php';
 // standardized autoloader https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md, so we do:
 function autoload($class) {
 
-    if (file_exists("libs/" . $class . ".php")) {
-        require "libs/" . $class . ".php";
+    // if file does not exist in LIBS folder [set it in config/config.php],
+    // then check in LIBS/external
+    if (file_exists(LIBS . $class . ".php")) {
+        require LIBS . $class . ".php";
     } else {
-        require "libs/external/" . $class . ".php";
+        require LIBS . "external/" . $class . ".php";
     }
     
 }
