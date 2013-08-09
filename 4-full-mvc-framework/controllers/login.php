@@ -43,8 +43,18 @@ class Login extends Controller {
             //exit;
     }    
     
+    function showprofile() {
+        
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();        
+        $this->view->render('login/showprofile');
+        
+    }
+    
     function editusername() {
         
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();                
         $this->view->render('login/editusername');        
         
     }
@@ -63,6 +73,8 @@ class Login extends Controller {
     
     function edituseremail() {
         
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();                
         $this->view->render('login/edituseremail');
         
     }

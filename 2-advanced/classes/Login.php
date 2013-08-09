@@ -128,10 +128,13 @@ class Login {
 
     private function loginWithSessionData() {
         
+        $this->user_name = $_SESSION['user_name'];
+        $this->user_email = $_SESSION['user_email'];
+        
         // set logged in status to true, because we just checked for this:
         // !empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)
         // when we called this method (in the constructor)
-        $this->user_is_logged_in = true;
+        $this->user_is_logged_in = true;        
         
     }
     

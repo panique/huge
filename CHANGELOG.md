@@ -1,5 +1,20 @@
 # CHANGE LOG #
 
+August 9th 2013
+* 4-full-mvc-framework: application title/logo is now clickable
+* 4-full-mvc-framework: private user profile page
+* 4-full-mvc-framework: prevented access to views if user is not logged in
+* 4-full-mvc-framework: Google Chrome messes up webfonts, so switchback to Arial :(
+
+August 8th 2013
+* 2-advanced: pull request merged: getUsername() now always returns username
+* 2-advanced: basic formatting in views
+* 2-advanced: promotion of long sentences as password (in views)
+* 4-full-mvc-framework: promotion of long sentences as password (in views)
+
+August 5th 2013
+* all registration / password change views have a password pattern explaining notice now
+
 July 20th 2013
 * removed netbeans files from repo ;)
 * comment fixes
