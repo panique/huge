@@ -5,7 +5,7 @@ html, body {
 
 body {
     background-color: #fff;
-    font-family: Raleway;
+    font-family: Arial;
     font-size: 14px;
     color: #000;
     padding: 0;
@@ -19,6 +19,20 @@ h1, h2, h3 {
 p {
     margin-bottom: 10px;
     line-height: 22px;
+}
+
+/* TODO: this should be part of the real header */
+.title-box {
+    font-size: 25px; 
+    padding: 15px; 
+    background-color: #1e2029; 
+    color: #fff; 
+    font-weight: 700;
+}
+
+.title-box a {
+    color: #fff; 
+    text-decoration: none;
 }
 
 .header {
@@ -278,6 +292,14 @@ input[type="submit"] {
     font-weight: bold;
     /*padding: 10px;*/
     cursor: pointer;
+}
+
+.login-form-password-pattern-reminder {
+    display: block;
+    /*width: 200px;*/
+    color: #999;
+    font-size: 11px;
+    
 }
 
 

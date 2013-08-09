@@ -4,7 +4,6 @@
 	<title>Test</title>
         <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css" />
-        <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,500,200,100,600,700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/custom.js"></script>
 </head>
@@ -14,8 +13,8 @@
         DEBUG HELPER: you are in the view: <?php echo $filename; ?>
     </div>
 
-    <div style='font-size: 25px; padding: 15px; background-color: #1e2029; color: #fff; font-weight: 700;'>
-        My Application
+    <div class='title-box'>
+        <a href="<?php echo URL; ?>">My Application</a>
     </div>
     
     <div class="header">
@@ -44,6 +43,9 @@
                 <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                     <a href="#">My Account</a>
                     <ul class="sub-menu">
+                        <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                            <a href="<?php echo URL; ?>login/showprofile">Show my profile</a>
+                        </li>                        
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
                         </li>
