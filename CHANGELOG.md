@@ -2,6 +2,8 @@
 
 August 10th 2013
 * 4-full-mvc-framework: local avatars
+* README: new section USEFUL STUFF for edge cases
+* README: USEFUL STUFF: info on shared session/login for multiple instances of the script
 
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable

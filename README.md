@@ -169,6 +169,12 @@ this. For your own security: Please don't use several years old versions of PHP 
 for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
 active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
 
+###USEFUL STUFF
+
+* If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
+in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
+there's a nice solution: https://github.com/panique/php-login/issues/82
+
 ###MORE INFO IN THE WIKI
 
 See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
