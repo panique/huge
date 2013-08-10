@@ -88,7 +88,11 @@
                 </div>
                 
                 <div class="avatar">
-                    <?php echo Session::get('user_gravatar_image_tag'); ?>
+                    <?php if (USE_GRAVATARS) { ?>
+                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
+                    <?php } else { ?>
+                        <img src='<?php echo Session::get('user_avatar_file'); ?>' />
+                    <?php } ?>
                 </div>                
 
             </div>

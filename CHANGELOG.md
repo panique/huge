@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 10th 2013
+* 4-full-mvc-framework: local avatars
+
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable
 * 4-full-mvc-framework: private user profile page

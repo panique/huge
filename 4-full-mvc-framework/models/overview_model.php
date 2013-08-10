@@ -14,7 +14,7 @@ class Overview_Model extends Model {
      */
     public function getAllUsersProfiles() {
 
-        $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active FROM users");
+        $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
         $sth->execute();
         
         $all_users_profiles = array();
@@ -24,9 +24,14 @@ class Overview_Model extends Model {
             $all_users_profiles[$user->user_id]->user_id = $user->user_id; // hmm...
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email; // be careful with public emails in real apps
-            $all_users_profiles[$user->user_id]->user_gravatar_link = $this->getGravatarLinkFromEmail($user->user_email);            
-            $all_users_profiles[$user->user_id]->user_active = $user->user_active;
             
+            if (USE_GRAVATARS) {
+                $all_users_profiles[$user->user_id]->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+            } else {
+                $all_users_profiles[$user->user_id]->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+            }
+            
+            $all_users_profiles[$user->user_id]->user_active = $user->user_active;
         }
         
         return $all_users_profiles;
@@ -39,12 +44,16 @@ class Overview_Model extends Model {
      */
     public function getUserProfile($user_id) {
 
-        $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active FROM users WHERE user_id = :user_id");
+        $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users WHERE user_id = :user_id");
         $sth->execute(array(':user_id' => $user_id));
         
-        $user = $sth->fetch();        
-
-        $user->user_gravatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+        $user = $sth->fetch();
+        
+        if (USE_GRAVATARS) {            
+            $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+        } else {
+            $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+        }        
         
         return $user;
     }        
@@ -75,5 +84,19 @@ class Overview_Model extends Model {
         return $gravatar_image_link;
         
     }
+    
+    /**
+     * Gets the user's avatar file path
+     * @return string
+     */
+    public function getUserAvatarFilePath($user_has_avatar, $user_id) {
+        
+        if ($user_has_avatar) {
+         
+            return URL . AVATAR_PATH . $user_id . '.jpg';
+            
+        }
+        
+    }      
     
 }

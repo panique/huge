@@ -54,6 +54,7 @@ class Login_Model extends Model
                             Session::set('user_id', $result->user_id);
                             Session::set('user_name', $result->user_name);
                             Session::set('user_email', $result->user_email);
+                            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
                             // call the setGravatarImageUrl() method which writes gravatar urls into the session
                             $this->setGravatarImageUrl($result->user_email);
@@ -365,7 +366,7 @@ class Login_Model extends Model
         return false;
     }
     
-    /*
+    /**
      * sendVerificationEmail()
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
@@ -473,6 +474,190 @@ class Login_Model extends Model
         // the image url like above but with an additional <img src .. /> around
         Session::set('user_gravatar_image_tag', $url_with_tag);
         
+    }
+    
+    /**
+     * Gets the user's avatar file path
+     * @return string
+     */
+    public function getUserAvatarFilePath() {
+        
+        $sth = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
+        $sth->execute(array(':user_id' => $_SESSION['user_id']));
+
+        if ($sth->fetch()->user_has_avatar) {
+         
+            return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
+            
+        }
+        
+    }    
+    
+    public function createAvatar() {
+
+        if (!empty ($_FILES['avatar_file']['tmp_name'])) {
+        
+            // get the image width, height and mime type
+            // btw: why does PHP call this getimagesize when it gets much more than just the size ?
+            $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
+            
+            // dont handle files > 5MB
+            if ($_FILES['avatar_file']['size'] <= 5000000 ) {
+                
+                if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
+
+                    if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
+
+                        $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
+
+                        // creates a 44x44px avatar jpg file in the avatar folder
+                        // see the function defintion (also in this class) for more info on how to use
+                        $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+                        
+                        $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
+                        $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                        
+                        Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                        
+                        $this->errors[] = "Avatar upload was successful.";                        
+
+                    } else {
+
+                        $this->errors[] = "Only JPEG and PNG files are supported.";
+
+                    }
+
+                } else {
+
+                    $this->errors[] = "Avatar source file's width/height is too small. Needs to be 100x100 minimum.";
+
+                }
+            
+            } else {
+                
+                $this->errors[] = "Avatar source file is too big. 5 Megabyte is the maximum.";
+                
+            } 
+        }        
+    }
+    
+    /**
+     * Resize Image
+     *
+     * Takes the source image and resizes it to the specified width & height or proportionally if crop is off.
+     * @access public
+     * @author Jay Zawrotny <jayzawrotny@gmail.com>
+     * @license Do whatever you want with it.
+     * @param string $source_image The location to the original raw image.
+     * @param string $destination_filename The location to save the new image.
+     * @param int $width The desired width of the new image
+     * @param int $height The desired height of the new image.
+     * @param int $quality The quality of the JPG to produce 1 - 100
+     * @param bool $crop Whether to crop the image or not. It always crops from the center.
+     */
+    function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true) {
+
+	if ( ! $image_data = getimagesize( $source_image ) ) {
+		return false;
+	}
+
+	switch( $image_data['mime'] ) {
+		case 'image/gif':
+			$get_func = 'imagecreatefromgif';
+			$suffix = ".gif";
+		break;
+		case 'image/jpeg';
+			$get_func = 'imagecreatefromjpeg';
+			$suffix = ".jpg";
+		break;
+		case 'image/png':
+			$get_func = 'imagecreatefrompng';
+			$suffix = ".png";
+		break;
+	}
+
+	$img_original = call_user_func( $get_func, $source_image );
+	$old_width = $image_data[0];
+	$old_height = $image_data[1];
+	$new_width = $width;
+	$new_height = $height;
+	$src_x = 0;
+	$src_y = 0;
+	$current_ratio = round( $old_width / $old_height, 2 );
+	$desired_ratio_after = round( $width / $height, 2 );
+	$desired_ratio_before = round( $height / $width, 2 );
+
+	if ( $old_width < $width || $old_height < $height ) {
+
+		 // The desired image size is bigger than the original image. 
+		 // Best not to do anything at all really.
+		return false;
+	}
+
+	// If the crop option is left on, it will take an image and best fit it
+	// so it will always come out the exact specified size.
+	if ( $crop ) {
+            
+		// create empty image of the specified size
+		$new_image = imagecreatetruecolor( $width, $height );
+
+		// Landscape Image
+		if( $current_ratio > $desired_ratio_after ) {
+			$new_width = $old_width * $height / $old_height;
+		}
+
+		// Nearly square ratio image.
+		if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
+                    
+                    if ( $old_width > $old_height ) {                        
+                        $new_height = max( $width, $height );
+                        $new_width = $old_width * $new_height / $old_height;
+                    } else {
+                        $new_height = $old_height * $width / $old_width;
+                    }
+		}
+
+		// Portrait sized image
+		if ( $current_ratio < $desired_ratio_before  ) {
+                    $new_height = $old_height * $width / $old_width;
+		}
+
+		// Find out the ratio of the original photo to it's new, thumbnail-based size
+		// for both the width and the height. It's used to find out where to crop.
+		$width_ratio = $old_width / $new_width;
+		$height_ratio = $old_height / $new_height;
+
+		// Calculate where to crop based on the center of the image
+		$src_x = floor( ( ( $new_width - $width ) / 2 ) * $width_ratio );
+		$src_y = round( ( ( $new_height - $height ) / 2 ) * $height_ratio );
+	}
+	// Don't crop the image, just resize it proportionally
+	else {
+            
+		if ( $old_width > $old_height ) {
+                    $ratio = max( $old_width, $old_height ) / max( $width, $height );
+		} else {
+                    $ratio = max( $old_width, $old_height ) / min( $width, $height );
+		}
+
+		$new_width = $old_width / $ratio;
+		$new_height = $old_height / $ratio;
+
+		$new_image = imagecreatetruecolor( $new_width, $new_height );
+	}
+
+	// Where all the real magic happens
+	imagecopyresampled( $new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height );
+
+	// Save it as a JPG File with our $destination_filename param.
+	imagejpeg( $new_image, $destination_filename, $quality  );
+
+	// Destroy the evidence!
+	imagedestroy( $new_image );
+	imagedestroy( $img_original );
+
+	// Return true because it worked and we're happy. Let the dancing commence!
+	return true;
     }
     
     /**

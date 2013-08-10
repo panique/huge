@@ -18,7 +18,7 @@
                 echo '<tr class="active">';            
             }        
             echo '<td>'.$this->user->user_id.'</td>';            
-            echo '<td class="avatar"><img src="'.$this->user->user_gravatar_link.'" /></td>';
+            echo '<td class="avatar"><img src="'.$this->user->user_avatar_link.'" /></td>';
             echo '<td>'.$this->user->user_name.'</td>';
             echo '<td>'.$this->user->user_email.'</td>';
             echo '<td>Active: '.$this->user->user_active.'</td>';

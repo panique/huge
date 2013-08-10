@@ -62,6 +62,7 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: user profile page
 - main feature: public user list / public profiles
 - main feature: time delay after failed logins
+- main feature: local avatars
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
@@ -181,6 +182,8 @@ and safer to use other things. You can find the official info on those functions
 
 I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
 MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
+
+Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping function.
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 

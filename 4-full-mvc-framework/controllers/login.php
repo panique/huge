@@ -89,7 +89,31 @@ class Login extends Controller {
         
         $this->view->render('login/edituseremail');        
         
-    }  
+    } 
+    
+    function uploadavatar() {
+        
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();                
+        
+        $this->view->avatar_file_path = $this->model->getUserAvatarFilePath();
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/uploadavatar');
+        
+    }   
+    
+    function uploadavatar_action() {
+
+        $this->model->createAvatar();
+
+        // TODO: find a better solution than always doing this by hand
+        // put the errors from the login model into the view (so we can display them in the view)
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/uploadavatar');    
+
+    }
 
     // register page
     function register() {    

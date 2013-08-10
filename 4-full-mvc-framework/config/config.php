@@ -21,6 +21,16 @@ define('URL', 'http://127.0.0.1/php-login/4-full-mvc-framework/');
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
  */
 define('LIBS', 'libs/');
+define('AVATAR_PATH', 'public/avatars/');
+
+
+/**
+ * Configuration for: Avatars/Gravatar support
+ * Set to true if you want to use "Gravatars", a service that automatically gets avatar pictures via using
+ * the email adresses of users by requesting images from the gravatar.com API.
+ * Set to false to use you own, locally saved avatars.
+ */
+define('USE_GRAVATARS', false);
 
 
 /**
