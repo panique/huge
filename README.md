@@ -112,12 +112,11 @@ Usually this script works out-of-the-box. Simply copy the script to your server'
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
 *ON YOUR SERVER*
-1. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
-2. usually the mod_rewrite module will not work now (why?), so you have to edit
+* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775`.
+* 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
+* 3. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
-3. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
-
-* make your avatar folder (public/avatars) writeable by doing a `chmod 775`.
+* 4. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
 
 Please note: I really don't understand why it's so goddamn complicated to set up the most simple features on a linux server.
 But we have to live with that. If you keep running into problems with that mod_rewrite shit, then please send me an email, 
