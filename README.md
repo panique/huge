@@ -117,6 +117,8 @@ the config files/.htaccess like described below. Sometimes, you'll need to insta
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
 * 3. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
 
+* make your avatar folder (public/avatars) writeable by doing a `chmod 775`.
+
 Please note: I really don't understand why it's so goddamn complicated to set up the most simple features on a linux server.
 But we have to live with that. If you keep running into problems with that mod_rewrite shit, then please send me an email, 
 open a github issue or get a server that is ready-to-go with mod_rewrite already activated.
