@@ -2,15 +2,15 @@
 
 /**
  * A simple, clean and secure PHP Login Script
- * 
+ *
  * MVC FRAMEWORK VERSION
  * Check Github for other versions
  * Check develop branch on Github for bleeding edge versions
- * 
+ *
  * A simple PHP Login Script embedded into a small framework.
  * Uses PHP sessions, the most modern password-hashing and salting
  * and gives all major functions a proper login system needs.
- * 
+ *
  * @package php-login
  * @author Panique <panique@web.de>
  * @link http://www.php-login.net
@@ -23,8 +23,8 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 // checking for minimum PHP version
-if (version_compare(PHP_VERSION, '5.3.7', '<') ) {
-  exit("Sorry, Simple PHP Login does not run on a PHP version smaller than 5.3.7 !");  
+if (version_compare(PHP_VERSION, '5.3.7', '<')) {
+    exit("Sorry, Simple PHP Login does not run on a PHP version smaller than 5.3.7 !");
 }
 
 // loading config
