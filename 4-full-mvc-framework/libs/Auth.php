@@ -27,9 +27,7 @@ class Auth {
         $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
         
         if ($cookie) {
-            
-            //var_dump($cookie);
-            //exit;
+
             list ($user_id, $token, $hash) = explode(':', $cookie);
             if ($hash !== hash('sha256', $user_id . ':' . $token)) {
                 return false;

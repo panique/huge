@@ -70,6 +70,7 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: public user list / public profiles
 - main feature: time delay after failed logins
 - main feature: local avatars
+- main feature: remember me / keep me logged in
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
@@ -158,6 +159,27 @@ then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
 in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
+
+###IMPORTANT NOTE REGARDING SESSION HANDLING
+
+Sessions in PHP are easy to handle, but have a tricky configuration underneath. The common opinion is, that when you
+close your browser, the session is gone. Actually, it's a little bit more complicated:
+Have a look on these 3 line in your `php.ini`:
+
+`session.gc_maxlifetime = 3600`
+`session.gc_probability = 1`
+`session.gc_divisor = 1000`
+
+`session.gc_maxlifetime` says: 3600 seconds (1 hour) after session initialization, PHP will mark this session as "outdated" and
+flag it as "ready to delete". The session still exists after 1 hour! But it's not deleted. The deletion process of all
+outdated and ready-to-delete file is called "garbage collection" (process), and it's triggered - with a specific probability - 
+when another user comes to your page. This probability is calculated by `session.gc_probability` divided by `session.gc_divisor`.
+Yeah, a little bit weird, but the people behind PHP have thought about this, and there are reasons for this behaviour.
+
+Have a look on this excellent answer on StackOverflow to read more about this topic: 
+[How do I expire a PHP session after 30 minutes?](http://stackoverflow.com/a/1270960/1114320).
+For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
+PHP's session gargabe collector process ;)
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
