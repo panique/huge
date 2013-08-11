@@ -9,8 +9,10 @@ Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions
 pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
 stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
-Available in 4 versions: 
+Available in 5 versions: 
 
+0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
+with a full power SQLite one-file database.
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
 3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
