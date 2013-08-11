@@ -4,6 +4,7 @@ August 10th 2013
 * 4-full-mvc-framework: local avatars
 * README: new section USEFUL STUFF for edge cases
 * README: USEFUL STUFF: info on shared session/login for multiple instances of the script
+* introducing new "0-one-file" version of the script that uses a SQLite one-file database
 
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable

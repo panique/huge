@@ -18,6 +18,11 @@ Available in 4 versions:
 
 ###DIFFERENT VERSIONS
 
+#####ONE-FILE VERSION (by Mark Constable)
+
+- extremely reduced to one (!) php file that handles ALL the stuff (plus a compatibility file for PHP 5.3 and 5.4)
+- uses a one-file SQLite database (that will be created automatically while installation), does not need a real MySQL database
+
 #####MINIMAL VERSION
 
 - main features: user can register, log in and log out
@@ -92,6 +97,12 @@ upper sidebar here on this page.
 ###HOW TO INSTALL
 
 This script has been made to run out-of-the-box. Not more config stuff than necessary.
+
+#####HOW TO INSTALL 0-ONE-FILE VERSION
+
+* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in your folder. That's it.
+* (2.) when really using this script in a live project, please select a strong password for the database, you can change
+that in the first lines on the script.
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
@@ -190,7 +201,10 @@ and safer to use other things. You can find the official info on those functions
 I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
 MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
 
-Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping function.
+Another very big Thanks to Mark Constable for creating the awesome 0-one-file version of the script. It's unbelievable
+what powerful things you can create within ONE short and readable file!
+
+Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping function.
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 

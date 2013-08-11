@@ -13,6 +13,10 @@
  * functions and/or much more complex code / file structure. buzzwords: MVC,
  * dependency injected, one shared database connection, PDO, prepared
  * statements, PSR-0/1/2 and documented in phpDocumentor style
+ * 
+ * To install this script, simply call index.php?a=install, a SQLite
+ * one-file-database will then be created in your project folder.
+ * This one-file script does not need a MySQL-database.
  *
  * @package php-login
  * @author Panique <panique@web.de>
@@ -21,11 +25,18 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-    require("../1-minimal/libraries/password_compatibility_library.php");
+// checking for minimum PHP version
+if (version_compare(PHP_VERSION, '5.3.7', '<')) {
+    exit("Sorry, Simple PHP Login does not run on a PHP version smaller than 5.3.7 !");
+} else if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+    // if you are using PHP 5.3 or PHP 5.4 you have to include the password_api_compatibility_library.php
+    // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
+    require_once("libraries/password_compatibility_library.php");
 }
 
 session_start();
+
+// tools for debugging
 //error_log('GET='.var_export($_GET, true));
 //error_log('POST='.var_export($_POST, true));
 //error_log('SESSION='.var_export($_SESSION, true));
@@ -64,25 +75,21 @@ function logout()
     $_SESSION = array();
     $_SESSION['msg'] = "You are now logged out";
     header('Location: '.$_SERVER['PHP_SELF']);
-    exit();
+    exit(); // TODO: should we really use exit() ?
 }
 
 function login()
 {
     if (!empty($_POST)) {
         $msg = '';
-        if (strlen($_POST['user_name']) > 1) {
-            if (strlen($_POST['user_password']) > 5) {
-                $user = read_user($_POST['user_name']);
-                if (isset($user['user_name'])) {
-                    if (password_verify($_POST['user_password'], $user['user_password_hash'])) {
-                        create_session($user);
-                        header('Location: '.$_SERVER['PHP_SELF']);
-                        exit();
-                    } else $msg = 'Passwords do not match';
-                } else $msg = 'Username does not exist';
-            } else $msg = 'Password must be at least 6 characters';
-        } else $msg = 'Username must be at least 2 characters';
+        $user = read_user($_POST['user_name']);
+        if (isset($user['user_name'])) {
+            if (password_verify($_POST['user_password'], $user['user_password_hash'])) {
+                create_session($user);
+                header('Location: '.$_SERVER['PHP_SELF']);
+                exit();
+            } else $msg = 'Wrong password';
+        } else $msg = 'User does not exist';
         $_SESSION['msg'] = $msg;
     }
     return login_form();
@@ -138,14 +145,14 @@ function install()
 
     try {
         $dbh->exec("
- CREATE TABLE IF NOT EXISTS `users` (
+        CREATE TABLE IF NOT EXISTS `users` (
         `user_id` $pri,
         `user_name` varchar(64),
         `user_password_hash` varchar(255),
         `user_email` varchar(64));
- $ind");
+        $ind");
     } catch (PDOException $e) {
-        die($e->getMessage());
+        die($e->getMessage()); // TODO: should we really use die() ?
     }
     $_POST['user_name'] = cfg('admin');
     $_POST['user_email'] = cfg('email');
@@ -158,7 +165,7 @@ function install()
 }
 
 // private support functions
-
+// TODO @mark: this needs documentation/comments
 function cfg($k = NULL, $v = NULL)
 {
     static $stash = array();
@@ -193,7 +200,7 @@ function page($content)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
 body { margin: 0 auto; width: 42em; }
-h1, form, .msg { text-align: center; }
+h1, h2, form, .msg { text-align: center; }
 label { display: inline-block; width: 10em; text-align: right;  }
 a { text-decoration: none; }
 .msg, .btn { border: 1px solid #CFCFCF; padding: 0.25em 1em 0.5em 1em; border-radius: 0.3em; }
@@ -203,7 +210,9 @@ a { text-decoration: none; }
     </style>
   </head>
   <body>
-    <h1>'.cfg('title').'</h1>'.$msg.$content.'
+    <h1>'.cfg('title').'</h1>
+    <h2>(one-file version, with SQLite one-file database)</h2>
+    '.$msg.$content.'        
   </body>
 </html>
 ';
