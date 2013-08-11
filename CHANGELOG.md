@@ -1,10 +1,19 @@
 # CHANGE LOG #
 
+August 10th 2013
+* 4-full-mvc-framework: local avatars
+* README: new section USEFUL STUFF for edge cases
+* README: USEFUL STUFF: info on shared session/login for multiple instances of the script
+* introducing new "0-one-file" version of the script that uses a SQLite one-file database
+
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable
 * 4-full-mvc-framework: private user profile page
 * 4-full-mvc-framework: prevented access to views if user is not logged in
 * 4-full-mvc-framework: Google Chrome messes up webfonts, so switchback to Arial :(
+* 4-full-mvc-framework: public user list
+* 4-full-mvc-framework: better autoloader (LIB constant, splitting internal/external libs)
+* 4-full-mvc-framework: time delay after 3 failed logins
 
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username
