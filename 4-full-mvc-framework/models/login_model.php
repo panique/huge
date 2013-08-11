@@ -61,9 +61,33 @@ class Login_Model extends Model
 
                             // reset the failed login counter for that user
                             $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
-                            $sth->execute(array(':user_id' => $result->user_id));                            
+                            $sth->execute(array(':user_id' => $result->user_id));  
+                            
+                            // if user has check the "remember me" checkbox, then write cookie
+                            if (isset($_POST['user_rememberme'])) {
+                                
+                                // generate 64 char random string
+                                $random_token_string = hash('sha256', mt_rand());
+                                
+                                $sth = $this->db->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
+                                $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $result->user_id));
+                                
+                                // generate cookie string that consists of userid, randomstring and combined hash of both
+                                $cookie_string_first_part = $result->user_id . ':' . $random_token_string;
+                                $cookie_string_hash = hash('sha256', $cookie_string_first_part);        
+                                $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;        
 
-                            //header('location: ../dashboard');
+                                // set cookie
+                                
+                                //echo COOKIE_RUNTIME;
+                                //echo COOKIE_DOMAIN;
+                                //exit;
+                                
+                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
+                                
+                            }
+                            
                             return true;                                
 
                         } else {
@@ -102,6 +126,28 @@ class Login_Model extends Model
             $this->errors[] = "Password field was empty.";
         }
 
+    }
+    
+
+    
+    /**
+     * Logout
+     */
+    public function logout() {
+
+        // set the rememberme-cookie to yesterday. 
+        // that's obivously the best practice to kill a cookie via php 
+        // @see http://stackoverflow.com/a/686166/1114320
+        setcookie('rememberme', false, time() - 3600, '/');
+        
+        // delete the session
+        Session::destroy();
+        
+        //echo "cookie deleted, session destroyed!";
+        //exit;
+        
+        // relocate to app's index page
+        //header('location: ' . URL);
     }
 	
     /**
@@ -433,9 +479,7 @@ class Login_Model extends Model
 
         }
         
-    } 
-    
-    
+    }
        
     /**
      * Get either a Gravatar URL or complete image tag for a specified email address.

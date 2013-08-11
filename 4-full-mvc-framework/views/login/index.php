@@ -20,9 +20,12 @@
             <input type="text" name="user_name" />
             
             <label>Password</label>
-            <input type="password" name="user_password" />
+            <input type="password" name="user_password" />            
             
-            <label></label><input type="submit" />            
+            <input type="checkbox" name="user_rememberme" style="float: left; min-width: 0; margin: 3px 10px 15px 0;" />
+            <label style="float:left; min-width: 0; font-size: 12px; color: #888;">Keep me logged in (for 2 weeks)</label>
+                                    
+            <input type="submit" style="float: none; clear: both;" />            
             
     </form>    
     

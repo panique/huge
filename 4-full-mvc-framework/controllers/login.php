@@ -12,6 +12,22 @@ class Login extends Controller {
     }
 
     function index() {
+        /*
+        $login_with_cookie = $this->model->loginWithCookie();
+        $this->view->errors = $this->model->errors;
+        
+        if ($login_with_cookie) {
+            
+            // if YES, then move user to dashboard/index
+            // please note: this is a browser-relocater, not a rendered view
+            header('location: ' . URL . 'dashboard/index');
+            //$this->view->render('dashboard/index');
+            
+        } else {
+            
+            // if NO, then show the login/index (login form) again
+            $this->view->render('login/index');
+        }*/
         
         $this->view->render('login/index');
     }
@@ -42,9 +58,9 @@ class Login extends Controller {
     
     function logout()
     {
-            Session::destroy();
-            header('location: ' . URL .  'login');
-            //exit;
+        $this->model->logout();
+        header('location: ' . URL);
+        //$this->view->render('login/index');
     }    
     
     function showprofile() {

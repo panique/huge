@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+August 11th 2013
+* 4-full-mvc-framework: logout happens now via model (which is cleaner)
+* 4-full-mvc-framework: remember me feature introduced
+
 August 10th 2013
 * 4-full-mvc-framework: local avatars
 * README: new section USEFUL STUFF for edge cases
