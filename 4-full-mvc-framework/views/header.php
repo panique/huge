@@ -48,7 +48,10 @@
                     <ul class="sub-menu">
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/showprofile">Show my profile</a>
-                        </li>                        
+                        </li>    
+                        <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                            <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
+                        </li>                          
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
                         </li>
