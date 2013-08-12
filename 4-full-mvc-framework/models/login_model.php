@@ -220,48 +220,89 @@ class Login_Model extends Model
     /**
      * edit the user's email, provided in the editing form
      */
-    public function editUserEmail() {        
+    public function editUserEmail() {
         
-        if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
+        // email and password provided ?
+        if (!empty($_POST['user_email']) && !empty($_POST["user_password"])) {
             
-            $this->errors[] = "Sorry, that email address is the same as your current one. Please choose another one.";
-        
-        } 
-        // user mail cannot be empty and must be in email format
-        elseif (!empty($_POST['user_email']) && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-                
-            // escapin' this
-            $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-            // prevent database flooding
-            $this->user_email = substr($this->user_email, 0, 64);
-            // not really necessary, but just in case...
-            $this->user_id = $_SESSION['user_id'];
+            // check if new email is same like the old one
+            if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
 
-            $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
-            $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $this->user_id));                        
-            
-            $count =  $sth->rowCount();
-            
-            if ($count == 1) {
+                $this->errors[] = "Sorry, that email address is the same as your current one. Please choose another one.";
 
-                Session::set('user_email', $this->user_email);
+            } 
+            // user mail must be in email format
+            elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
                 
-                // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                $this->setGravatarImageUrl($this->user_email);                
-                
-                $this->errors[] = "Your email address has been changed successfully. New email address is " . $this->user_email . ".";
+                // check if password is right
+                $sth = $this->db->prepare("SELECT user_id,
+                                                  user_password_hash
+                                           FROM users
+                                           WHERE user_id = :user_id");
+                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+
+                $count =  $sth->rowCount();
+                if ($count == 1) {
+
+                    // fetch one row (we only have one result)
+                    $result = $sth->fetch();
+                      
+                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
+                        
+                        // escapin' this
+                        $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+                        // prevent database flooding
+                        $this->user_email = substr($this->user_email, 0, 64);
+                        // not really necessary, but just in case...
+                        $this->user_id = $_SESSION['user_id']; // TODO: delete this line
+
+                        $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
+                        $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));                        
+
+                        $count =  $sth->rowCount();
+
+                        if ($count == 1) {
+
+                            Session::set('user_email', $this->user_email);
+
+                            // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                            $this->setGravatarImageUrl($this->user_email);                
+
+                            $this->errors[] = "Your email address has been changed successfully. New email address is " . $this->user_email . ".";
+
+                        } else {
+
+                            $this->errors[] = "Sorry, your email changing failed.";
+
+                        }
+                        
+                    } else {
+                        
+                        $this->errors[] = "Wrong password.";
+                        
+                    }
+                    
+                }
 
             } else {
 
-                $this->errors[] = "Sorry, your email changing failed.";
+                $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
 
-            }
+            }  
+            
+        } elseif (!empty($_POST['user_email'])) {
+            
+            $this->errors[] = "No password provided.";
+            
+        } elseif (!empty($_POST['user_password'])) {
+            
+            $this->errors[] = "No email adress provided.";
             
         } else {
             
-            $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
+            $this->errors[] = "No email adress and no password provided.";
             
-        }        
+        }
         
     } 
     
