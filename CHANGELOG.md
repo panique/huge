@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 13th 2013
+* 4-full-mvc-framework: email change now asks for password (to prevent account takeovers)
+
 August 12th 2013
 * introducing the styles for the php-login project: https://github.com/panique/php-login-styles
 
