@@ -9,14 +9,19 @@ Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions
 pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
 stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
-Available in 5 versions: 
+Available in 4 versions (plus beautiful themes/templates/user interfaces): 
 
 0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
 with a full power SQLite one-file database.
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
-3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
 4. full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
+
+Version #3, the styled version, has been dismissed to introduce a new project:
+Simple, beautiful, professional themes/templates/user interfaces for all 4 versions, packed into an independent project.
+Free to use and perfectly fitting into any version the php-login project. Simply copy into your css(/js?) folder
+and your are ready-to-go. Find the code here [coming up in the second half of 2013]: 
+https://github.com/panique/php-login-styles
 
 ###DIFFERENT VERSIONS
 

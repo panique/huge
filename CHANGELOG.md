@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 12th 2013
+* introducing the styles for the php-login project: https://github.com/panique/php-login-styles
+
 August 11th 2013
 * 4-full-mvc-framework: logout happens now via model (which is cleaner)
 * 4-full-mvc-framework: remember me feature introduced
