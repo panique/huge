@@ -186,6 +186,14 @@ Have a look on this excellent answer on StackOverflow to read more about this to
 For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
 PHP's session gargabe collector process ;)
 
+###IF YOU WANT TO KNOW MORE ABOUT THE PHP 5.5 (and 5.3/5.4) PASSWORD FUNCTIONS
+
+1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](https://github.com/panique/php-login/wiki/A-little-guideline-on-how-to-use-the-PHP-5.5-password-hashing-functions-and-it%27s-%22library-plugin%22-based-PHP-5.3-&-5.4-implementation) 
+2. [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
+3. [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
+
+You can find all them in the project's [github wiki](https://github.com/panique/php-login/wiki).
+
 ###REQUIREMENTS / TROUBLESHOOTING
 
 * needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
