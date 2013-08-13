@@ -64,7 +64,7 @@ class Login_Model extends Model
 
                             // reset the failed login counter for that user
                             $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
-                            $sth->execute(array(':user_id' => $result->user_id));  
+                            $sth->execute(array(':user_id' => $result->user_id));                           
                             
                             // if user has check the "remember me" checkbox, then write cookie
                             if (isset($_POST['user_rememberme'])) {

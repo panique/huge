@@ -238,6 +238,6 @@ class Login extends Controller {
             $captcha->generateCaptcha();
             // render a img showing the characters (=the captcha)
             $captcha->showCaptcha();
-    }    
+    }   
 
 }

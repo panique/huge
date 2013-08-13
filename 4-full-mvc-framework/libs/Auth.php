@@ -44,10 +44,11 @@ class Auth {
                                         user_password_hash, 
                                         user_active, 
                                         user_account_type,
+                                        user_has_avatar,
                                         user_failed_logins, 
                                         user_last_failed_login  
                                  FROM users
-                                 WHERE user_name = :user_name ;");
+                                 WHERE user_id = :user_id");
             $sth->execute(array(':user_id' => $user_id));
 
             $count =  $sth->rowCount();
