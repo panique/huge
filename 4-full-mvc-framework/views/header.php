@@ -53,6 +53,9 @@
                         </li>
                         -->
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                            <a href="<?php echo URL; ?>login/changeaccounttype">Change account type</a>
+                        </li>                           
+                        <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
                         </li>                          
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >

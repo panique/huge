@@ -25,6 +25,7 @@ class Login_Model extends Model
                                               user_email, 
                                               user_password_hash, 
                                               user_active, 
+                                              user_account_type,
                                               user_failed_logins, 
                                               user_last_failed_login  
                                        FROM users
@@ -54,6 +55,8 @@ class Login_Model extends Model
                             Session::set('user_id', $result->user_id);
                             Session::set('user_name', $result->user_name);
                             Session::set('user_email', $result->user_email);
+                            Session::set('user_account_type', $result->user_account_type);                            
+                            
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
                             // call the setGravatarImageUrl() method which writes gravatar urls into the session
@@ -971,6 +974,63 @@ class Login_Model extends Model
         
         // default
         return false;
+        
+    }
+    
+    /**
+     * Upgrades/downgrades the user's account
+     * Currently it's just the field user_account_type in the database that
+     * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
+     * simply increase or decrease this value to emulate an account upgrade/downgrade.
+     * 
+     * Put some more complex stuff in here, maybe a pay-process or whatever you like.
+     * 
+     */
+    public function changeAccountType() {
+        
+        if (!empty($_POST["user_account_upgrade"])) {
+            
+            // do whatever you want to upgrade the account here (pay-process etc)
+            // ....
+            
+            $sth = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
+            $sth->execute(array(':user_id' => $_SESSION["user_id"]));                                  
+
+            if ($sth->rowCount() == 1) {
+                
+                // set account type in session to 2
+                Session::set('user_account_type', 2);                
+
+                $this->errors[] = "Account upgrade was successful!";
+
+            } else {
+
+                $this->errors[] = "Account upgrade was NOT successful!";
+
+            }
+            
+        } elseif (!empty($_POST["user_account_downgrade"])) {
+
+            // do whatever you want to downgrade the account here (pay-process etc)
+            // ....            
+            
+            $sth = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
+            $sth->execute(array(':user_id' => $_SESSION["user_id"]));  
+            
+            if ($sth->rowCount() == 1) {
+                
+                // set account type in session to 1
+                Session::set('user_account_type', 1);                
+
+                $this->errors[] = "Account downgrade was successful!";
+
+            } else {
+
+                $this->errors[] = "Account downgrade was NOT successful!";
+
+            }         
+            
+        }
         
     }
     

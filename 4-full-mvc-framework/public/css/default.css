@@ -100,6 +100,11 @@ h1 {
     margin-top: 0;
 }
 
+h2 {
+    font-size: 25px;
+    margin-top: 0;
+}
+
 table td {
     padding: 10px;
 }

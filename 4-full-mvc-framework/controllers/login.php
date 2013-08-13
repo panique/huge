@@ -12,22 +12,6 @@ class Login extends Controller {
     }
 
     function index() {
-        /*
-        $login_with_cookie = $this->model->loginWithCookie();
-        $this->view->errors = $this->model->errors;
-        
-        if ($login_with_cookie) {
-            
-            // if YES, then move user to dashboard/index
-            // please note: this is a browser-relocater, not a rendered view
-            header('location: ' . URL . 'dashboard/index');
-            //$this->view->render('dashboard/index');
-            
-        } else {
-            
-            // if NO, then show the login/index (login form) again
-            $this->view->render('login/index');
-        }*/
         
         $this->view->render('login/index');
     }
@@ -119,9 +103,8 @@ class Login extends Controller {
         $this->view->avatar_file_path = $this->model->getUserAvatarFilePath();
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/uploadavatar');
-        
-    }   
+        $this->view->render('login/uploadavatar');        
+    }
     
     function uploadavatar_action() {
 
@@ -131,15 +114,30 @@ class Login extends Controller {
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/uploadavatar');    
+        $this->view->render('login/uploadavatar');
 
+    }
+    
+    function changeaccounttype() {
+        
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();
+        $this->view->render('login/changeaccounttype');
+        
+    }
+    
+    function changeaccounttype_action() {
+        
+        $this->model->changeAccountType();
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/changeaccounttype');          
     }
 
     // register page
     function register() {    
         
-        $this->view->render('login/register');
-        
+        $this->view->render('login/register');        
     }
     
     // real registration action
@@ -155,8 +153,7 @@ class Login extends Controller {
             $this->view->render('login/index');
         } else {
             $this->view->render('login/register');
-        }
-        
+        }        
         
     }
     
@@ -168,14 +165,12 @@ class Login extends Controller {
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/verify');
-        
+        $this->view->render('login/verify');        
     }
     
     function requestpasswordreset() {
         
-        $this->view->render('login/requestpasswordreset');
-        
+        $this->view->render('login/requestpasswordreset');        
     }
     
     function requestpasswordreset_action() {
@@ -194,8 +189,7 @@ class Login extends Controller {
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/requestpasswordreset');
-        
+        $this->view->render('login/requestpasswordreset');        
     }  
     
     function verifypasswordrequest($user_name, $verification_code) {

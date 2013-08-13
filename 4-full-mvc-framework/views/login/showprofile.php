@@ -26,4 +26,8 @@
         Your avatar pic (saved on local server): <img src='<?php echo Session::get('user_avatar_file'); ?>' />
     </div> 
     
+    <div>
+        Your account type is: <?php echo Session::get('user_account_type'); ?>
+    </div>
+    
 </div>
