@@ -159,6 +159,7 @@ RewriteBase /myapp/
 * 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
+* 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 7. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
