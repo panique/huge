@@ -2,6 +2,7 @@
 
 August 13th 2013
 * 4-full-mvc-framework: email change now asks for password (to prevent account takeovers)
+* 4-full-mvc-framework: "my account" menu item now links directly to user's profile
 
 August 12th 2013
 * introducing the styles for the php-login project: https://github.com/panique/php-login-styles
