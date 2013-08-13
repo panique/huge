@@ -39,12 +39,15 @@ class Auth {
                     
             // get real token from database (and all other data)
             $sth = $db->prepare("SELECT user_id, 
-                                              user_name, 
-                                              user_email, 
-                                              user_rememberme_token,
-                                              user_has_avatar
-                                       FROM users
-                                       WHERE user_id = :user_id");
+                                        user_name, 
+                                        user_email, 
+                                        user_password_hash, 
+                                        user_active, 
+                                        user_account_type,
+                                        user_failed_logins, 
+                                        user_last_failed_login  
+                                 FROM users
+                                 WHERE user_name = :user_name ;");
             $sth->execute(array(':user_id' => $user_id));
 
             $count =  $sth->rowCount();
@@ -59,6 +62,7 @@ class Auth {
                 Session::set('user_id', $result->user_id);
                 Session::set('user_name', $result->user_name);
                 Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);   
                 
                 if ($result->user_has_avatar) {
                     $avatar_path = URL . AVATAR_PATH . $result->user_id . '.jpg';
