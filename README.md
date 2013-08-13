@@ -76,6 +76,7 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: time delay after failed logins
 - main feature: local avatars
 - main feature: remember me / keep me logged in
+- main feature: account upgrade/downgrade (for basic/premium accounts)
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
