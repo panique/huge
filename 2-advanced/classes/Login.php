@@ -92,13 +92,17 @@ class Login {
                 
                 $this->editUserPassword();
                 
-            } 
+            }
+		}
+		// if user has an cookie available
+		elseif (isset($_COOKIE[COOKIE_IDENT_NAME])) {
 
+			$this->loginWithCookieData();
+		}
         // if user just submitted a login form
-        } elseif (isset($_POST["login"])) {
+        elseif (isset($_POST["login"])) {
 
-                $this->loginWithPostData();
-                
+            $this->loginWithPostData();
         }
         
         // checking if user requested a password reset mail
@@ -137,7 +141,40 @@ class Login {
         $this->user_is_logged_in = true;        
         
     }
-    
+
+    private function loginWithCookieData() {
+
+		$cookie_data = explode('|', base64_decode($_COOKIE[COOKIE_IDENT_NAME]));
+
+		if (!empty($cookie_data) && count($cookie_data) == 5) {
+			list($cookie['user_id'], $cookie['user_name'], $cookie['user_email'], $cookie['expiration_time'], $cookie['password_hash']) = $cookie_data;
+		}
+
+		// creating a database connection
+		$this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+		// database query, getting all the info of the selected user
+		$checklogin = $this->db_connection->query("SELECT user_id, user_name, user_email, user_password_hash, user_active FROM users WHERE user_id = ". intval($cookie['user_id']) .";");
+
+		// if this user exists
+		if ($checklogin->num_rows == 1) {
+
+			// get result row (as an object)
+			$result_row = $checklogin->fetch_object();
+
+			if (sha1(COOKIE_SALT . $result_row->user_password_hash . $cookie['expiration_time']) == $cookie['password_hash']) {
+
+				$_SESSION['user_id'] = $result_row->user_id;
+				$_SESSION['user_name'] = $result_row->user_name;
+				$_SESSION['user_email'] = $result_row->user_email;
+				$_SESSION['user_logged_in'] = 1;
+
+				$this->user_name = $_SESSION['user_name'];
+				$this->user_email = $_SESSION['user_email'];
+				$this->user_is_logged_in = true;
+			}
+		}
+    }
 
     private function loginWithPostData() {
         
@@ -171,6 +208,11 @@ class Login {
                             $_SESSION['user_name'] = $result_row->user_name;
                             $_SESSION['user_email'] = $result_row->user_email;
                             $_SESSION['user_logged_in'] = 1;
+
+							$cookie_expire = strtotime('+30 days');
+							setcookie(COOKIE_IDENT_NAME, 
+								base64_encode($result_row->user_id .'|'. $result_row->user_name .'|'. $result_row->user_email .'|'. $cookie_expire .'|'. 
+											  sha1(COOKIE_SALT . $result_row->user_password_hash . $cookie_expire)), $cookie_expire, "/", "", "", TRUE);
 
                             // declare user id, set the login status to true
                             $this->user_id = $result_row->user_id;
@@ -248,6 +290,7 @@ class Login {
             
             $_SESSION = array();
             session_destroy();
+            setcookie(COOKIE_IDENT_NAME, '', strtotime('-30 days'), '/');
             $this->user_is_logged_in = false;
             $this->messages[] = "You have been logged out.";     
             
