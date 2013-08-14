@@ -22,35 +22,32 @@ class Note extends Controller {
         
         // get all notes (of the logged in user)
         $this->view->notes = $this->model->getAllNotes();
+        $this->view->errors = $this->model->errors;
         $this->view->render('note/index');
     }
 
     public function create() {
-        $note_text = $_POST['note_text'];
-
-        $this->model->create($note_text);
+        
+        $this->model->create($_POST['note_text']);
         header('location: ' . URL . 'note');
     }
 
     public function edit($note_id) {
+        
         $this->view->note = $this->model->getNote($note_id);
-
-        if (empty($this->view->note)) {
-            die('This is an invalid note!');
-        }
-
+        $this->view->errors = $this->model->errors;
         $this->view->render('note/edit');
     }
 
     public function editSave($note_id) {
-        $note_text = $_POST['note_text'];
-
+        
         // do editSave() in the note_model, passing note_id from URL and note_text from POST via params
-        $this->model->editSave($note_id, $note_text);
-        header('location: ' . URL . 'note');
+        $this->model->editSave($note_id, $_POST['note_text']);
+        header('location: ' . URL . 'note');        
     }
 
     public function delete($note_id) {
+        
         $this->model->delete($note_id);
         header('location: ' . URL . 'note');
     }

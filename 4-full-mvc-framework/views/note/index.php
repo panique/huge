@@ -1,7 +1,7 @@
 <div class="content">
     
     <h1>Create new note</h1>
-    <h3>"Notes" are just an example of how to create, edit and delete things.</h3>
+    <h3>"Notes" are just an example of how to create, show (read), edit (update) and delete things. CRUD, you know...</h3>
 
     <form method="post" action="<?php echo URL;?>note/create">
         <label>Text of new note: </label><input type="text" name="note_text" />

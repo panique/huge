@@ -39,18 +39,15 @@ class Session {
         
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
-        }
-            
+        }            
     }
 
     /**
      * deletes the sssions = logs the user out
-     * moves the user to the index page of our app
      */
     public static function destroy() {
         
         session_destroy();
-        header('location: ' . URL);
     }
 
 }

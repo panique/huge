@@ -100,6 +100,11 @@ h1 {
     margin-top: 0;
 }
 
+h2 {
+    font-size: 25px;
+    margin-top: 0;
+}
+
 table td {
     padding: 10px;
 }
@@ -300,6 +305,21 @@ input[type="submit"] {
     color: #999;
     font-size: 11px;
     
+}
+
+
+/* overview pages */
+table.overview-table tr.inactive {
+    opacity: 0.3;
+}
+
+table.overview-table td {
+    padding: 6px 10px;
+    /*border: 1px solid #ccc;*/
+    vertical-align: middle;
+}
+table.overview-table td.avatar {
+    padding: 0 !important;
 }
 
 
