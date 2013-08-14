@@ -21,3 +21,13 @@ define("DB_USER", "root");
 
 /** The password of the above user */
 define("DB_PASS", "mysql");
+
+/**
+ * Configuration file for cookie remember me function
+ * 
+ * /
+
+/** Name of the cookie */
+define("COOKIE_IDENT_NAME", "user_identification");
+/** Salt used for password storage into the cookie */
+define("COOKIE_SALT", "lrP@45a6&1dPNdiop");
