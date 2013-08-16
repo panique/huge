@@ -11,11 +11,10 @@ stay secure, even if server technology (and hacker technology!) gets much much s
 
 ####Available in 4 versions (plus beautiful themes/templates/user interfaces):
 
-0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
-with a full power SQLite one-file database.
-1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
-2. advanced (much more features)
-4. full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
+0. One-File version. A full login system in one php file. Does not need a MySQL database, the script comes with a full power SQLite one-file database.
+1. Extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
+2. Advanced (much more features)
+4. Full-MVC-framework (even more features and professional MVC-framework code structure)
 
 Version #3, the styled version, has been dismissed to introduce a new project:
 Simple, beautiful, professional themes/templates/user interfaces for all 4 versions, packed into an independent project.
