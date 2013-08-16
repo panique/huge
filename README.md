@@ -9,7 +9,7 @@ Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions
 pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
 stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
-Available in 4 versions (plus beautiful themes/templates/user interfaces): 
+**Available in 4 versions (plus beautiful themes/templates/user interfaces): **
 
 0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
 with a full power SQLite one-file database.
@@ -143,7 +143,8 @@ Usually this script works out-of-the-box. Simply copy the script to your server'
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
 *ON YOUR SERVER*
-* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775`.
+* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775` or `chmod 777` [@linux guys, please correct this
+if there's a better way] on that folder.
 * 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 3. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
