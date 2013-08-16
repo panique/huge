@@ -23,7 +23,8 @@ class Overview_Model extends Model {
 
         foreach ($sth->fetchAll() as $user) {
             
-            // TOOD: why an object ? This might be memory-intensive
+            // a new object for every user. This is eventually not really optimal when it comes
+            // to performance, but it fits the view style better
             $all_users_profiles[$user->user_id] = new stdClass();
             
             $all_users_profiles[$user->user_id]->user_id = $user->user_id; // hmm...
