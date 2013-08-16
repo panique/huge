@@ -462,19 +462,25 @@ class Login_Model extends Model
         
         $mail = new PHPMailer;
 
+        // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
             
-            $mail->IsSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = EMAIL_SMTP_HOST;  // Specify main and backup server
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               // Enable SMTP authentication
-            $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
-            $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
-            
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {
-                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
-            }            
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;  
+            $mail->Username = EMAIL_SMTP_USERNAME;                            
+            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Port = EMAIL_SMTP_PORT;       
             
         } else {
             
@@ -817,19 +823,25 @@ class Login_Model extends Model
         
         $mail = new PHPMailer;
 
+        // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
             
-            $mail->IsSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = EMAIL_SMTP_HOST;  // Specify main and backup server
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               // Enable SMTP authentication
-            $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
-            $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
-            
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {
-                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
-            }            
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;  
+            $mail->Username = EMAIL_SMTP_USERNAME;                            
+            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Port = EMAIL_SMTP_PORT;       
             
         } else {
             
