@@ -32,6 +32,10 @@ require_once("config/db.php");
 // the script will then use the standard value)
 require_once("config/hashing.php");
 
+// include the PHPMailer library & the mail configs
+require_once("config/email.php");
+require_once("libraries/PHPMailer.php");
+
 // include the email data for password reset mails
 require_once("config/email_passwordreset.php");
 

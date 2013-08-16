@@ -6,6 +6,7 @@ August 13th 2013
 * 4-full-mvc-framework: SMTP mail config now shows a ready-to-go gmail.com example
 * 4-full-mvc-framework: live-demo links for the project!
 * 4-full-mvc-framework: avatar folder is now checked for writing rights
+* 2-advanced: SMTP mailing possible by default
 
 August 13th 2013
 * 4-full-mvc-framework: email change now asks for password (to prevent account takeovers)
