@@ -10,7 +10,7 @@
 
 /** absolute URL to register.php, necessary for email password reset links */
 define("EMAIL_PASSWORDRESET_URL", "http://127.0.0.1/php-login/2-advanced/password_reset.php");
-
 define("EMAIL_PASSWORDRESET_FROM", "noreply@example.com");
+define("EMAIL_PASSWORDRESET_FROM_NAME", "My Project");
 define("EMAIL_PASSWORDRESET_SUBJECT", "Password reset for PROJECT XY");
 define("EMAIL_PASSWORDRESET_CONTENT", "Please click on this link to reset your password:");

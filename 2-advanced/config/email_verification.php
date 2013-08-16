@@ -10,7 +10,7 @@
 
 /** absolute URL to register.php, necessary for email verification links */
 define("EMAIL_VERIFICATION_URL", "http://127.0.0.1/php-login/2-advanced/register.php");
-
 define("EMAIL_VERIFICATION_FROM", "noreply@example.com");
+define("EMAIL_VERIFICATION_FROM_NAME", "My Project");
 define("EMAIL_VERIFICATION_SUBJECT", "Account Activation for PROJECT XY");
 define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account:");

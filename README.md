@@ -11,11 +11,10 @@ stay secure, even if server technology (and hacker technology!) gets much much s
 
 ####Available in 4 versions (plus beautiful themes/templates/user interfaces):
 
-0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
-with a full power SQLite one-file database.
-1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
-2. advanced (much more features)
-4. full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
+0. One-File version. A full login system in one php file. Does not need a MySQL database, the script comes with a full power SQLite one-file database.
+1. Extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
+2. Advanced (much more features)
+4. Full-MVC-framework (even more features and professional MVC-framework code structure)
 
 Version #3, the styled version, has been dismissed to introduce a new project:
 Simple, beautiful, professional themes/templates/user interfaces for all 4 versions, packed into an independent project.
@@ -27,7 +26,7 @@ https://github.com/panique/php-login-styles
 
 - `0-one-file`: http://109.75.177.79:81/
 - `1-minimal`: http://109.75.177.79:82/
-- `2-advanced`: coming up
+- `2-advanced`: http://109.75.177.79:83/
 - `4-full-mvc-framework`: http://109.75.177.79:84/
 
 Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
@@ -62,15 +61,7 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: user can request password reset ("i forgot my password" function)
 - main feature: gravatar profile pic support
 - main feature: captcha
-
-*NOTE: this version needs the mail()-function (and in upcoming versions also the graphic/GD functions) of PHP.
-Usually naked servers don't have a mail server installed that will make it possible to send mail.
-In order to use this version of the script, please install a mail server by following the tutorial in the "2-advanced/_install" folder!*
-
-#####STYLED/THEMED [not published yet. coming up in late 2013]
-
-- same like 2., but with additional css/js stylings
-- several stylings to choose
+- main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
 
 #####FULL-MVC-FRAMEWORK
 
@@ -89,9 +80,7 @@ In order to use this version of the script, please install a mail server by foll
 - main feature: remember me / keep me logged in
 - main feature: account upgrade/downgrade (for basic/premium accounts)
 - COMING UP: PDF/Tutorial that shows how to use this framework
-- COMING UP: more features
 - COMING UP: code cleanup
-- COMING UP: better error handling
 
 BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
 The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
@@ -133,9 +122,10 @@ that in the first lines on the script.
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
-* 3. as this version uses email sending, you'll need to install a mail server tool on your server [SMTP via PHPMailer coming up].
-Maybe a mail server is already installed on your server. This is something you can do within 60 seconds on your linux command line.
-Please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
+* 3. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
+If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
+If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
+There's already a demo account sheme in the config.
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
