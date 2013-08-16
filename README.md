@@ -23,6 +23,16 @@ Free to use and perfectly fitting into any version the php-login project. Simply
 and your are ready-to-go. Find the code here [coming up in the second half of 2013]: 
 https://github.com/panique/php-login-styles
 
+###LIVE-DEMOS
+
+`0-one-file`: http://109.75.177.79:81/
+`1-minimal`: http://109.75.177.79:82/
+`2-advanced`: coming up
+`4-full-mvc-framework`: http://109.75.177.79:84/
+
+Feel free to test the scripts, and feel free to find security holes, problems and errors.
+Please note that this is just a preview, so don't misuse it.
+
 ###DIFFERENT VERSIONS
 
 #####ONE-FILE VERSION (by Mark Constable)
