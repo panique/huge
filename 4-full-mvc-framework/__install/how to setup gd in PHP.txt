@@ -1,0 +1,9 @@
+FOR THE UPCOMING CAPTCHA FEATURE:
+
+HOW TO SET UP PHP'S GD LIBRARY (GRAPHIC PROCESSING & GENERATION)
+
+sudo apt-get install php5-gd
+/etc/init.d/apache2 restart
+
+@see: http://www.cyberciti.biz/faq/ubuntu-linux-install-or-add-php-gd-support-to-apache/
+@see: [PHP Manual] http://www.php.net/manual/en/book.image.php
