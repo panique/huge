@@ -471,7 +471,7 @@ class Login_Model extends Model
             $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
             $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
             
-            if (EMAIL_SMTP_ENCRYPTION) {
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
                 
                 $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
             }            
@@ -826,7 +826,7 @@ class Login_Model extends Model
             $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
             $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
             
-            if (EMAIL_SMTP_ENCRYPTION) {
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
                 
                 $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
             }            
