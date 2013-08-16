@@ -559,29 +559,50 @@ class Login {
      */
     public function sendPasswordResetMail() {
         
-        $to      = $this->user_email;
-        $subject = EMAIL_PASSWORDRESET_SUBJECT;
-        
-        $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($this->user_name).'&verification_code='.urlencode($this->user_password_reset_hash);
-        
-        // the link to your password_reset.php, please set this value in config/email_passwordreset.php
-        $body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
+        $mail = new PHPMailer;
 
-        // stuff for HTML mails, test this is you feel adventurous ;)
-        $header  = 'MIME-Version: 1.0' . "\r\n";
-        $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $header .= "To: <$to>" . "\r\n";
-        $header .= 'From: '.EMAIL_PASSWORDRESET_FROM."\r\n";
-
-        if (mail($to, $subject, $body, $header)) {
+        // please look into the config/config.php for much more info on how to use this!
+        // use SMTP or use mail()
+        if (EMAIL_USE_SMTP) {
             
-            $this->messages[] = "Password reset mail successfully sent!";
-            return true;
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;  
+            $mail->Username = EMAIL_SMTP_USERNAME;                            
+            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Port = EMAIL_SMTP_PORT;       
             
         } else {
             
-            $this->errors[] = "Password reset mail NOT successfully sent!";
+            $mail->IsMail();            
+        }
+        
+        $mail->From = EMAIL_PASSWORDRESET_FROM;
+        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
+        $mail->AddAddress($this->user_email);
+        $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
+        
+        $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($this->user_name).'&verification_code='.urlencode($this->user_password_reset_hash);
+        $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
+
+        if(!$mail->Send()) {
+            
+            $this->errors[] = "Password reset mail NOT successfully sent! Error: " . $mail->ErrorInfo;
             return false;
+           
+        } else {
+            
+            $this->messages[] = "Password reset mail successfully sent!";
+            return true;
             
         }
         

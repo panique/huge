@@ -875,20 +875,6 @@ class Login_Model extends Model
 
         if(!$mail->Send()) {
             
-           $this->errors[] = FEEDBACK_MAIL_SENDING_ERROR . $mail->ErrorInfo;
-           return false;
-           
-        } else {
-            
-            $this->errors[] = 'A password reset mail has been sent successfully.';
-            return true;
-            
-        }
-        
-        
-        
-        if(!$mail->Send()) {
-            
            $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
            
