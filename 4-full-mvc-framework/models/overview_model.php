@@ -23,6 +23,9 @@ class Overview_Model extends Model {
 
         foreach ($sth->fetchAll() as $user) {
             
+            // TOOD: why an object ? This might be memory-intensive
+            $all_users_profiles[$user->user_id] = new stdClass();
+            
             $all_users_profiles[$user->user_id]->user_id = $user->user_id; // hmm...
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email; // be careful with public emails in real apps
