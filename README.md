@@ -31,7 +31,8 @@ https://github.com/panique/php-login-styles
 - `4-full-mvc-framework`: http://109.75.177.79:84/
 
 Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
-Please note that this is just a preview, so don't misuse it.
+Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
+mail account instead, like this one: http://trashmail.ws/
 
 ###DIFFERENT VERSIONS
 
