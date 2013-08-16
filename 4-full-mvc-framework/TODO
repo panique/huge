@@ -1,9 +1,0 @@
-(1.) proper error handling for database fails
-(2.) proper error handling for ... well, everything ;)
-(3.) documentation on how everything works together (graphical flow !?)
-
-- change message/errors to "feedback"
-- how to organize files in libs folder. are those files really "libs" ?
-- phpmailer and password_compat should move into own folders (?)
-- how to handle errors systemwide ? $this->errors is shitty...
-- bulletproof tutorial (video ?) !

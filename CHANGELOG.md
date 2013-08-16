@@ -1,10 +1,38 @@
 # CHANGE LOG #
 
+August 13th 2013
+* 4-full-mvc-framework: smaller fixes
+* 4-full-mvc-framework: much better SMTP mail config (with ports etc)
+* 4-full-mvc-framework: SMTP mail config now shows a ready-to-go gmail.com example
+* 4-full-mvc-framework: live-demo links for the project!
+
+August 13th 2013
+* 4-full-mvc-framework: email change now asks for password (to prevent account takeovers)
+* 4-full-mvc-framework: "my account" menu item now links directly to user's profile
+* 4-full-mvc-framework: users can upgrade/downgrade their account status, like standard/premium etc.
+* 4-full-mvc-framework: system feedback messages are now constants, not pure text in the model anymore
+
+August 12th 2013
+* introducing the styles for the php-login project: https://github.com/panique/php-login-styles
+
+August 11th 2013
+* 4-full-mvc-framework: logout happens now via model (which is cleaner)
+* 4-full-mvc-framework: remember me feature introduced
+
+August 10th 2013
+* 4-full-mvc-framework: local avatars
+* README: new section USEFUL STUFF for edge cases
+* README: USEFUL STUFF: info on shared session/login for multiple instances of the script
+* introducing new "0-one-file" version of the script that uses a SQLite one-file database
+
 August 9th 2013
 * 4-full-mvc-framework: application title/logo is now clickable
 * 4-full-mvc-framework: private user profile page
 * 4-full-mvc-framework: prevented access to views if user is not logged in
 * 4-full-mvc-framework: Google Chrome messes up webfonts, so switchback to Arial :(
+* 4-full-mvc-framework: public user list
+* 4-full-mvc-framework: better autoloader (LIB constant, splitting internal/external libs)
+* 4-full-mvc-framework: time delay after 3 failed logins
 
 August 8th 2013
 * 2-advanced: pull request merged: getUsername() now always returns username

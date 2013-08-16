@@ -9,14 +9,37 @@ Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions
 pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
 stay secure, even if server technology (and hacker technology!) gets much much stronger.*
 
-Available in 4 versions: 
+Available in 4 versions (plus beautiful themes/templates/user interfaces): 
 
+0. One-File version. Seriously, a full login system in one php file. Does not even need a MySQL database, the script comes
+with a full power SQLite one-file database.
 1. extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
 2. advanced (much more features)
-3. [coming up] styled/themed (same like "advanced", but with css themes, maybe js actions)
 4. full-MVC-framework (same features like 1./2./3., but professional MVC-framework code structure)
 
+Version #3, the styled version, has been dismissed to introduce a new project:
+Simple, beautiful, professional themes/templates/user interfaces for all 4 versions, packed into an independent project.
+Free to use and perfectly fitting into any version the php-login project. Simply copy into your css(/js?) folder
+and your are ready-to-go. Find the code here [coming up in the second half of 2013]: 
+https://github.com/panique/php-login-styles
+
+###LIVE-DEMOS
+
+- `0-one-file`: http://109.75.177.79:81/
+- `1-minimal`: http://109.75.177.79:82/
+- `2-advanced`: coming up
+- `4-full-mvc-framework`: http://109.75.177.79:84/
+
+Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
+Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
+mail account instead, like this one: http://trashmail.ws/
+
 ###DIFFERENT VERSIONS
+
+#####ONE-FILE VERSION (by Mark Constable)
+
+- extremely reduced to one (!) php file that handles ALL the stuff (plus a compatibility file for PHP 5.3 and 5.4)
+- uses a one-file SQLite database (that will be created automatically while installation), does not need a real MySQL database
 
 #####MINIMAL VERSION
 
@@ -51,13 +74,20 @@ In order to use this version of the script, please install a mail server by foll
 
 #####FULL-MVC-FRAMEWORK
 
-- same functions like advanced version (and currently also captchas), but totally new code/file structure
+- all the features from 2-advanced and more
+- quite professional code/file structure
 - perfect for building REAL applications
 - main feature: URL rewriting (beautiful URLs)
 - main feature: professional usage of controllers and actions
 - main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
 - main feature: mail sending via local linux mail tool OR SMTP account
 - main feature: captcha
+- main feature: user profile page
+- main feature: public user list / public profiles
+- main feature: time delay after failed logins
+- main feature: local avatars
+- main feature: remember me / keep me logged in
+- main feature: account upgrade/downgrade (for basic/premium accounts)
 - COMING UP: PDF/Tutorial that shows how to use this framework
 - COMING UP: more features
 - COMING UP: code cleanup
@@ -88,6 +118,12 @@ upper sidebar here on this page.
 
 This script has been made to run out-of-the-box. Not more config stuff than necessary.
 
+#####HOW TO INSTALL 0-ONE-FILE VERSION
+
+* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in your folder. That's it.
+* (2.) when really using this script in a live project, please select a strong password for the database, you can change
+that in the first lines on the script.
+
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
@@ -107,10 +143,11 @@ Usually this script works out-of-the-box. Simply copy the script to your server'
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
 *ON YOUR SERVER*
-* 1. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
-* 2. usually the mod_rewrite module will not work now (why?), so you have to edit
+* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775`.
+* 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
+* 3. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
-* 3. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
+* 4. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
 
 Please note: I really don't understand why it's so goddamn complicated to set up the most simple features on a linux server.
 But we have to live with that. If you keep running into problems with that mod_rewrite shit, then please send me an email, 
@@ -133,12 +170,42 @@ RewriteBase /myapp/
 * 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
+* 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 7. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
 in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
+
+###IMPORTANT NOTE REGARDING SESSION HANDLING
+
+Sessions in PHP are easy to handle, but have a tricky configuration underneath. The common opinion is, that when you
+close your browser, the session is gone. Actually, it's a little bit more complicated:
+Have a look on these 3 line in your `php.ini`:
+
+`session.gc_maxlifetime = 3600`
+`session.gc_probability = 1`
+`session.gc_divisor = 1000`
+
+`session.gc_maxlifetime` says: 3600 seconds (1 hour) after session initialization, PHP will mark this session as "outdated" and
+flag it as "ready to delete". The session still exists after 1 hour! But it's not deleted. The deletion process of all
+outdated and ready-to-delete file is called "garbage collection" (process), and it's triggered - with a specific probability - 
+when another user comes to your page. This probability is calculated by `session.gc_probability` divided by `session.gc_divisor`.
+Yeah, a little bit weird, but the people behind PHP have thought about this, and there are reasons for this behaviour.
+
+Have a look on this excellent answer on StackOverflow to read more about this topic: 
+[How do I expire a PHP session after 30 minutes?](http://stackoverflow.com/a/1270960/1114320).
+For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
+PHP's session gargabe collector process ;)
+
+###IF YOU WANT TO KNOW MORE ABOUT THE PHP 5.5 (and 5.3/5.4) PASSWORD FUNCTIONS
+
+1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](https://github.com/panique/php-login/wiki/A-little-guideline-on-how-to-use-the-PHP-5.5-password-hashing-functions-and-it%27s-%22library-plugin%22-based-PHP-5.3-&-5.4-implementation) 
+2. [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
+3. [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
+
+You can find all them in the project's [github wiki](https://github.com/panique/php-login/wiki).
 
 ###REQUIREMENTS / TROUBLESHOOTING
 
@@ -163,6 +230,12 @@ this. For your own security: Please don't use several years old versions of PHP 
 for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
 active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
 
+###USEFUL STUFF
+
+* If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
+in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
+there's a nice solution: https://github.com/panique/php-login/issues/82
+
 ###MORE INFO IN THE WIKI
 
 See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
@@ -177,6 +250,11 @@ and safer to use other things. You can find the official info on those functions
 
 I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
 MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
+
+Another very big Thanks to Mark Constable for creating the awesome 0-one-file version of the script. It's unbelievable
+what powerful things you can create within ONE short and readable file!
+
+Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping function.
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 

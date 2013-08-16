@@ -12,7 +12,7 @@ class Login_Model extends Model
 
     public function __construct() {
         
-            parent::__construct();
+        parent::__construct();
             
     }
 
@@ -20,7 +20,14 @@ class Login_Model extends Model
         
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
-            $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active 
+            $sth = $this->db->prepare("SELECT user_id, 
+                                              user_name, 
+                                              user_email, 
+                                              user_password_hash, 
+                                              user_active, 
+                                              user_account_type,
+                                              user_failed_logins, 
+                                              user_last_failed_login  
                                        FROM users
                                        WHERE user_name = :user_name ;");
             $sth->execute(array(':user_name' => $_POST['user_name']));
@@ -28,9 +35,16 @@ class Login_Model extends Model
             $count =  $sth->rowCount();
             if ($count == 1) {
 
-                    // fetch one row (we only have one result)
-                    $result = $sth->fetch();
-
+                // fetch one row (we only have one result)
+                $result = $sth->fetch();
+                
+                if ( ($result->user_failed_logins >= 2) && ($result->user_last_failed_login > (time()-30)) ) {
+                    
+                    $this->errors[] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
+                    return false;                    
+                    
+                } else {
+                    
                     if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
                         if ($result->user_active == 1) {
@@ -41,46 +55,102 @@ class Login_Model extends Model
                             Session::set('user_id', $result->user_id);
                             Session::set('user_name', $result->user_name);
                             Session::set('user_email', $result->user_email);
+                            Session::set('user_account_type', $result->user_account_type);                            
                             
+                            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
                             // call the setGravatarImageUrl() method which writes gravatar urls into the session
                             $this->setGravatarImageUrl($result->user_email);
+
+                            // reset the failed login counter for that user
+                            $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
+                            $sth->execute(array(':user_id' => $result->user_id));                           
                             
-                            //header('location: ../dashboard');
+                            // if user has check the "remember me" checkbox, then write cookie
+                            if (isset($_POST['user_rememberme'])) {
+                                
+                                // generate 64 char random string
+                                $random_token_string = hash('sha256', mt_rand());
+                                
+                                $sth = $this->db->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
+                                $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $result->user_id));
+                                
+                                // generate cookie string that consists of userid, randomstring and combined hash of both
+                                $cookie_string_first_part = $result->user_id . ':' . $random_token_string;
+                                $cookie_string_hash = hash('sha256', $cookie_string_first_part);        
+                                $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;        
+
+                                // set cookie
+                                
+                                //echo COOKIE_RUNTIME;
+                                //echo COOKIE_DOMAIN;
+                                //exit;
+                                
+                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
+                                
+                            }
+                            
                             return true;                                
 
                         } else {
 
-                            $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
+                            $this->errors[] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
                             return false;
 
-                        }   
-
+                        }
 
                     } else {
 
-                        $this->errors[] = "Password was wrong.";
+                        // increment the failed login counter for that user
+                        $sth = $this->db->prepare("UPDATE users "
+                                . "SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login "
+                                . "WHERE user_name = :user_name");
+                        $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
+
+                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
                         return false;
                     }
+                    
+                }
 
             } else {
-                    $this->errors[] = "This user does not exists.";
-                    return false;
+                
+                $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
+                return false;
             }
-
-            //if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
-
-
-            //$data = $sth->fetchAll();
 
         } elseif (empty($_POST['user_name'])) {
 
-            $this->errors[] = "Username field was empty.";
+            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
 
         } elseif (empty($_POST['user_password'])) {
 
-            $this->errors[] = "Password field was empty.";
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         }
 
+    }
+    
+
+    
+    /**
+     * Logout
+     */
+    public function logout() {
+
+        // set the rememberme-cookie to yesterday. 
+        // that's obivously the best practice to kill a cookie via php 
+        // @see http://stackoverflow.com/a/686166/1114320
+        setcookie('rememberme', false, time() - 3600, '/');
+        
+        // delete the session
+        Session::destroy();
+        
+        //echo "cookie deleted, session destroyed!";
+        //exit;
+        
+        // relocate to app's index page
+        //header('location: ' . URL);
     }
 	
     /**
@@ -100,7 +170,7 @@ class Login_Model extends Model
         
         if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
             
-            $this->errors[] = "Sorry, that username is the same as your current one. Please choose another one.";
+            $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
         
         } 
         // username cannot be empty and must be azAZ09 and 2-64 characters
@@ -120,7 +190,7 @@ class Login_Model extends Model
             
             if ($count == 1) {
 
-                $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
+                $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
 
             } else {
 
@@ -132,11 +202,11 @@ class Login_Model extends Model
                 if ($count == 1) {
 
                     Session::set('user_name', $this->user_name);
-                    $this->errors[] = "Your username has been changed successfully. New username is " . $this->user_name . ".";
+                    $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
 
                 } else {
 
-                    $this->errors[] = "Sorry, your chosen username renaming failed.";
+                    $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
 
                 }
 
@@ -144,7 +214,7 @@ class Login_Model extends Model
             
         } else {
             
-            $this->errors[] = "Sorry, your chosen username does not fit into the naming pattern.";
+            $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
             
         }
         
@@ -155,47 +225,87 @@ class Login_Model extends Model
      */
     public function editUserEmail() {
         
-        
-        if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
+        // email and password provided ?
+        if (!empty($_POST['user_email']) && !empty($_POST["user_password"])) {
             
-            $this->errors[] = "Sorry, that email address is the same as your current one. Please choose another one.";
-        
-        } 
-        // user mail cannot be empty and must be in email format
-        elseif (!empty($_POST['user_email']) && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-                
-            // escapin' this
-            $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-            // prevent database flooding
-            $this->user_email = substr($this->user_email, 0, 64);
-            // not really necessary, but just in case...
-            $this->user_id = $_SESSION['user_id'];
+            // check if new email is same like the old one
+            if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
 
-            $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
-            $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $this->user_id));                        
-            
-            $count =  $sth->rowCount();
-            
-            if ($count == 1) {
+                $this->errors[] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
 
-                Session::set('user_email', $this->user_email);
+            } 
+            // user mail must be in email format
+            elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
                 
-                // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                $this->setGravatarImageUrl($this->user_email);                
-                
-                $this->errors[] = "Your email address has been changed successfully. New email address is " . $this->user_email . ".";
+                // check if password is right
+                $sth = $this->db->prepare("SELECT user_id,
+                                                  user_password_hash
+                                           FROM users
+                                           WHERE user_id = :user_id");
+                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+
+                $count =  $sth->rowCount();
+                if ($count == 1) {
+
+                    // fetch one row (we only have one result)
+                    $result = $sth->fetch();
+                      
+                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
+                        
+                        // escapin' this
+                        $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+                        // prevent database flooding
+                        $this->user_email = substr($this->user_email, 0, 64);
+                        // not really necessary, but just in case...
+                        $this->user_id = $_SESSION['user_id']; // TODO: delete this line
+
+                        $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
+                        $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));                        
+
+                        $count =  $sth->rowCount();
+
+                        if ($count == 1) {
+
+                            Session::set('user_email', $this->user_email);
+
+                            // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                            $this->setGravatarImageUrl($this->user_email);                
+
+                            $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
+
+                        } else {
+
+                            $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+
+                        }
+                        
+                    } else {
+                        
+                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
+                        
+                    }
+                    
+                }
 
             } else {
 
-                $this->errors[] = "Sorry, your email changing failed.";
+                $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
 
-            }
+            }  
+            
+        } elseif (!empty($_POST['user_email'])) {
+            
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            
+        } elseif (!empty($_POST['user_password'])) {
+            
+            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
             
         } else {
             
-            $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
+            $this->errors[] = FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY;
             
-        }        
+        }
         
     } 
     
@@ -212,43 +322,43 @@ class Login_Model extends Model
         
         if (!$captcha->checkCaptcha()) {
         
-            $this->errors[] = "The entered captcha security characters were wrong!";
+            $this->errors[] = FEEDBACK_CAPTCHA_WRONG;
             
         } elseif (empty($_POST['user_name'])) {
           
-            $this->errors[] = "Empty Username";
+            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
 
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
           
-            $this->errors[] = "Empty Password";            
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;            
             
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
           
-            $this->errors[] = "Password and password repeat are not the same";   
+            $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;   
             
         } elseif (strlen($_POST['user_password_new']) < 6) {
             
-            $this->errors[] = "Password has a minimum length of 6 characters";            
+            $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;            
                         
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
             
-            $this->errors[] = "Username cannot be shorter than 2 or longer than 64 characters";
+            $this->errors[] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
                         
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             
-            $this->errors[] = "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters";
+            $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
             
         } elseif (empty($_POST['user_email'])) {
             
-            $this->errors[] = "Email cannot be empty";
+            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
             
         } elseif (strlen($_POST['user_email']) > 64) {
             
-            $this->errors[] = "Email cannot be longer than 64 characters";
+            $this->errors[] = FEEDBACK_EMAIL_TOO_LONG;
             
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             
-            $this->errors[] = "Your email address is not in a valid email format";
+            $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
         
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
@@ -260,8 +370,6 @@ class Login_Model extends Model
                   && !empty($_POST['user_password_new']) 
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
-            
-
             
                 // escapin' this, additionally removing everything that could be (html/javascript-) code
                 $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
@@ -288,7 +396,7 @@ class Login_Model extends Model
 
                 if ($count == 1) {
 
-                    $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
+                    $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
 
                 } else {
                     
@@ -311,7 +419,7 @@ class Login_Model extends Model
                         if ($this->sendVerificationEmail()) {
                             
                             // when mail has been send successfully
-                            $this->messages[] = "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail.";
+                            $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
                             $this->registration_successful = true;
                             return true;
                             
@@ -322,23 +430,22 @@ class Login_Model extends Model
                             // @see http://www.php.net/manual/en/pdo.lastinsertid.php
                             
                             $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id ;");
-                            $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));
+                            $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));                            
                             
-                            
-                            $this->errors[] = "Sorry, we could not send you an verification mail. Your account has NOT been created.";
+                            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
 
                         }
 
                     } else {
 
-                        $this->errors[] = "Sorry, your registration failed. Please go back and try again.";
+                        $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
 
                     }
                 }            
             
         } else {
             
-            $this->errors[] = "An unknown error occured.";
+            $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
             
         }          
         
@@ -346,7 +453,7 @@ class Login_Model extends Model
         return false;
     }
     
-    /*
+    /**
      * sendVerificationEmail()
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
@@ -355,19 +462,25 @@ class Login_Model extends Model
         
         $mail = new PHPMailer;
 
+        // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
             
-            $mail->IsSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = EMAIL_SMTP_HOST;  // Specify main and backup server
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               // Enable SMTP authentication
-            $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
-            $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
-            
-            if (EMAIL_SMTP_ENCRYPTION) {
-                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
-            }            
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;  
+            $mail->Username = EMAIL_SMTP_USERNAME;                            
+            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Port = EMAIL_SMTP_PORT;       
             
         } else {
             
@@ -382,12 +495,12 @@ class Login_Model extends Model
 
         if(!$mail->Send()) {
             
-           $this->errors[] = 'Mail could not be sent due to: ' . $mail->ErrorInfo;
+           $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
            
         } else {
             
-            $this->errors[] = 'A verification mail has been sent successfully.';
+            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
             return true;
             
         }
@@ -405,17 +518,15 @@ class Login_Model extends Model
 
         if ($sth->rowCount() > 0) {
 
-            $this->errors[] = "Activation was successful! You can now log in!";
+            $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
 
         } else {
 
-            $this->errors[] = "Sorry, no such id/verification code combination here...";
+            $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
 
         }
         
-    } 
-    
-    
+    }
        
     /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
@@ -454,6 +565,190 @@ class Login_Model extends Model
         // the image url like above but with an additional <img src .. /> around
         Session::set('user_gravatar_image_tag', $url_with_tag);
         
+    }
+    
+    /**
+     * Gets the user's avatar file path
+     * @return string
+     */
+    public function getUserAvatarFilePath() {
+        
+        $sth = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
+        $sth->execute(array(':user_id' => $_SESSION['user_id']));
+
+        if ($sth->fetch()->user_has_avatar) {
+         
+            return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
+            
+        }
+        
+    }    
+    
+    public function createAvatar() {
+
+        if (!empty ($_FILES['avatar_file']['tmp_name'])) {
+        
+            // get the image width, height and mime type
+            // btw: why does PHP call this getimagesize when it gets much more than just the size ?
+            $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
+            
+            // dont handle files > 5MB
+            if ($_FILES['avatar_file']['size'] <= 5000000 ) {
+                
+                if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
+
+                    if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
+
+                        $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
+
+                        // creates a 44x44px avatar jpg file in the avatar folder
+                        // see the function defintion (also in this class) for more info on how to use
+                        $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+                        
+                        $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
+                        $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                        
+                        Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                        
+                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+
+                    } else {
+
+                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+
+                    }
+
+                } else {
+
+                    $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
+
+                }
+            
+            } else {
+                
+                $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
+                
+            } 
+        }        
+    }
+    
+    /**
+     * Resize Image
+     *
+     * Takes the source image and resizes it to the specified width & height or proportionally if crop is off.
+     * @access public
+     * @author Jay Zawrotny <jayzawrotny@gmail.com>
+     * @license Do whatever you want with it.
+     * @param string $source_image The location to the original raw image.
+     * @param string $destination_filename The location to save the new image.
+     * @param int $width The desired width of the new image
+     * @param int $height The desired height of the new image.
+     * @param int $quality The quality of the JPG to produce 1 - 100
+     * @param bool $crop Whether to crop the image or not. It always crops from the center.
+     */
+    function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true) {
+
+	if ( ! $image_data = getimagesize( $source_image ) ) {
+		return false;
+	}
+
+	switch( $image_data['mime'] ) {
+		case 'image/gif':
+			$get_func = 'imagecreatefromgif';
+			$suffix = ".gif";
+		break;
+		case 'image/jpeg';
+			$get_func = 'imagecreatefromjpeg';
+			$suffix = ".jpg";
+		break;
+		case 'image/png':
+			$get_func = 'imagecreatefrompng';
+			$suffix = ".png";
+		break;
+	}
+
+	$img_original = call_user_func( $get_func, $source_image );
+	$old_width = $image_data[0];
+	$old_height = $image_data[1];
+	$new_width = $width;
+	$new_height = $height;
+	$src_x = 0;
+	$src_y = 0;
+	$current_ratio = round( $old_width / $old_height, 2 );
+	$desired_ratio_after = round( $width / $height, 2 );
+	$desired_ratio_before = round( $height / $width, 2 );
+
+	if ( $old_width < $width || $old_height < $height ) {
+
+		 // The desired image size is bigger than the original image. 
+		 // Best not to do anything at all really.
+		return false;
+	}
+
+	// If the crop option is left on, it will take an image and best fit it
+	// so it will always come out the exact specified size.
+	if ( $crop ) {
+            
+		// create empty image of the specified size
+		$new_image = imagecreatetruecolor( $width, $height );
+
+		// Landscape Image
+		if( $current_ratio > $desired_ratio_after ) {
+			$new_width = $old_width * $height / $old_height;
+		}
+
+		// Nearly square ratio image.
+		if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
+                    
+                    if ( $old_width > $old_height ) {                        
+                        $new_height = max( $width, $height );
+                        $new_width = $old_width * $new_height / $old_height;
+                    } else {
+                        $new_height = $old_height * $width / $old_width;
+                    }
+		}
+
+		// Portrait sized image
+		if ( $current_ratio < $desired_ratio_before  ) {
+                    $new_height = $old_height * $width / $old_width;
+		}
+
+		// Find out the ratio of the original photo to it's new, thumbnail-based size
+		// for both the width and the height. It's used to find out where to crop.
+		$width_ratio = $old_width / $new_width;
+		$height_ratio = $old_height / $new_height;
+
+		// Calculate where to crop based on the center of the image
+		$src_x = floor( ( ( $new_width - $width ) / 2 ) * $width_ratio );
+		$src_y = round( ( ( $new_height - $height ) / 2 ) * $height_ratio );
+	}
+	// Don't crop the image, just resize it proportionally
+	else {
+            
+		if ( $old_width > $old_height ) {
+                    $ratio = max( $old_width, $old_height ) / max( $width, $height );
+		} else {
+                    $ratio = max( $old_width, $old_height ) / min( $width, $height );
+		}
+
+		$new_width = $old_width / $ratio;
+		$new_height = $old_height / $ratio;
+
+		$new_image = imagecreatetruecolor( $new_width, $new_height );
+	}
+
+	// Where all the real magic happens
+	imagecopyresampled( $new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height );
+
+	// Save it as a JPG File with our $destination_filename param.
+	imagejpeg( $new_image, $destination_filename, $quality  );
+
+	// Destroy the evidence!
+	imagedestroy( $new_image );
+	imagedestroy( $img_original );
+
+	// Return true because it worked and we're happy. Let the dancing commence!
+	return true;
     }
     
     /**
@@ -508,13 +803,13 @@ class Login_Model extends Model
 
                 } else {
 
-                    $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
+                    $this->errors[] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL; // maybe say something not that technical.
 
                 }                    
                 
             } else {
 
-                $this->errors[] = "This username does not exist.";
+                $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
 
             }
                 
@@ -528,19 +823,25 @@ class Login_Model extends Model
         
         $mail = new PHPMailer;
 
+        // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
             
-            $mail->IsSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = EMAIL_SMTP_HOST;  // Specify main and backup server
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               // Enable SMTP authentication
-            $mail->Username = EMAIL_SMTP_USERNAME;                            // SMTP username
-            $mail->Password = EMAIL_SMTP_PASSWORD;                           // SMTP password
-            
-            if (EMAIL_SMTP_ENCRYPTION) {
-                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                  // Enable encryption, 'ssl' also accepted            
-            }            
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;  
+            $mail->Username = EMAIL_SMTP_USERNAME;                            
+            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Port = EMAIL_SMTP_PORT;       
             
         } else {
             
@@ -557,7 +858,7 @@ class Login_Model extends Model
 
         if(!$mail->Send()) {
             
-           $this->errors[] = 'Mail could not be sent due to: ' . $mail->ErrorInfo;
+           $this->errors[] = FEEDBACK_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
            
         } else {
@@ -566,6 +867,20 @@ class Login_Model extends Model
             return true;
             
         }
+        
+        
+        
+        if(!$mail->Send()) {
+            
+           $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+           return false;
+           
+        } else {
+            
+            $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
+            return true;
+            
+        }        
         
     }    
     
@@ -600,13 +915,13 @@ class Login_Model extends Model
 
             } else {
 
-                $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
+                $this->errors[] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
                 return false;
             }
 
         } else {
 
-            $this->errors[] = "Username/Verification code combination does not exist.";
+            $this->errors[] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
             return false;
         }
         
@@ -657,24 +972,24 @@ class Login_Model extends Model
                         // check if exactly one row was successfully changed:
                         if ($sth->rowCount() == 1) {
 
-                            $this->errors[] = "Password sucessfully changed!";
+                            $this->errors[] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
                             return true;
 
                         } else {
 
-                            $this->errors[] = "Sorry, your password changing failed.";
+                            $this->errors[] = FEEDBACK_PASSWORD_CHANGE_FAILED;
 
                         }
                     
                 } else {
                     
-                    $this->errors[] = "Password too short, please request a new password reset.";
+                    $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;
                     
                 }
                 
             } else {
                 
-                $this->errors[] = "Passwords dont match, please request a new password reset.";
+                $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;
                 
             }
                 
@@ -682,6 +997,63 @@ class Login_Model extends Model
         
         // default
         return false;
+        
+    }
+    
+    /**
+     * Upgrades/downgrades the user's account
+     * Currently it's just the field user_account_type in the database that
+     * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
+     * simply increase or decrease this value to emulate an account upgrade/downgrade.
+     * 
+     * Put some more complex stuff in here, maybe a pay-process or whatever you like.
+     * 
+     */
+    public function changeAccountType() {
+        
+        if (!empty($_POST["user_account_upgrade"])) {
+            
+            // do whatever you want to upgrade the account here (pay-process etc)
+            // ....
+            
+            $sth = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
+            $sth->execute(array(':user_id' => $_SESSION["user_id"]));                                  
+
+            if ($sth->rowCount() == 1) {
+                
+                // set account type in session to 2
+                Session::set('user_account_type', 2);                
+
+                $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
+
+            } else {
+
+                $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
+
+            }
+            
+        } elseif (!empty($_POST["user_account_downgrade"])) {
+
+            // do whatever you want to downgrade the account here (pay-process etc)
+            // ....            
+            
+            $sth = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
+            $sth->execute(array(':user_id' => $_SESSION["user_id"]));  
+            
+            if ($sth->rowCount() == 1) {
+                
+                // set account type in session to 1
+                Session::set('user_account_type', 1);                
+
+                $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
+
+            } else {
+
+                $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
+
+            }         
+            
+        }
         
     }
     

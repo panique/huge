@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * This is basically a simple CRUD demonstration.
+ */
+
 class Note_Model extends Model
 {
+    public $errors = array();
+    
     public function __construct()
     {
         parent::__construct();
@@ -44,7 +50,7 @@ class Note_Model extends Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = "Database action was not successful.";
+            $this->errors[] = FEEDBACK_NOTE_CREATION_FAILED;
             return false;
         }
     }
@@ -64,7 +70,7 @@ class Note_Model extends Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = "Database action was not successful.";
+            $this->errors[] = FEEDBACK_NOTE_EDITING_FAILED;
             return false;
         }                
                 
@@ -84,7 +90,7 @@ class Note_Model extends Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = "Database action was not successful.";
+            $this->errors[] = FEEDBACK_NOTE_DELETION_FAILED;
             return false;
         }     
     }

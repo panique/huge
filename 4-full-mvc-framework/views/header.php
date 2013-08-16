@@ -27,6 +27,9 @@
             <li <?php if ($this->checkForActiveController($filename, "help")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo URL; ?>help/index">Help</a>
             </li>
+            <li <?php if ($this->checkForActiveController($filename, "overview")) { echo ' class="active" '; } ?> >
+                <a href="<?php echo URL; ?>overview/index">Overview</a>
+            </li>            
             <?php if (Session::get('user_logged_in') == true):?>
             <li <?php if ($this->checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>	
@@ -41,11 +44,20 @@
 
             <?php if (Session::get('user_logged_in') == true):?>
                 <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                    <a href="#">My Account</a>
+                    <!--<a href="#">My Account</a>-->
+                    <a href="<?php echo URL; ?>login/showprofile">My Account</a>
                     <ul class="sub-menu">
+                        <!--
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/showprofile">Show my profile</a>
-                        </li>                        
+                        </li>
+                        -->
+                        <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                            <a href="<?php echo URL; ?>login/changeaccounttype">Change account type</a>
+                        </li>                           
+                        <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                            <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
+                        </li>                          
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
                         </li>
@@ -85,7 +97,11 @@
                 </div>
                 
                 <div class="avatar">
-                    <?php echo Session::get('user_gravatar_image_tag'); ?>
+                    <?php if (USE_GRAVATARS) { ?>
+                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
+                    <?php } else { ?>
+                        <img src='<?php echo Session::get('user_avatar_file'); ?>' />
+                    <?php } ?>
                 </div>                
 
             </div>

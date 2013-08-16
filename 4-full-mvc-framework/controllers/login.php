@@ -4,6 +4,10 @@ class Login extends Controller {
 
     function __construct() {
         
+        // a little note on that (seen on StackOverflow):
+        // "As long as myChild has no constructor, the parent constructor will be called / inherited."
+        // This means wenn a class thats extends another class has a __construct, it needs to construct
+        // the parent in that constructor, like this:          
         parent::__construct();
     }
 
@@ -38,9 +42,9 @@ class Login extends Controller {
     
     function logout()
     {
-            Session::destroy();
-            header('location: ' . URL .  'login');
-            //exit;
+        $this->model->logout();
+        header('location: ' . URL);
+        //$this->view->render('login/index');
     }    
     
     function showprofile() {
@@ -89,13 +93,51 @@ class Login extends Controller {
         
         $this->view->render('login/edituseremail');        
         
-    }  
+    } 
+    
+    function uploadavatar() {
+        
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();                
+        
+        $this->view->avatar_file_path = $this->model->getUserAvatarFilePath();
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/uploadavatar');        
+    }
+    
+    function uploadavatar_action() {
+
+        $this->model->createAvatar();
+
+        // TODO: find a better solution than always doing this by hand
+        // put the errors from the login model into the view (so we can display them in the view)
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/uploadavatar');
+
+    }
+    
+    function changeaccounttype() {
+        
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();
+        $this->view->render('login/changeaccounttype');
+        
+    }
+    
+    function changeaccounttype_action() {
+        
+        $this->model->changeAccountType();
+        $this->view->errors = $this->model->errors;
+        
+        $this->view->render('login/changeaccounttype');          
+    }
 
     // register page
     function register() {    
         
-        $this->view->render('login/register');
-        
+        $this->view->render('login/register');        
     }
     
     // real registration action
@@ -111,8 +153,7 @@ class Login extends Controller {
             $this->view->render('login/index');
         } else {
             $this->view->render('login/register');
-        }
-        
+        }        
         
     }
     
@@ -124,14 +165,12 @@ class Login extends Controller {
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/verify');
-        
+        $this->view->render('login/verify');        
     }
     
     function requestpasswordreset() {
         
-        $this->view->render('login/requestpasswordreset');
-        
+        $this->view->render('login/requestpasswordreset');        
     }
     
     function requestpasswordreset_action() {
@@ -150,8 +189,7 @@ class Login extends Controller {
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $this->model->errors;
         
-        $this->view->render('login/requestpasswordreset');
-        
+        $this->view->render('login/requestpasswordreset');        
     }  
     
     function verifypasswordrequest($user_name, $verification_code) {
@@ -200,6 +238,6 @@ class Login extends Controller {
             $captcha->generateCaptcha();
             // render a img showing the characters (=the captcha)
             $captcha->showCaptcha();
-    }    
+    }   
 
 }
