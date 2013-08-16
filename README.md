@@ -125,7 +125,8 @@ that in the first lines on the script.
 * 3. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
 If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
 If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
-There's already a demo account sheme in the config.
+There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need the PHP OpenSSL module, which is usually
+preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
@@ -149,6 +150,11 @@ http://www.jarrodoberto.com/articles/2011/11/enabling-mod-rewrite-on-ubuntu
 
 And a general StackOverflow discussion about the activation of mod_rewrite (and troubleshooting) here:
 http://stackoverflow.com/q/869092/1114320
+
+If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
+If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
+There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need PHP OpenSSL module, which is usually
+preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 
 *IN THE CODE*
 
