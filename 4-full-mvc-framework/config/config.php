@@ -195,6 +195,7 @@ define("FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL", "Avatar upload was successful.");
 define("FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE", "Only JPEG and PNG files are supported.");
 define("FEEDBACK_AVATAR_UPLOAD_TOO_SMALL", "Avatar source file's width/height is too small. Needs to be 100x100 pixel minimum.");
 define("FEEDBACK_AVATAR_UPLOAD_TOO_BIG", "Avatar source file is too big. 5 Megabyte is the maximum.");
+define("FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE", "Avatar folder is not writeable. Please change this via chmod 775 or 777.");
 define("FEEDBACK_PASSWORD_RESET_TOKEN_FAIL", "Could not write token to database.");
 define("FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR", "Password reset mail could not be sent due to: ");
 define("FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL", "A password reset mail has been sent successfully.");
@@ -206,7 +207,6 @@ define("FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL", "Account upgrade was successful.")
 define("FEEDBACK_ACCOUNT_UPGRADE_FAILED", "Account upgrade failed.");
 define("FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL", "Account downgrade was successful.");
 define("FEEDBACK_ACCOUNT_DOWNGRADE_FAILED", "Account downgrade failed.");
-
 define("FEEDBACK_NOTE_CREATION_FAILED", "Note creation failed.");
 define("FEEDBACK_NOTE_EDITING_FAILED", "Note editing failed.");
 define("FEEDBACK_NOTE_DELETION_FAILED", "Note deletion failed.");
