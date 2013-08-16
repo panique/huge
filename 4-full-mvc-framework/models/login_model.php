@@ -585,51 +585,68 @@ class Login_Model extends Model
     }    
     
     public function createAvatar() {
-
-        if (!empty ($_FILES['avatar_file']['tmp_name'])) {
         
-            // get the image width, height and mime type
-            // btw: why does PHP call this getimagesize when it gets much more than just the size ?
-            $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
+        if (is_dir(AVATAR_PATH) && is_writable(AVATAR_PATH)) {
             
-            // dont handle files > 5MB
-            if ($_FILES['avatar_file']['size'] <= 5000000 ) {
-                
-                if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
+            if (!empty ($_FILES['avatar_file']['tmp_name'])) {
 
-                    if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
+                // get the image width, height and mime type
+                // btw: why does PHP call this getimagesize when it gets much more than just the size ?
+                $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
-                        $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
+                // dont handle files > 5MB
+                if ($_FILES['avatar_file']['size'] <= 5000000 ) {
 
-                        // creates a 44x44px avatar jpg file in the avatar folder
-                        // see the function defintion (also in this class) for more info on how to use
-                        $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
-                        
-                        $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
-                        $sth->execute(array(':user_id' => $_SESSION['user_id']));
-                        
-                        Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-                        
-                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+                    if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
+
+                        if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
+
+                            $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
+                            
+                            if (is_writeable($target_file_path)) {
+                                
+                                // creates a 44x44px avatar jpg file in the avatar folder
+                                // see the function defintion (also in this class) for more info on how to use
+                                $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+
+                                $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
+                                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+
+                                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+                                $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+                                
+                            } else {
+                                
+                                $this->errors[] = FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE;
+                                
+                            }
+
+                        } else {
+
+                            $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+
+                        }
 
                     } else {
 
-                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
 
                     }
 
                 } else {
 
-                    $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
+                    $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
 
-                }
+                } 
+            }  
+
+        } else {
             
-            } else {
-                
-                $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
-                
-            } 
-        }        
+            $this->errors[] = FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE;
+            
+        }
+      
     }
     
     /**
