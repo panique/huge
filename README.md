@@ -25,12 +25,12 @@ https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
 
-`0-one-file`: http://109.75.177.79:81/
-`1-minimal`: http://109.75.177.79:82/
-`2-advanced`: coming up
-`4-full-mvc-framework`: http://109.75.177.79:84/
+- `0-one-file`: http://109.75.177.79:81/
+- `1-minimal`: http://109.75.177.79:82/
+- `2-advanced`: coming up
+- `4-full-mvc-framework`: http://109.75.177.79:84/
 
-Feel free to test the scripts, and feel free to find security holes, problems and errors.
+Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
 Please note that this is just a preview, so don't misuse it.
 
 ###DIFFERENT VERSIONS
