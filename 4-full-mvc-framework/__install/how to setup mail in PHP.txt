@@ -1,0 +1,34 @@
+HOW TO SET UP A SIMPLE MAIL SERVER ON LINUX (NECESSARY FOR USING PHP'S MAIL() FUNCTION):
+
+On newly setup linux systems, PHP's mail() function will not work [but will still give back "true"],
+as there is not mailing tool installed on your server. This is really fucked up, and not really
+described in the "oh-so-good" PHP manual. I needed weeks to find out how to send mails with PHP,
+and I really think the people who are responsible for this need a kick in the ass for this,
+but here's my little tutorial:
+
+ON LINUX (Ubuntu 12.04 LTS):
+
+After you have installed Apache, PHP etc, also install sendmail:
+sudo apt-get install sendmail
+
+Type this to display the path where sendmail has been installed:
+which sendmail
+
+After that, edit the php.ini (usually in etc/php5/apache2/php.ini) and search for this line: 
+;sendmail_path = 
+
+and change it to this:
+sendmail_path = "THE SENDMAIL PATH -t -i"
+which means something like this:
+sendmail_path = "/usr/sbin/sendmail -t -i"
+
+Important: Remove the ";" in front of the line!
+Important too: Most tutorials post this line without the two ", but in my case this never worked without them.
+
+Reboot the entire server.
+
+ON WINDOWS 7/8 (for people who develop locally on a WAMP stack):
+
+I have no idea how to set up a mail server under windows, but this little tool here [http://smtp4dev.codeplex.com/]
+seems to be perfect: It makes sending mail via mail() possible, but keeps them inside the tool, so you can
+check & handle them, but they will never really leave your system. Perfect for development!

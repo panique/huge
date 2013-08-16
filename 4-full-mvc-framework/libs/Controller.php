@@ -13,6 +13,12 @@ class Controller {
         // everytime a controller is created, start a session
         // TODO: this is a singleton. should this be handled in another way ?
         Session::init();
+        
+        // if user is not logged in, try to login with cookie ("remember me" feature)        
+        if (!isset($_SESSION['user_logged_in'])) {
+            
+            Auth::loginWithCookie();
+        }        
 
         // everytime a controller is created, create a view object (that does nothing, but provides the render() method)
         $this->view = new View();
