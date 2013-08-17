@@ -7,8 +7,8 @@
  * @author Panique <panique@web.de>
  * @version 1.1
  */
-class Registration {
-
+class Registration
+{
     private     $db_connection              = null;                     // database connection   
     
     private     $user_name                  = "";                       // user's name
@@ -48,6 +48,25 @@ class Registration {
                 
             }
     }
+
+	private function databaseConnection()
+	{
+		// connection already opened
+		if ($this->db_connection != null) {
+			return true;
+		} else {
+			// create a database connection, using the constants from config/config.php		
+			try {
+				$this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
+				return true;
+
+			// If an error is catched, database connection failed
+			} catch (PDOException $e) {
+				$this->errors[] = "Database connection problem.";
+				return false;
+			}
+		}
+	}
 
     /**
      * registerNewUser()
@@ -111,15 +130,12 @@ class Registration {
             // TODO: the above check is redundant, but from a developer's perspective it makes clear
             // what exactly we want to reach to go into this if-block
 
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
+			// if database connection opened
+			if ($this->databaseConnection()) {
                
-                // escapin' this, additionally removing everything that could be (html/javascript-) code
-                $this->user_name            = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
-                $this->user_email           = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
+                // we just remove extra space
+                $this->user_name  = trim($_POST['user_name']);
+                $this->user_email = trim($_POST['user_email']);
                 
                 // no need to escape as this is only used in the hash function
                 $this->user_password = $_POST['user_password_new'];
@@ -135,9 +151,11 @@ class Registration {
                 $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                 // check if user already exists
-                $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");
+                $query_check_user_name = $this->db_connection->prepare('SELECT user_name FROM users WHERE user_name=:user_name');
+				$query_check_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+				$query_check_user_name->execute();
 
-                if ($query_check_user_name->num_rows == 1) {
+                if ($query_check_user_name->fetchColumn() != false) {
 
                     $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
 
@@ -147,12 +165,17 @@ class Registration {
                     $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
 
                     // write new users data into database
-                    $query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."', '".$this->user_activation_hash."');");
-                    
+                    $query_new_user_insert = $this->db_connection->prepare('INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES(:user_name, :user_password_hash, :user_email, :user_activation_hash)');
+					$query_new_user_insert->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+					$query_new_user_insert->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+					$query_new_user_insert->bindValue(':user_email', $this->user_email, PDO::PARAM_STR);
+					$query_new_user_insert->bindValue(':user_activation_hash', $this->user_activation_hash, PDO::PARAM_STR);
+					$query_new_user_insert->execute();
+
                     // id of new user
                     // mySQLi's insert_id property (= the last inserted row)
                     // @see php.net/manual/en/mysqli.insert-id.php
-                    $this->user_id = $this->db_connection->insert_id;
+                    $this->user_id = $this->db_connection->lastInsertId();
                     
                     if ($query_new_user_insert) {
                         
@@ -166,9 +189,10 @@ class Registration {
                         } else {
 
                             // delete this users account immediately, as we could not send a verification email
-                            // the row (which will be deleted) is identified by mySQLi's insert_id property (= the last inserted row)
-                            // @see php.net/manual/en/mysqli.insert-id.php
-                            $this->db_connection->query("DELETE FROM users WHERE user_id = '".$this->db_connection->insert_id."';");
+							$query_delete_user = $this->db_connection->prepare('DELETE FROM users WHERE user_id=:user_id');
+							$query_delete_user->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+							$query_delete_user->execute();
+							
                             $this->errors[] = "Sorry, we could not send you an verification mail. Your account has NOT been created.";
 
                         }
@@ -179,10 +203,6 @@ class Registration {
 
                     }
                 }
-
-            } else {
-
-                $this->errors[] = "Sorry, no database connection.";
 
             }
             
@@ -258,19 +278,19 @@ class Registration {
      */
     public function verifyNewUser() {
         
-        // creating a database connection
-        $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-        // if no connection errors (= working database connection)
-        if (!$this->db_connection->connect_errno) {
+		// if database connection opened
+		if ($this->databaseConnection()) {
             
-            $this->user_id = $this->db_connection->real_escape_string($_GET['id']);
-            $this->user_activation_hash = $this->db_connection->real_escape_string($_GET['verification_code']);
+            $this->user_id = intval(trim($_GET['id']));
+            $this->user_activation_hash = $_GET['verification_code'];
             
             //
-            $this->db_connection->query('UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = "'.$this->user_id.'" AND user_activation_hash = "'.$this->user_activation_hash.'";');
-            
-            if ($this->db_connection->affected_rows > 0) {
+			$query_update_user = $this->db_connection->prepare('UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash');
+			$query_update_user->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+			$query_update_user->bindValue(':user_activation_hash', $this->user_activation_hash, PDO::PARAM_STR);
+			$query_update_user->execute();
+
+            if ($query_update_user->rowCount() > 0) {
                 
                 $this->verification_successful = true;
                 $this->messages[] = "Activation was successful! You can now log in!";                
@@ -281,10 +301,6 @@ class Registration {
                 
             }
             
-        } else {
-
-            $this->errors[] = "Sorry, no database connection.";
-
         }
         
     }
