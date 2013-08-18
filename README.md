@@ -170,7 +170,7 @@ RewriteBase /myapp/
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
-* 7. Read the TUTORIAL.md file to get an idea how everything works together !
+* 8. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
 
@@ -231,7 +231,7 @@ active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.o
 
 ###USEFUL STUFF
 
-* If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
+If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
 in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
 there's a nice solution: https://github.com/panique/php-login/issues/82
 
