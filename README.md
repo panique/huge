@@ -121,12 +121,14 @@ that in the first lines on the script.
 #####HOW TO INSTALL 2-ADVANCED VERSION
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
-* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 2. change mySQL user and or mySQL password in config/config.php ("DB_USER" and "DB_PASS").
 * 3. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
 If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
 If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
 There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need the PHP OpenSSL module, which is usually
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
+* 4. change the links/etc in config/config to your needs! You need to provide the URL of your project here to link to your project from within
+verification/password reset mails.
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
