@@ -204,6 +204,7 @@ class Login {
                                     $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
                                     
                                     // TODO: this should be put into another method !?
+                                    // btw this doesn't need to be escaped as user_id comes from database and user_password_hash is directly calculated (see above)
                                     $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '$this->user_id';");
                                     
                                     if ($this->db_connection->affected_rows == 0) {
