@@ -1,6 +1,9 @@
 # CHANGE LOG #
 
 August 18th 2013
+* 4-full-mvc-framework: fixed cookie vulnerability introduced few days ago
+
+August 18th 2013
 * 2-advanced: merged config files to one file
 
 August 13th 2013
