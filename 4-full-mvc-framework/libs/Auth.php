@@ -29,11 +29,19 @@ class Auth {
         if ($cookie) {
 
             list ($user_id, $token, $hash) = explode(':', $cookie);
+
             if ($hash !== hash('sha256', $user_id . ':' . $token)) {
                 return false;
             }
+
+            // do not log in when token is empty
+            if (empty($token)) {
+                return false;
+            }
             
-            // TODO in models: check if database connection already exists !!
+            // TODO: put this into a controller/model (which is difficult as the cookie stuff needs to be done
+            // before any regular controller-action-calls)
+
             // create new database connection
             $db = new Database();
                     
@@ -48,8 +56,10 @@ class Auth {
                                         user_failed_logins, 
                                         user_last_failed_login  
                                  FROM users
-                                 WHERE user_id = :user_id");
-            $sth->execute(array(':user_id' => $user_id));
+                                 WHERE user_id = :user_id
+                                   AND user_rememberme_token = :user_rememberme_token
+                                   AND user_rememberme_token IS NOT NULL");
+            $sth->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token));
 
             $count =  $sth->rowCount();
             if ($count == 1) {
