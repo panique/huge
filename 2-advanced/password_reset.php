@@ -25,19 +25,11 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
     require_once("libraries/password_compatibility_library.php");
 }
 
-// include the configs / constants for the database connection
-require_once("config/db.php");
+// include the config
+require_once("config/config.php");
 
-// include the hashing cost factor (you can delete this line if you have never touched the cost factor,
-// the script will then use the standard value)
-require_once("config/hashing.php");
-
-// include the PHPMailer library & the mail configs
-require_once("config/email.php");
+// include the PHPMailer library
 require_once("libraries/PHPMailer.php");
-
-// include the email data for password reset mails
-require_once("config/email_passwordreset.php");
 
 // load the login class
 require_once("classes/Login.php");

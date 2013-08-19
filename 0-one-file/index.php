@@ -13,7 +13,7 @@
  * functions and/or much more complex code / file structure. buzzwords: MVC,
  * dependency injected, one shared database connection, PDO, prepared
  * statements, PSR-0/1/2 and documented in phpDocumentor style
- * 
+ *
  * To install this script, simply call index.php?a=install, a SQLite
  * one-file-database will then be created in your project folder.
  * This one-file script does not need a MySQL-database.
@@ -42,19 +42,19 @@ session_start();
 //error_log('SESSION='.var_export($_SESSION, true));
 
 echo page(init(cfg(array(
-    'title'     => 'Simple PHP Login',
-    'admin'     => 'admin',
-    'email'     => 'admin@localhost.lan',
-    'passwd'    => 'changeme',
-    'db'        => null,
-    'dbconf'    => array(
-        'host'  => 'localhost',
-        'name'  => 'users',
-        'pass'  => 'changeme',
-        'path'  => 'users.db',
-        'port'  => '3306',
-        'type'  => 'sqlite',
-        'user'  => 'root')))));
+    'title' => 'Simple PHP Login',
+    'admin' => 'admin',
+    'email' => 'admin@localhost.lan',
+    'passwd' => 'changeme',
+    'db' => null,
+    'dbconf' => array(
+        'host' => 'localhost',
+        'name' => 'users',
+        'pass' => 'changeme',
+        'path' => 'users.db',
+        'port' => '3306',
+        'type' => 'sqlite',
+        'user' => 'root')))));
 
 // public callable functions
 
@@ -62,19 +62,19 @@ function home()
 {
     return isset($_SESSION['user_logged_in']) ? '
     <p>
-      Hello, '.$_SESSION['user_name'].'. You are now logged in. Try to close
+      Hello, ' . $_SESSION['user_name'] . '. You are now logged in. Try to close
       this browser tab and open it again. Still logged in! ;)
     </p>
     <p>
       <a class="btn" href="?a=logout">Logout</a>
-    </p>': login_form();
+    </p>' : login_form();
 }
 
 function logout()
 {
     $_SESSION = array();
     $_SESSION['msg'] = "You are now logged out";
-    header('Location: '.$_SERVER['PHP_SELF']);
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit(); // TODO: should we really use exit() ?
 }
 
@@ -86,7 +86,7 @@ function login()
         if (isset($user['user_name'])) {
             if (password_verify($_POST['user_password'], $user['user_password_hash'])) {
                 create_session($user);
-                header('Location: '.$_SERVER['PHP_SELF']);
+                header('Location: ' . $_SERVER['PHP_SELF']);
                 exit();
             } else $msg = 'Wrong password';
         } else $msg = 'User does not exist';
@@ -112,7 +112,7 @@ function register()
                                             if (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
                                                 create_user();
                                                 $_SESSION['msg'] = 'You are now registered so please login';
-                                                header('Location: '.$_SERVER['PHP_SELF']);
+                                                header('Location: ' . $_SERVER['PHP_SELF']);
                                                 exit();
                                             } else $msg = 'You must provide a valid email address';
                                         } else $msg = 'Email must be less than 64 characters';
@@ -160,7 +160,7 @@ function install()
     create_user();
     $_SESSION = array();
     $_SESSION['msg'] = 'Database and default user are now installed, please login';
-    header('Location: '.$_SERVER['PHP_SELF']);
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit();
 }
 
@@ -189,14 +189,14 @@ function init($cfg)
 function page($content)
 {
     $msg = isset($_SESSION['msg']) ? '
-    <p class="msg">'.$_SESSION['msg'].'</p>' : '';
+    <p class="msg">' . $_SESSION['msg'] . '</p>' : '';
     unset($_SESSION['msg']);
 
     return '<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>'.cfg('title').'</title>
+    <title>' . cfg('title') . '</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
 body { margin: 0 auto; width: 42em; }
@@ -210,9 +210,9 @@ a { text-decoration: none; }
     </style>
   </head>
   <body>
-    <h1>'.cfg('title').'</h1>
+    <h1>' . cfg('title') . '</h1>
     <h2>(one-file version, with SQLite one-file database)</h2>
-    '.$msg.$content.'        
+    ' . $msg . $content . '
   </body>
 </html>
 ';
@@ -224,7 +224,7 @@ function login_form()
     return '
     <form method="post" action="?a=login" name="loginform">
       <label for="login_input_username">Username</label>
-      <input id="login_input_username" class="login_input" type="text" name="user_name" value="'.$user_name.'" required>
+      <input id="login_input_username" class="login_input" type="text" name="user_name" value="' . $user_name . '" required>
       <br>
       <label for="login_input_password">Password</label>
       <input id="login_input_password" class="login_input" type="password" name="user_password" autocomplete="off" required>
@@ -248,11 +248,11 @@ function register_form()
       2 to 64 characters long and the password has to be at least 6 characters.</p>
       <!-- the user name input field uses a HTML5 pattern check -->
       <label for="login_input_username">Username</label>
-      <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" value="'.$user_name.'" required>
+      <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" value="' . $user_name . '" required>
       <br>
       <!-- the email input field uses a HTML5 email type check -->
       <label for="login_input_email">Email Address</label>
-      <input id="login_input_email" class="login_input" type="email" name="user_email" value="'.$user_email.'" required>
+      <input id="login_input_email" class="login_input" type="email" name="user_email" value="' . $user_email . '" required>
       <br>
       <label for="login_input_password_new">Password</label>
       <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off">
@@ -275,14 +275,14 @@ function db_init($dbconf)
 {
     extract($dbconf);
     $dsn = $type === 'mysql'
-        ? 'mysql:host='.$host.';port='.$port.';dbname='.$name
-        : 'sqlite:'.$path;
+        ? 'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $name
+        : 'sqlite:' . $path;
     try {
         $db = new PDO($dsn, $user, $pass);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $db;
     } catch (PDOException $e) {
-        die('DB Connection failed: '.$e->getMessage());
+        die('DB Connection failed: ' . $e->getMessage());
     }
 }
 
@@ -307,13 +307,18 @@ function read_user($user)
   WHERE user_name = '$user'")->fetch(PDO::FETCH_ASSOC);
 }
 
-function update_user() {}
-function delete_user() {}
+function update_user()
+{
+}
+
+function delete_user()
+{
+}
 
 function create_session($user)
 {
     $_SESSION['user_name'] = $user['user_name'];
     $_SESSION['user_email'] = $user['user_email'];
     $_SESSION['user_logged_in'] = 1;
-    $_SESSION['msg'] = $user['user_name'].' is now logged in';
+    $_SESSION['msg'] = $user['user_name'] . ' is now logged in';
 }

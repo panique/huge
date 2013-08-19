@@ -24,6 +24,8 @@ https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
 
+**ATTENTION! DUE TO MASSIVE MAIL TRAFFIC THE DEMOS CURRENTLY DON'T SEND EMAILS ANYMORE!**
+
 - `0-one-file`: http://109.75.177.79:81/
 - `1-minimal`: http://109.75.177.79:82/
 - `2-advanced`: http://109.75.177.79:83/
@@ -121,12 +123,14 @@ that in the first lines on the script.
 #####HOW TO INSTALL 2-ADVANCED VERSION
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
-* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+* 2. change mySQL user and or mySQL password in config/config.php ("DB_USER" and "DB_PASS").
 * 3. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
 If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
 If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
 There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need the PHP OpenSSL module, which is usually
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
+* 4. change the links/etc in config/config to your needs! You need to provide the URL of your project here to link to your project from within
+verification/password reset mails.
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
@@ -168,7 +172,7 @@ RewriteBase /myapp/
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
-* 7. Read the TUTORIAL.md file to get an idea how everything works together !
+* 8. Read the TUTORIAL.md file to get an idea how everything works together !
 
 ###CONFIGURE
 
@@ -229,7 +233,7 @@ active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.o
 
 ###USEFUL STUFF
 
-* If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
+If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
 in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
 there's a nice solution: https://github.com/panique/php-login/issues/82
 
