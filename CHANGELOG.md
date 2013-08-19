@@ -2,6 +2,7 @@
 
 August 18th 2013
 * 4-full-mvc-framework: fixed cookie vulnerability introduced few days ago
+* 2-advanced: first PSR-code-convention styles implemented
 
 August 18th 2013
 * 2-advanced: merged config files to one file
