@@ -182,6 +182,7 @@ Sometimes gmail.com will not send mails anymore, usually because of:
 1. "SMTP Connect error": PHPMailer says "smtp login failed", but login is correct: Gmail.com thinks you are a spammer. You'll need to
 "unlock" your application for gmail.com by logging into your gmail account via your browser, go to http://www.google.com/accounts/DisplayUnlockCaptcha
 and then, within the next 10minutes, send an email via your app. Gmail will then white-list your app server.
+Have a look here for full explanaition: https://support.google.com/mail/answer/14257?p=client_login&rd=1
 
 2, "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
  too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
