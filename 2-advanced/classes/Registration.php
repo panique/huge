@@ -236,7 +236,7 @@ class Registration {
         $link = EMAIL_VERIFICATION_URL.'?id='.urlencode($this->user_id).'&verification_code='.urlencode($this->user_activation_hash);
         
         // the link to your register.php, please set this value in config/email_verification.php
-        $mail->Body = EMAIL_VERIFICATION_CONTENT.' <a href="'.$link.'">'.$link.'</a>';     
+        $mail->Body = EMAIL_VERIFICATION_CONTENT.' '.$link;
         
         if(!$mail->Send()) {
             
