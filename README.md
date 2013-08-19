@@ -24,6 +24,8 @@ https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
 
+**ATTENTION! DUE TO MASSIVE MAIL TRAFFIC THE DEMOS CURRENTLY DON'T SEND EMAILS ANYMORE!**
+
 - `0-one-file`: http://109.75.177.79:81/
 - `1-minimal`: http://109.75.177.79:82/
 - `2-advanced`: http://109.75.177.79:83/
