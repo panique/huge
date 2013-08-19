@@ -273,8 +273,12 @@ class Registration {
             if ($this->db_connection->affected_rows > 0) {
                 
                 $this->verification_successful = true;
-                $this->messages[] = "Activation was successful! You can now log in!";                
-                
+                $this->messages[] = "Activation was successful! You can now log in!";
+
+            } elseif($this->db_connection->errno > 0) {
+
+                $this->errors[] = "Sorry, MySQL is reporting an error. Check your configuration.";
+
             } else {
             
                 $this->errors[] = "Sorry, no such id/verification code combination here...";

@@ -124,7 +124,25 @@ class Login {
         }
         
     }    
-    
+
+	private function databaseConnection() {
+		// connection already opened
+		if ($this->db_connection != null)
+			return true;
+		else {
+			// create a database connection, using the constants from config/db.php (which we loaded in index.php)
+			$this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+			// if no connection errors (= working database connection)
+			if (!$this->db_connection->connect_errno)
+				return true;
+			// otherwise, database connection failed
+			else {
+				$this->errors[] = "Database connection problem.";
+				return false;
+			}
+		}
+	}
 
     private function loginWithSessionData() {
         
@@ -144,11 +162,8 @@ class Login {
         // if POST data (from login form) contains non-empty user_name and non-empty user_password
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
             
-            // create a database connection, using the constants from config/db.php (which we loaded in index.php)
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
+			// if database connection opened
+			if ($this->databaseConnection()) {
                 
                 // escape the POST stuff
                 $this->user_name = $this->db_connection->real_escape_string($_POST['user_name']);            
@@ -189,6 +204,7 @@ class Login {
                                     $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
                                     
                                     // TODO: this should be put into another method !?
+                                    // btw this doesn't need to be escaped as user_id comes from database and user_password_hash is directly calculated (see above)
                                     $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '$this->user_id';");
                                     
                                     if ($this->db_connection->affected_rows == 0) {
@@ -225,11 +241,8 @@ class Login {
                     $this->errors[] = "This user does not exist.";
                 }
                 
-            } else {
-                
-                $this->errors[] = "Database connection problem.";
             }
-            
+
         } elseif (empty($_POST['user_name'])) {
 
             $this->errors[] = "Username field was empty.";
@@ -278,11 +291,8 @@ class Login {
         // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
         elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
             
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
+			// if database connection opened
+			if ($this->databaseConnection()) {
 
                 // escapin' this
                 $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
@@ -314,12 +324,8 @@ class Login {
                     
                 }
                 
-            } else {
-                
-                $this->errors[] = "Sorry, no database connection.";
-                
             }
-            
+
         } else {
             
             $this->errors[] = "Sorry, your chosen username does not fit into the naming pattern.";
@@ -342,12 +348,8 @@ class Login {
         // user mail cannot be empty and must be in email format
         elseif (!empty($_POST['user_email']) && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             
-            
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
+			// if database connection opened
+			if ($this->databaseConnection()) {
                 
                 // escapin' this
                 $this->user_email = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
@@ -370,12 +372,8 @@ class Login {
 
                 }
                 
-            } else {
-                
-                $this->errors[] = "Sorry, no database connection.";
-                
             }
-            
+
         } else {
             
             $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
@@ -406,12 +404,9 @@ class Login {
                   && !empty($_POST['user_password_repeat']) 
                   && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
                         
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+			// if database connection opened
+			if ($this->databaseConnection()) {
 
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
-                        
                 // database query, getting hash of currently logged in user (to check with just provided password)
                 $check_for_right_password = $this->db_connection->query("SELECT user_password_hash FROM users WHERE user_id = '".$_SESSION['user_id']."';");
 
@@ -459,11 +454,8 @@ class Login {
                     $this->errors[] = "This user does not exist.";
                 }
                 
-            } else {
-                
-                $this->errors[] = "Database connection problem.";
-            }            
-            
+            }          
+
         }
         
     }   
@@ -500,13 +492,10 @@ class Login {
             
             // generate random hash for email password reset verification (40 char string)
             $this->user_password_reset_hash = sha1(uniqid(mt_rand(), true));
-            
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
-                
+			// if database connection opened
+			if ($this->databaseConnection()) {
+
                 // TODO: this is not totally clean, as this is just the form provided username
                 $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));                
                 $query_get_user_data = $this->db_connection->query("SELECT user_id, user_email FROM users WHERE user_name = '".$this->user_name."';");
@@ -543,11 +532,8 @@ class Login {
 
                 }
                 
-            } else {
-                
-                $this->errors[] = "Database connection problem.";
-            } 
-            
+            }
+
         }
         
         // return false (this method only returns true when the database entry has been set successfully)
@@ -614,13 +600,10 @@ class Login {
     public function checkIfEmailVerificationCodeIsValid() {
 
         if (!empty($_GET["user_name"]) && !empty($_GET["verification_code"])) {
-            
-            // creating a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
-                
+            // if database connection opened
+            if ($this->databaseConnection()) {
+
                 // TODO: this is not totally clean, as this is just the form provided username
                 $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_GET['user_name'], ENT_QUOTES));         
                 $this->user_password_reset_hash = $this->db_connection->real_escape_string(htmlentities($_GET['verification_code'], ENT_QUOTES));         
@@ -654,12 +637,9 @@ class Login {
                     $this->errors[] = "This username does not exist.";
 
                 }
-                
-            } else {
-                
-                $this->errors[] = "Database connection problem.";
-            } 
-            
+
+            }
+
         } else {
             
             $this->errors[] = "Empty link parameter data.";
@@ -684,11 +664,8 @@ class Login {
          
                 if (strlen($_POST['user_password_new']) >= 6) {
                     
-                    // creating a database connection
-                    $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-                    // if no connection errors (= working database connection)
-                    if (!$this->db_connection->connect_errno) {
+                    // if database connection opened
+                    if ($this->databaseConnection()) {
 
                         // escapin' this, additionally removing everything that could be (html/javascript-) code
                         $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
@@ -727,13 +704,8 @@ class Login {
 
                         }
 
-
-                    } else {
-
-                        $this->errors[] = "Sorry, no database connection.";
-
                     }
-                    
+
                 } else {
                     
                     $this->errors[] = "Password too short, please request a new password reset.";

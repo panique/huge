@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Configuration file for: Database Connection 
+ * Configuration file for: Database Connection
  * This is the place where your database login constants are saved
- * 
+ *
  * For more info about constants please @see http://php.net/manual/en/function.define.php
  * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/q/2447791/1114320
  */
@@ -16,7 +16,9 @@ define("DB_HOST", "127.0.0.1");
 define("DB_NAME", "login");
 
 /** user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT.
-/** By the way, it's bad style to use "root", but for development it will work */
+ * by the way, it's bad style to use "root". In a real application you should create a database user
+ * that fits your needs.
+ */
 define("DB_USER", "root");
 
 /** The password of the above user */
