@@ -174,6 +174,20 @@ then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 8. Read the TUTORIAL.md file to get an idea how everything works together !
 
+###IMPORTANT NOTICE WHEN USING GMAIL.COM AS SMTP MAIL SERVICE
+
+Gmail is very popular as an SMTP mail sending service and would perfectly fit for small projects, but
+Sometimes gmail.com will not send mails anymore, usually because of:
+
+1. "SMTP Connect error": PHPMailer says "smtp login failed", but login is correct: Gmail.com thinks you are a spammer. You'll need to
+"unlock" your application for gmail.com by logging into your gmail account via your browser, go to http://www.google.com/accounts/DisplayUnlockCaptcha
+and then, within the next 10minutes, send an email via your app. Gmail will then white-list your app server.
+
+2, "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
+ too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
+
+https://support.google.com/mail/answer/14257?p=client_login&rd=1
+
 ###CONFIGURE
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
