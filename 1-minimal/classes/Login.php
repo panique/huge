@@ -31,7 +31,7 @@ class Login {
 
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
-        // 2. login via session data (happens each time user opens a page on your php project AFTER he has sucessfully logged in via the login form)
+        // 2. login via session data (happens each time user opens a page on your php project AFTER he has successfully logged in via the login form)
         // 3. login via post data, which means simply logging in via the login form. after the user has submit his login/password successfully, his
         //    logged-in-status is written into his session data on the server. this is the typical behaviour of common login scripts.
         

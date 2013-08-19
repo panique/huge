@@ -5,5 +5,5 @@
     Try to log out, an go to /dashboard/ again. You'll be redirected to /index/ as you are not logged in.
     ...<br/><br/>
     You can protect a whole section in your app within the according controller (here: controllers/dashboard.php)
-    by placing <span style='font-style: italic;'>Auth::handleLogin();</span> into the contructor.
+    by placing <span style='font-style: italic;'>Auth::handleLogin();</span> into the constructor.
 </div>

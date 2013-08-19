@@ -440,7 +440,7 @@ class Login {
                         // check if exactly one row was successfully changed:
                         if ($this->db_connection->affected_rows == 1) {
 
-                            $this->messages[] = "Password sucessfully changed!";
+                            $this->messages[] = "Password successfully changed!";
 
                         } else {
 
@@ -719,7 +719,7 @@ class Login {
                         if ($this->db_connection->affected_rows == 1) {
 
                             $this->password_reset_was_successful = true;
-                            $this->messages[] = "Password sucessfully changed!";
+                            $this->messages[] = "Password successfully changed!";
 
                         } else {
 
@@ -742,7 +742,7 @@ class Login {
                 
             } else {
                 
-                $this->errors[] = "Passwords dont match, please request a new password reset.";
+                $this->errors[] = "Passwords don't match, please request a new password reset.";
                 
             }
                 
@@ -805,7 +805,7 @@ class Login {
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&d=$d&r=$r&f=y";
         
-        // the image url (on gravatarr servers), will return in something like
+        // the image url (on gravatar servers), will return in something like
         // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
         // note: the url does NOT have something like .jpg
         $this->user_gravatar_image_url = $url;        

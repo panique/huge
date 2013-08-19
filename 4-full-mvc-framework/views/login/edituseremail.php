@@ -1,6 +1,6 @@
 <div class="content">
 
-    <h1>Change your email adress</h1>
+    <h1>Change your email address</h1>
 
     <?php 
 
@@ -16,7 +16,7 @@
 
     <form action="<?php echo URL; ?>login/edituseremail_action" method="post">
         
-        <label>New email adress:</label>
+        <label>New email address:</label>
         <input type="text" name="user_email" />
         
         <label>Your password (to prove it's really YOU):</label>
