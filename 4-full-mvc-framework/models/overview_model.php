@@ -65,7 +65,7 @@ class Overview_Model extends Model {
     }        
     
     /**
-     * Gets a gravatar image link from given email adress
+     * Gets a gravatar image link from given email address
      * Gravatar is the #1 (free) provider for email address based global avatar hosting.
      * The URL (or image) returns always a .jpg file !
      * For deeper info on the different parameter possibilities:

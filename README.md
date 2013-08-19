@@ -30,7 +30,7 @@ https://github.com/panique/php-login-styles
 - `4-full-mvc-framework`: http://109.75.177.79:84/
 
 Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
-Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
+Please note that this is just a preview, so don't misuse it. Also don't post your personal email address here as it will be visible! Use a trash
 mail account instead, like this one: http://trashmail.ws/
 
 ###DIFFERENT VERSIONS
@@ -48,7 +48,7 @@ mail account instead, like this one: http://trashmail.ws/
 - feature: email must be provided, email must fit email format (checked in PHP and client-side in HTML5)
 - feature: password and password repeat check need to be the same (strict php string check ===)
 - security: SQL injection prevention: everything is escaped with real_escape_string()
-- security: passwords are hashed and salted using the offical PHP 5.5 password hashing functions
+- security: passwords are hashed and salted using the official PHP 5.5 password hashing functions
 - security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
 - security: user input is cleaned, your php app is protected against XSS attacks
 
@@ -86,7 +86,7 @@ BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase 
 The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
 "Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic
 and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site,
-they are excellent and very sympathic.
+they are excellent and very friendly.
 
 *Screenshot (desktop) from the 4-full-mvc-framework:*
 
@@ -124,8 +124,8 @@ that in the first lines on the script.
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
 * 3. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
 If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
-If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
-There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need the PHP OpenSSL module, which is usually
+If you want to use SMTP mail sending, then get an SMTP account (gmail.com for example) and put your login data into the config/email.php file.
+There's already a demo account scheme in the config. To connect to a SMTP service you'll probably need the PHP OpenSSL module, which is usually
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
@@ -138,7 +138,7 @@ the config files/.htaccess like described below. Sometimes, you'll need to insta
 if there's a better way] on that folder.
 * 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 3. usually the mod_rewrite module will not work now (why?), so you have to edit
-`/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
+`/etc/apache2/sites-available/default` and change the first two occurrences of `AllowOverride None` to `AllowOverride All`
 * 4. restart your server by typing `service apache2 restart` or `/etc/init.d/apache2 restart` 
 
 Please note: I really don't understand why it's so goddamn complicated to set up the most simple features on a linux server.
@@ -152,8 +152,8 @@ And a general StackOverflow discussion about the activation of mod_rewrite (and 
 http://stackoverflow.com/q/869092/1114320
 
 If you want to use local mail sending (which is NOT recommended) then please have a look into the file "how to setup mail in PHP.txt" in the "_install" folder.
-If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for example) and put your login data into the config/email.php file.
-There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need PHP OpenSSL module, which is usually
+If you want to use SMTP mail sending, then get an SMTP account (gmail.com for example) and put your login data into the config/email.php file.
+There's already a demo account scheme in the config. To connect to a SMTP service you'll probably need PHP OpenSSL module, which is usually
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 
 *IN THE CODE*
@@ -162,7 +162,7 @@ preinstalled on php/apache2. If it's not activated, please do so by uncommenting
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
 * 3. change the LIB constant in config/config.php to the URL (not path!) of your app.
 * 4. change the RewriteBase in .htaccess to the subfolder of your web/ht_docs/www directory (not path!, not URL!) where your app is in.
-If your app is in the root of your web folder, then pleae delete this line. If it's in var/www/myapp, then your line should look like
+If your app is in the root of your web folder, then please delete this line. If it's in var/www/myapp, then your line should look like
 RewriteBase /myapp/
 * 5. Mail sending: if you are using a local mail server tool (sendmail) then you can skip this step. If you want to use an SMTP account 
 then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
@@ -194,7 +194,7 @@ Yeah, a little bit weird, but the people behind PHP have thought about this, and
 Have a look on this excellent answer on StackOverflow to read more about this topic: 
 [How do I expire a PHP session after 30 minutes?](http://stackoverflow.com/a/1270960/1114320).
 For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
-PHP's session gargabe collector process ;)
+PHP's session garbage collector process ;)
 
 ###IF YOU WANT TO KNOW MORE ABOUT THE PHP 5.5 (and 5.3/5.4) PASSWORD FUNCTIONS
 
@@ -212,7 +212,7 @@ You can find all them in the project's [github wiki](https://github.com/panique/
 * are the database connection infos in config/db.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
-* please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
+* please don't use this script if you have absolutely no idea what PHP or MySQL is. Seriously.
 * the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
 Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
 mails with an SMTP account.

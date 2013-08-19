@@ -3,7 +3,7 @@
     <h1>Change account type</h1>
     
     <p>
-        This page is a basic implementation of the upgrage-process.
+        This page is a basic implementation of the upgrade-process.
         User can click on that button to upgrade their accounts from
         "basic account" to "premium account". This script simple offers
         a clickable button that will upgrade/downgrade the account instantly.

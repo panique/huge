@@ -65,7 +65,7 @@ class Registration {
                         
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             
-            $this->errors[] = "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters";
+            $this->errors[] = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
             
         } elseif (empty($_POST['user_email'])) {
             
@@ -77,7 +77,7 @@ class Registration {
             
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             
-            $this->errors[] = "Your email adress is not in a valid email format";
+            $this->errors[] = "Your email address is not in a valid email format";
         
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
@@ -142,7 +142,7 @@ class Registration {
             
         } else {
             
-            $this->errors[] = "An unknown error occured.";
+            $this->errors[] = "An unknown error occurred.";
             
         }
         

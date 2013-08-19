@@ -139,7 +139,7 @@ class Login_Model extends Model
     public function logout() {
 
         // set the rememberme-cookie to yesterday. 
-        // that's obivously the best practice to kill a cookie via php 
+        // that's obviously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - 3600, '/');
         
@@ -550,7 +550,7 @@ class Login_Model extends Model
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&d=$d&r=$r";
         
-        // the image url (on gravatarr servers), will return in something like
+        // the image url (on gravatar servers), will return in something like
         // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
         // note: the url does NOT have something like .jpg
         Session::set('user_gravatar_image_url', $url);
@@ -594,7 +594,7 @@ class Login_Model extends Model
                 // btw: why does PHP call this getimagesize when it gets much more than just the size ?
                 $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
-                // dont handle files > 5MB
+                // don't handle files > 5MB
                 if ($_FILES['avatar_file']['size'] <= 5000000 ) {
 
                     if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
@@ -606,7 +606,7 @@ class Login_Model extends Model
                             if (is_writeable($target_file_path)) {
                                 
                                 // creates a 44x44px avatar jpg file in the avatar folder
-                                // see the function defintion (also in this class) for more info on how to use
+                                // see the function definition (also in this class) for more info on how to use
                                 $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
 
                                 $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
@@ -913,7 +913,7 @@ class Login_Model extends Model
 
             if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
 
-                // verification was sucessful
+                // verification was successful
                 return true;
 
             } else {

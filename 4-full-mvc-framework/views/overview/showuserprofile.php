@@ -7,7 +7,7 @@
     </p>
     
     <p>
-        <span style="color: red;">NOTE: be sure NOT to show email adresses of users in a real app. This is just a demo.</span>
+        <span style="color: red;">NOTE: be sure NOT to show email addresses of users in a real app. This is just a demo.</span>
         
         <table class="overview-table">
         <?php
