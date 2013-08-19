@@ -57,7 +57,8 @@ class Auth {
                                         user_last_failed_login  
                                  FROM users
                                  WHERE user_id = :user_id
-                                   AND user_rememberme_token = :user_rememberme_token");
+                                   AND user_rememberme_token = :user_rememberme_token
+                                   AND user_rememberme_token IS NOT NULL");
             $sth->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token));
 
             $count =  $sth->rowCount();
