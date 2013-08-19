@@ -50,7 +50,7 @@
         <img src="<?php echo URL; ?>login/showCaptcha" />
 
         <label>Please enter those characters</label>
-        <input type="text" name="captcha" />           
+        <input type="text" name="captcha" required />
         
         <input type="submit"  name="register" value="Register" />
         

@@ -17,10 +17,10 @@
     <form action="<?php echo URL; ?>login/login" method="post">
 
             <label>Username</label>
-            <input type="text" name="user_name" />
+            <input type="text" name="user_name" required />
             
             <label>Password</label>
-            <input type="password" name="user_password" />            
+            <input type="password" name="user_password" required />
             
             <input type="checkbox" name="user_rememberme" style="float: left; min-width: 0; margin: 3px 10px 15px 0;" />
             <label style="float:left; min-width: 0; font-size: 12px; color: #888;">Keep me logged in (for 2 weeks)</label>

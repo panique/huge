@@ -48,7 +48,7 @@ if ($registration->messages) {
     <img src="tools/showCaptcha.php" /><br/>
     
     <label>Please enter those characters</label><br/>
-    <input type="text" name="captcha" /><br/><br/>      
+    <input type="text" name="captcha" required /><br/><br/>
     
     <input type="submit"  name="register" value="Register" /><br/><br/>
     
