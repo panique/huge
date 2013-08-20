@@ -334,17 +334,17 @@ class Login_Model extends Model
 
             }
 
-        } elseif (!empty($_POST['user_email'])) {
+        } elseif (!empty($_POST['user_username'])) {
 
             $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
 
         } elseif (!empty($_POST['user_password'])) {
 
-            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
+            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
 
         } else {
 
-            $this->errors[] = FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY;
+            $this->errors[] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
 
         }
         
