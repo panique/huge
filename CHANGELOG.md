@@ -1,5 +1,10 @@
 # CHANGE LOG #
 
+August 20th 2013
+* 4-full-mvc-framework: complete rewrite of cookie handling (now clean and in mvc-structure)
+* 4-full-mvc-framework: removed avatar file write-rights check (only checking for folder)
+* 4-full-mvc-framework: put error output in view files
+
 August 18th 2013
 * 4-full-mvc-framework: fixed cookie vulnerability introduced few days ago
 * 2-advanced: first PSR-code-convention styles implemented
