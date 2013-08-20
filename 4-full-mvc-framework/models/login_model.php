@@ -257,55 +257,95 @@ class Login_Model extends Model
      * edit the user's name, provided in the editing form
      */
     public function editUserName() {
+
+        // email and password provided ?
+        if (!empty($_POST['user_name']) && !empty($_POST["user_password"])) {
         
-        if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
-            
-            $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
-        
-        } 
-        // username cannot be empty and must be azAZ09 and 2-64 characters
-        // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
-        elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
-            
-            // escapin' this
-            $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-            $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
-            $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
+            if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
 
-            // check if new username already exists
-            $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
-            $sth->execute(array(':user_name' => $this->user_name));
+                $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
 
-            $count =  $sth->rowCount();
-            
-            if ($count == 1) {
+            }
+            // username cannot be empty and must be azAZ09 and 2-64 characters
+            // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
+            elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
 
-                $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-
-            } else {
-
-                $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
-                $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));                
+                // check if password is right
+                $sth = $this->db->prepare("SELECT user_id,
+                                                  user_password_hash
+                                           FROM users
+                                           WHERE user_id = :user_id");
+                $sth->execute(array(':user_id' => $_SESSION['user_id']));
 
                 $count =  $sth->rowCount();
-
                 if ($count == 1) {
 
-                    Session::set('user_name', $this->user_name);
-                    $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+                    // fetch one row (we only have one result)
+                    $result = $sth->fetch();
 
-                } else {
+                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
-                    $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                        // escapin' this
+                        $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+                        $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
+                        $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
+
+                        // check if new username already exists
+                        $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
+                        $sth->execute(array(':user_name' => $this->user_name));
+
+                        $count =  $sth->rowCount();
+
+                        if ($count == 1) {
+
+                            $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+
+                        } else {
+
+                            $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
+                            $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));
+
+                            $count =  $sth->rowCount();
+
+                            if ($count == 1) {
+
+                                Session::set('user_name', $this->user_name);
+                                $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+
+                            } else {
+
+                                $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+
+                            }
+
+                        }
+
+                    } else {
+
+                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
+
+                    }
 
                 }
 
+            } else {
+
+                $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+
             }
-            
+
+        } elseif (!empty($_POST['user_email'])) {
+
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+
+        } elseif (!empty($_POST['user_password'])) {
+
+            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
+
         } else {
-            
-            $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-            
+
+            $this->errors[] = FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY;
+
         }
         
     }
