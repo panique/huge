@@ -113,17 +113,16 @@ class Login
     private function databaseConnection()
     {
         // connection already opened
-        if ($this->db_connection != null)
+        if ($this->db_connection != null) {
             return true;
-        else {
-            // create a database connection, using the constants from config/db.php (which we loaded in index.php)
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
+        } else {
+            // create a database connection, using the constants from config/config.php		
+            try {
+                $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
                 return true;
-            // otherwise, database connection failed
-            } else {
+
+                // If an error is catched, database connection failed
+            } catch (PDOException $e) {
                 $this->errors[] = "Database connection problem.";
                 return false;
             }
@@ -149,16 +148,15 @@ class Login
             // if database connection opened
             if ($this->databaseConnection()) {
 
-                // escape the POST stuff
-                $this->user_name = $this->db_connection->real_escape_string($_POST['user_name']);            
                 // database query, getting all the info of the selected user
-                $checklogin = $this->db_connection->query("SELECT user_id, user_name, user_email, user_password_hash, user_active FROM users WHERE user_name = '".$this->user_name."';");
+                $checklogin = $this->db_connection->prepare('SELECT user_id, user_name, user_email, user_password_hash, user_active FROM users WHERE user_name = :user_name');
+                $checklogin->bindValue(':user_name', trim($_POST['user_name']), PDO::PARAM_STR);
+                $checklogin->execute();
+                // get result row (as an object)
+                $result_row = $checklogin->fetchObject();
 
                 // if this user exists
-                if ($checklogin->num_rows == 1) {
-
-                    // get result row (as an object)
-                    $result_row = $checklogin->fetch_object();
+                if (isset($result_row->user_id)) {
 
                     // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
                     if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
@@ -173,6 +171,7 @@ class Login
 
                             // declare user id, set the login status to true
                             $this->user_id = $result_row->user_id;
+							$this->user_name = $result_row->user_name;
                             $this->user_is_logged_in = true;
 
                             // OPTIONAL: recalculate the user's password hash
@@ -188,9 +187,12 @@ class Login
                                     $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
 
                                     // TODO: this should be put into another method !?
-                                    $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '$this->user_id';");
+                                    $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
+                                    $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+                                    $query_update->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+                                    $query_update->execute();
 
-                                    if ($this->db_connection->affected_rows == 0) {
+                                    if ($query_update->rowCount() == 0) {
 
                                         // writing new hash was successful. you should now output this to the user ;)
 
@@ -274,23 +276,29 @@ class Login
             if ($this->databaseConnection()) {
 
                 // escapin' this
-                $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
-                $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
-                $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); // TODO: is this really necessary ?
+                $this->user_name = substr(trim($_POST['user_name']), 0, 64);
+                $this->user_id = intval($_SESSION['user_id']);
 
                 // check if new username already exists
-                $query_check_user_name = $this->db_connection->query("SELECT * FROM users WHERE user_name = '".$this->user_name."';");
+                $query_check_user_name = $this->db_connection->prepare('SELECT user_id FROM users WHERE user_name = :user_name');
+                $query_check_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                $query_check_user_name->execute();
+                // get result row (as an object)
+                $result_row = $query_check_user_name->fetchObject();
 
-                if ($query_check_user_name->num_rows == 1) {
+                if (isset($result_row->user_id)) {
 
                     $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
 
                 } else {
 
                     // write user's new data into database
-                    $query_edit_user_name = $this->db_connection->query("UPDATE users SET user_name = '$this->user_name' WHERE user_id = '$this->user_id';");
+                    $query_edit_user_name = $this->db_connection->prepare('UPDATE users SET user_name = :user_name WHERE user_id = :user_id');
+                    $query_edit_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                    $query_edit_user_name->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+                    $query_edit_user_name->execute();
 
-                    if ($query_edit_user_name) {
+                    if ($query_edit_user_name->rowCount()) {
 
                         $_SESSION['user_name'] = $this->user_name;
                         $this->messages[] = "Your username has been changed successfully. New username is " . $this->user_name . ".";
@@ -328,17 +336,18 @@ class Login
             // if database connection opened
             if ($this->databaseConnection()) {
 
-                // escapin' this
-                $this->user_email = $this->db_connection->real_escape_string(htmlentities($_POST['user_email'], ENT_QUOTES));
                 // prevent database flooding
-                $this->user_email = substr($this->user_email, 0, 64); 
+                $this->user_email = substr(trim($_POST['user_email']), 0, 64); 
                 // not really necessary, but just in case...
-                $this->user_id = $this->db_connection->real_escape_string($_SESSION['user_id']); 
+                $this->user_id = intval($_SESSION['user_id']);
 
                 // write users new data into database
-                $query_edit_user_email = $this->db_connection->query("UPDATE users SET user_email = '$this->user_email' WHERE user_id = '$this->user_id';");
+                $query_edit_user_email = $this->db_connection->prepare('UPDATE users SET user_email = :user_email WHERE user_id = :user_id');
+                $query_edit_user_email->bindValue(':user_email', $this->user_email, PDO::PARAM_STR);
+                $query_edit_user_email->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+                $query_edit_user_email->execute();
 
-                if ($query_edit_user_email) {
+                if ($query_edit_user_email->rowCount()) {
 
                     $_SESSION['user_email'] = $this->user_email;
                     $this->messages[] = "Your email address has been changed successfully. New email address is " . $this->user_email . ".";
@@ -383,13 +392,14 @@ class Login
             if ($this->databaseConnection()) {
 
                 // database query, getting hash of currently logged in user (to check with just provided password)
-                $check_for_right_password = $this->db_connection->query("SELECT user_password_hash FROM users WHERE user_id = '".$_SESSION['user_id']."';");
+                $check_for_right_password = $this->db_connection->prepare('SELECT user_password_hash FROM users WHERE user_id = :user_id');
+                $check_for_right_password->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $check_for_right_password->execute();
+                // get result row (as an object)
+                $result_row = $check_for_right_password->fetchObject();
 
                 // if this user exists
-                if ($check_for_right_password->num_rows == 1) {
-
-                    // get result row (as an object)
-                    $result_row = $check_for_right_password->fetch_object();
+                if (isset($result_row->user_password_hash)) {
 
                     // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
                     if (password_verify($_POST['user_password_old'], $result_row->user_password_hash)) {
@@ -405,10 +415,13 @@ class Login
                         $this->user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));                        
 
                         // write users new hash into database
-                        $this->db_connection->query("UPDATE users SET user_password_hash = '$this->user_password_hash' WHERE user_id = '".$_SESSION['user_id']."';");
+                        $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
+                        $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+                        $query_update->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                        $query_update->execute();
 
                         // check if exactly one row was successfully changed:
-                        if ($this->db_connection->affected_rows == 1) {
+                        if ($query_update->rowCount()) {
 
                             $this->messages[] = "Password sucessfully changed!";
 
@@ -469,26 +482,30 @@ class Login
             if ($this->databaseConnection()) {
 
                 // TODO: this is not totally clean, as this is just the form provided username
-                $this->user_name = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));                
-                $query_get_user_data = $this->db_connection->query("SELECT user_id, user_email FROM users WHERE user_name = '".$this->user_name."';");
+                $this->user_name = trim($_POST['user_name']); //$this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));                
+                $query_get_user_data = $this->db_connection->prepare('SELECT user_id, user_email FROM users WHERE user_name = :user_name');
+                $query_get_user_data->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                $query_get_user_data->execute();
+                // get result row (as an object)
+                $result_row = $query_get_user_data->fetchObject();
 
                 // if this user exists
-                if ($query_get_user_data->num_rows == 1) {
-
-                    // get result row (as an object)
-                    $result_user_row = $query_get_user_data->fetch_object();
+                if (isset($result_row->user_id)) {
 
                     // database query: 
-                    $this->db_connection->query("UPDATE users 
-                                                 SET user_password_reset_hash = '".$this->user_password_reset_hash."', 
-                                                     user_password_reset_timestamp = '".$temporary_timestamp."' 
-                                                 WHERE user_name = '".$this->user_name."';");
+                    $query_update = $this->db_connection->prepare('UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
+					                                               user_password_reset_timestamp = :user_password_reset_timestamp
+					                                               WHERE user_name = :user_name');
+                    $query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+					$query_update->bindValue(':user_password_reset_timestamp', $temporary_timestamp, PDO::PARAM_INT);
+                    $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                    $query_update->execute();
 
                     // check if exactly one row was successfully changed:
-                    if ($this->db_connection->affected_rows == 1) {
+                    if ($query_update->rowCount() == 1) {
 
                         // define email
-                        $this->user_email = $result_user_row->user_email;
+                        $this->user_email = $result_row->user_email;
 
                         return true;
 
@@ -576,23 +593,23 @@ class Login
             if ($this->databaseConnection()) {
 
                 // TODO: this is not totally clean, as this is just the form provided username
-                $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_GET['user_name'], ENT_QUOTES));         
-                $this->user_password_reset_hash = $this->db_connection->real_escape_string(htmlentities($_GET['verification_code'], ENT_QUOTES));         
+                $this->user_name                = trim($_GET['user_name']);
+                $this->user_password_reset_hash = $_GET['verification_code'];
 
-                $query_get_user_data = $this->db_connection->query("SELECT user_id, user_password_reset_timestamp 
-                                                                    FROM users 
-                                                                    WHERE user_name = '".$this->user_name."' 
-                                                                       && user_password_reset_hash = '".$this->user_password_reset_hash."';");
+                $query_get_user_data = $this->db_connection->prepare('SELECT user_id, user_password_reset_timestamp FROM users 
+				WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
+                $query_get_user_data->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+				$query_get_user_data->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+                $query_get_user_data->execute();
+                // get result row (as an object)
+                $result_row = $query_get_user_data->fetchObject();
 
                 // if this user exists
-                if ($query_get_user_data->num_rows == 1) {
-
-                    // get result row (as an object)
-                    $result_user_row = $query_get_user_data->fetch_object();
+                if (isset($result_row->user_id)) {
 
                     $timestamp_one_hour_ago = time() - 3600; // 3600 seconds are 1 hour
 
-                    if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
+                    if ($result_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
 
                         // set the marker to true, making it possible to show the password reset edit form view
                         $this->password_reset_link_is_valid = true;
@@ -639,9 +656,9 @@ class Login
 					if ($this->databaseConnection()) {
 
                         // escapin' this, additionally removing everything that could be (html/javascript-) code
-                        $this->user_name                = $this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));
-                        $this->user_password_reset_hash = $this->db_connection->real_escape_string(htmlentities($_POST['user_password_reset_hash'], ENT_QUOTES));
-                        
+                        $this->user_name                = trim($_POST['user_name']);
+                        $this->user_password_reset_hash = $_POST['user_password_reset_hash'];
+
                         // no need to escape as this is only used in the hash function
                         $this->user_password = $_POST['user_password_new'];
 
@@ -656,15 +673,16 @@ class Login
                         $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                         // write users new hash into database
-                        $this->db_connection->query("UPDATE users
-                                                     SET user_password_hash = '$this->user_password_hash', 
-                                                         user_password_reset_hash = NULL, 
-                                                         user_password_reset_timestamp = NULL
-                                                     WHERE user_name = '".$this->user_name."' 
-                                                        && user_password_reset_hash = '".$this->user_password_reset_hash."';");
+                        $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash, 
+                                                                      user_password_reset_hash = NULL, user_password_reset_timestamp = NULL
+                                                                      WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
+                        $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+				     	$query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+                        $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                        $query_update->execute();
 
                         // check if exactly one row was successfully changed:
-                        if ($this->db_connection->affected_rows == 1) {
+                        if ($query_update->rowCount() == 1) {
 
                             $this->password_reset_was_successful = true;
                             $this->messages[] = "Password sucessfully changed!";
