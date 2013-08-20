@@ -61,6 +61,7 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: user can request password reset ("i forgot my password" function)
 - main feature: gravatar profile pic support
 - main feature: captcha
+- main feature: PDO (instead of mysqli)
 - main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
 
 #####FULL-MVC-FRAMEWORK
@@ -224,11 +225,11 @@ You can find all them in the project's [github wiki](https://github.com/panique/
 
 * needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
-* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
-* are the database connection infos in config/db.php or config/config.php correct ?
+* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) for `1-minimal`
+* are the database connection info in config/db.php or config/config.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
-* please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
+* please don't use this script if you have absolutely no idea what PHP or MySQL is. Seriously.
 * the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
 Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
 mails with an SMTP account.

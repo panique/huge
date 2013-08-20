@@ -5,6 +5,7 @@ August 20th 2013
 * 4-full-mvc-framework: removed avatar file write-rights check (only checking for folder)
 * 4-full-mvc-framework: put error output in view files
 * 4-full-mvc-framework: route user to last visited page after re-login with cookie
+* 2-advanced: this version uses now PDO all over the script
 
 August 18th 2013
 * 4-full-mvc-framework: fixed cookie vulnerability introduced few days ago
