@@ -104,6 +104,8 @@ define("HASH_COST_FACTOR", "10");
  * 
  * An example setup for using gmail.com [Google Mail] as email sending service, 
  * works perfectly in August 2013. Change the "xxx" to your needs.
+ * Please note that there are several issues with gmail, like gmail will block your server
+ * for "spam" reasons or you'll have a daily sending limit. See the readme.md for more info.
  * 
  * define("EMAIL_USE_SMTP", true);
  * define("EMAIL_SMTP_HOST", 'ssl://smtp.gmail.com');
