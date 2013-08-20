@@ -228,7 +228,7 @@ You can find all them in the project's [github wiki](https://github.com/panique/
 * needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
 * needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
-* are the database connection infos in config/db.php correct ?
+* are the database connection infos in config/db.php or config/config.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
 * please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
