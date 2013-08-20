@@ -84,8 +84,6 @@ class Login_Model extends Model
 
                                 // set cookie
                                 setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
-                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
-                                
                             }
                             
                             return true;                                
@@ -94,7 +92,6 @@ class Login_Model extends Model
 
                             $this->errors[] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
                             return false;
-
                         }
 
                     } else {
@@ -204,6 +201,20 @@ class Login_Model extends Model
             $this->errors[] = FEEDBACK_COOKIE_INVALID;
             return false;
         }
+    }
+
+    /**
+     * @return string view/location
+     */
+    public function getCookieUrl() {
+
+        if (!empty($_COOKIE['lastvisitedpage'])) {
+            $url = $_COOKIE['lastvisitedpage'];
+        } else {
+            $url = '';
+        }
+
+        return $url;
     }
     
     /**

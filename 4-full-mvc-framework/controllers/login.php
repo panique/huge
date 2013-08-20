@@ -54,13 +54,13 @@ class Login extends Controller {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
         $login_successful = $this->model->loginWithCookie();
 
-        $this->view->errors = $this->model->errors;
+        $this->view->errors = $this->model->errors; // useless in this case
 
         if ($login_successful) {
-            // TODO: view or relocator ?
-            $this->view->render('dashboard/index');
-            // please note: this is a browser-relocator, not a rendered view
-            //header('location: ' . URL . 'dashboard/index');
+
+            $location = $this->model->getCookieUrl();
+            header('location: ' . URL . $location);
+
         } else {
             // delete the invalid cookie to prevent infinite login loops
             $this->model->deleteCookie();
