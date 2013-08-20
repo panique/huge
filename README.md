@@ -138,8 +138,7 @@ Usually this script works out-of-the-box. Simply copy the script to your server'
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
 *ON YOUR SERVER*
-* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775` or `chmod 777` [@linux guys, please correct this
-if there's a better way] on that folder.
+* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775 public/avatars` or `chmod 777 public/avatars` [depends on how you installed apache/php] on that folder.
 * 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 3. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
