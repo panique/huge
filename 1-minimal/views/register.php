@@ -1,5 +1,3 @@
-<!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
-
 <!-- errors & messages --->
 <?php
 
@@ -17,7 +15,8 @@ if ($registration->messages) {
     }
 }
 
-?>   
+?>
+<!-- errors & messages --->
 
 <!-- register form -->
 <form method="post" action="register.php" name="registerform">   
@@ -41,5 +40,3 @@ if ($registration->messages) {
 
 <!-- backlink -->
 <a href="index.php">Back to Login Page</a>
-
-<!-- this is the Simple sexy PHP Login Script. You can find it on http://www.php-login.net ! It's free and open source. -->
