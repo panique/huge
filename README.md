@@ -274,7 +274,7 @@ Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping f
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATE $10+ IF YOU REALLY USE THIS SCRIPT###
+###DONATE SOME DOLLARS IF YOU REALLY USE THIS SCRIPT###
 
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.
