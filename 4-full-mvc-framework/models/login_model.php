@@ -20,6 +20,8 @@ class Login_Model extends Model
         
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
+            // get user's data
+            // (we check if the password fits the password_hash via password_verify() some lines below)
             $sth = $this->db->prepare("SELECT user_id, 
                                               user_name, 
                                               user_email, 
@@ -81,13 +83,8 @@ class Login_Model extends Model
                                 $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;        
 
                                 // set cookie
-                                
-                                //echo COOKIE_RUNTIME;
-                                //echo COOKIE_DOMAIN;
-                                //exit;
-                                
-                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
-                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
+                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
                                 
                             }
                             
@@ -132,27 +129,109 @@ class Login_Model extends Model
     }
     
 
+    public function loginWithCookie() {
+
+        $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
+
+        if ($cookie) {
+
+            list ($user_id, $token, $hash) = explode(':', $cookie);
+
+            if ($hash !== hash('sha256', $user_id . ':' . $token)) {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+            // do not log in when token is empty
+            if (empty($token)) {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+            // get real token from database (and all other data)
+            $sth = $this->db->prepare("SELECT user_id,
+                                              user_name,
+                                              user_email,
+                                              user_password_hash,
+                                              user_active,
+                                              user_account_type,
+                                              user_has_avatar,
+                                              user_failed_logins,
+                                              user_last_failed_login
+                                         FROM users
+                                         WHERE user_id = :user_id
+                                           AND user_rememberme_token = :user_rememberme_token
+                                           AND user_rememberme_token IS NOT NULL");
+            $sth->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token));
+
+            $count =  $sth->rowCount();
+            if ($count == 1) {
+
+                // fetch one row (we only have one result)
+                $result = $sth->fetch();
+
+                // TODO: this block is same/similar to the one from login(), maybe we should put this in a method
+                // write data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result->user_id);
+                Session::set('user_name', $result->user_name);
+                Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);
+
+                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+                // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                $this->setGravatarImageUrl($result->user_email);
+
+                // NOTE: we don't set another rememberme-cookie here as the current cookie should always
+                // be invalid after a certain amount of time, so the user has to login with username/password
+                // again from time to time. This is good and safe ! ;)
+
+                $this->errors[] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
+                return true;
+
+            } else {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+        } else {
+
+            $this->errors[] = FEEDBACK_COOKIE_INVALID;
+            return false;
+        }
+    }
     
     /**
-     * Logout
+     * log out
+     * delete cookie, delete session
      */
     public function logout() {
 
-        // set the rememberme-cookie to yesterday. 
-        // that's obivously the best practice to kill a cookie via php 
+        // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
+        // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
-        setcookie('rememberme', false, time() - 3600, '/');
+        setcookie('rememberme', false, time() - (3600 * 3650), '/');
         
         // delete the session
         Session::destroy();
-        
-        //echo "cookie deleted, session destroyed!";
-        //exit;
-        
-        // relocate to app's index page
-        //header('location: ' . URL);
     }
-	
+
+    /**
+     * deletes the (invalid) remember-cookie to prevent infinitive login loops
+     */
+    public function deleteCookie() {
+
+        // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
+        // that's obivously the best practice to kill a cookie via php
+        // @see http://stackoverflow.com/a/686166/1114320
+        setcookie('rememberme', false, time() - (3600 * 3650), '/');
+    }
+
     /**
      * simply return the current state of the user's login
      * @return boolean user's login status
