@@ -71,8 +71,10 @@ p {
 
 .content {
     /*background-color: #fcfcfd;*/
+    /*
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
+    */
     padding: 45px 35px;
     /*margin:0 10px;*/
     margin: 0;
