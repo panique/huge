@@ -116,6 +116,9 @@ class Login
 
                 $this->errors[] = "Database connection problem.";
             }
+            //Fix to prevent form resubmission
+            header("Location: ".$_SERVER['REQUEST_URI']);
+		    exit();
 
         } elseif (empty($_POST['user_name'])) {
 
