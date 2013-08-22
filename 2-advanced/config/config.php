@@ -28,6 +28,7 @@ define("DB_PASS", "mysql");
  */
 define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
 define('COOKIE_DOMAIN', ''); // the domain where the cookie is valid for
+define('COOKIE_SECRET_KEY', '1gp@TMPS{+$78sfpMJFe-92s'); // use to salt cookie content and when changed, can invalidate all databases users cookies
 
 /**
  * Configuration for: Email server credentials
