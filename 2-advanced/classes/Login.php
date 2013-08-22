@@ -40,7 +40,6 @@ class Login
     /** @var array $messages Collection of success / neutral messages */
     public $messages = array();
 
-
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
@@ -53,9 +52,10 @@ class Login
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
         // 2. login via session data (happens each time user opens a page on your php project AFTER he has successfully logged in via the login form)
-        // 3. login via post data, which means simply logging in via the login form. after the user has submit his login/password successfully, his
+        // 3. login via cookie
+        // 4. login via post data, which means simply logging in via the login form. after the user has submit his login/password successfully, his
         //    logged-in-status is written into his session data on the server. this is the typical behaviour of common login scripts.
-        
+
         // if user tried to log out
         if (isset($_GET["logout"])) {
 
@@ -121,7 +121,7 @@ class Login
         if ($this->db_connection != null) {
             return true;
         } else {
-            // create a database connection, using the constants from config/config.php		
+            // create a database connection, using the constants from config/config.php
             try {
                 $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
                 return true;
@@ -151,42 +151,45 @@ class Login
 
             list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
 
-            if ($hash !== hash('sha256', $user_id . ':' . $token) || empty($token)) {
+            if ($hash == hash('sha256', $user_id . ':' . $token . COOKIE_SECRET_KEY) && !empty($token)) {
 
-                $this->errors[] = "Invalid cookie";
+                if ($this->databaseConnection()) {
 
-            } else if ($this->databaseConnection()) {
-
-                // get real token from database (and all other data)
-                $sth = $this->db_connection->prepare("SELECT user_id, user_name, user_email FROM users WHERE user_id = :user_id
+                    // get real token from database (and all other data)
+                    $sth = $this->db_connection->prepare("SELECT user_id, user_name, user_email FROM users WHERE user_id = :user_id
                                                       AND user_rememberme_token = :user_rememberme_token AND user_rememberme_token IS NOT NULL");
-                $sth->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-				$sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
-                $sth->execute();
-                // get result row (as an object)
-                $result_row = $sth->fetchObject();
+                    $sth->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+                    $sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
+                    $sth->execute();
+                    // get result row (as an object)
+                    $result_row = $sth->fetchObject();
 
-                if (isset($result_row->user_id)) {
+                    if (isset($result_row->user_id)) {
 
-                    // write user data into PHP SESSION [a file on your server]
-                    $_SESSION['user_id'] = $result_row->user_id;
-                    $_SESSION['user_name'] = $result_row->user_name;
-                    $_SESSION['user_email'] = $result_row->user_email;
-                    $_SESSION['user_logged_in'] = 1;
+                        // write user data into PHP SESSION [a file on your server]
+                        $_SESSION['user_id'] = $result_row->user_id;
+                        $_SESSION['user_name'] = $result_row->user_name;
+                        $_SESSION['user_email'] = $result_row->user_email;
+                        $_SESSION['user_logged_in'] = 1;
 
-                    // declare user id, set the login status to true
-                    $this->user_id = $result_row->user_id;
-                    $this->user_name = $result_row->user_name;
-					$this->user_email = $result_row->user_email;
-                    $this->user_is_logged_in = true;
+                        // declare user id, set the login status to true
+                        $this->user_id = $result_row->user_id;
+                        $this->user_name = $result_row->user_name;
+                        $this->user_email = $result_row->user_email;
+                        $this->user_is_logged_in = true;
 
-                } else {
-
-                    $this->errors[] = "Invalid cookie";
-
-				}
+                        // Cookie token usable only once
+                        $this->newRememberMeCookie();
+                        return true;
+                    }
+                }
             }
+
+            // A cookie has been used but is not valid... we delete it
+            $this->deleteRememberMeCookie();
+            $this->errors[] = "Invalid cookie";
         }
+        return false;
     }
 
     private function loginWithPostData()
@@ -220,25 +223,15 @@ class Login
 
                             // declare user id, set the login status to true
                             $this->user_id = $result_row->user_id;
-							$this->user_name = $result_row->user_name;
-					        $this->user_email = $result_row->user_email;
+                            $this->user_name = $result_row->user_name;
+                            $this->user_email = $result_row->user_email;
                             $this->user_is_logged_in = true;
 
-                            // if user has check the "remember me" checkbox, then write cookie
+                            // if user has check the "remember me" checkbox, then generate token and write cookie
                             if (isset($_POST['user_rememberme'])) {
 
-                                // generate 64 char random string and store it in current user data
-                                $random_token_string = hash('sha256', mt_rand());
-                                $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
-                                $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $_SESSION['user_id']));
+                                $this->newRememberMeCookie();
 
-                                // generate cookie string that consists of userid, randomstring and combined hash of both
-                                $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
-                                $cookie_string_hash = hash('sha256', $cookie_string_first_part);        
-                                $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;        
-
-                                // set cookie
-                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
                             } else {
 
                                 // Reset rememberme token
@@ -312,10 +305,26 @@ class Login
 
     }
 
-    /**
-     * perform the logout
-     */
-    public function doLogout()
+    private function newRememberMeCookie()
+    {
+        // if database connection opened
+        if ($this->databaseConnection()) {
+            // generate 64 char random string and store it in current user data
+            $random_token_string = hash('sha256', mt_rand());
+            $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
+            $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $_SESSION['user_id']));
+
+            // generate cookie string that consists of userid, randomstring and combined hash of both
+            $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
+            $cookie_string_hash = hash('sha256', $cookie_string_first_part . COOKIE_SECRET_KEY);
+            $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
+
+            // set cookie
+            setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+        }
+    }
+
+    private function deleteRememberMeCookie()
     {
         // if database connection opened
         if ($this->databaseConnection()) {
@@ -324,13 +333,21 @@ class Login
             $sth->execute(array(':user_id' => $_SESSION['user_id']));
         }
 
-        $_SESSION = array();
-        session_destroy();
-
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
         // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 3650), '/');
+    }
+
+    /**
+     * perform the logout
+     */
+    public function doLogout()
+    {
+        $this->deleteRememberMeCookie();
+
+        $_SESSION = array();
+        session_destroy();
 
         $this->user_is_logged_in = false;
         $this->messages[] = "You have been logged out.";
@@ -580,10 +597,10 @@ class Login
 
                     // database query: 
                     $query_update = $this->db_connection->prepare('UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
-					                                               user_password_reset_timestamp = :user_password_reset_timestamp
-					                                               WHERE user_name = :user_name');
+                                                                   user_password_reset_timestamp = :user_password_reset_timestamp
+                                                                   WHERE user_name = :user_name');
                     $query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
-					$query_update->bindValue(':user_password_reset_timestamp', $temporary_timestamp, PDO::PARAM_INT);
+                    $query_update->bindValue(':user_password_reset_timestamp', $temporary_timestamp, PDO::PARAM_INT);
                     $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
                     $query_update->execute();
 
@@ -683,9 +700,9 @@ class Login
                 $this->user_password_reset_hash = $_GET['verification_code'];
 
                 $query_get_user_data = $this->db_connection->prepare('SELECT user_id, user_password_reset_timestamp FROM users 
-				WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
+                WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
                 $query_get_user_data->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-				$query_get_user_data->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+                $query_get_user_data->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
                 $query_get_user_data->execute();
                 // get result row (as an object)
                 $result_row = $query_get_user_data->fetchObject();
@@ -738,8 +755,8 @@ class Login
 
                 if (strlen($_POST['user_password_new']) >= 6) {
 
-					// if database connection opened
-					if ($this->databaseConnection()) {
+                    // if database connection opened
+                    if ($this->databaseConnection()) {
 
                         // escapin' this, additionally removing everything that could be (html/javascript-) code
                         $this->user_name                = trim($_POST['user_name']);
@@ -763,7 +780,7 @@ class Login
                                                                       user_password_reset_hash = NULL, user_password_reset_timestamp = NULL
                                                                       WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
                         $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
-				     	$query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+                        $query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
                         $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
                         $query_update->execute();
 
