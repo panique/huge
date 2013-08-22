@@ -254,7 +254,7 @@ there's a nice solution: https://github.com/panique/php-login/issues/82
 
 ####Installing PHP 5.5
 
-Sweet little (3 bash commands) guideline for Ubuntu 12.04: [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS]([How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands).
+Sweet little (3 bash commands) guideline for Ubuntu 12.04: [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
 
 ###MORE INFO IN THE WIKI
 
