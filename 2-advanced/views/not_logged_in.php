@@ -26,6 +26,7 @@ if ($login->messages) {
     <input id="login_input_username" class="login_input" type="text" name="user_name" required /><br/><br/>
     <label for="login_input_password">Password</label><br/>
     <input id="login_input_password" class="login_input" type="password" name="user_password" autocomplete="off" required /><br/><br/>
+    <input type="checkbox" id="login_input_rememberme" name="user_rememberme" value="1" /> Keep me logged in (for 2 weeks)<br/><br/>
     <input type="submit"  name="login" value="Log in" /><br/><br/>
 </form>
 
