@@ -110,6 +110,8 @@ This script has been made to run out-of-the-box. Not more config stuff than nece
 
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
+A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/).
+
 * 1. call the script via `index.php?a=install`, which will create a `users.db` file right in the `database` folder. That's it.
 * (2.) when really using this script in a live project, please select a strong password for the database, you can change
 that in the first lines on the script. When renaming the database folder don't forget to change the path in the index.php
@@ -285,6 +287,12 @@ If you think this script is useful and saves you a lot of work, a lot of costs (
 then donating a small amount would be very cool.
 
 [Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
+
+###CHECK MY BLOG: DEV-METAL.COM###
+
+Have a look on my new dev blog, highly relevant to the login script ! The blog will feature installation guidelines for this script,
+insights about the current development (of php-login), masses of PHP and security stuff, lots of UI/UX related things, talks, slides,
+interviews, tutorials, and some delicious details about the Berlin startup scene.
 
 ###AVAILABLE FOR HIRE###
 
