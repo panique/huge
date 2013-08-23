@@ -62,6 +62,7 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: gravatar profile pic support
 - main feature: captcha
 - main feature: PDO (instead of mysqli)
+- main feature: remember me / keep me logged in
 - main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
 
 #####FULL-MVC-FRAMEWORK
@@ -131,6 +132,7 @@ There's already a demo account sheme in the config. To connect to a SMTP service
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 * 4. change the links/etc in config/config to your needs! You need to provide the URL of your project here to link to your project from within
 verification/password reset mails.
+* 5. in config/config.php, change COOKIE_DOMAIN to your domain name and put a personnal COOKIE_SECRET_KEY 
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
