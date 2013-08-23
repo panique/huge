@@ -235,8 +235,7 @@ class Login
                             } else {
 
                                 // Reset rememberme token
-                                $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = NULL WHERE user_id = :user_id");
-                                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                                $this->deleteRememberMeCookie();
 
                             }
 
@@ -336,7 +335,7 @@ class Login
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
         // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
-        setcookie('rememberme', false, time() - (3600 * 3650), '/');
+        setcookie('rememberme', false, time() - (3600 * 3650), '/', COOKIE_DOMAIN);
     }
 
     /**
