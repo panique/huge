@@ -22,12 +22,12 @@ define("DB_PASS", "mysql");
  * Please note: The COOKIE_DOMAIN needs the domain where your app is, 
  * in a format like this: .mydomain.com
  * Note the . in front of the domain. No www, no http, no slash here!
- * For local development .127.0.0.1 is fine, but when deploying you should
+ * For local development .127.0.0.1 or .localhost is fine, but when deploying you should
  * change this to your real domain!
  * @see php.net/manual/en/function.setcookie.php
  */
 define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
-define('COOKIE_DOMAIN', ''); // the domain where the cookie is valid for
+define('COOKIE_DOMAIN', '.127.0.0.1'); // the domain where the cookie is valid for
 define('COOKIE_SECRET_KEY', '1gp@TMPS{+$78sfpMJFe-92s'); // use to salt cookie content and when changed, can invalidate all databases users cookies
 
 /**
