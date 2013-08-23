@@ -1,0 +1,17 @@
+Please read the README.md for more information on requirements, how to install etc. or
+have a look into these blog posts explaining step by step how to set up the different versions
+of the script:
+
+0-ONE-FILE VERSION:
+http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/
+
+1-MINIMAL:
+... [coming up]
+
+2-ADVANCED:
+... [coming up]
+
+4-FULL-MVC-FRAMEWORK:
+... [coming up]
+
+You have downloaded this file from https://github.com/panique/php-login
