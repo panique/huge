@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+August 23th 2013
+* 0-one-file: moved db file to folder and blocked db folder/db file access from the outside
+
 August 20th 2013
 * 4-full-mvc-framework: complete rewrite of cookie handling (now clean and in mvc-structure)
 * 4-full-mvc-framework: removed avatar file write-rights check (only checking for folder)

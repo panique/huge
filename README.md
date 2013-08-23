@@ -110,9 +110,10 @@ This script has been made to run out-of-the-box. Not more config stuff than nece
 
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
-* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in your folder. That's it.
+* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in the `database` folder. That's it.
 * (2.) when really using this script in a live project, please select a strong password for the database, you can change
-that in the first lines on the script.
+that in the first lines on the script. When renaming the database folder don't forget to change the path in the index.php
+config also!
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
