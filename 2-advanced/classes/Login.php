@@ -115,6 +115,9 @@ class Login
 
     }
 
+    /**
+     * Checks if database connection is opened and open it if not
+     */
     private function databaseConnection()
     {
         // connection already opened
@@ -131,6 +134,29 @@ class Login
                 $this->errors[] = "Database connection problem.";
                 return false;
             }
+        }
+    }
+
+    /**
+     * Search into database for the user data of user_name specified as parameter
+     * @return user data as an object if existing user
+     * @return false if user_name is not found in the database
+     */
+    private function getUserData($user_name)
+    {
+        // if database connection opened
+        if ($this->databaseConnection()) {
+
+            // database query, getting all the info of the selected user
+            $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_name = :user_name');
+            $query_user->bindValue(':user_name', $user_name, PDO::PARAM_STR);
+            $query_user->execute();
+            // get result row (as an object)
+            return $query_user->fetchObject();
+
+		} else {
+
+            return false;
         }
     }
 
@@ -197,100 +223,87 @@ class Login
         // if POST data (from login form) contains non-empty user_name and non-empty user_password
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
-            // if database connection opened
-            if ($this->databaseConnection()) {
+            // database query, getting all the info of the selected user
+            $result_row = $this->getUserData(trim($_POST['user_name']));
 
-                // database query, getting all the info of the selected user
-                $checklogin = $this->db_connection->prepare('SELECT user_id, user_name, user_email, user_password_hash, user_active FROM users WHERE user_name = :user_name');
-                $checklogin->bindValue(':user_name', trim($_POST['user_name']), PDO::PARAM_STR);
-                $checklogin->execute();
-                // get result row (as an object)
-                $result_row = $checklogin->fetchObject();
+            // if this user exists
+            if (isset($result_row->user_id)) {
 
-                // if this user exists
-                if (isset($result_row->user_id)) {
+                // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
+                if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
 
-                    // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
-                    if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
+                    if ($result_row->user_active == 1) {
 
-                        if ($result_row->user_active == 1) {
+                        // write user data into PHP SESSION [a file on your server]
+                        $_SESSION['user_id'] = $result_row->user_id;
+                        $_SESSION['user_name'] = $result_row->user_name;
+                        $_SESSION['user_email'] = $result_row->user_email;
+                        $_SESSION['user_logged_in'] = 1;
 
-                            // write user data into PHP SESSION [a file on your server]
-                            $_SESSION['user_id'] = $result_row->user_id;
-                            $_SESSION['user_name'] = $result_row->user_name;
-                            $_SESSION['user_email'] = $result_row->user_email;
-                            $_SESSION['user_logged_in'] = 1;
+                        // declare user id, set the login status to true
+                        $this->user_id = $result_row->user_id;
+                        $this->user_name = $result_row->user_name;
+                        $this->user_email = $result_row->user_email;
+                        $this->user_is_logged_in = true;
 
-                            // declare user id, set the login status to true
-                            $this->user_id = $result_row->user_id;
-                            $this->user_name = $result_row->user_name;
-                            $this->user_email = $result_row->user_email;
-                            $this->user_is_logged_in = true;
+                        // if user has check the "remember me" checkbox, then generate token and write cookie
+                        if (isset($_POST['user_rememberme'])) {
 
-                            // if user has check the "remember me" checkbox, then generate token and write cookie
-                            if (isset($_POST['user_rememberme'])) {
+                            $this->newRememberMeCookie();
 
-                                $this->newRememberMeCookie();
+                        } else {
 
-                            } else {
+                            // Reset rememberme token
+                            $this->deleteRememberMeCookie();
 
-                                // Reset rememberme token
-                                $this->deleteRememberMeCookie();
+                        }
 
-                            }
+                        // OPTIONAL: recalculate the user's password hash
+                        // DELETE this if-block if you like, it only exists to recalculate users's hashes when you provide a cost factor,
+                        // by default the script will use a cost factor of 10 and never change it.
+                        // check if the have defined a cost factor in config/hashing.php
+                        if (defined('HASH_COST_FACTOR')) {
 
-                            // OPTIONAL: recalculate the user's password hash
-                            // DELETE this if-block if you like, it only exists to recalculate users's hashes when you provide a cost factor,
-                            // by default the script will use a cost factor of 10 and never change it.
-                            // check if the have defined a cost factor in config/hashing.php
-                            if (defined('HASH_COST_FACTOR')) {
+                            // check if the hash needs to be rehashed
+                            if (password_needs_rehash($result_row->user_password_hash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
 
-                                // check if the hash needs to be rehashed
-                                if (password_needs_rehash($result_row->user_password_hash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
+                                // calculate new hash with new cost factor
+                                $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
 
-                                    // calculate new hash with new cost factor
-                                    $this->user_password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
+                                // TODO: this should be put into another method !?
+                                $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
+                                $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+                                $query_update->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+                                $query_update->execute();
 
-                                    // TODO: this should be put into another method !?
-                                    $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
-                                    $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
-                                    $query_update->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
-                                    $query_update->execute();
-
-                                    if ($query_update->rowCount() == 0) {
-
-                                        // writing new hash was successful. you should now output this to the user ;)
-
-                                    } else {
-
-                                        // writing new hash was NOT successful. you should now output this to the user ;)
-
-                                    }
-
+                                if ($query_update->rowCount() == 0) {
+                                    // writing new hash was successful. you should now output this to the user ;)
+                                } else {
+                                    // writing new hash was NOT successful. you should now output this to the user ;)
                                 }
 
                             }
 
-                            // TO CLARIFY: in future versions of the script: should we rehash every hash with standard cost factor
-                            // when the HASH_COST_FACTOR in config/hashing.php is commented out ?                            
-
-                        } else {
-
-                            $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
-
                         }
+
+                        // TO CLARIFY: in future versions of the script: should we rehash every hash with standard cost factor
+                        // when the HASH_COST_FACTOR in config/hashing.php is commented out ?                            
 
                     } else {
 
-                        $this->errors[] = "Wrong password. Try again.";
+                        $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
 
-                    }                
+                    }
 
                 } else {
 
-                    $this->errors[] = "This user does not exist.";
-                }
+                    $this->errors[] = "Wrong password. Try again.";
 
+                }                
+
+            } else {
+
+                $this->errors[] = "This user does not exist.";
             }
 
         } elseif (empty($_POST['user_name'])) {
@@ -304,6 +317,9 @@ class Login
 
     }
 
+    /**
+     * Create all data needed for remember me cookie connection on client and server side 
+     */
     private function newRememberMeCookie()
     {
         // if database connection opened
@@ -323,6 +339,9 @@ class Login
         }
     }
 
+    /**
+     * Delete all data needed for remember me cookie connection on client and server side 
+     */
     private function deleteRememberMeCookie()
     {
         // if database connection opened
@@ -374,42 +393,33 @@ class Login
         // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
         } elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
 
-            // if database connection opened
-            if ($this->databaseConnection()) {
+            // escapin' this
+            $this->user_name = substr(trim($_POST['user_name']), 0, 64);
+            $this->user_id = intval($_SESSION['user_id']);
 
-                // escapin' this
-                $this->user_name = substr(trim($_POST['user_name']), 0, 64);
-                $this->user_id = intval($_SESSION['user_id']);
+            // check if new username already exists
+            $result_row = $this->getUserData($this->user_name);
 
-                // check if new username already exists
-                $query_check_user_name = $this->db_connection->prepare('SELECT user_id FROM users WHERE user_name = :user_name');
-                $query_check_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-                $query_check_user_name->execute();
-                // get result row (as an object)
-                $result_row = $query_check_user_name->fetchObject();
+            if (isset($result_row->user_id)) {
 
-                if (isset($result_row->user_id)) {
+                $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
 
-                    $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
+            } else {
+
+                // write user's new data into database
+                $query_edit_user_name = $this->db_connection->prepare('UPDATE users SET user_name = :user_name WHERE user_id = :user_id');
+                $query_edit_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                $query_edit_user_name->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+                $query_edit_user_name->execute();
+
+                if ($query_edit_user_name->rowCount()) {
+
+                    $_SESSION['user_name'] = $this->user_name;
+                    $this->messages[] = "Your username has been changed successfully. New username is " . $this->user_name . ".";
 
                 } else {
 
-                    // write user's new data into database
-                    $query_edit_user_name = $this->db_connection->prepare('UPDATE users SET user_name = :user_name WHERE user_id = :user_id');
-                    $query_edit_user_name->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-                    $query_edit_user_name->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
-                    $query_edit_user_name->execute();
-
-                    if ($query_edit_user_name->rowCount()) {
-
-                        $_SESSION['user_name'] = $this->user_name;
-                        $this->messages[] = "Your username has been changed successfully. New username is " . $this->user_name . ".";
-
-                    } else {
-
-                        $this->errors[] = "Sorry, your chosen username renaming failed.";
-
-                    }
+                    $this->errors[] = "Sorry, your chosen username renaming failed.";
 
                 }
 
@@ -490,60 +500,52 @@ class Login
         // all the above tests are ok
         } else {
 
-            // if database connection opened
-            if ($this->databaseConnection()) {
+            // database query, getting hash of currently logged in user (to check with just provided password)
+            $result_row = $this->getUserData($_SESSION['user_name']);
 
-                // database query, getting hash of currently logged in user (to check with just provided password)
-                $check_for_right_password = $this->db_connection->prepare('SELECT user_password_hash FROM users WHERE user_id = :user_id');
-                $check_for_right_password->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-                $check_for_right_password->execute();
-                // get result row (as an object)
-                $result_row = $check_for_right_password->fetchObject();
+            // if this user exists
+            if (isset($result_row->user_password_hash)) {
 
-                // if this user exists
-                if (isset($result_row->user_password_hash)) {
+                // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
+                if (password_verify($_POST['user_password_old'], $result_row->user_password_hash)) {
 
-                    // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
-                    if (password_verify($_POST['user_password_old'], $result_row->user_password_hash)) {
+                    // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
+                    // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
+                    $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
 
-                        // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                        // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
-                        $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+                    // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+                    // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+                    // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+                    // want the parameter: as an array with, currently only used with 'cost' => XX.
+                    $this->user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));                        
 
-                        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                        // want the parameter: as an array with, currently only used with 'cost' => XX.
-                        $this->user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));                        
+                    // write users new hash into database
+                    $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
+                    $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
+                    $query_update->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                    $query_update->execute();
 
-                        // write users new hash into database
-                        $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
-                        $query_update->bindValue(':user_password_hash', $this->user_password_hash, PDO::PARAM_STR);
-                        $query_update->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-                        $query_update->execute();
+                    // check if exactly one row was successfully changed:
+                    if ($query_update->rowCount()) {
 
-                        // check if exactly one row was successfully changed:
-                        if ($query_update->rowCount()) {
-
-                            $this->messages[] = "Password sucessfully changed!";
-
-                        } else {
-
-                            $this->errors[] = "Sorry, your password changing failed.";
-
-                        }
+                        $this->messages[] = "Password sucessfully changed!";
 
                     } else {
 
-                        $this->errors[] = "Your OLD password was wrong.";
+                        $this->errors[] = "Sorry, your password changing failed.";
 
                     }
 
                 } else {
 
-                    $this->errors[] = "This user does not exist.";
+                    $this->errors[] = "Your OLD password was wrong.";
+
                 }
 
+            } else {
+
+                $this->errors[] = "This user does not exist.";
+ 
             }
 
         }
@@ -580,48 +582,40 @@ class Login
             // generate random hash for email password reset verification (40 char string)
             $this->user_password_reset_hash = sha1(uniqid(mt_rand(), true));
 
-            // if database connection opened
-            if ($this->databaseConnection()) {
+            $this->user_name = trim($_POST['user_name']);
 
-                // TODO: this is not totally clean, as this is just the form provided username
-                $this->user_name = trim($_POST['user_name']); //$this->db_connection->real_escape_string(htmlentities($_POST['user_name'], ENT_QUOTES));                
-                $query_get_user_data = $this->db_connection->prepare('SELECT user_id, user_email FROM users WHERE user_name = :user_name');
-                $query_get_user_data->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-                $query_get_user_data->execute();
-                // get result row (as an object)
-                $result_row = $query_get_user_data->fetchObject();
+            // database query, getting all the info of the selected user
+            $result_row = $this->getUserData($this->user_name);
 
-                // if this user exists
-                if (isset($result_row->user_id)) {
+            // if this user exists
+            if (isset($result_row->user_id)) {
 
-                    // database query: 
-                    $query_update = $this->db_connection->prepare('UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
-                                                                   user_password_reset_timestamp = :user_password_reset_timestamp
-                                                                   WHERE user_name = :user_name');
-                    $query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
-                    $query_update->bindValue(':user_password_reset_timestamp', $temporary_timestamp, PDO::PARAM_INT);
-                    $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-                    $query_update->execute();
+                // database query: 
+                $query_update = $this->db_connection->prepare('UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
+                                                               user_password_reset_timestamp = :user_password_reset_timestamp
+                                                               WHERE user_name = :user_name');
+                $query_update->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
+                $query_update->bindValue(':user_password_reset_timestamp', $temporary_timestamp, PDO::PARAM_INT);
+                $query_update->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+                $query_update->execute();
 
-                    // check if exactly one row was successfully changed:
-                    if ($query_update->rowCount() == 1) {
+                // check if exactly one row was successfully changed:
+                if ($query_update->rowCount() == 1) {
 
-                        // define email
-                        $this->user_email = $result_row->user_email;
+                    // define email
+                    $this->user_email = $result_row->user_email;
 
-                        return true;
-
-                    } else {
-
-                        $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
-
-                    }
+                    return true;
 
                 } else {
 
-                    $this->errors[] = "This username does not exist.";
+                    $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
 
                 }
+
+            } else {
+
+                $this->errors[] = "This username does not exist.";
 
             }
 
@@ -691,42 +685,32 @@ class Login
     {
         if (!empty($_GET["user_name"]) && !empty($_GET["verification_code"])) {
 
-            // if database connection opened
-            if ($this->databaseConnection()) {
+            // get username and password reset hash from url
+            $this->user_name = trim($_GET['user_name']);
+            $this->user_password_reset_hash = $_GET['verification_code'];
 
-                // TODO: this is not totally clean, as this is just the form provided username
-                $this->user_name                = trim($_GET['user_name']);
-                $this->user_password_reset_hash = $_GET['verification_code'];
+            // database query, getting all the info of the selected user
+            $result_row = $this->getUserData($this->user_name);
 
-                $query_get_user_data = $this->db_connection->prepare('SELECT user_id, user_password_reset_timestamp FROM users 
-                WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
-                $query_get_user_data->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
-                $query_get_user_data->bindValue(':user_password_reset_hash', $this->user_password_reset_hash, PDO::PARAM_STR);
-                $query_get_user_data->execute();
-                // get result row (as an object)
-                $result_row = $query_get_user_data->fetchObject();
+            // if this user exists and have the same hash in database
+            if (isset($result_row->user_id) && $result_row->user_password_reset_hash == $this->user_password_reset_hash) {
 
-                // if this user exists
-                if (isset($result_row->user_id)) {
+                $timestamp_one_hour_ago = time() - 3600; // 3600 seconds are 1 hour
 
-                    $timestamp_one_hour_ago = time() - 3600; // 3600 seconds are 1 hour
+                if ($result_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
 
-                    if ($result_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
-
-                        // set the marker to true, making it possible to show the password reset edit form view
-                        $this->password_reset_link_is_valid = true;
-
-                    } else {
-
-                        $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
-
-                    }
+                    // set the marker to true, making it possible to show the password reset edit form view
+                    $this->password_reset_link_is_valid = true;
 
                 } else {
 
-                    $this->errors[] = "This username does not exist.";
+                    $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
 
                 }
+
+            } else {
+
+                $this->errors[] = "This username does not exist.";
 
             }
 
