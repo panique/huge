@@ -309,6 +309,11 @@ input[type="submit"] {
     
 }
 
+/* general */
+.clear-both {
+    clear: both;
+}
+
 
 /* overview pages */
 table.overview-table tr.inactive {
@@ -322,6 +327,17 @@ table.overview-table td {
 }
 table.overview-table td.avatar {
     padding: 0 !important;
+}
+
+/* debug helper */
+.debug-helper-box {
+    position: fixed;
+    bottom: 20px;
+    right: 0;
+    padding: 20px;
+    color: #fff;
+    background-color: red;
+    font-weight: bold;
 }
 
 
