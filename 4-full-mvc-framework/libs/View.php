@@ -17,9 +17,9 @@ class View {
             
         } else {
             
-            require 'views/header.php';
+            require 'templates/header.php';
             require 'views/' . $filename . '.php';
-            require 'views/footer.php';
+            require 'templates/footer.php';
             
         }
         
