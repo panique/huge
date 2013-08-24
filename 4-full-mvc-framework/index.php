@@ -4,8 +4,8 @@
  * A simple, clean and secure PHP Login Script
  *
  * MVC FRAMEWORK VERSION
- * Check Github for other versions
- * Check develop branch on Github for bleeding edge versions
+ * Check GitHub for other versions
+ * Check develop branch on GitHub for bleeding edge versions
  *
  * A simple PHP Login Script embedded into a small framework.
  * Uses PHP sessions, the most modern password-hashing and salting
