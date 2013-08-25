@@ -6,7 +6,7 @@ of the script:
 http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/
 
 1-MINIMAL:
-... [coming up]
+http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/
 
 2-ADVANCED:
 ... [coming up]
