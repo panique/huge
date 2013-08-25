@@ -21,7 +21,9 @@ define('URL', 'http://127.0.0.1/php-login/4-full-mvc-framework/');
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
  */
 define('LIBS', 'libs/');
-define('AVATAR_PATH', 'public/avatars/'); // dont forget to make this folder writeable via chmod 775
+// dont forget to make this folder writeable via chmod 775
+// the slash at the end is VERY important!
+define('AVATAR_PATH', 'public/avatars/');
 
 
 /**
@@ -104,6 +106,8 @@ define("HASH_COST_FACTOR", "10");
  * 
  * An example setup for using gmail.com [Google Mail] as email sending service, 
  * works perfectly in August 2013. Change the "xxx" to your needs.
+ * Please note that there are several issues with gmail, like gmail will block your server
+ * for "spam" reasons or you'll have a daily sending limit. See the readme.md for more info.
  * 
  * define("EMAIL_USE_SMTP", true);
  * define("EMAIL_SMTP_HOST", 'ssl://smtp.gmail.com');
@@ -147,13 +151,13 @@ define("EMAIL_SMTP_ENCRYPTION", 'ssl');
  * define("EMAIL_VERIFICATION_SUBJECT", "Account Activation for PROJECT XY");
  * define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account:");
  */
-define("EMAIL_PASSWORDRESET_URL", "http://127.0.0.1/php-login/4-full-mvc-framework/login/verifypasswordrequest");
+define("EMAIL_PASSWORDRESET_URL", URL . "login/verifypasswordrequest");
 define("EMAIL_PASSWORDRESET_FROM_EMAIL", "noreply@example.com");
 define("EMAIL_PASSWORDRESET_FROM_NAME", "My Project");
 define("EMAIL_PASSWORDRESET_SUBJECT", "Password reset for PROJECT XY");
 define("EMAIL_PASSWORDRESET_CONTENT", "Please click on this link to reset your password: ");
 
-define("EMAIL_VERIFICATION_URL", "http://127.0.0.1/php-login/4-full-mvc-framework/login/verify");
+define("EMAIL_VERIFICATION_URL", URL . "login/verify");
 define("EMAIL_VERIFICATION_FROM_EMAIL", "noreply@example.com");
 define("EMAIL_VERIFICATION_FROM_NAME", "My Project");
 define("EMAIL_VERIFICATION_SUBJECT", "Account Activation for PROJECT XY");
@@ -175,6 +179,7 @@ define("FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY", "Email field was empty.");
 define("FEEDBACK_USERNAME_SAME_AS_OLD_ONE", "Sorry, that username is the same as your current one. Please choose another one.");
 define("FEEDBACK_USERNAME_ALREADY_TAKEN", "Sorry, that username is already taken. Please choose another one.");
 define("FEEDBACK_USERNAME_CHANGE_SUCCESSFUL", "Your username has been changed successfully.");
+define("FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY", "Username and password fields were empty.");
 define("FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN", "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters.");
 define("FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN", "Sorry, your chosen email does not fit into the email naming pattern.");
 define("FEEDBACK_EMAIL_SAME_AS_OLD_ONE", "Sorry, that email address is the same as your current one. Please choose another one.");
@@ -210,5 +215,7 @@ define("FEEDBACK_ACCOUNT_DOWNGRADE_FAILED", "Account downgrade failed.");
 define("FEEDBACK_NOTE_CREATION_FAILED", "Note creation failed.");
 define("FEEDBACK_NOTE_EDITING_FAILED", "Note editing failed.");
 define("FEEDBACK_NOTE_DELETION_FAILED", "Note deletion failed.");
+define("FEEDBACK_COOKIE_INVALID", "Your remember-me-cookie is invalid.");
+define("FEEDBACK_COOKIE_LOGIN_SUCCESSFUL", "You were successfully logged in via the remember-me-cookie.");
 
 define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occured!");

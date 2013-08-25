@@ -1,27 +1,23 @@
 <?php
 
 /**
- * class Registration
  * handles the user registration
- *
  * @author Panique <panique@web.de>
- * @version 1.0
  */
 class Registration
 {
-
-    private $db_connection = null; // database connection
-
-    private $user_name = ""; // user's name
-    private $user_email = ""; // user's email
-    private $user_password = ""; // user's password (what comes from POST)
-    private $user_password_hash = ""; // user's hashed and salted password
+    // database connection
+    private $db_connection = null;
+    private $user_name = "";
+    private $user_email = "";
+    private $user_password = "";
+    private $user_password_hash = "";
 
     public $registration_successful = false;
-
-    public $errors = array(); // collection of error messages
-    public $messages = array(); // collection of success / neutral messages
-
+    // collection of error messages
+    public $errors = array();
+    // collection of success / neutral messages
+    public $messages = array();
 
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
@@ -38,8 +34,6 @@ class Registration
     }
 
     /**
-     * registerNewUser
-     *
      * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
      * everything is fine
      */
@@ -68,7 +62,7 @@ class Registration
 
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
 
-            $this->errors[] = "Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters";
+            $this->errors[] = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
 
         } elseif (empty($_POST['user_email'])) {
 
@@ -80,7 +74,7 @@ class Registration
 
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
 
-            $this->errors[] = "Your email adress is not in a valid email format";
+            $this->errors[] = "Your email address is not in a valid email format";
 
         } elseif (!empty($_POST['user_name'])
             && strlen($_POST['user_name']) <= 64
@@ -119,7 +113,7 @@ class Registration
 
                 if ($query_check_user_name->num_rows == 1) {
 
-                    $this->errors[] = "Sorry, that user name is already taken.<br/>Please choose another one.";
+                    $this->errors[] = "Sorry, that user name is already taken. Please choose another one.";
 
                 } else {
 
@@ -146,7 +140,7 @@ class Registration
 
         } else {
 
-            $this->errors[] = "An unknown error occured.";
+            $this->errors[] = "An unknown error occurred.";
 
         }
 

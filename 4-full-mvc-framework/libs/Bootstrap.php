@@ -83,6 +83,10 @@ class Bootstrap {
      */
     private function _loadDefaultController()
     {
+
+        // write URL cookie
+        $this->writeUrlCookie($this->_url);
+
         require $this->_controllerPath . $this->_defaultFile;
         $this->_controller = new Index();
         $this->_controller->index();
@@ -108,11 +112,11 @@ class Bootstrap {
     }
     
     /**
-     * If a method is passed in the GET url paremter
+     * If a method is passed in the GET url parameter
      * 
      *  http://localhost/controller/method/(param)/(param)/(param)
      *  url[0] = Controller
-     *  url[1] = Method
+     *  url[1] = Method (= "Action")
      *  url[2] = Param
      *  url[3] = Param
      *  url[4] = Param
@@ -129,6 +133,9 @@ class Bootstrap {
                 exit;
             }
         }
+
+        // write URL cookie
+        $this->writeUrlCookie($this->_url);
         
         // Determine what to load
         switch ($length) {
@@ -157,7 +164,23 @@ class Bootstrap {
                 break;
         }
     }
-    
+
+    /**
+     * EXPERIMENTAL!
+     * write a cookie that says where exactly the user currently is
+     * (to help finding your last location after coming back to the page)
+     */
+    private function writeUrlCookie($url_array) {
+
+        if (count($url_array) > 0) {
+            $url = implode("/", $url_array);
+        } else {
+            $url = "index";
+        }
+
+        setcookie('lastvisitedpage', $url, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+    }
+
     /**
      * Display an error page if nothing exists
      * 

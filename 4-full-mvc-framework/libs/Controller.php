@@ -14,10 +14,11 @@ class Controller {
         // TODO: this is a singleton. should this be handled in another way ?
         Session::init();
         
-        // if user is not logged in, try to login with cookie ("remember me" feature)        
-        if (!isset($_SESSION['user_logged_in'])) {
-            
-            Auth::loginWithCookie();
+        // if user is not logged in, but has a rememberme-cookie, then try to login with cookie ("remember me" feature)
+        if (!isset($_SESSION['user_logged_in']) && isset($_COOKIE['rememberme'])) {
+
+            // route user to cookie-auto-login controller/action
+            header('location: ' . URL . 'login/loginwithcookie');
         }        
 
         // everytime a controller is created, create a view object (that does nothing, but provides the render() method)
@@ -41,5 +42,4 @@ class Controller {
             $this->model = new $modelName();
         }
     }
-
 }

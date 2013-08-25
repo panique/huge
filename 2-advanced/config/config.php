@@ -18,6 +18,19 @@ define("DB_USER", "root");
 define("DB_PASS", "mysql");
 
 /**
+ * Configuration for: Cookies
+ * Please note: The COOKIE_DOMAIN needs the domain where your app is, 
+ * in a format like this: .mydomain.com
+ * Note the . in front of the domain. No www, no http, no slash here!
+ * For local development .127.0.0.1 or .localhost is fine, but when deploying you should
+ * change this to your real domain!
+ * @see php.net/manual/en/function.setcookie.php
+ */
+define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
+define('COOKIE_DOMAIN', '.127.0.0.1'); // the domain where the cookie is valid for
+define('COOKIE_SECRET_KEY', '1gp@TMPS{+$78sfpMJFe-92s'); // use to salt cookie content and when changed, can invalidate all databases users cookies
+
+/**
  * Configuration for: Email server credentials
  * 
  * Here you can define how you want to send emails.
@@ -27,7 +40,9 @@ define("DB_PASS", "mysql");
  * 
  * An example setup for using gmail.com [Google Mail] as email sending service, 
  * works perfectly in August 2013. Change the "xxx" to your needs.
- * 
+ * Please note that there are several issues with gmail, like gmail will block your server
+ * for "spam" reasons or you'll have a daily sending limit. See the readme.md for more info.
+ *
  * define("EMAIL_USE_SMTP", true);
  * define("EMAIL_SMTP_HOST", 'ssl://smtp.gmail.com');
  * define("EMAIL_SMTP_AUTH", true);

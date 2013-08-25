@@ -31,7 +31,7 @@ if ($registration->messages) {
     <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required /><br/><br/>
     
     <!-- the email input field uses a HTML5 email type check -->
-    <label for="login_input_email">User's email</label><br/>    
+    <label for="login_input_email">User's email (please provide a real email adress, you'll get a verification mail with an activation link)</label><br/>
     <input id="login_input_email" class="login_input" type="email" name="user_email" required /><br/><br/>
     
     <label for="login_input_password_new">
@@ -48,7 +48,7 @@ if ($registration->messages) {
     <img src="tools/showCaptcha.php" /><br/>
     
     <label>Please enter those characters</label><br/>
-    <input type="text" name="captcha" /><br/><br/>      
+    <input type="text" name="captcha" required /><br/><br/>
     
     <input type="submit"  name="register" value="Register" /><br/><br/>
     

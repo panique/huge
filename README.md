@@ -61,6 +61,8 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: user can request password reset ("i forgot my password" function)
 - main feature: gravatar profile pic support
 - main feature: captcha
+- main feature: PDO (instead of mysqli)
+- main feature: remember me / keep me logged in
 - main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
 
 #####FULL-MVC-FRAMEWORK
@@ -109,11 +111,16 @@ This script has been made to run out-of-the-box. Not more config stuff than nece
 
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
-* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in your folder. That's it.
+A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/).
+
+* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in the `database` folder. That's it.
 * (2.) when really using this script in a live project, please select a strong password for the database, you can change
-that in the first lines on the script.
+that in the first lines on the script. When renaming the database folder don't forget to change the path in the index.php
+config also!
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
+
+A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
@@ -129,6 +136,8 @@ There's already a demo account sheme in the config. To connect to a SMTP service
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 * 4. change the links/etc in config/config to your needs! You need to provide the URL of your project here to link to your project from within
 verification/password reset mails.
+* 5. in config/config.php, change COOKIE_DOMAIN to your domain name
+* 5. in config/config.php, change COOKIE_SECRET_KEY to something new, simply a random string that will be a unique code for your project
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
@@ -136,8 +145,7 @@ Usually this script works out-of-the-box. Simply copy the script to your server'
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
 *ON YOUR SERVER*
-* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775` or `chmod 777` [@linux guys, please correct this
-if there's a better way] on that folder.
+* 1. make your avatar folder (public/avatars) writeable by doing a `chmod 775 public/avatars` or `chmod 777 public/avatars` [depends on how you installed apache/php] on that folder.
 * 2. activate the apache module mod_rewrite by typing on the command line (on your server): `a2enmod rewrite`
 * 3. usually the mod_rewrite module will not work now (why?), so you have to edit
 `/etc/apache2/sites-available/default` and change the first two occurences of `AllowOverride None` to `AllowOverride All`
@@ -171,6 +179,21 @@ then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 6. Change the URLs, emails and texts of EMAIL_PASSWORDRESET_... and EMAIL_VERIFICATION_... to your needs.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 8. Read the TUTORIAL.md file to get an idea how everything works together !
+
+###IMPORTANT NOTICE WHEN USING GMAIL.COM AS SMTP MAIL SERVICE
+
+Gmail is very popular as an SMTP mail sending service and would perfectly fit for small projects, but
+Sometimes gmail.com will not send mails anymore, usually because of:
+
+1. "SMTP Connect error": PHPMailer says "smtp login failed", but login is correct: Gmail.com thinks you are a spammer. You'll need to
+"unlock" your application for gmail.com by logging into your gmail account via your browser, go to http://www.google.com/accounts/DisplayUnlockCaptcha
+and then, within the next 10minutes, send an email via your app. Gmail will then white-list your app server.
+Have a look here for full explanaition: https://support.google.com/mail/answer/14257?p=client_login&rd=1
+
+2, "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
+ too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
+
+https://support.google.com/mail/answer/14257?p=client_login&rd=1
 
 ###CONFIGURE
 
@@ -210,11 +233,11 @@ You can find all them in the project's [github wiki](https://github.com/panique/
 
 * needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * needs mySQL 5.1+
-* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers)
-* are the database connection infos in config/db.php correct ?
+* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) for `1-minimal`
+* are the database connection info in config/db.php or config/config.php correct ?
 * have you created a database named "login" like mentioned above ?
 * does the provided database user (standard is "root") have rights to read (and write) the database ?
-* please don't use this script if you have absolutly no idea what PHP or MySQL is. Seriously.
+* please don't use this script if you have absolutely no idea what PHP or MySQL is. Seriously.
 * the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
 Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
 mails with an SMTP account.
@@ -231,9 +254,15 @@ active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.o
 
 ###USEFUL STUFF
 
+####Multiple projects on one server that should share / not share their sessions
+
 If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
 in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
 there's a nice solution: https://github.com/panique/php-login/issues/82
+
+####Installing PHP 5.5
+
+Sweet little (3 bash commands) guideline for Ubuntu 12.04: [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
 
 ###MORE INFO IN THE WIKI
 
@@ -257,12 +286,18 @@ Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping f
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATE $10+ IF YOU REALLY USE THIS SCRIPT###
+###DONATE SOME DOLLARS IF YOU REALLY USE THIS SCRIPT###
 
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.
 
 [Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
+
+###CHECK MY BLOG: DEV-METAL.COM###
+
+Have a look on my new dev blog, highly relevant to the login script ! The blog will feature installation guidelines for this script,
+insights about the current development (of php-login), masses of PHP and security stuff, lots of UI/UX related things, talks, slides,
+interviews, tutorials, and some delicious details about the Berlin startup scene.
 
 ###AVAILABLE FOR HIRE###
 

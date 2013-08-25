@@ -1,15 +1,15 @@
 <!doctype html>
 <html>
 <head>
-	<title>Test</title>
-        <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
+	<title>My Application</title>
+    <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css" />
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/custom.js"></script>
 </head>
 <body>
     
-    <div style="position: fixed; bottom: 20px; right: 0; padding: 20px; color: #fff; background-color: red; font-weight: bold;">
+    <div class="debug-helper-box">
         DEBUG HELPER: you are in the view: <?php echo $filename; ?>
     </div>
 
@@ -107,7 +107,7 @@
             </div>
         <?php endif; ?>
 
-        <div style="clear: both;"></div>
+        <div class="clear-both"></div>
 
     </div>	
 	
