@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+August 25th 2013
+* 2-advanced: cookies / remember me feature
+* 2-advanced: registration saves ip/timestamp now
+
 August 23th 2013
 * 0-one-file: moved db file to folder and blocked db folder/db file access from the outside
 
