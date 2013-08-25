@@ -15,8 +15,13 @@
     ?>
 
     <form action="<?php echo URL; ?>login/editusername_action" method="post">
+
         <label>New username</label>
-        <input type="text" name="user_name" />
+        <input type="text" name="user_name" required />
+
+        <label>Your password (to prove it's really YOU):</label>
+        <input type="password" name="user_password" required />
+
         <input type="submit" value="Submit" />
     </form>
     

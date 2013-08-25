@@ -16,7 +16,7 @@
     
     <form action="<?php echo URL; ?>login/uploadavatar_action" method="post" enctype="multipart/form-data">
         <label for="avatar_file">Select an avatar image from your harddisk (will be scaled to 44x44 px):</label>
-        <input type="file" name="avatar_file" />
+        <input type="file" name="avatar_file" required />
         <!-- max size 5 MB (as many people directly upload high res pictures from their digicams) -->
         <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
         <input name="submit" type="submit" value="Upload image" />

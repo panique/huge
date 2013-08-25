@@ -25,7 +25,10 @@
         <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />
 
         <!-- the email input field uses a HTML5 email type check -->
-        <label for="login_input_email">User's email</label>    
+        <label for="login_input_email">
+            User's email
+            <span style="display: block; font-size: 14px; color: #999;">(please provide a <span style="text-decoration: underline; color: mediumvioletred;">real email address</span>, you'll get a verification mail with an activation link)</span>
+        </label>
         <input id="login_input_email" class="login_input" type="email" name="user_email" required />
 
         <label for="login_input_password_new">
@@ -47,7 +50,7 @@
         <img src="<?php echo URL; ?>login/showCaptcha" />
 
         <label>Please enter those characters</label>
-        <input type="text" name="captcha" />           
+        <input type="text" name="captcha" required />
         
         <input type="submit"  name="register" value="Register" />
         

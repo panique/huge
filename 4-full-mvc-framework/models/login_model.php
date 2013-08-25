@@ -20,6 +20,8 @@ class Login_Model extends Model
         
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
+            // get user's data
+            // (we check if the password fits the password_hash via password_verify() some lines below)
             $sth = $this->db->prepare("SELECT user_id, 
                                               user_name, 
                                               user_email, 
@@ -81,14 +83,7 @@ class Login_Model extends Model
                                 $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;        
 
                                 // set cookie
-                                
-                                //echo COOKIE_RUNTIME;
-                                //echo COOKIE_DOMAIN;
-                                //exit;
-                                
-                                //setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
-                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/");
-                                
+                                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
                             }
                             
                             return true;                                
@@ -97,7 +92,6 @@ class Login_Model extends Model
 
                             $this->errors[] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
                             return false;
-
                         }
 
                     } else {
@@ -132,27 +126,123 @@ class Login_Model extends Model
     }
     
 
+    public function loginWithCookie() {
+
+        $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
+
+        if ($cookie) {
+
+            list ($user_id, $token, $hash) = explode(':', $cookie);
+
+            if ($hash !== hash('sha256', $user_id . ':' . $token)) {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+            // do not log in when token is empty
+            if (empty($token)) {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+            // get real token from database (and all other data)
+            $sth = $this->db->prepare("SELECT user_id,
+                                              user_name,
+                                              user_email,
+                                              user_password_hash,
+                                              user_active,
+                                              user_account_type,
+                                              user_has_avatar,
+                                              user_failed_logins,
+                                              user_last_failed_login
+                                         FROM users
+                                         WHERE user_id = :user_id
+                                           AND user_rememberme_token = :user_rememberme_token
+                                           AND user_rememberme_token IS NOT NULL");
+            $sth->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token));
+
+            $count =  $sth->rowCount();
+            if ($count == 1) {
+
+                // fetch one row (we only have one result)
+                $result = $sth->fetch();
+
+                // TODO: this block is same/similar to the one from login(), maybe we should put this in a method
+                // write data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result->user_id);
+                Session::set('user_name', $result->user_name);
+                Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);
+
+                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+                // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                $this->setGravatarImageUrl($result->user_email);
+
+                // NOTE: we don't set another rememberme-cookie here as the current cookie should always
+                // be invalid after a certain amount of time, so the user has to login with username/password
+                // again from time to time. This is good and safe ! ;)
+
+                $this->errors[] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
+                return true;
+
+            } else {
+
+                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                return false;
+            }
+
+        } else {
+
+            $this->errors[] = FEEDBACK_COOKIE_INVALID;
+            return false;
+        }
+    }
+
+    /**
+     * @return string view/location
+     */
+    public function getCookieUrl() {
+
+        if (!empty($_COOKIE['lastvisitedpage'])) {
+            $url = $_COOKIE['lastvisitedpage'];
+        } else {
+            $url = '';
+        }
+
+        return $url;
+    }
     
     /**
-     * Logout
+     * log out
+     * delete cookie, delete session
      */
     public function logout() {
 
-        // set the rememberme-cookie to yesterday. 
-        // that's obivously the best practice to kill a cookie via php 
+        // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
+        // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
-        setcookie('rememberme', false, time() - 3600, '/');
+        setcookie('rememberme', false, time() - (3600 * 3650), '/');
         
         // delete the session
         Session::destroy();
-        
-        //echo "cookie deleted, session destroyed!";
-        //exit;
-        
-        // relocate to app's index page
-        //header('location: ' . URL);
     }
-	
+
+    /**
+     * deletes the (invalid) remember-cookie to prevent infinitive login loops
+     */
+    public function deleteCookie() {
+
+        // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
+        // that's obivously the best practice to kill a cookie via php
+        // @see http://stackoverflow.com/a/686166/1114320
+        setcookie('rememberme', false, time() - (3600 * 3650), '/');
+    }
+
     /**
      * simply return the current state of the user's login
      * @return boolean user's login status
@@ -167,55 +257,95 @@ class Login_Model extends Model
      * edit the user's name, provided in the editing form
      */
     public function editUserName() {
+
+        // email and password provided ?
+        if (!empty($_POST['user_name']) && !empty($_POST["user_password"])) {
         
-        if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
-            
-            $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
-        
-        } 
-        // username cannot be empty and must be azAZ09 and 2-64 characters
-        // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
-        elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
-            
-            // escapin' this
-            $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-            $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
-            $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
+            if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
 
-            // check if new username already exists
-            $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
-            $sth->execute(array(':user_name' => $this->user_name));
+                $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
 
-            $count =  $sth->rowCount();
-            
-            if ($count == 1) {
+            }
+            // username cannot be empty and must be azAZ09 and 2-64 characters
+            // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
+            elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
 
-                $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-
-            } else {
-
-                $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
-                $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));                
+                // check if password is right
+                $sth = $this->db->prepare("SELECT user_id,
+                                                  user_password_hash
+                                           FROM users
+                                           WHERE user_id = :user_id");
+                $sth->execute(array(':user_id' => $_SESSION['user_id']));
 
                 $count =  $sth->rowCount();
-
                 if ($count == 1) {
 
-                    Session::set('user_name', $this->user_name);
-                    $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+                    // fetch one row (we only have one result)
+                    $result = $sth->fetch();
 
-                } else {
+                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
-                    $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                        // escapin' this
+                        $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+                        $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
+                        $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
+
+                        // check if new username already exists
+                        $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
+                        $sth->execute(array(':user_name' => $this->user_name));
+
+                        $count =  $sth->rowCount();
+
+                        if ($count == 1) {
+
+                            $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+
+                        } else {
+
+                            $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
+                            $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));
+
+                            $count =  $sth->rowCount();
+
+                            if ($count == 1) {
+
+                                Session::set('user_name', $this->user_name);
+                                $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+
+                            } else {
+
+                                $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+
+                            }
+
+                        }
+
+                    } else {
+
+                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
+
+                    }
 
                 }
 
+            } else {
+
+                $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+
             }
-            
+
+        } elseif (!empty($_POST['user_username'])) {
+
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+
+        } elseif (!empty($_POST['user_password'])) {
+
+            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
+
         } else {
-            
-            $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-            
+
+            $this->errors[] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
+
         }
         
     }
@@ -602,25 +732,17 @@ class Login_Model extends Model
                         if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
 
                             $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
-                            
-                            if (is_writeable($target_file_path)) {
                                 
-                                // creates a 44x44px avatar jpg file in the avatar folder
-                                // see the function defintion (also in this class) for more info on how to use
-                                $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+                            // creates a 44x44px avatar jpg file in the avatar folder
+                            // see the function defintion (also in this class) for more info on how to use
+                            $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
 
-                                $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
-                                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                            $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
+                            $sth->execute(array(':user_id' => $_SESSION['user_id']));
 
-                                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
-                                $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
-                                
-                            } else {
-                                
-                                $this->errors[] = FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE;
-                                
-                            }
+                            $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
 
                         } else {
 

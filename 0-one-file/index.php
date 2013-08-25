@@ -51,7 +51,7 @@ echo page(init(cfg(array(
         'host' => 'localhost',
         'name' => 'users',
         'pass' => 'changeme',
-        'path' => 'users.db',
+        'path' => 'database/users.db',
         'port' => '3306',
         'type' => 'sqlite',
         'user' => 'root')))));

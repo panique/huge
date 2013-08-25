@@ -1,25 +1,22 @@
 <?php
 
 /**
- * class Login
  * handles the user login/logout/session
- *
  * @author Panique <panique@web.de>
- * @version 1.2
  */
 class Login
 {
+    // database connection
+    private $db_connection = null;
+    private $user_name = "";
+    private $user_email = "";
+    private $user_password_hash = "";
+    private $user_is_logged_in = false;
 
-    private $db_connection = null; // database connection
-
-    private $user_name = ""; // user's name
-    private $user_email = ""; // user's email
-    private $user_password_hash = ""; // user's hashed and salted password
-    private $user_is_logged_in = false; // status of login
-
-    public $errors = array(); // collection of error messages
-    public $messages = array(); // collection of success / neutral messages
-
+    // collection of error messages
+    public $errors = array();
+    // collection of success / neutral messages
+    public $messages = array();
 
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
@@ -27,7 +24,6 @@ class Login
      */
     public function __construct()
     {
-
         // create/read session
         session_start();
 
@@ -41,35 +37,35 @@ class Login
         if (isset($_GET["logout"])) {
 
             $this->doLogout();
-
-        } // if user has an active session on the server
+        }
+        // if user has an active session on the server
         elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
 
             $this->loginWithSessionData();
-
-            // if user just submitted a login form
-        } elseif (isset($_POST["login"])) {
+        }
+        // if user just submitted a login form
+        elseif (isset($_POST["login"])) {
 
             $this->loginWithPostData();
-
         }
     }
 
-
+    /**
+     * log in with session data
+     */
     private function loginWithSessionData()
     {
-
         // set logged in status to true, because we just checked for this:
         // !empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)
         // when we called this method (in the constructor)
         $this->user_is_logged_in = true;
-
     }
 
-
+    /**
+     * log in with post data
+     */
     private function loginWithPostData()
     {
-
         // if POST data (from login form) contains non-empty user_name and non-empty user_password
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
@@ -104,7 +100,6 @@ class Login
                     } else {
 
                         $this->errors[] = "Wrong password. Try again.";
-
                     }
 
                 } else {
@@ -125,7 +120,6 @@ class Login
 
             $this->errors[] = "Password field was empty.";
         }
-
     }
 
     /**
@@ -133,7 +127,6 @@ class Login
      */
     public function doLogout()
     {
-
         $_SESSION = array();
         session_destroy();
         $this->user_is_logged_in = false;
@@ -147,9 +140,6 @@ class Login
      */
     public function isUserLoggedIn()
     {
-
         return $this->user_is_logged_in;
-
     }
-
 }

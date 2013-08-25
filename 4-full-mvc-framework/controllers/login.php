@@ -29,7 +29,9 @@ class Login extends Controller {
         if ($login_successful) {
             
             // if YES, then move user to dashboard/index
-            // please note: this is a browser-relocater, not a rendered view
+
+            // TODO: why are we using a relocator, not a view rendering here ?
+            // please note: this is a browser-relocator, not a rendered view
             header('location: ' . URL . 'dashboard/index');
             //$this->view->render('dashboard/index');
             
@@ -46,7 +48,27 @@ class Login extends Controller {
         header('location: ' . URL);
         //$this->view->render('login/index');
     }    
-    
+
+    function loginwithcookie()
+    {
+        // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
+        $login_successful = $this->model->loginWithCookie();
+
+        $this->view->errors = $this->model->errors; // useless in this case
+
+        if ($login_successful) {
+
+            $location = $this->model->getCookieUrl();
+            header('location: ' . URL . $location);
+
+        } else {
+            // delete the invalid cookie to prevent infinite login loops
+            $this->model->deleteCookie();
+            // render login/index view
+            $this->view->render('login/index');
+        }
+    }
+
     function showprofile() {
         
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
