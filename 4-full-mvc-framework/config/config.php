@@ -40,7 +40,8 @@ define('USE_GRAVATARS', false);
  * in a format like this: .mydomain.com
  * Note the . in front of the domain. No www, no http, no slash here!
  * For local development .127.0.0.1 is fine, but when deploying you should
- * change this to your real domain!
+ * change this to your real domain, like '.mydomain.com' ! The leading dot makes the cookie available for
+ * subdomains too.
  * @see php.net/manual/en/function.setcookie.php
  */
 define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
