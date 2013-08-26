@@ -6,7 +6,7 @@
  * ADVANCED VERSION
  * (check the website / github / facebook for other versions)
  *
- * A simple PHP Login Script without all the nerd bullshit.
+ * A simple PHP Login Script.
  * Uses PHP SESSIONS, modern SHA512-password-hashing and salting
  * and gives the basic functions a proper login system needs.
  *
