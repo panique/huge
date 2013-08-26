@@ -120,14 +120,14 @@ config also!
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
-A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
+A very detailed guideline on how to install the `1-minimal` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
 
 #####HOW TO INSTALL 2-ADVANCED VERSION
 
-A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/).
+A very detailed guideline on how to install the `2-advanced` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/config.php ("DB_USER" and "DB_PASS").
