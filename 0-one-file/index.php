@@ -5,14 +5,14 @@
  *
  * SINGLE FILE FUNCTIONAL VERSION
  *
-  * A simple PHP Login Script. Uses PHP SESSIONS, modern password-hashing
-* and salting and gives the basic functions a proper login system needs.
-* Please remember: this is just the minimal version of the login script,
-* so if you need a more advanced version, have a look on the github repo.
-* There are / will be better versions, including more functions and/or
-* much more complex code / file structure.
-* Keywords: MVC, dependency injected, one shared database connection,
-* PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style,
+ * A simple PHP Login Script. Uses PHP SESSIONS, modern password-hashing
+ * and salting and gives the basic functions a proper login system needs.
+ * Please remember: this is just the minimal version of the login script,
+ * so if you need a more advanced version, have a look on the github repo.
+ * There are / will be better versions, including more functions and/or
+ * much more complex code / file structure.
+ * Keywords: MVC, dependency injected, one shared database connection,
+ * PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style.
  *
  * To install this script, simply call index.php?a=install, a SQLite
  * one-file-database will then be created in your project folder.
