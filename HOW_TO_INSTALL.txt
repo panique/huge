@@ -9,7 +9,7 @@ http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-o
 http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/
 
 2-ADVANCED:
-... [coming up]
+http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/
 
 4-FULL-MVC-FRAMEWORK:
 ... [coming up]

@@ -23,11 +23,13 @@ define("DB_PASS", "mysql");
  * in a format like this: .mydomain.com
  * Note the . in front of the domain. No www, no http, no slash here!
  * For local development .127.0.0.1 or .localhost is fine, but when deploying you should
- * change this to your real domain!
+ * change this to your real domain, like '.mydomain.com' ! The leading dot makes the cookie available for
+ * subdomains too.
+ * @see http://stackoverflow.com/q/9618217/1114320
  * @see php.net/manual/en/function.setcookie.php
  */
 define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
-define('COOKIE_DOMAIN', '.127.0.0.1'); // the domain where the cookie is valid for
+define('COOKIE_DOMAIN', '.127.0.0.1'); // the domain where the cookie is valid for, like '.mydomain.com'
 define('COOKIE_SECRET_KEY', '1gp@TMPS{+$78sfpMJFe-92s'); // use to salt cookie content and when changed, can invalidate all databases users cookies
 
 /**
