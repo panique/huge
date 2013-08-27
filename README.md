@@ -143,6 +143,8 @@ verification/password reset mails.
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
 
+A very detailed guideline on how to install the `4-full-mvc-framework` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/).
+
 Usually this script works out-of-the-box. Simply copy the script to your server's web folder (/var/www/ maybe) and change
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
 
