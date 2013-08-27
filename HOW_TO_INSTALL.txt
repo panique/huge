@@ -12,6 +12,6 @@ http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/
 http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/
 
 4-FULL-MVC-FRAMEWORK:
-... [coming up]
+http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/
 
 You have downloaded this file from https://github.com/panique/php-login
