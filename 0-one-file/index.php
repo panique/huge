@@ -95,38 +95,88 @@ function login()
     return login_form();
 }
 
+/**
+ * Register Function
+ *
+ * @return string
+ */
 function register()
 {
-    if (!empty($_POST)) {
-        $msg = '';
-        if ($_POST['user_name']) {
-            if ($_POST['user_password_new']) {
-                if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
-                    if (strlen($_POST['user_password_new']) > 5) {
-                        if (strlen($_POST['user_name']) < 65 && strlen($_POST['user_name']) > 1) {
-                            if (preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-                                $user = read_user($_POST['user_name']);
-                                if (!isset($user['user_name'])) {
-                                    if ($_POST['user_email']) {
-                                        if (strlen($_POST['user_email']) < 65) {
-                                            if (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-                                                create_user();
-                                                $_SESSION['msg'] = 'You are now registered so please login';
-                                                header('Location: ' . $_SERVER['PHP_SELF']);
-                                                exit();
-                                            } else $msg = 'You must provide a valid email address';
-                                        } else $msg = 'Email must be less than 64 characters';
-                                    } else $msg = 'Email cannot be empty';
-                                } else $msg = 'Username already exists';
-                            } else $msg = 'Username must be only a-z, A-Z, 0-9';
-                        } else $msg = 'Username must be between 2 and 64 characters';
-                    } else $msg = 'Password must be at least 6 characters';
-                } else $msg = 'Passwords do not match';
-            } else $msg = 'Empty Password';
-        } else $msg = 'Empty Username';
-        $_SESSION['msg'] = $msg;
+    if (empty($_POST)) {
+        return '';
     }
+
+    $msg = editRegistration();
+
+    if ($msg === '') {
+        create_user();
+        $_SESSION['msg'] = 'You are now registered so please login';
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    }
+
+    $_SESSION['msg'] = $msg;
     return register_form();
+}
+
+/**
+ * Edit Registration Data
+ *
+ * @return string
+ */
+function editRegistration()
+{
+    if ($_POST['user_name']) {
+    } else {
+        return 'Empty Username';
+    }
+
+    if ($_POST['user_password_new']) {
+    } else {
+        return 'Empty Password';
+    }
+
+    if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
+    } else {
+        return 'Passwords do not match';
+    }
+
+    if (strlen($_POST['user_password_new']) > 5) {
+    } else {
+        return 'Password must be at least 6 characters';
+    }
+
+    if (strlen($_POST['user_name']) < 65 && strlen($_POST['user_name']) > 1) {
+    } else {
+        return 'Username must be between 2 and 64 characters';
+    }
+
+    if (preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
+    } else {
+        return 'Username must be only a-z, A-Z, 0-9';
+    }
+
+    $user = read_user($_POST['user_name']);
+    if (isset($user['user_name'])) {
+        return 'Username already exists';
+    }
+
+    if ($_POST['user_email']) {
+    } else {
+        return 'Email cannot be empty';
+    }
+
+    if (strlen($_POST['user_email']) < 65) {
+    } else {
+        return 'Email must be less than 64 characters';
+    }
+
+    if (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+    } else {
+        return 'You must provide a valid email address';
+    }
+
+    return '';
 }
 
 function install()
