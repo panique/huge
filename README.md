@@ -120,14 +120,14 @@ config also!
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
-A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
+A very detailed guideline on how to install the `1-minimal` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
 
 #####HOW TO INSTALL 2-ADVANCED VERSION
 
-A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/).
+A very detailed guideline on how to install the `2-advanced` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
 * 2. change mySQL user and or mySQL password in config/config.php ("DB_USER" and "DB_PASS").
@@ -142,6 +142,8 @@ verification/password reset mails.
 * 5. in config/config.php, change COOKIE_SECRET_KEY to something new, simply a random string that will be a unique code for your project
 
 #####HOW TO INSTALL 4-FULL-MVC-FRAMEWORK VERSION
+
+A very detailed guideline on how to install the `4-full-mvc-framework` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/).
 
 Usually this script works out-of-the-box. Simply copy the script to your server's web folder (/var/www/ maybe) and change
 the config files/.htaccess like described below. Sometimes, you'll need to install/activate mod_rewrite first:
