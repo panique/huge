@@ -295,7 +295,7 @@ then donating a small amount would be very cool.
 
 [Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
 
-###CHECK MY BLOG: DEV-METAL.COM###
+###CHECK MY NEW BLOG: [DEV-METAL.COM](http://www.dev-metal.com)###
 
 Have a look on my new dev blog, highly relevant to the login script ! The blog will feature installation guidelines for this script,
 insights about the current development (of php-login), masses of PHP and security stuff, lots of UI/UX related things, talks, slides,
