@@ -246,6 +246,10 @@ mails with an SMTP account.
 * the 2-advanced and 4-full-mvc-framework version use the PHP GD graphic functions, so you need to have them enabled. That's standard on most
 php installations.
 
+###CONTRIBUTING
+
+Please review CONTRIBUTING.md before sending a pull request.
+
 ###USAGE WITH OLDER PHP VERSIONS: 
 
 This script needs PHP 5.3.7 or higher. PHP 5.2 is outdated since 2009, so supporting this would be contra-productive (and is impossible btw).
