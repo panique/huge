@@ -23,8 +23,8 @@ if ($login->messages) {
 <!-- new password form box -->
 <form method="post" action="password_reset.php" name="new_password_form">
     
-    <input type='hidden' name='user_name' value='<?php echo $login->getUsername(); ?>' />
-    <input type='hidden' name='user_password_reset_hash' value='<?php echo $login->getPasswordResetHash(); ?>' />
+    <input type='hidden' name='user_name' value='<?php echo $_GET['user_name']; ?>' />
+    <input type='hidden' name='user_password_reset_hash' value='<?php echo $_GET['verification_code']; ?>' />
     
     <label for="reset_input_password_new">New password (min. 6 characters)</label>
     <input id="reset_input_password_new" class="reset_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />  
