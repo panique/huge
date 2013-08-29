@@ -13,7 +13,7 @@
 
 // check if php gd extension is loaded
 if (!extension_loaded('gd')) {
-	die("It looks like GD is installed");
+	die("It looks like GD is not installed");
 }
 
 session_start();
