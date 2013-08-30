@@ -293,7 +293,7 @@ Also a big big "thank you" to the donors of this project, your tips gimme a good
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.
 
-[Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
+[![Paypal](http://www.php-login.net/img/paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
 ###CHECK MY NEW BLOG: [DEV-METAL.COM](http://www.dev-metal.com)###
 
