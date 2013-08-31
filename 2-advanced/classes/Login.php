@@ -210,8 +210,22 @@ class Login
         // if POST data (from login form) contains non-empty user_name and non-empty user_password
         if (!empty($user_name) && !empty($user_password)) {
 
-            // database query, getting all the info of the selected user
-            $result_row = $this->getUserData(trim($user_name));
+            // user can login with his username or his email address.
+            // if user has not typed a valid email address, we try to identify him with his user_name  
+            if (!filter_var($user_name, FILTER_VALIDATE_EMAIL)) {
+                // database query, getting all the info of the selected user
+                $result_row = $this->getUserData(trim($user_name));
+
+            // if user has typed a valid email address, we try to identify him with his user_email
+            } else if ($this->databaseConnection()) {
+
+                // database query, getting all the info of the selected user
+                $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_email = :user_email');
+                $query_user->bindValue(':user_email', trim($user_name), PDO::PARAM_STR);
+                $query_user->execute();
+                // get result row (as an object)
+                $result_row = $query_user->fetchObject();
+            }
 
             // if this user exists
             if (isset($result_row->user_id)) {
@@ -436,21 +450,36 @@ class Login
             // if database connection opened
             if ($this->databaseConnection()) {
 
-                // write users new data into database
-                $query_edit_user_email = $this->db_connection->prepare('UPDATE users SET user_email = :user_email WHERE user_id = :user_id');
-                $query_edit_user_email->bindValue(':user_email', $user_email, PDO::PARAM_STR);
-                $query_edit_user_email->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-                $query_edit_user_email->execute();
+                // check if new email already exists
+                $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_email = :user_email');
+                $query_user->bindValue(':user_email', $user_email, PDO::PARAM_STR);
+                $query_user->execute();
+                // get result row (as an object)
+                $result_row = $query_user->fetchObject();
 
-                if ($query_edit_user_email->rowCount()) {
+                // if this email exists
+                if (isset($result_row->user_id)) {
 
-                    $_SESSION['user_email'] = $user_email;
-                    $this->messages[] = "Your email address has been changed successfully. New email address is " . $user_email . ".";
+                    $this->errors[] = "Sorry, this email address is already registered.";
 
                 } else {
+    
+                    // write users new data into database
+                    $query_edit_user_email = $this->db_connection->prepare('UPDATE users SET user_email = :user_email WHERE user_id = :user_id');
+                    $query_edit_user_email->bindValue(':user_email', $user_email, PDO::PARAM_STR);
+                    $query_edit_user_email->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                    $query_edit_user_email->execute();
 
-                    $this->errors[] = "Sorry, your email changing failed.";
+                    if ($query_edit_user_email->rowCount()) {
 
+                        $_SESSION['user_email'] = $user_email;
+                        $this->messages[] = "Your email address has been changed successfully. New email address is " . $user_email . ".";
+
+                    } else {
+
+                        $this->errors[] = "Sorry, your email changing failed.";
+
+                    }
                 }
 
             }
