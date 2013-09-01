@@ -23,18 +23,12 @@ require_once("php-login.php");
 // so this single line handles the entire login process.
 $login = new Login();
 
-// ask for the different states:
-if ($login->passwordResetLinkIsValid() == true) {
-    // the user just came to our page by the URL provided in the password-reset-mail and all data is valid
-    // so we show the type-your-new-password form
-    include("views/password_reset_new_password.php");
-
-} elseif ($login->passwordResetWasSuccessful() == true) {
-    // the user has just successfully entered a new password
-    // so we show the index page = the login page
+// the user has just successfully entered a new password
+// so we show the index page = the login page
+if ($login->passwordResetWasSuccessful() == true && $login->passwordResetLinkIsValid() != true) {
     include("views/not_logged_in.php");
 
 } else {
-    // no data from a password-reset-mail has been provided, so we simply show the request-a-password-reset form
-    include("views/password_reset_request.php");
+    // show the request-a-password-reset or type-your-new-password form
+    include("views/password_reset.php");
 }
