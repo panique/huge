@@ -10,6 +10,8 @@ class Login
 {
     /** @var object $db_connection The database connection */
     private $db_connection = null;
+    /** @var array with translation of language strings */
+    private $lang = array();
 
     /** @var int $user_id The user's id */
     private $user_id = null;
@@ -43,7 +45,10 @@ class Login
     public function __construct()
     {
         // create/read session
-        session_start();                                        
+        session_start();        
+		
+        // Create internal reference to global array with translation of language strings
+        $this->lang = & $GLOBALS['phplogin_lang'];
 
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
@@ -124,7 +129,7 @@ class Login
                 return true;
             // If an error is catched, database connection failed
             } catch (PDOException $e) {
-                $this->errors[] = "Database connection problem.";
+                $this->errors[] = $this->lang['Database error'];
                 return false;
             }
         }
@@ -200,7 +205,7 @@ class Login
             }
             // A cookie has been used but is not valid... we delete it
             $this->deleteRememberMeCookie();
-            $this->errors[] = "Invalid cookie";
+            $this->errors[] = $this->lang['Invalid cookie'];
         }
         return false;
     }
@@ -292,28 +297,28 @@ class Login
 
                     } else {
 
-                        $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
+                        $this->errors[] = $this->lang['Account not activated'];
 
                     }
 
                 } else {
 
-                    $this->errors[] = "Wrong password. Try again.";
+                    $this->errors[] = $this->lang['Wrong password'];
 
                 }                
 
             } else {
 
-                $this->errors[] = "This user does not exist.";
+                $this->errors[] = $this->lang['User not exist'];
             }
 
         } elseif (empty($user_name)) {
 
-            $this->errors[] = "Username field was empty.";
+            $this->errors[] = $this->lang['Empty username'];
 
         } elseif (empty($user_password)) {
 
-            $this->errors[] = "Password field was empty.";
+            $this->errors[] = $this->lang['Empty password'];
         }
 
     }
@@ -369,7 +374,7 @@ class Login
         session_destroy();
 
         $this->user_is_logged_in = false;
-        $this->messages[] = "You have been logged out.";
+        $this->messages[] = $this->lang['Logged out'];
     }
 
     /**
@@ -391,7 +396,7 @@ class Login
 
         if (!empty($user_name) && $user_name == $_SESSION["user_name"]) {
 
-            $this->errors[] = "Sorry, that username is the same as your current one. Please choose another one.";
+            $this->errors[] = $this->lang['Same username'];
 
         // username cannot be empty and must be azAZ09 and 2-64 characters
         // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
@@ -402,7 +407,7 @@ class Login
 
             if (isset($result_row->user_id)) {
 
-                $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
+                $this->errors[] = $this->lang['Username exist'];
 
             } else {
 
@@ -415,11 +420,11 @@ class Login
                 if ($query_edit_user_name->rowCount()) {
 
                     $_SESSION['user_name'] = $user_name;
-                    $this->messages[] = "Your username has been changed successfully. New username is " . $user_name . ".";
+                    $this->messages[] = $this->lang['Username changed'] . $user_name;
 
                 } else {
 
-                    $this->errors[] = "Sorry, your chosen username renaming failed.";
+                    $this->errors[] = $this->lang['Username change failed'];
 
                 }
 
@@ -427,7 +432,7 @@ class Login
 
         } else {
 
-            $this->errors[] = "Sorry, your chosen username does not fit into the naming pattern.";
+            $this->errors[] = $this->lang['Invalid username'];
 
         }
     }
@@ -442,7 +447,7 @@ class Login
 
         if (!empty($user_email) && $user_email == $_SESSION["user_email"]) {
 
-            $this->errors[] = "Sorry, that email address is the same as your current one. Please choose another one.";
+            $this->errors[] = $this->lang['Same email'];
 
         // user mail cannot be empty and must be in email format
         } elseif (!empty($user_email) && filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
@@ -460,7 +465,7 @@ class Login
                 // if this email exists
                 if (isset($result_row->user_id)) {
 
-                    $this->errors[] = "Sorry, this email address is already registered.";
+                    $this->errors[] = $this->lang['Email exist'];
 
                 } else {
     
@@ -473,11 +478,11 @@ class Login
                     if ($query_edit_user_email->rowCount()) {
 
                         $_SESSION['user_email'] = $user_email;
-                        $this->messages[] = "Your email address has been changed successfully. New email address is " . $user_email . ".";
+                        $this->messages[] = $this->lang['Email changed'] . $user_email;
 
                     } else {
 
-                        $this->errors[] = "Sorry, your email changing failed.";
+                        $this->errors[] = $this->lang['Email change failed'];
 
                     }
                 }
@@ -486,7 +491,7 @@ class Login
 
         } else {
 
-            $this->errors[] = "Sorry, your chosen email does not fit into the naming pattern.";
+            $this->errors[] = $this->lang['Invalid email'];
 
         }
 
@@ -499,15 +504,15 @@ class Login
     {
         if (empty($user_password_new) || empty($user_password_repeat) || empty($user_password_old)) {
 
-            $this->errors[] = "Empty Password";            
+            $this->errors[] = $this->lang['Empty password'];            
 
         } elseif ($user_password_new !== $user_password_repeat) {
 
-            $this->errors[] = "Password and password repeat are not the same";   
+            $this->errors[] = $this->lang['Bad confirm password'];
 
         } elseif (strlen($user_password_new) < 6) {
 
-            $this->errors[] = "Password has a minimum length of 6 characters";            
+            $this->errors[] = $this->lang['Password too short'];
 
         // all the above tests are ok
         } else {
@@ -540,23 +545,23 @@ class Login
                     // check if exactly one row was successfully changed:
                     if ($query_update->rowCount()) {
 
-                        $this->messages[] = "Password sucessfully changed!";
+                        $this->messages[] = $this->lang['Password changed'];
 
                     } else {
 
-                        $this->errors[] = "Sorry, your password changing failed.";
+                        $this->errors[] = $this->lang['Password changed failed'];
 
                     }
 
                 } else {
 
-                    $this->errors[] = "Your OLD password was wrong.";
+                    $this->errors[] = $this->lang['Wrong old password'];
 
                 }
 
             } else {
 
-                $this->errors[] = "This user does not exist.";
+                $this->errors[] = $this->lang['User not exist'];
  
             }
 
@@ -573,7 +578,7 @@ class Login
 
         if (empty($user_name)) {
 
-            $this->errors[] = "Empty username";
+            $this->errors[] = $this->lang['Empty username'];
 
         } else {
 
@@ -608,13 +613,13 @@ class Login
 
                 } else {
 
-                    $this->errors[] = "Could not write token to database."; // maybe say something not that technical.
+                    $this->errors[] = $this->lang['Database error'];
 
                 }
 
             } else {
 
-                $this->errors[] = "This username does not exist.";
+                $this->errors[] = $this->lang['User not exist'];
 
             }
 
@@ -666,12 +671,12 @@ class Login
 
         if(!$mail->Send()) {
 
-            $this->errors[] = "Password reset mail NOT successfully sent! Error: " . $mail->ErrorInfo;
+            $this->errors[] = $this->lang['Password mail not sent'] . $mail->ErrorInfo;
             return false;
 
         } else {
 
-            $this->messages[] = "Password reset mail successfully sent!";
+            $this->messages[] = $this->lang['Password mail sent'];
             return true;
         }
 
@@ -701,19 +706,19 @@ class Login
 
                 } else {
 
-                    $this->errors[] = "Your reset link has expired. Please use the reset link within one hour.";
+                    $this->errors[] = $this->lang['Reset link has expired'];
 
                 }
 
             } else {
 
-                $this->errors[] = "This username does not exist.";
+                $this->errors[] = $this->lang['User not exist'];
 
             }
 
         } else {
 
-            $this->errors[] = "Empty link parameter data.";
+            $this->errors[] = $this->lang['Empty link parameter'];
 
         }
 
@@ -762,11 +767,11 @@ class Login
                         if ($query_update->rowCount() == 1) {
 
                             $this->password_reset_was_successful = true;
-                            $this->messages[] = "Password sucessfully changed!";
+                            $this->messages[] = $this->lang['Password changed'];
 
                         } else {
 
-                            $this->errors[] = "Sorry, your password changing failed.";
+                            $this->errors[] = $this->lang['Password changed failed'];
 
                         }
 
@@ -774,13 +779,13 @@ class Login
 
                 } else {
 
-                    $this->errors[] = "Password too short, please request a new password reset.";
+                    $this->errors[] = $this->lang['Password too short'];
 
                 }
 
             } else {
 
-                $this->errors[] = "Passwords dont match, please request a new password reset.";
+                $this->errors[] = $this->lang['Bad confirm password'];
 
             }
 
