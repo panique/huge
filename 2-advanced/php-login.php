@@ -23,6 +23,18 @@ require_once(PHPLOGIN_PATH . 'config/config.php');
 // include the PHPMailer library
 require_once(PHPLOGIN_PATH . 'libraries/PHPMailer.php');
 
+// detection of the language for the current user
+define('PHPLOGIN_LANG', substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+
+// try to load the specified language file
+if (file_exists(PHPLOGIN_PATH . 'lang/'. PHPLOGIN_LANG . '.php')) {
+	include(PHPLOGIN_PATH . 'lang/'. PHPLOGIN_LANG . '.php');
+} else {
+	// default is english language file
+	define('PHPLOGIN_LANG', 'en');
+	include('lang\\en.php');	
+}
+
 // load the login and registration classes
 require_once(PHPLOGIN_PATH . 'classes/Login.php');
 require_once(PHPLOGIN_PATH . 'classes/Registration.php');
