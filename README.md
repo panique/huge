@@ -64,6 +64,8 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: PDO (instead of mysqli)
 - main feature: remember me / keep me logged in
 - main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
+- new feature: user can log in with email adress
+- new feature: language files / i18n
 
 #####FULL-MVC-FRAMEWORK
 
@@ -260,6 +262,10 @@ active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.o
 
 ###USEFUL STUFF
 
+####How to use PDO (it's really easy!)
+
+http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers
+
 ####Multiple projects on one server that should share / not share their sessions
 
 If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
@@ -268,7 +274,11 @@ there's a nice solution: https://github.com/panique/php-login/issues/82
 
 ####Installing PHP 5.5
 
-Sweet little (3 bash commands) guideline for Ubuntu 12.04: [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
+Sweet little (3 bash commands) guideline for Ubuntu 12.04:
+[How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
+
+Same for Debian 7.0 / 7.1:
+[How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
 
 ###MORE INFO IN THE WIKI
 

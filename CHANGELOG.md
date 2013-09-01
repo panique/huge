@@ -1,5 +1,14 @@
 # CHANGE LOG #
 
+September 1st 2013
+* 2-advanced: Feedback message are now config variables, not inline text anymore
+* 2-advanced: Language support (english, french)
+* 2-advanced: Email are now unique in the system
+* 2-advanced: User can log in with email now
+* 2-advanced: Bigger file structure changes
+* 2-advanced: Code quality improvements
+* 2-advanced: Lot's of structural changes, mostly code improvements
+
 August 25th 2013
 * 2-advanced: cookies / remember me feature
 * 2-advanced: registration saves ip/timestamp now
