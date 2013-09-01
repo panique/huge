@@ -21,7 +21,7 @@ session_start();
 // target captcha string length
 $iCaptchaLength = 4;
 
-// following letters are excluded from captcha: O, Q, I, 5, S
+// following letters are excluded from captcha: I, O, Q, S, 0, 1, 5
 $str_choice = 'ABCDEFGHJKLMNPRTUVWXYZ2346789';
 $str_captcha = '';
 // create target captcha with letters comming from $str_choice
