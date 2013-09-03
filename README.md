@@ -24,10 +24,10 @@ https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
 
-- `0-one-file`: http://109.75.177.79:81/
-- `1-minimal`: http://109.75.177.79:82/
-- `2-advanced`: http://109.75.177.79:83/
-- `4-full-mvc-framework`: http://109.75.177.79:84/
+- `0-one-file`: http://php-login.net/demo1.html
+- `1-minimal`: http://php-login.net/demo2.html
+- `2-advanced`: http://php-login.net/demo3.html
+- `4-full-mvc-framework`: http://php-login.net/demo4.html
 
 Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
 Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
