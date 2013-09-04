@@ -12,14 +12,9 @@ class Login
     private $db_connection = null;
 
     private $db_type = "sqlite"; // feel free to expend this with mysql etc.
-    private $db_sqlite_path = "database/users.db"; // only needed for SQLite
-    //private $db_host = "127.0.0.1";
-    //private $db_user = "root";
-    //private $db_pass = "mysql";
-    //private $db_name = "login";
+    private $db_sqlite_path = "database/users.db";
 
-    // TODO: should we define username etc as class constants, static property or property ?
-    // TODO: where to put config data ?
+    // is THIS even used ?
     private $user_name = "";
     private $user_email = "";
     private $user_password_hash = "";
