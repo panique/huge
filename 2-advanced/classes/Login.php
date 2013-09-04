@@ -232,10 +232,10 @@ class Login
             } else if (! password_verify($user_password, $result_row->user_password_hash)) {
                 $this->errors[] = $this->lang['Wrong password'];
             // does the user activates his account with the verification email
-    		} else if ($result_row->user_active != 1) {
+            } else if ($result_row->user_active != 1) {
                 $this->errors[] = $this->lang['Account not activated'];
 
-			} else {
+            } else {
                 // write user data into PHP SESSION [a file on your server]
                 $_SESSION['user_id'] = $result_row->user_id;
                 $_SESSION['user_name'] = $result_row->user_name;
