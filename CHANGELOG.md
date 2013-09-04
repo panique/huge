@@ -1,5 +1,10 @@
 # CHANGE LOG #
 
+September 4st 2013
+
+* 0-one-file: Deletion of 0-one-file project (because code quality)
+* 0-one-file: Complete rewrite of 0-one-file project
+
 September 1st 2013
 * 2-advanced: Feedback message are now config variables, not inline text anymore
 * 2-advanced: Language support (english, french)
