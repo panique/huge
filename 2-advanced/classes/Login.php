@@ -715,4 +715,3 @@ class Login
         $this->user_gravatar_image_tag = $url;
     }
 }
-?>
