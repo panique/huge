@@ -6,7 +6,7 @@
 
 // TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
 // TODO: class properties or pass stuff from method to method ?
-// TODO: "dont use else" rule ?
+// TODO: "don't use else" rule ?
 // TODO: max level intend == 1 ?
 // TODO: PHP_SELF ?
 // TODO: explain the horrible missing of rowCount() in SQLite PDO !
@@ -18,7 +18,7 @@ class Login
     /**
      * @var string
      */
-    private $db_type = "sqlite"; // feel free to expend this with mysql etc.
+    private $db_type = "sqlite"; // feel free to expand this with mysql etc.
 
     /**
      * @var string
