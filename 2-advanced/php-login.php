@@ -24,16 +24,14 @@ require_once(PHPLOGIN_PATH . 'config/config.php');
 require_once(PHPLOGIN_PATH . 'libraries/PHPMailer.php');
 
 // detection of the language for the current user
-define('PHPLOGIN_LANG', substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
-
-// try to load the specified language file
-if (file_exists(PHPLOGIN_PATH . 'lang/'. PHPLOGIN_LANG . '.php')) {
-	include(PHPLOGIN_PATH . 'lang/'. PHPLOGIN_LANG . '.php');
-} else {
-	// default is english language file
-	define('PHPLOGIN_LANG', 'en');
-	include('lang\\en.php');	
+$user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+// if translation file for the specified language doesn't exist, we use default english file
+if (! file_exists(PHPLOGIN_PATH . 'lang/' . $user_lang . '.php')) {
+    $user_lang = 'en';
 }
+// save language as constant and include language translated strings
+define('PHPLOGIN_LANG', $user_lang);
+include(PHPLOGIN_PATH . 'lang/' . PHPLOGIN_LANG . '.php');
 
 // load the login and registration classes
 require_once(PHPLOGIN_PATH . 'classes/Login.php');
