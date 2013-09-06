@@ -95,7 +95,6 @@ class Registration
 
         // finally if all the above checks are ok
         } else if ($this->databaseConnection()) {
-
             // check if username or email already exists
             $query_check_user_name = $this->db_connection->prepare('SELECT user_name, user_email FROM users WHERE user_name=:user_name OR user_email=:user_email');
             $query_check_user_name->bindValue(':user_name', $user_name, PDO::PARAM_STR);
@@ -137,7 +136,7 @@ class Registration
                     // send a verification email
                     if ($this->sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
                         // when mail has been send successfully
-                        $this->messages[] = "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail.";
+                        $this->messages[] = $this->lang['Verification mail sent'];
                         $this->registration_successful = true;
                     } else {
                         // delete this users account immediately, as we could not send a verification email
@@ -199,7 +198,6 @@ class Registration
             $this->errors[] = $this->lang['Verification mail not sent'] . $mail->ErrorInfo;
             return false;
         } else {
-            $this->messages[] = $this->lang['Verification mail sent'];
             return true;
         }
     }
