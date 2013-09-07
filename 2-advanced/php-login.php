@@ -18,7 +18,7 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
 }
 
 // include the config
-require_once(PHPLOGIN_PATH . 'config/config.php');
+require_once(PHPLOGIN_PATH . 'includes/config.php');
 
 // include the PHPMailer library
 require_once(PHPLOGIN_PATH . 'libraries/PHPMailer.php');
@@ -34,7 +34,7 @@ define('PHPLOGIN_LANG', $user_lang);
 include(PHPLOGIN_PATH . 'lang/' . PHPLOGIN_LANG . '.php');
 
 // load the login and registration classes
-require_once(PHPLOGIN_PATH . 'classes/Login.php');
-require_once(PHPLOGIN_PATH . 'classes/Registration.php');
+require_once(PHPLOGIN_PATH . 'includes/class-Login.php');
+require_once(PHPLOGIN_PATH . 'includes/class-Registration.php');
 
 ?>
