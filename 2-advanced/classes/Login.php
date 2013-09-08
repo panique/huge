@@ -6,29 +6,53 @@
  */
 class Login
 {
-    /** @var object $db_connection The database connection */
+    /**
+     * @var object $db_connection The database connection
+     */
     private $db_connection = null;
-    /** @var array with translation of language strings */
+    /**
+     * @var array with translation of language strings
+     */
     private $lang = array();
-    /** @var int $user_id The user's id */
+    /**
+     * @var int $user_id The user's id
+     */
     private $user_id = null;
-    /** @var string $user_name The user's name */
+    /**
+     * @var string $user_name The user's name
+     */
     private $user_name = "";
-    /** @var string $user_email The user's mail */
+    /**
+     * @var string $user_email The user's mail
+     */
     private $user_email = "";
-    /** @var boolean $user_is_logged_in The user's login status */
+    /** 
+     * @var boolean $user_is_logged_in The user's login status
+     */
     private $user_is_logged_in = false;
-    /** @var string $user_gravatar_image_url The user's gravatar profile pic url (or a default one) */
+    /**
+     * @var string $user_gravatar_image_url The user's gravatar profile pic url (or a default one)
+     */
     public $user_gravatar_image_url = "";
-    /** @var string $user_gravatar_image_tag The user's gravatar profile pic url with <img ... /> around */
+    /**
+     * @var string $user_gravatar_image_tag The user's gravatar profile pic url with <img ... /> around
+     */
     public $user_gravatar_image_tag = "";
-    /** @var boolean $password_reset_link_is_valid Marker for view handling */
+    /**
+     * @var boolean $password_reset_link_is_valid Marker for view handling
+     */
     private $password_reset_link_is_valid  = false;
-    /** @var boolean $password_reset_was_successful Marker for view handling */
+    /**
+     * @var boolean $password_reset_was_successful Marker for view handling
+     */
     private $password_reset_was_successful = false;
-    /** @var array $errors Collection of error messages */
+    /**
+     * @var array $errors Collection of error messages
+     */
     public $errors = array();
-    /** @var array $messages Collection of success / neutral messages */
+    /**
+     * @var array $messages Collection of success / neutral messages
+     */
     public $messages = array();
 
     /**
@@ -44,6 +68,7 @@ class Login
         // TODO: unite Login and Registration classes ?
 
         // create internal reference to global array with translation of language strings
+        // TODO: @devplanete: This should be $_GLOBALS !!?!?!?!?!?!
         $this->lang = & $GLOBALS['phplogin_lang'];
 
         // check the possible login actions:

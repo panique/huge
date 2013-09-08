@@ -13,19 +13,29 @@
  */
 class Login
 {
-    /** @var string Type of used database (currently only SQLite, but feel free to expand this with mysql etc) */
+    /**
+     * @var string Type of used database (currently only SQLite, but feel free to expand this with mysql etc)
+     */
     private $db_type = "sqlite"; //
 
-    /** @var string Path of the database file (create this with _install.php) */
+    /**
+     * @var string Path of the database file (create this with _install.php)
+     */
     private $db_sqlite_path = "database/users.db";
 
-    /** @var null Database connection */
+    /**
+     * @var null Database connection
+     */
     private $db_connection = null;
 
-    /** @var bool Login status of user */
+    /**
+     * @var bool Login status of user
+     */
     private $user_is_logged_in = false;
 
-    /** @var string System messages, likes errors, notices, etc. */
+    /**
+     * @var string System messages, likes errors, notices, etc.
+     */
     public $feedback = "";
 
 
@@ -160,7 +170,8 @@ class Login
     }
 
     /**
-     * TODO
+     * The registration flow
+     * TODO: make this more professional
      * @return bool
      */
     private function doRegistration()
@@ -193,8 +204,8 @@ class Login
 
     /**
      * Checks if user exits, if so: check if provided password matches the one in the database
-     * @return bool User login status
      * TODO: remove 2 levels deep if structure
+     * @return bool User login status
      */
     private function checkLoginFormDataPasswordCorrect()
     {
