@@ -23,6 +23,7 @@ and your are ready-to-go. Find the code here [coming up in the second half of 20
 https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
+Please note: This project is developing quite fast, so the demos might not show the current state of development.
 
 - `0-one-file`: http://php-login.net/demo1.html
 - `1-minimal`: http://php-login.net/demo2.html
