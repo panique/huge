@@ -29,7 +29,7 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
 
 // loading config
 require 'config/config.php';
-
+// loading the Official PHP Password Hashing Compatibility Library (see more in the README file)
 require 'libs/external/PasswordCompatibilityLibrary.php';
 
 // the autoloading function, which will be called every time a file "is missing"
