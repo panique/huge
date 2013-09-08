@@ -86,5 +86,3 @@ $phplogin_lang = array(
 'Profile picture'			=> 'Photo de profil (depuis gravatar) :'
 
 );
-
-?>

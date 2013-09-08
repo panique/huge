@@ -1,22 +1,23 @@
 <?php
 
 /**
- * class Registration
  * handles the user registration
- * 
  * @author Panique <panique@web.de>
- * @version 1.1
  */
 class Registration
 {
-    private $db_connection            = null;    // database connection   
-    private $lang                     = array(); // array with translation of language strings
-
+    /** @var object $db_connection The database connection */
+    private $db_connection            = null;
+    /** @var array array with translation of language strings */
+    private $lang                     = array();
+    /** @var bool success state of registration */
     public  $registration_successful  = false;
+    /** @var bool success state of verification */
     public  $verification_successful  = false;
-
-    public  $errors                   = array(); // collection of error messages
-    public  $messages                 = array(); // collection of success / neutral messages
+    /** @var array collection of error messages */
+    public  $errors                   = array();
+    /** @var array collection of success / neutral messages */
+    public  $messages                 = array();
 
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
@@ -60,8 +61,6 @@ class Registration
     }
 
     /**
-     * registerNewUser()
-     * 
      * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
      * everything is fine
      */
@@ -72,6 +71,7 @@ class Registration
         $user_email = trim($user_email);
 
         // check provided data validity
+        // TODO: check for "return true" case early, so put this first
         if (strtolower($captcha) != strtolower($_SESSION['captcha'])) {
             $this->errors[] = $this->lang['Wrong captcha'];
         } elseif (empty($user_name)) {
@@ -154,7 +154,6 @@ class Registration
     }
 
     /*
-     * sendVerificationEmail()
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
@@ -203,7 +202,6 @@ class Registration
     }
 
     /**
-     * verifyNewUser()
      * checks the id/verification code combination and set the user's activation status to true (=1) in the database
      */
     public function verifyNewUser($user_id, $user_activation_hash)

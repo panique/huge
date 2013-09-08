@@ -1,9 +1,7 @@
 <?php
 
 /**
- * class Login
  * handles the user login/logout/session
- * 
  * @author Panique <panique@web.de>
  */
 class Login
@@ -12,27 +10,22 @@ class Login
     private $db_connection = null;
     /** @var array with translation of language strings */
     private $lang = array();
-
     /** @var int $user_id The user's id */
     private $user_id = null;
     /** @var string $user_name The user's name */
     private $user_name = "";
     /** @var string $user_email The user's mail */
     private $user_email = "";
-
     /** @var boolean $user_is_logged_in The user's login status */
     private $user_is_logged_in = false;
-
     /** @var string $user_gravatar_image_url The user's gravatar profile pic url (or a default one) */
     public $user_gravatar_image_url = "";
     /** @var string $user_gravatar_image_tag The user's gravatar profile pic url with <img ... /> around */
     public $user_gravatar_image_tag = "";
-
     /** @var boolean $password_reset_link_is_valid Marker for view handling */
     private $password_reset_link_is_valid  = false;
     /** @var boolean $password_reset_was_successful Marker for view handling */
     private $password_reset_was_successful = false;
-
     /** @var array $errors Collection of error messages */
     public $errors = array();
     /** @var array $messages Collection of success / neutral messages */
@@ -41,11 +34,14 @@ class Login
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
-     */    
+     */
     public function __construct()
     {
         // create/read session
-        session_start();        
+        session_start();
+
+        // TODO: organize this stuff better and make the constructor very small
+        // TODO: unite Login and Registration classes ?
 
         // create internal reference to global array with translation of language strings
         $this->lang = & $GLOBALS['phplogin_lang'];
@@ -105,7 +101,8 @@ class Login
     }
 
     /**
-     * Checks if database connection is opened and open it if not
+     * Checks if database connection is opened.
+     * If not, then tries to open it.
      */
     private function databaseConnection()
     {
@@ -113,13 +110,11 @@ class Login
         if ($this->db_connection != null) {
             return true;
         } else {
-            // create a database connection, using the constants from config/config.php
             try {
                 $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
                 return true;
-            // If an error is catched, database connection failed
             } catch (PDOException $e) {
-                $this->errors[] = $this->lang['Database error'];
+                $this->errors[] = $this->lang['Database error'] . $e->getMessage();
                 return false;
             }
         }
@@ -129,6 +124,8 @@ class Login
      * Search into database for the user data of user_name specified as parameter
      * @return user data as an object if existing user
      * @return false if user_name is not found in the database
+     * TODO: @devplanete This returns two different types. Maybe this is valid, but it feels bad. We should rework this.
+     * TODO: @devplanete After some resarch I'm VERY sure that this is not good coding style! Please fix this.
      */
     private function getUserData($user_name)
     {
@@ -145,6 +142,10 @@ class Login
         }
     }
 
+    /**
+     * Logs in with S_SESSION data.
+     * Technically we are already logged in at that point of time, as the $_SESSION values already exist.
+     */
     private function loginWithSessionData()
     {
         $this->user_name = $_SESSION['user_name'];
@@ -153,9 +154,13 @@ class Login
         // set logged in status to true, because we just checked for this:
         // !empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)
         // when we called this method (in the constructor)
-        $this->user_is_logged_in = true;        
+        $this->user_is_logged_in = true;
     }
 
+    /**
+     * Logs in via the Cookie
+     * @return bool success state of cookie login
+     */
     private function loginWithCookieData()
     {
         if (isset($_COOKIE['rememberme'])) {
@@ -200,6 +205,12 @@ class Login
         return false;
     }
 
+    /**
+     * Logs in with the data provided in $_POST, coming from the login form
+     * @param $user_name
+     * @param $user_password
+     * @param $user_rememberme
+     */
     private function loginWithPostData($user_name, $user_password, $user_rememberme)
     {
         if (empty($user_name)) {
@@ -210,7 +221,7 @@ class Login
         // if POST data (from login form) contains non-empty user_name and non-empty user_password
         } else {
             // user can login with his username or his email address.
-            // if user has not typed a valid email address, we try to identify him with his user_name  
+            // if user has not typed a valid email address, we try to identify him with his user_name
             if (!filter_var($user_name, FILTER_VALIDATE_EMAIL)) {
                 // database query, getting all the info of the selected user
                 $result_row = $this->getUserData(trim($user_name));
@@ -285,7 +296,7 @@ class Login
     }
 
     /**
-     * Create all data needed for remember me cookie connection on client and server side 
+     * Create all data needed for remember me cookie connection on client and server side
      */
     private function newRememberMeCookie()
     {
@@ -307,7 +318,7 @@ class Login
     }
 
     /**
-     * Delete all data needed for remember me cookie connection on client and server side 
+     * Delete all data needed for remember me cookie connection on client and server side
      */
     private function deleteRememberMeCookie()
     {
@@ -325,7 +336,7 @@ class Login
     }
 
     /**
-     * perform the logout
+     * Perform the logout, resetting the session
      */
     public function doLogout()
     {
@@ -339,16 +350,16 @@ class Login
     }
 
     /**
-     * simply return the current state of the user's login
-     * @return boolean user's login status
+     * Simply return the current state of the user's login
+     * @return bool user's login status
      */
     public function isUserLoggedIn()
     {
         return $this->user_is_logged_in;
     }
-    
+
     /**
-     * edit the user's name, provided in the editing form
+     * Edit the user's name, provided in the editing form
      */
     public function editUserName($user_name)
     {
@@ -387,7 +398,7 @@ class Login
     }
 
     /**
-     * edit the user's email, provided in the editing form
+     * Edit the user's email, provided in the editing form
      */
     public function editUserEmail($user_email)
     {
@@ -426,15 +437,15 @@ class Login
                 }
             }
         }
-    }  
+    }
 
     /**
-     * edit the user's password, provided in the editing form
+     * Edit the user's password, provided in the editing form
      */
     public function editUserPassword($user_password_old, $user_password_new, $user_password_repeat)
     {
         if (empty($user_password_new) || empty($user_password_repeat) || empty($user_password_old)) {
-            $this->errors[] = $this->lang['Empty password'];            
+            $this->errors[] = $this->lang['Empty password'];
         // is the repeat password identical to password
         } elseif ($user_password_new !== $user_password_repeat) {
             $this->errors[] = $this->lang['Bad confirm password'];
@@ -461,7 +472,7 @@ class Login
                     // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
                     // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
                     // want the parameter: as an array with, currently only used with 'cost' => XX.
-                    $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));                        
+                    $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
 
                     // write users new hash into database
                     $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
@@ -482,10 +493,11 @@ class Login
                 $this->errors[] = $this->lang['User not exist'];
             }
         }
-    }   
-    
+    }
+
     /**
-     * 
+     * Sets a random token into the database (that will verify the user when he/she comes back via the link
+     * in the email) and sends the according email.
      */
     public function setPasswordResetDatabaseTokenAndSendMail($user_name)
     {
@@ -506,7 +518,7 @@ class Login
             // if this user exists
             if (isset($result_row->user_id)) {
 
-                // database query: 
+                // database query:
                 $query_update = $this->db_connection->prepare('UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
                                                                user_password_reset_timestamp = :user_password_reset_timestamp
                                                                WHERE user_name = :user_name');
@@ -528,11 +540,11 @@ class Login
             }
         }
         // return false (this method only returns true when the database entry has been set successfully)
-        return false;        
+        return false;
     }
-    
+
     /**
-     * 
+     * Sends the password-reset-email.
      */
     public function sendPasswordResetMail($user_name, $user_email, $user_password_reset_hash)
     {
@@ -546,27 +558,27 @@ class Login
             //useful for debugging, shows full SMTP errors
             //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
             // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->Username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
+            $mail->Port = EMAIL_SMTP_PORT;
         } else {
-            $mail->IsMail();            
+            $mail->IsMail();
         }
 
         $mail->From = EMAIL_PASSWORDRESET_FROM;
-        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
+        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
 
         $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($user_name).'&verification_code='.urlencode($user_password_reset_hash);
-        $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
+        $mail->Body = EMAIL_PASSWORDRESET_CONTENT . ' ' . $link;
 
         if(!$mail->Send()) {
             $this->errors[] = $this->lang['Password mail not sent'] . $mail->ErrorInfo;
@@ -576,9 +588,9 @@ class Login
             return true;
         }
     }
-    
+
     /**
-     * 
+     * Checks if the verification string in the account verification mail is valid and matches to the user.
      */
     public function checkIfEmailVerificationCodeIsValid($user_name, $verification_code)
     {
@@ -606,9 +618,9 @@ class Login
             }
         }
     }
-    
+
     /**
-     * 
+     * Checks and writes the new password.
      */
     public function editNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)
     {
@@ -636,7 +648,7 @@ class Login
             $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
 
             // write users new hash into database
-            $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash, 
+            $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash,
                                                            user_password_reset_hash = NULL, user_password_reset_timestamp = NULL
                                                            WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash');
             $query_update->bindValue(':user_password_hash', $user_password_hash, PDO::PARAM_STR);
@@ -653,9 +665,9 @@ class Login
             }
         }
     }
-    
+
     /**
-     * 
+     * Gets the success state of the password-reset-link-validation.
      * @return boolean
      */
     public function passwordResetLinkIsValid()
@@ -664,16 +676,17 @@ class Login
     }
 
     /**
-     * 
+     * Gets the success state of the password-reset action.
      * @return boolean
      */
     public function passwordResetWasSuccessful()
     {
         return $this->password_reset_was_successful;
     }
-    
+
     /**
-     * 
+     * Gets the username
+     * @return string username
      */
     public function getUsername()
     {
@@ -709,8 +722,8 @@ class Login
         $url = '<img src="' . $url . '"';
         foreach ($atts as $key => $val)
             $url .= ' ' . $key . '="' . $val . '"';
-        $url .= ' />';            
- 
+        $url .= ' />';
+
         // the image url like above but with an additional <img src .. /> around
         $this->user_gravatar_image_tag = $url;
     }
