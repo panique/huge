@@ -102,7 +102,7 @@ they are excellent and very sympathic.
 
 ###HOW TO DOWNLOAD
 
-Here on github you'll always find a stable and secure master branch and the in-development develop branch.
+Here on GitHub you'll always find a stable and secure master branch and the in-development develop branch.
 The master branch is ready for production, the develop branch is not (as it just shows the current state of development,
 maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the right
 upper sidebar here on this page.
@@ -114,8 +114,6 @@ This script has been made to run out-of-the-box. Not more config stuff than nece
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
 A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/).
-
-TODO: change the tutorial in the blog !
 
 * 1. call the install script via `_install.php`, which will create a `users.db` file right in the `database` folder. That's it.
 Please note that the `database` folder needs to be writable and you need to have the SQLite extension activated in PHP.
