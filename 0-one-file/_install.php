@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * This is the installation file for the 0-one-file version of the php-login script.
+ * It simply creates a new and empty database.
+ */
+
 error_reporting(E_ALL);
 
 $db_type = "sqlite";

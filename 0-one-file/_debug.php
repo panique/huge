@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * This is a helper file that simply outputs the content of the users.db file.
+ * Might be useful for your development.
+ */
+
 error_reporting(E_ALL);
 
 $db_type = "sqlite";
