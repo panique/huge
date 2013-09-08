@@ -1,9 +1,5 @@
 <?php
 
-// THIS IS JUST A DEMO !
-// THIS VERSION IS NOT FINISHED !
-// IT IS AN EARLY PREVIEW OF HOW THE NEW 0-ONE-FILE SCRIPT COULD LOOK LIKE !
-
 // TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
 // TODO: class properties or pass stuff from method to method ?
 // TODO: "don't use else" rule ?
@@ -11,8 +7,10 @@
 // TODO: PHP_SELF ?
 // TODO: explain the horrible missing of rowCount() in SQLite PDO !
 
-// no hard exit via exit()
-
+/**
+ * Class Login
+ * An entire php login script in one file, one class.
+ */
 class Login
 {
     /**
