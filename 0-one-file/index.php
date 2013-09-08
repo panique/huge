@@ -1,324 +1,426 @@
 <?php
 
-/**
- * A simple, clean and secure PHP Login Script
- *
- * SINGLE FILE FUNCTIONAL VERSION
- *
- * A simple PHP Login Script. Uses PHP SESSIONS, modern password-hashing
- * and salting and gives the basic functions a proper login system needs.
- * Please remember: this is just the minimal version of the login script,
- * so if you need a more advanced version, have a look on the github repo.
- * There are / will be better versions, including more functions and/or
- * much more complex code / file structure.
- * Keywords: MVC, dependency injected, one shared database connection,
- * PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style.
- *
- * To install this script, simply call index.php?a=install, a SQLite
- * one-file-database will then be created in your project folder.
- * This one-file script does not need a MySQL-database.
- *
- * @package php-login
- * @author Panique <panique@web.de>
- * @author Mark Constable <markc@renta.net>
- * @link https://github.com/panique/php-login/
- * @license http://opensource.org/licenses/MIT MIT License
- */
+// THIS IS JUST A DEMO !
+// THIS VERSION IS NOT FINISHED !
+// IT IS AN EARLY PREVIEW OF HOW THE NEW 0-ONE-FILE SCRIPT COULD LOOK LIKE !
 
-// checking for minimum PHP version
-if (version_compare(PHP_VERSION, '5.3.7', '<')) {
-    exit("Sorry, Simple PHP Login does not run on a PHP version smaller than 5.3.7 !");
-} else if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-    // if you are using PHP 5.3 or PHP 5.4 you have to include the password_api_compatibility_library.php
-    // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
-    require_once("libraries/password_compatibility_library.php");
-}
+// TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
+// TODO: class properties or pass stuff from method to method ?
+// TODO: "don't use else" rule ?
+// TODO: max level intend == 1 ?
+// TODO: PHP_SELF ?
+// TODO: explain the horrible missing of rowCount() in SQLite PDO !
 
-session_start();
+// no hard exit via exit()
 
-// tools for debugging
-//error_log('GET='.var_export($_GET, true));
-//error_log('POST='.var_export($_POST, true));
-//error_log('SESSION='.var_export($_SESSION, true));
-
-echo page(init(cfg(array(
-    'title' => 'Simple PHP Login',
-    'admin' => 'admin',
-    'email' => 'admin@localhost.lan',
-    'passwd' => 'changeme',
-    'db' => null,
-    'dbconf' => array(
-        'host' => 'localhost',
-        'name' => 'users',
-        'pass' => 'changeme',
-        'path' => 'database/users.db',
-        'port' => '3306',
-        'type' => 'sqlite',
-        'user' => 'root')))));
-
-// public callable functions
-
-function home()
+class Login
 {
-    return isset($_SESSION['user_logged_in']) ? '
-    <p>
-      Hello, ' . $_SESSION['user_name'] . '. You are now logged in. Try to close
-      this browser tab and open it again. Still logged in! ;)
-    </p>
-    <p>
-      <a class="btn" href="?a=logout">Logout</a>
-    </p>' : login_form();
-}
+    /**
+     * @var string
+     */
+    private $db_type = "sqlite"; // feel free to expand this with mysql etc.
 
-function logout()
-{
-    $_SESSION = array();
-    $_SESSION['msg'] = "You are now logged out";
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit(); // TODO: should we really use exit() ?
-}
+    /**
+     * @var string
+     */
+    private $db_sqlite_path = "database/users.db";
 
-function login()
-{
-    if (!empty($_POST)) {
-        $msg = '';
-        $user = read_user($_POST['user_name']);
-        if (isset($user['user_name'])) {
-            if (password_verify($_POST['user_password'], $user['user_password_hash'])) {
-                create_session($user);
-                header('Location: ' . $_SERVER['PHP_SELF']);
-                exit();
-            } else $msg = 'Wrong password';
-        } else $msg = 'User does not exist';
-        $_SESSION['msg'] = $msg;
+    /**
+     * @var null
+     */
+    private $db_connection = null;
+
+    /**
+     * @var bool
+     */
+    private $user_is_logged_in = false;
+
+    /**
+     * @var string
+     */
+    public $feedback = "";
+
+
+    /**
+     * Does necessary checks for PHP version and PHP password compatibility library and runs the application
+     */
+    public function __construct()
+    {
+        if ($this->performMinimumRequirementsCheck()) {
+            $this->runApplication();
+        }
     }
-    return login_form();
-}
 
-function register()
-{
-    if (!empty($_POST)) {
-        $msg = '';
-        if ($_POST['user_name']) {
-            if ($_POST['user_password_new']) {
-                if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
-                    if (strlen($_POST['user_password_new']) > 5) {
-                        if (strlen($_POST['user_name']) < 65 && strlen($_POST['user_name']) > 1) {
-                            if (preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-                                $user = read_user($_POST['user_name']);
-                                if (!isset($user['user_name'])) {
-                                    if ($_POST['user_email']) {
-                                        if (strlen($_POST['user_email']) < 65) {
-                                            if (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-                                                create_user();
-                                                $_SESSION['msg'] = 'You are now registered so please login';
-                                                header('Location: ' . $_SERVER['PHP_SELF']);
-                                                exit();
-                                            } else $msg = 'You must provide a valid email address';
-                                        } else $msg = 'Email must be less than 64 characters';
-                                    } else $msg = 'Email cannot be empty';
-                                } else $msg = 'Username already exists';
-                            } else $msg = 'Username must be only a-z, A-Z, 0-9';
-                        } else $msg = 'Username must be between 2 and 64 characters';
-                    } else $msg = 'Password must be at least 6 characters';
-                } else $msg = 'Passwords do not match';
-            } else $msg = 'Empty Password';
-        } else $msg = 'Empty Username';
-        $_SESSION['msg'] = $msg;
+    /**
+     * Performs a check for minimum requirements to run this application.
+     * Does not run the further application when PHP version is lower than 5.3.7
+     * Does include the PHP password compatibility library when PHP version lower than 5.5.0
+     * (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
+     * TODO: failsafe method flow would be nice (default return)
+     */
+    private function performMinimumRequirementsCheck()
+    {
+        if (version_compare(PHP_VERSION, '5.3.7', '<')) {
+            echo "Sorry, Simple PHP Login does not run on a PHP version older than 5.3.7 !";
+            return false;
+        } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            require_once("libraries/password_compatibility_library.php");
+            return true;
+        } elseif (version_compare(PHP_VERSION, '5.5.0', '>=')) {
+            return true;
+        }
     }
-    return register_form();
-}
 
-function install()
-{
-    $dbc = cfg('dbconf');
-    $dbh = cfg('db', db_init($dbc));
-    $pri = $dbc['type'] === 'mysql'
-        ? 'int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT'
-        : 'INTEGER PRIMARY KEY';
-    $ind = $dbc['type'] === 'mysql'
-        ? ' ALTER TABLE `users` ADD UNIQUE (`user_name`);'
-        : 'CREATE UNIQUE INDEX `user_name_UNIQUE` ON `users` (`user_name` ASC);';
-
-    // uncomment below to reinstall tables while testing
-    //$dbh->exec("DROP TABLE IF EXISTS `users`;");
-
-    try {
-        $dbh->exec("
-        CREATE TABLE IF NOT EXISTS `users` (
-        `user_id` $pri,
-        `user_name` varchar(64),
-        `user_password_hash` varchar(255),
-        `user_email` varchar(64));
-        $ind");
-    } catch (PDOException $e) {
-        die($e->getMessage()); // TODO: should we really use die() ?
+    /**
+     * This is basically the Controller that handles the entire flow of the application.
+     * TODO: get rid of 2 levels deep if/else ?
+     */
+    public function runApplication()
+    {
+        // check is user wants to see register page (etc.)
+        if (isset($_GET["action"]) && $_GET["action"] == "register") {
+            $this->doRegistration();
+            $this->showPageRegistration();
+        } else {
+            // start the session, always needed!
+            $this->doStartSession();
+            // check for possible user interactions (login with session/post data or logout)
+            $this->performUserLoginAction();
+            // show "page", according to user's login status
+            if ($this->getUserLoginStatus()) {
+                $this->showPageLoggedIn();
+            } else {
+                $this->showPageLoginForm();
+            }
+        }
     }
-    $_POST['user_name'] = cfg('admin');
-    $_POST['user_email'] = cfg('email');
-    $_POST['user_password_new'] = cfg('passwd');
-    create_user();
-    $_SESSION = array();
-    $_SESSION['msg'] = 'Database and default user are now installed, please login';
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit();
-}
 
-// private support functions
-// TODO @mark: this needs documentation/comments
-function cfg($k = NULL, $v = NULL)
-{
-    static $stash = array();
-    if (empty($k)) return $stash;
-    if (is_array($k)) return $stash = array_merge($stash, $k);
-    if ($v) $stash[$k] = $v;
-    return isset($stash[$k]) ? $stash[$k] : NULL;
-}
+    /**
+     * Creates a PDO database connection (in this case to a SQLite flat-file database)
+     * @return bool database creation success status
+     */
+    private function createDatabaseConnection()
+    {
+        try {
+            $this->db_connection = new PDO($this->db_type . ':' . $this->db_sqlite_path);
+            return true;
+        } catch (PDOException $e) {
+            $this->feedback = "PDO database connection problem: " . $e->getMessage();
+            return false;
+        } catch (Exception $e) {
+            $this->feedback = "General problem: " . $e->getMessage();
+            return false;
+        }
+    }
 
-function init($cfg)
-{
-    if (!empty($_POST)) cfg('db', db_init($cfg['dbconf']));
-    $action = isset($_REQUEST['a'])
-        ? strtolower(str_replace(' ', '_', trim($_REQUEST['a'])))
-        : 'home';
-    return in_array($action, array('home', 'login', 'logout', 'register', 'install'))
-        ? $action()
-        : '<b>Error: action does not exist</b>';
-}
+    /**
+     * Handles the flow of the login/logout process. According to the circumstances, a logout, a login with session
+     * data or a login with post data will be performed
+     */
+    private function performUserLoginAction()
+    {
+        if (isset($_GET["action"]) && $_GET["action"] == "logout") {
+            $this->doLogout();
+        } elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_is_logged_in'])) {
+            $this->doLoginWithSessionData();
+        } elseif (isset($_POST["login"])) {
+            $this->doLoginWithPostData();
+        }
+    }
 
-function page($content)
-{
-    $msg = isset($_SESSION['msg']) ? '
-    <p class="msg">' . $_SESSION['msg'] . '</p>' : '';
-    unset($_SESSION['msg']);
+    /**
+     * Simply starts the session.
+     * It's cleaner to put this into a method than writing it directly into runApplication()
+     */
+    private function doStartSession()
+    {
+        session_start();
+    }
 
-    return '<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>' . cfg('title') . '</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-body { margin: 0 auto; width: 42em; }
-h1, h2, form, .msg { text-align: center; }
-label { display: inline-block; width: 10em; text-align: right;  }
-a { text-decoration: none; }
-.msg, .btn { border: 1px solid #CFCFCF; padding: 0.25em 1em 0.5em 1em; border-radius: 0.3em; }
-.msg { background-color: #FFEFEF; color: #DF0000; font-weight: bold; }
-.btn { background-color: #EFEFEF; }
-.btn:hover { background-color: #DFDFDF; }
-    </style>
-  </head>
-  <body>
-    <h1>' . cfg('title') . '</h1>
-    <h2>(one-file version, with SQLite one-file database)</h2>
-    ' . $msg . $content . '
-  </body>
-</html>
-';
-}
+    /**
+     *
+     */
+    private function doLoginWithSessionData()
+    {
+        $this->user_is_logged_in = true; // ?
+    }
 
-function login_form()
-{
-    $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : '';
-    return '
-    <form method="post" action="?a=login" name="loginform">
-      <label for="login_input_username">Username</label>
-      <input id="login_input_username" class="login_input" type="text" name="user_name" value="' . $user_name . '" required>
-      <br>
-      <label for="login_input_password">Password</label>
-      <input id="login_input_password" class="login_input" type="password" name="user_password" autocomplete="off" required>
-      <br>
-      <br>
-      <input type="submit"  name="a" value="Login" />
-      <br>
-      <br>
-      <a class="btn" href="?a=register">Register New Account</a>
-    </form>';
+    /**
+     * TODO: split checkLoginFormDataPasswordCorrect into CHECK for login data and REALLY LOGGIN IN
+     */
+    private function doLoginWithPostData()
+    {
+        // TODO: how to fix 2 levels deep if structure
+        // TODO: not intuitive what happens here
+        if ($this->checkLoginFormDataNotEmpty()) {
+            if ($this->createDatabaseConnection()) {
+                $this->checkLoginFormDataPasswordCorrect(); // TODO: better name
+            }
+        }
+    }
 
-}
+    /**
+     * Logs the user out
+     */
+    private function doLogout()
+    {
+        $_SESSION = array();
+        session_destroy();
+        $this->user_is_logged_in = false;
 
-function register_form()
-{
-    $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : '';
-    $user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
-    return '
-    <form method="post" action="?a=register" name="registerform">
-      <p>All fields are required. Username must be only letters and numbers from<br>
-      2 to 64 characters long and the password has to be at least 6 characters.</p>
-      <!-- the user name input field uses a HTML5 pattern check -->
-      <label for="login_input_username">Username</label>
-      <input id="login_input_username" class="login_input" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" value="' . $user_name . '" required>
-      <br>
-      <!-- the email input field uses a HTML5 email type check -->
-      <label for="login_input_email">Email Address</label>
-      <input id="login_input_email" class="login_input" type="email" name="user_email" value="' . $user_email . '" required>
-      <br>
-      <label for="login_input_password_new">Password</label>
-      <input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off">
-      <br>
-      <label for="login_input_password_repeat">Confirm Password</label>
-      <input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off">
-      <br>
-      <br>
-      <input type="submit"  name="a" value="Register">
-      <br>
-      <br>
-      <a class="btn" href="?a=login">&laquo; Back to Login Page</a>
-    </form>';
+        $this->feedback = "You were just logged out.";
+    }
 
-}
+    /**
+     * TODO
+     * @return bool
+     */
+    private function doRegistration()
+    {
+        if ($this->checkRegistrationData()) {
+            if ($this->createDatabaseConnection()) {
+                $this->createNewUser(); // TODO: better name ?
+            }
+        }
+        // default return
+        return false;
+    }
 
-// CRUD/database functions
+    /**
+     * Validates the login form data, checks if username and password are provided
+     * @return bool
+     */
+    private function checkLoginFormDataNotEmpty()
+    {
+        if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
+            return true;
+        } elseif (empty($_POST['user_name'])) {
+            $this->feedback = "Username field was empty.";
+        } elseif (empty($_POST['user_password'])) {
+            $this->feedback = "Password field was empty.";
+        }
+        // default return
+        return false;
+    }
 
-function db_init($dbconf)
-{
-    extract($dbconf);
-    $dsn = $type === 'mysql'
-        ? 'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $name
-        : 'sqlite:' . $path;
-    try {
-        $db = new PDO($dsn, $user, $pass);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $db;
-    } catch (PDOException $e) {
-        die('DB Connection failed: ' . $e->getMessage());
+    // TODO: remove 2 levels deep if structure
+    /**
+     * Checks if user exits, if so: check if provided password matches the one in the database
+     * @return bool user login status
+     */
+    private function checkLoginFormDataPasswordCorrect()
+    {
+        $sql = 'SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = :user_name LIMIT 1';
+        $query = $this->db_connection->prepare($sql);
+        $query->bindValue(':user_name', $_POST['user_name']);
+        $query->execute();
+
+        // btw that's the weird way to get num_rows in PDO with SQLite. what a fucking bullshit! but that's the
+        // way to get the rows. $result->numRows() works with SQLite pure, but not with SQLite PDO.
+        // I think that PDO is a bad choice.
+        //if (count($query->fetchAll(PDO::FETCH_NUM)) == 1) {
+
+        // As there is no numRows() in SQLite/PDO (!!) we have to do it this way:
+        // If you meet the inventor of PDO, punch him. Seriously.
+        $result_row = $query->fetchObject();
+        if ($result_row) {
+
+            // using PHP 5.5's password_verify() function to check password
+            if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
+
+                // write user data into PHP SESSION [a file on your server]
+                $_SESSION['user_name'] = $result_row->user_name;
+                $_SESSION['user_email'] = $result_row->user_email;
+                $_SESSION['user_is_logged_in'] = true;
+                $this->user_is_logged_in = true;
+
+            } else {
+                $this->feedback = "Wrong password.";
+            }
+        } else {
+            $this->feedback = "This user does not exist.";
+        }
+    }
+
+    /**
+     * Validates the user's registration input
+     * @return bool success status of user's registration data validation
+     */
+    private function checkRegistrationData()
+    {
+        // if no registration form submitted: exit the method
+        if (!isset($_POST["register"])) {
+            return false;
+        }
+
+        // validating the input
+        if (!empty($_POST['user_name'])
+            && strlen($_POST['user_name']) <= 64
+            && strlen($_POST['user_name']) >= 2
+            && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+            && !empty($_POST['user_email'])
+            && strlen($_POST['user_email']) <= 64
+            && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
+            && !empty($_POST['user_password_new'])
+            && !empty($_POST['user_password_repeat'])
+            && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
+        ) {
+            // only this case return true, only this case is valid
+            return true;
+        } elseif (empty($_POST['user_name'])) {
+            $this->feedback = "Empty Username";
+        } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
+            $this->feedback = "Empty Password";
+        } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
+            $this->feedback = "Password and password repeat are not the same";
+        } elseif (strlen($_POST['user_password_new']) < 6) {
+            $this->feedback = "Password has a minimum length of 6 characters";
+        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
+            $this->feedback = "Username cannot be shorter than 2 or longer than 64 characters";
+        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
+            $this->feedback = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
+        } elseif (empty($_POST['user_email'])) {
+            $this->feedback = "Email cannot be empty";
+        } elseif (strlen($_POST['user_email']) > 64) {
+            $this->feedback = "Email cannot be longer than 64 characters";
+        } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+            $this->feedback = "Your email address is not in a valid email format";
+        } else {
+            $this->feedback = "An unknown error occurred.";
+        }
+
+        // default return
+        return false;
+    }
+
+    /**
+     * @return bool returns success status of user registration
+     */
+    private function createNewUser()
+    {
+        // remove html code etc. from username and email
+        $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+        $user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+        $user_password = $_POST['user_password_new'];
+        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 char hash string.
+        // the constant PASSWORD_DEFAULT comes from PHP 5.5 or the password_compatibility_library
+        $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT);
+
+        $sql = 'SELECT * FROM users WHERE user_name = :user_name';
+        $query = $this->db_connection->prepare($sql);
+        $query->bindValue(':user_name', $user_name);
+        $query->execute();
+
+        // As there is no numRows() in SQLite/PDO (!!) we have to do it this way:
+        // If you meet the inventor of PDO, punch him. Seriously.
+        $result_row = $query->fetchObject();
+        if ($result_row) {
+            $this->feedback = "Sorry, that username is already taken. Please choose another one.";
+            return false;
+        } else {
+            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email) VALUES(:user_name, :user_password_hash, :user_email)';
+            $query = $this->db_connection->prepare($sql);
+            $query->bindValue(':user_name', $user_name);
+            $query->bindValue(':user_password_hash', $user_password_hash);
+            $query->bindValue(':user_email', $user_email);
+            // PDO's execute() gives back TRUE when successful, FALSE when not
+            // @link http://stackoverflow.com/q/1661863/1114320
+            $registration_success_state = $query->execute();
+
+            if ($registration_success_state) {
+                $this->feedback = "Your account has been created successfully. You can now log in.";
+                return true;
+            } else {
+                $this->feedback = "Sorry, your registration failed. Please go back and try again.";
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Simply returns the current status of the user's login
+     * @return bool user's login status
+     */
+    public function getUserLoginStatus()
+    {
+        return $this->user_is_logged_in;
+    }
+
+    /**
+     * Simple demo-"page" that will be shown when the user is logged in.
+     * In a real application you would probably include an html-template here, but for this extremely simple
+     * demo the "echo" statements are totally okay.
+     */
+    private function showPageLoggedIn()
+    {
+        if ($this->feedback) {
+            echo $this->feedback . "<br/><br/>";
+        }
+
+        // TODO: should we include a template here ?
+
+        echo 'Hello ' . $_SESSION['user_name'] . ', you are logged in.<br/><br/>';
+        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=logout">Log out</a>';
+    }
+
+    /**
+     * Simple demo-"page" with the login form.
+     * In a real application you would probably include an html-template here, but for this extremely simple
+     * demo the "echo" statements are totally okay.
+     */
+    private function showPageLoginForm()
+    {
+        if ($this->feedback) {
+            echo $this->feedback . "<br/><br/>";
+        }
+
+        // TODO: should we include a template here ?
+
+        echo '<h2>Login</h2>';
+
+        // TODO: putting html here is bad...
+        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '" name="loginform">';
+        echo '<label for="login_input_username">Username</label> ';
+        echo '<input id="login_input_username" type="text" name="user_name" required /> ';
+        echo '<label for="login_input_password">Password</label> ';
+        echo '<input id="login_input_password" type="password" name="user_password" required /> ';
+        echo '<input type="submit"  name="login" value="Log in" />';
+        echo '</form>';
+
+        // TODO: PHP_SELF ?
+        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=register">Register new account</a>';
+    }
+
+    /**
+     * Simple demo-"page" with the registration form.
+     * In a real application you would probably include an html-template here, but for this extremely simple
+     * demo the "echo" statements are totally okay.
+     */
+    private function showPageRegistration()
+    {
+        if ($this->feedback) {
+            echo $this->feedback . "<br/><br/>";
+        }
+
+        // TODO: should we include a template here ?
+
+        echo '<h2>Registration</h2>';
+
+        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?action=register" name="registerform">';
+        echo '<label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>';
+        echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />';
+        echo '<label for="login_input_email">User\'s email</label>';
+        echo '<input id="login_input_email" type="email" name="user_email" required />';
+        echo '<label for="login_input_password_new">Password (min. 6 characters)</label>';
+        echo '<input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />';
+        echo '<label for="login_input_password_repeat">Repeat password</label>';
+        echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
+        echo '<input type="submit" name="register" value="Register" />';
+        echo '</form>';
+
+        echo '<a href="' . $_SERVER['PHP_SELF'] . '">Homepage</a>';
     }
 }
 
-function create_user()
-{
-    $q = cfg('db')->prepare("
-    INSERT INTO users (user_name, user_password_hash, user_email)
-     VALUES(:user_name, :user_password_hash, :user_email)");
-
-    $q->bindValue(":user_name", $_POST['user_name']);
-    $q->bindValue(":user_password_hash", password_hash($_POST['user_password_new'], PASSWORD_DEFAULT));
-    $q->bindValue(":user_email", $_POST['user_email']);
-    if (!$q->execute()) throw new Exception(die($q->errorInfo()));
-    $q->closeCursor();
-}
-
-function read_user($user)
-{
-    return cfg('db')->query("
- SELECT user_name, user_email, user_password_hash
-   FROM users
-  WHERE user_name = '$user'")->fetch(PDO::FETCH_ASSOC);
-}
-
-function update_user()
-{
-}
-
-function delete_user()
-{
-}
-
-function create_session($user)
-{
-    $_SESSION['user_name'] = $user['user_name'];
-    $_SESSION['user_email'] = $user['user_email'];
-    $_SESSION['user_logged_in'] = 1;
-    $_SESSION['msg'] = $user['user_name'] . ' is now logged in';
-}
+// runs the app
+$login = new Login();

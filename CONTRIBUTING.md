@@ -1,4 +1,4 @@
-# How to Contribute
+# How to contribute
 
 ## Pull Requests
 
@@ -8,3 +8,15 @@
 
 It is very important to separate new features or improvements into separate feature branches, and to send a
 pull request for each branch. This allows me to review and pull in new features or improvements individually.
+
+# How (NOT) to contribute
+
+1. Ladies & Gentlemen, please CHECK YOUR CODE before committing! Some people commit stuff that breaks
+the project completely, and obviously they never even tried to run their own code. It takes a long time to check
+and as this project provides security-critical stuff it might be fatal if we introduce security holes here.
+2. Please only commit useful changes. Some commits destroyed the project or moved it two steps backwards.
+3. Please ALWAYS commit into develop branch.
+4. Please comment everything you do, everything you change! Comment the parameters, their contents and write
+valid PHPdocumentor blocks! If your code does not cleary say what it does, then it's not possible to accept it.
+
+Thanks a lot for all your work!

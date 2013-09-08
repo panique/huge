@@ -24,10 +24,10 @@ https://github.com/panique/php-login-styles
 
 ###LIVE-DEMOS
 
-- `0-one-file`: http://109.75.177.79:81/
-- `1-minimal`: http://109.75.177.79:82/
-- `2-advanced`: http://109.75.177.79:83/
-- `4-full-mvc-framework`: http://109.75.177.79:84/
+- `0-one-file`: http://php-login.net/demo1.html
+- `1-minimal`: http://php-login.net/demo2.html
+- `2-advanced`: http://php-login.net/demo3.html
+- `4-full-mvc-framework`: http://php-login.net/demo4.html
 
 Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
 Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
@@ -64,6 +64,8 @@ mail account instead, like this one: http://trashmail.ws/
 - main feature: PDO (instead of mysqli)
 - main feature: remember me / keep me logged in
 - main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
+- new feature: user can log in with email adress
+- new feature: language files / i18n
 
 #####FULL-MVC-FRAMEWORK
 
@@ -100,7 +102,7 @@ they are excellent and very sympathic.
 
 ###HOW TO DOWNLOAD
 
-Here on github you'll always find a stable and secure master branch and the in-development develop branch.
+Here on GitHub you'll always find a stable and secure master branch and the in-development develop branch.
 The master branch is ready for production, the develop branch is not (as it just shows the current state of development,
 maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the right
 upper sidebar here on this page.
@@ -113,10 +115,8 @@ This script has been made to run out-of-the-box. Not more config stuff than nece
 
 A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/).
 
-* 1. call the script via `index.php?a=install`, which will create a `users.db` file right in the `database` folder. That's it.
-* (2.) when really using this script in a live project, please select a strong password for the database, you can change
-that in the first lines on the script. When renaming the database folder don't forget to change the path in the index.php
-config also!
+* 1. call the install script via `_install.php`, which will create a `users.db` file right in the `database` folder. That's it.
+Please note that the `database` folder needs to be writable and you need to have the SQLite extension activated in PHP.
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
@@ -260,6 +260,10 @@ active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.o
 
 ###USEFUL STUFF
 
+####How to use PDO (it's really easy!)
+
+http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers
+
 ####Multiple projects on one server that should share / not share their sessions
 
 If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
@@ -268,7 +272,11 @@ there's a nice solution: https://github.com/panique/php-login/issues/82
 
 ####Installing PHP 5.5
 
-Sweet little (3 bash commands) guideline for Ubuntu 12.04: [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
+Sweet little (3 bash commands) guideline for Ubuntu 12.04:
+[How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
+
+Same for Debian 7.0 / 7.1:
+[How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
 
 ###MORE INFO IN THE WIKI
 
@@ -297,7 +305,7 @@ Also a big big "thank you" to the donors of this project, your tips gimme a good
 If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
 then donating a small amount would be very cool.
 
-[Visit PayPal here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) to donate. Thanks!
+[![Paypal](http://www.php-login.net/img/paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
 ###CHECK MY NEW BLOG: [DEV-METAL.COM](http://www.dev-metal.com)###
 
