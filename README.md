@@ -118,7 +118,7 @@ A very detailed guideline on how to install the `0-one-file` version [here in th
 TODO: change the tutorial in the blog !
 
 * 1. call the install script via `_install.php`, which will create a `users.db` file right in the `database` folder. That's it.
-Please note that the `database` folder needs to be writeable and you need to have the SQLite extension activated in PHP.
+Please note that the `database` folder needs to be writable and you need to have the SQLite extension activated in PHP.
 
 #####HOW TO INSTALL 1-MINIMAL VERSION
 
