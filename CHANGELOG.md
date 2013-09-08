@@ -1,7 +1,9 @@
 # CHANGE LOG #
 
-September 4st 2013
+September 8th 2013
+* 2-advanced: Fixing the breaking commits
 
+September 4th 2013
 * 0-one-file: Deletion of 0-one-file project (because code quality)
 * 0-one-file: Complete rewrite of 0-one-file project
 
