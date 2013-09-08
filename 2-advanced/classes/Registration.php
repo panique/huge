@@ -1,22 +1,34 @@
 <?php
 
 /**
- * handles the user registration
+ * Handles the user registration
  * @author Panique <panique@web.de>
  */
 class Registration
 {
-    /** @var object $db_connection The database connection */
+    /**
+     * @var object $db_connection The database connection
+     */
     private $db_connection            = null;
-    /** @var array array with translation of language strings */
+    /**
+     * @var array array with translation of language strings
+     */
     private $lang                     = array();
-    /** @var bool success state of registration */
+    /**
+     * @var bool success state of registration
+     */
     public  $registration_successful  = false;
-    /** @var bool success state of verification */
+    /**
+     * @var bool success state of verification
+     */
     public  $verification_successful  = false;
-    /** @var array collection of error messages */
+    /**
+     * @var array collection of error messages
+     */
     public  $errors                   = array();
-    /** @var array collection of success / neutral messages */
+    /**
+     * @var array collection of success / neutral messages
+     */
     public  $messages                 = array();
 
     /**

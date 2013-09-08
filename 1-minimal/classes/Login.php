@@ -6,16 +6,33 @@
  */
 class Login
 {
-    // database connection
+    /**
+     * @var object $db_connection The database connection
+     */
     private $db_connection = null;
+    /**
+     * @var string $user_name The user's name
+     */
     private $user_name = "";
+    /**
+     * @var string $user_email The user's mail
+     */
     private $user_email = "";
+    /**
+     * @var string $user_password_hash The user's password hash
+     */
     private $user_password_hash = "";
+    /**
+     * @var boolean $user_is_logged_in The user's login status
+     */
     private $user_is_logged_in = false;
-
-    // collection of error messages
+    /**
+     * @var array $errors Collection of error messages
+     */
     public $errors = array();
-    // collection of success / neutral messages
+    /**
+     * @var array $messages Collection of success / neutral messages
+     */
     public $messages = array();
 
     /**
