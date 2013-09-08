@@ -1,41 +1,31 @@
 <?php
 
-// TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
-// TODO: class properties or pass stuff from method to method ?
-// TODO: "don't use else" rule ?
-// TODO: max level intend == 1 ?
-// TODO: PHP_SELF ?
-// TODO: explain the horrible missing of rowCount() in SQLite PDO !
-
 /**
  * Class Login
  * An entire php login script in one file, one class.
+ *
+ * TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
+ * TODO: class properties or pass stuff from method to method ?
+ * TODO: "don't use else" rule ?
+ * TODO: max level intend == 1 ?
+ * TODO: PHP_SELF ?
+ * TODO: explain the horrible missing of rowCount() in SQLite PDO !
  */
 class Login
 {
-    /**
-     * @var string
-     */
-    private $db_type = "sqlite"; // feel free to expand this with mysql etc.
+    /** @var string Type of used database (currently only SQLite, but feel free to expand this with mysql etc) */
+    private $db_type = "sqlite"; //
 
-    /**
-     * @var string
-     */
+    /** @var string Path of the database file (create this with _install.php) */
     private $db_sqlite_path = "database/users.db";
 
-    /**
-     * @var null
-     */
+    /** @var null Database connection */
     private $db_connection = null;
 
-    /**
-     * @var bool
-     */
+    /** @var bool Login status of user */
     private $user_is_logged_in = false;
 
-    /**
-     * @var string
-     */
+    /** @var string System messages, likes errors, notices, etc. */
     public $feedback = "";
 
 
@@ -95,7 +85,7 @@ class Login
 
     /**
      * Creates a PDO database connection (in this case to a SQLite flat-file database)
-     * @return bool database creation success status
+     * @return bool Database creation success status
      */
     private function createDatabaseConnection()
     {
@@ -186,7 +176,7 @@ class Login
 
     /**
      * Validates the login form data, checks if username and password are provided
-     * @return bool
+     * @return bool Login form data check success state
      */
     private function checkLoginFormDataNotEmpty()
     {
@@ -201,10 +191,10 @@ class Login
         return false;
     }
 
-    // TODO: remove 2 levels deep if structure
     /**
      * Checks if user exits, if so: check if provided password matches the one in the database
-     * @return bool user login status
+     * @return bool User login status
+     * TODO: remove 2 levels deep if structure
      */
     private function checkLoginFormDataPasswordCorrect()
     {
@@ -242,7 +232,7 @@ class Login
 
     /**
      * Validates the user's registration input
-     * @return bool success status of user's registration data validation
+     * @return bool Success status of user's registration data validation
      */
     private function checkRegistrationData()
     {
@@ -292,7 +282,8 @@ class Login
     }
 
     /**
-     * @return bool returns success status of user registration
+     * Creates a new user.
+     * @return bool Success status of user registration
      */
     private function createNewUser()
     {
@@ -337,7 +328,7 @@ class Login
 
     /**
      * Simply returns the current status of the user's login
-     * @return bool user's login status
+     * @return bool User's login status
      */
     public function getUserLoginStatus()
     {
