@@ -1,17 +1,14 @@
 <?php
 
 /**
- * This is the "base controller class". All other "real" controllers extend this class. That means, that for example
- * ....
- * ....
- * ....
+ * This is the "base controller class". All other "real" controllers extend this class.
  */
 class Controller {
 
     function __construct() {
 
-        // everytime a controller is created, start a session
-        // TODO: this is a singleton. should this be handled in another way ?
+        // every time a controller is created, start a session
+        // TODO: this is a singleton/static method. should this be handled in another way ?
         Session::init();
         
         // if user is not logged in, but has a rememberme-cookie, then try to login with cookie ("remember me" feature)
@@ -21,14 +18,13 @@ class Controller {
             header('location: ' . URL . 'login/loginwithcookie');
         }        
 
-        // everytime a controller is created, create a view object (that does nothing, but provides the render() method)
+        // every time a controller is created, create a view object (that does nothing, but provides the render method)
         $this->view = new View();
     }
 
     /**
      * loads the model with the given name.
      * loadModel("test") would include models/test_model.php and create the object $this->model in the controller
-     * 
      * @param string $name The name of the model
      */
     public function loadModel($name) {

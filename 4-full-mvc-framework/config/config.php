@@ -21,7 +21,7 @@ define('URL', 'http://127.0.0.1/php-login/4-full-mvc-framework/');
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
  */
 define('LIBS', 'libs/');
-// dont forget to make this folder writeable via chmod 775
+// don't forget to make this folder writeable via chmod 775
 // the slash at the end is VERY important!
 define('AVATAR_PATH', 'public/avatars/');
 
