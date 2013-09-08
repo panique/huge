@@ -11,8 +11,9 @@ pull request for each branch. This allows me to review and pull in new features 
 
 # How NOT to contribute
 
-1. Ladies & Gentlemen, with all respect, please CHECK YOUR F****** CODE before committing!
+1. Ladies & Gentlemen, with all respect, please CHECK YOUR FUCKING CODE before committing!
 Some people commit stuff that breaks the project completely, and obviously they never even tried to run their own code.
+It takes a long time to check and test every commit.
 2. Please only commit useful changes. Some commits destroyed the project or moved it two steps backwards.
 3. Please ALWAYS commit into develop branch.
 
