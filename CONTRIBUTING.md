@@ -1,4 +1,4 @@
-# How to Contribute
+# How to contribute
 
 ## Pull Requests
 
@@ -8,3 +8,12 @@
 
 It is very important to separate new features or improvements into separate feature branches, and to send a
 pull request for each branch. This allows me to review and pull in new features or improvements individually.
+
+# How NOT to contribute
+
+1. Ladies & Gentlemen, with all respect, please CHECK YOUR F****** CODE before committing!
+Some people commit stuff that breaks the project completely, and obviously they never even tried to run their own code.
+2. Please only commit useful changes. Some commits destroyed the project or moved it two steps backwards.
+3. Please ALWAYS commit into develop branch.
+
+Thanks a lot for all your work!
