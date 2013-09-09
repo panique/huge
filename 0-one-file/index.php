@@ -8,7 +8,6 @@
  * TODO: class properties or pass stuff from method to method ?
  * TODO: "don't use else" rule ?
  * TODO: max level intend == 1 ? => not necessary in this little script !
- * TODO: PHP_SELF ?
  * TODO: explain the horrible missing of rowCount() in SQLite PDO !
  */
 class Login
@@ -358,7 +357,7 @@ class Login
         // TODO: should we include a template here ?
 
         echo 'Hello ' . $_SESSION['user_name'] . ', you are logged in.<br/><br/>';
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=logout">Log out</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a>';
     }
 
     /**
@@ -377,7 +376,7 @@ class Login
         echo '<h2>Login</h2>';
 
         // TODO: putting html here is bad...
-        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '" name="loginform">';
+        echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="loginform">';
         echo '<label for="login_input_username">Username</label> ';
         echo '<input id="login_input_username" type="text" name="user_name" required /> ';
         echo '<label for="login_input_password">Password</label> ';
@@ -385,8 +384,7 @@ class Login
         echo '<input type="submit"  name="login" value="Log in" />';
         echo '</form>';
 
-        // TODO: PHP_SELF ?
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=register">Register new account</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=register">Register new account</a>';
     }
 
     /**
@@ -404,7 +402,7 @@ class Login
 
         echo '<h2>Registration</h2>';
 
-        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?action=register" name="registerform">';
+        echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
         echo '<label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>';
         echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />';
         echo '<label for="login_input_email">User\'s email</label>';
@@ -416,7 +414,7 @@ class Login
         echo '<input type="submit" name="register" value="Register" />';
         echo '</form>';
 
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '">Homepage</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '">Homepage</a>';
     }
 }
 
