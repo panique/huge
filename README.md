@@ -36,7 +36,7 @@ mail account instead, like this one: http://trashmail.ws/
 
 ###DIFFERENT VERSIONS
 
-#####ONE-FILE VERSION (by Mark Constable)
+#####ONE-FILE VERSION
 
 - extremely reduced to one (!) php file that handles ALL the stuff (plus a compatibility file for PHP 5.3 and 5.4)
 - uses a one-file SQLite database (that will be created automatically while installation), does not need a real MySQL database
