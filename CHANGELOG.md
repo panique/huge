@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+September 9th 2013
+* 0-one-file: fixed PHP_SELF vars that were introduced in last commit to avoid XSS attacks
+
 September 8th 2013
 * 2-advanced: Fixing the breaking commits
 
