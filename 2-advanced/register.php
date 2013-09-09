@@ -45,7 +45,7 @@ if (!$login->registration_successful && !$login->verification_successful) { ?>
     <label for="user_password_repeat"><?php echo $phplogin_lang['Register password repeat']; ?></label>
     <input id="user_password_repeat" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />       
 
-    <img src="register_captcha.php" alt="captcha" style="display: block;"/>
+    <img src="captcha.php" alt="captcha" style="display: block;"/>
 
     <label><?php echo $phplogin_lang['Register captcha']; ?></label>
     <input type="text" name="captcha" required />
