@@ -7,8 +7,7 @@
  * TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
  * TODO: class properties or pass stuff from method to method ?
  * TODO: "don't use else" rule ?
- * TODO: max level intend == 1 ?
- * TODO: PHP_SELF ?
+ * TODO: max level intend == 1 ? => not necessary in this little script !
  * TODO: explain the horrible missing of rowCount() in SQLite PDO !
  */
 class Login
@@ -24,7 +23,7 @@ class Login
     private $db_sqlite_path = "database/users.db";
 
     /**
-     * @var null Database connection
+     * @var object Database connection
      */
     private $db_connection = null;
 
@@ -54,23 +53,23 @@ class Login
      * Does not run the further application when PHP version is lower than 5.3.7
      * Does include the PHP password compatibility library when PHP version lower than 5.5.0
      * (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
-     * TODO: failsafe method flow would be nice (default return)
+     * @return bool Success status of minimum requirements check, default is false
      */
     private function performMinimumRequirementsCheck()
     {
         if (version_compare(PHP_VERSION, '5.3.7', '<')) {
             echo "Sorry, Simple PHP Login does not run on a PHP version older than 5.3.7 !";
-            return false;
         } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
             require_once("libraries/password_compatibility_library.php");
             return true;
         } elseif (version_compare(PHP_VERSION, '5.5.0', '>=')) {
             return true;
         }
+        return false;
     }
 
     /**
-     * This is basically the Controller that handles the entire flow of the application.
+     * This is basically the controller that handles the entire flow of the application.
      * TODO: get rid of 2 levels deep if/else ?
      */
     public function runApplication()
@@ -95,7 +94,7 @@ class Login
 
     /**
      * Creates a PDO database connection (in this case to a SQLite flat-file database)
-     * @return bool Database creation success status
+     * @return bool Database creation success status, false by default
      */
     private function createDatabaseConnection()
     {
@@ -104,11 +103,10 @@ class Login
             return true;
         } catch (PDOException $e) {
             $this->feedback = "PDO database connection problem: " . $e->getMessage();
-            return false;
         } catch (Exception $e) {
             $this->feedback = "General problem: " . $e->getMessage();
-            return false;
         }
+        return false;
     }
 
     /**
@@ -226,13 +224,11 @@ class Login
 
             // using PHP 5.5's password_verify() function to check password
             if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
-
                 // write user data into PHP SESSION [a file on your server]
                 $_SESSION['user_name'] = $result_row->user_name;
                 $_SESSION['user_email'] = $result_row->user_email;
                 $_SESSION['user_is_logged_in'] = true;
                 $this->user_is_logged_in = true;
-
             } else {
                 $this->feedback = "Wrong password.";
             }
@@ -318,7 +314,8 @@ class Login
             $this->feedback = "Sorry, that username is already taken. Please choose another one.";
             return false;
         } else {
-            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email) VALUES(:user_name, :user_password_hash, :user_email)';
+            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
+                    VALUES(:user_name, :user_password_hash, :user_email)';
             $query = $this->db_connection->prepare($sql);
             $query->bindValue(':user_name', $user_name);
             $query->bindValue(':user_password_hash', $user_password_hash);
@@ -360,7 +357,7 @@ class Login
         // TODO: should we include a template here ?
 
         echo 'Hello ' . $_SESSION['user_name'] . ', you are logged in.<br/><br/>';
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=logout">Log out</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a>';
     }
 
     /**
@@ -379,7 +376,7 @@ class Login
         echo '<h2>Login</h2>';
 
         // TODO: putting html here is bad...
-        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '" name="loginform">';
+        echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="loginform">';
         echo '<label for="login_input_username">Username</label> ';
         echo '<input id="login_input_username" type="text" name="user_name" required /> ';
         echo '<label for="login_input_password">Password</label> ';
@@ -387,8 +384,7 @@ class Login
         echo '<input type="submit"  name="login" value="Log in" />';
         echo '</form>';
 
-        // TODO: PHP_SELF ?
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=register">Register new account</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=register">Register new account</a>';
     }
 
     /**
@@ -406,7 +402,7 @@ class Login
 
         echo '<h2>Registration</h2>';
 
-        echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?action=register" name="registerform">';
+        echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
         echo '<label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>';
         echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />';
         echo '<label for="login_input_email">User\'s email</label>';
@@ -418,7 +414,7 @@ class Login
         echo '<input type="submit" name="register" value="Register" />';
         echo '</form>';
 
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '">Homepage</a>';
+        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '">Homepage</a>';
     }
 }
 

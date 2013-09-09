@@ -26,7 +26,7 @@ class Login
      * @var string $user_email The user's mail
      */
     private $user_email = "";
-    /** 
+    /**
      * @var boolean $user_is_logged_in The user's login status
      */
     private $user_is_logged_in = false;
