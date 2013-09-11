@@ -17,7 +17,6 @@ if ($registration->messages) {
 }
 
 // show register form
-// - NOTE: those  are bad style and only there for basic formatting. remove them when you use real .css
 // - the user name input field uses a HTML5 pattern check
 // - the email input field uses a HTML5 email type check
 if (!$registration->registration_successful && !$registration->verification_successful) { ?>
