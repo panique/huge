@@ -80,7 +80,7 @@ $phplogin_lang = array(
 'Change password'			=> 'Changer le mot de passe',
 
 // Logged in
-'You are logged in as'		=> 'Vous êtes conncté en tant que : ',
+'You are logged in as'		=> 'Vous êtes connecté en tant que : ',
 'Logout'					=> 'Déconnexion',
 'Edit user data'			=> 'Modifier mon compte',
 'Profile picture'			=> 'Photo de profil (depuis gravatar) :'
