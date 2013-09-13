@@ -26,12 +26,12 @@ Same like Advanced Version, but everything comes with a professional MVC framewo
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 
 ## Requirements
-###Basic Requirements
+####Basic Requirements
 
 1. **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 2. **MySQL 5** database for Minimal, Advanced and Full MVC version. The one-file version does not need a database.
 
-###Additional Requirements
+####Additional Requirements
 3. Minimal version needs the PHP **mysqli** (last letter is an "i") extension activated (default)
 4. Advanced and Full MVC versions use mail sending, so you need to have an **SMTP mail sending account** somewhere OR you know how to get **linux's sendmail** etc. to run.
 5. Advanced and Full MVC versions use **PHP's GD graphic functions**, so you need to have them enabled. That's standard on most php installations.
@@ -119,7 +119,8 @@ then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 8. Read the TUTORIAL.md file to get an idea how everything works together !
 
-## Troubleshooting: When using gmail.com as SMTP service
+## Troubleshooting & Useful Stuff
+### When using gmail.com as SMTP service
 
 Gmail is very popular as an SMTP mail sending service and would perfectly fit for small projects, but
 Sometimes gmail.com will not send mails anymore, usually because of:
@@ -132,12 +133,12 @@ Have a look here for full explanaition: https://support.google.com/mail/answer/1
 2. "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
  too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
 
-## Troubleshooting: Session lifetime
+### Session lifetime
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
 in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
-## Troubleshooting: Session Garbage Collector
+### Session Garbage Collector
 
 Sessions in PHP are easy to handle, but have a tricky configuration underneath. The common opinion is, that when you
 close your browser, the session is gone. Actually, it's a little bit more complicated:
@@ -158,7 +159,7 @@ Have a look on this excellent answer on StackOverflow to read more about this to
 For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
 PHP's session gargabe collector process ;)
 
-## Useful stuff: The PHP 5.5 password hashing functions
+### The PHP 5.5 password hashing functions
 
 1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](https://github.com/panique/php-login/wiki/A-little-guideline-on-how-to-use-the-PHP-5.5-password-hashing-functions-and-it%27s-%22library-plugin%22-based-PHP-5.3-&-5.4-implementation) 
 2. [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
@@ -166,15 +167,15 @@ PHP's session gargabe collector process ;)
 
 You can find all them in the project's [github wiki](https://github.com/panique/php-login/wiki).
 
-## Useful stuff: How to use PDO (it's really easy!)
+### How to use PDO (it's really easy!)
 
 [http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 
-## Useful stuff: Prevent/Allow PHP session sharing 
+### Prevent/Allow PHP session sharing 
 
 [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
 
-## Useful stuff: Installing PHP 5.5
+### Installing PHP 5.5
 
 Sweet little (3 bash commands) guideline for Ubuntu 12.04:
 [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/). Same for Debian 7.0 / 7.1:
