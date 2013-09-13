@@ -1,116 +1,50 @@
-# A simple PHP & MySQL Login Script #
+# PHP & MySQL Login
 
-Have a look on the official project website (but you'll always find the most current informations here on github):
-http://www.php-login.net or follow via [Twitter](https://twitter.com/simplephplogin), [Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)
-or [Google+](https://plus.google.com/104110071861201951660).
+Simple, lightweight and easy to use **Login Script for PHP** that comes in 4 different versions. From one-file version with SQLite database to full-featured MVC framework. Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility pack, which makes those functions available in those versions too). Follow the project on **[Twitter](https://twitter.com/simplephplogin)**, **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**
+or **[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog **[Dev Metal](http://www.dev-metal.com)**.
 
-*A simple, secure, clean, stylish, non-nerdy, well documented, object-oriented, totally free and reduced to the max PHP login script.
-Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility
-pack, which makes those functions available in those versions too). This strength of the encryption can be increased (and decreased) to
-stay secure, even if server technology (and hacker technology!) gets much much stronger.*
+## Live Demos
 
-####Available in 4 versions (plus beautiful themes/templates/user interfaces):
+See live demonstrations of **[1. One File Version](http://php-login.net/demo1.html)**, **[2. Minimal Version](http://php-login.net/demo2.html)**, **[3. Advanced Version](http://php-login.net/demo3.html)** and **[4. Full MVC Framework Version](http://php-login.net/demo4.html)**. The server's phpinfo() can be found [here](http://109.75.177.79:80/).
 
-0. One-File version. A full login system in one php file. Does not need a MySQL database, the script comes with a full power SQLite one-file database.
-1. Extremely reduced (perfect for quickly setting up your project, made for people who need a simple login)
-2. Advanced (much more features)
-4. Full-MVC-framework (even more features and professional MVC-framework code structure)
+## Four different versions
 
-Version #3, the styled version, has been dismissed to introduce a new project:
-Simple, beautiful, professional themes/templates/user interfaces for all 4 versions, packed into an independent project.
-Free to use and perfectly fitting into any version the php-login project. Simply copy into your css(/js?) folder
-and your are ready-to-go. Find the code here [coming up in the second half of 2013]: 
-https://github.com/panique/php-login-styles
+#### One file
+Full login script in one file. Uses a one-file SQLite database (no MySQL needed) and PDO. Features: Register, login, logout.
 
-###LIVE-DEMOS
-Please note: This project is developing quite fast, so the demos might not show the current state of development.
+#### Minimal
+All the basic functions in a clean file structure, uses MySQL and mysqli. Register, login, logout.
 
-- `0-one-file`: http://php-login.net/demo1.html
-- `1-minimal`: http://php-login.net/demo2.html
-- `2-advanced`: http://php-login.net/demo3.html
-- `4-full-mvc-framework`: http://php-login.net/demo4.html
+#### Advanced
+Same like minimal (uses MySQL and PDO), but much more features: Register, login, logout, email verification, password reset, edit user data, gravatars, captchas, remember me / stay logged in cookies, login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
-Server's phpinfo() here: http://109.75.177.79:80/ ! Feel free to test the scripts, and feel free to find security holes, problems and errors.
-Please note that this is just a preview, so don't misuse it. Also don't post your personal email adress here as it will be visible! Use a trash
-mail account instead, like this one: http://trashmail.ws/
+#### Full MVC Framework
+Same like Advanced Version, but everything comes with a professional MVC framework structure, perfect for building real applications. Additional features like: URL rewriting, professional usage of controllers and actions, PDO, MySQL, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail), user profile pages, public user profiles, gravatars and local avatars, account upgrade/downgrade etc.  
 
-###DIFFERENT VERSIONS
+## License
 
-#####ONE-FILE VERSION
+Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 
-- extremely reduced to one (!) php file that handles ALL the stuff (plus a compatibility file for PHP 5.3 and 5.4)
-- uses a one-file SQLite database (that will be created automatically while installation), does not need a real MySQL database
+## Requirements
+###Basic Requirements
 
-#####MINIMAL VERSION
+1. **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
+2. **MySQL 5** database for Minimal, Advanced and Full MVC version. The one-file version does not need a database.
 
-- main features: user can register, log in and log out
-- feature: username cannot be empty, must be >= 2 characters and <= 64 characters (checked in PHP and client-side in HTML5)
-- feature: username must fit the azAZ09 pattern (checked in PHP and client-side in HTML5)
-- feature: email must be provided, email must fit email format (checked in PHP and client-side in HTML5)
-- feature: password and password repeat check need to be the same (strict php string check ===)
-- security: SQL injection prevention: everything is escaped with real_escape_string()
-- security: passwords are hashed and salted using the offical PHP 5.5 password hashing functions
-- security: (works 100% too in PHP 5.3 and 5.4 due to included function compatibility file (in "libraries"))
-- security: user input is cleaned, your php app is protected against XSS attacks
+###Additional Requirements
+3. Minimal version needs the PHP **mysqli** (last letter is an "i") extension activated (default)
+4. Advanced and Full MVC versions use mail sending, so you need to have an **SMTP mail sending account** somewhere OR you know how to get **linux's sendmail** etc. to run.
+5. Advanced and Full MVC versions use **PHP's GD graphic functions**, so you need to have them enabled. That's standard on most php installations.
 
-#####ADVANCED VERSION (same like minimal, but with additional features)
+**Please don't use this script if you have absolutly no idea what the above things mean. Seriously.**
 
-- main feature: username can be changed by user
-- main feature: email can be changed by user
-- main feature: user gets email after registration, has to click on verification link (one-time hash-check)
-- main feature: user can edit password (need to provide password again to prevent account takeovers when keeping browser open)
-- main feature: user can request password reset ("i forgot my password" function)
-- main feature: gravatar profile pic support
-- main feature: captcha
-- main feature: PDO (instead of mysqli)
-- main feature: remember me / keep me logged in
-- main feature: mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
-- new feature: user can log in with email adress
-- new feature: language files / i18n
+## Themes / User Interfaces / Stylings
 
-#####FULL-MVC-FRAMEWORK
+Bookmark the highly related partner-project "[php-login-styles](https://github.com/panique/php-login-styles)" which will host beautiful themes for all the php-login versions. Currently this is only a placeholder, the project starts in late 2013.
 
-- all the features from 2-advanced and more
-- quite professional code/file structure
-- perfect for building REAL applications
-- main feature: URL rewriting (beautiful URLs)
-- main feature: professional usage of controllers and actions
-- main feature: PDO database connector (@see http://www.phpro.org/tutorials/Introduction-to-PHP-PDO.html)
-- main feature: mail sending via local linux mail tool OR SMTP account
-- main feature: captcha
-- main feature: user profile page
-- main feature: public user list / public profiles
-- main feature: time delay after failed logins
-- main feature: local avatars
-- main feature: remember me / keep me logged in
-- main feature: account upgrade/downgrade (for basic/premium accounts)
-- COMING UP: PDF/Tutorial that shows how to use this framework
-- COMING UP: code cleanup
+## Installation
 
-BIG BIG THANKS to **JREAM** and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ !
-The **PHP Login Framework** is build using code from JReam's framework (I took the base code from
-"Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic
-and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site,
-they are excellent and very sympathic.
-
-*Screenshot (desktop) from the 4-full-mvc-framework:*
-
-![Screenshot desktop](http://imageshack.us/a/img14/536/ndd.png)
-
-*Screenshot (mobile) from the 4-full-mvc-framework:*
-
-![Screenshot mobile](http://img59.imageshack.us/img59/9750/fbvk.png)
-
-###HOW TO DOWNLOAD
-
-Here on GitHub you'll always find a stable and secure master branch and the in-development develop branch.
-The master branch is ready for production, the develop branch is not (as it just shows the current state of development,
-maybe including some not-so-good tested features). For newbies: to download, simply click the ZIP-button on the right
-upper sidebar here on this page.
-
-###HOW TO INSTALL
-
-This script has been made to run out-of-the-box. Not more config stuff than necessary.
+This script has been made to run out-of-the-box. Not more configuration than necessary. For a full installation guideline please have a look into these blog posts from the official support blog:
 
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
@@ -185,7 +119,7 @@ then fill in your credentials in EMAIL_SMTP_... and set EMAIL_USE_SMTP to true.
 * 7. Change the domain in COOKIE_DOMAIN in config/config.php to your needs. Note: there needs to be a dot in front of it!
 * 8. Read the TUTORIAL.md file to get an idea how everything works together !
 
-###IMPORTANT NOTICE WHEN USING GMAIL.COM AS SMTP MAIL SERVICE
+## Troubleshooting: When using gmail.com as SMTP service
 
 Gmail is very popular as an SMTP mail sending service and would perfectly fit for small projects, but
 Sometimes gmail.com will not send mails anymore, usually because of:
@@ -198,12 +132,12 @@ Have a look here for full explanaition: https://support.google.com/mail/answer/1
 2. "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
  too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
 
-###CONFIGURE
+## Troubleshooting: Session lifetime
 
 * you can set the lifetime of a session (until you will be logged out automatically) by changing the value of session.gc_maxlifetime
 in the php.ini (in seconds, for example 3600 is a hour, 36000 are ten hours)
 
-###IMPORTANT NOTE REGARDING SESSION HANDLING
+## Troubleshooting: Session Garbage Collector
 
 Sessions in PHP are easy to handle, but have a tricky configuration underneath. The common opinion is, that when you
 close your browser, the session is gone. Actually, it's a little bit more complicated:
@@ -224,7 +158,7 @@ Have a look on this excellent answer on StackOverflow to read more about this to
 For this script it means, that when you close your browser and open it again, and are still logged in, it has to do with
 PHP's session gargabe collector process ;)
 
-###IF YOU WANT TO KNOW MORE ABOUT THE PHP 5.5 (and 5.3/5.4) PASSWORD FUNCTIONS
+## Useful stuff: The PHP 5.5 password hashing functions
 
 1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](https://github.com/panique/php-login/wiki/A-little-guideline-on-how-to-use-the-PHP-5.5-password-hashing-functions-and-it%27s-%22library-plugin%22-based-PHP-5.3-&-5.4-implementation) 
 2. [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
@@ -232,58 +166,32 @@ PHP's session gargabe collector process ;)
 
 You can find all them in the project's [github wiki](https://github.com/panique/php-login/wiki).
 
-###REQUIREMENTS / TROUBLESHOOTING
+## Useful stuff: How to use PDO (it's really easy!)
 
-* needs **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
-* needs mySQL 5.1+
-* needs the PHP mysqli (last letter is an "i") extension activated (standard on nearly all modern servers) for `1-minimal`
-* are the database connection info in config/db.php or config/config.php correct ?
-* have you created a database named "login" like mentioned above ?
-* does the provided database user (standard is "root") have rights to read (and write) the database ?
-* please don't use this script if you have absolutely no idea what PHP or MySQL is. Seriously.
-* the 2-advanced and 4-full-mvc-framework versions use mail sending, so you need to have `sendmail` or something enabled on your server.
-Please see the instruction in the folder "__install" if you need help with that. The 4-full-mvc-framework version also allows to send
-mails with an SMTP account.
-* the 2-advanced and 4-full-mvc-framework version use the PHP GD graphic functions, so you need to have them enabled. That's standard on most
-php installations.
+[http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 
-###CONTRIBUTING
+## Useful stuff: Prevent/Allow PHP session sharing 
+
+[How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
+
+## Useful stuff: Installing PHP 5.5
+
+Sweet little (3 bash commands) guideline for Ubuntu 12.04:
+[How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/). Same for Debian 7.0 / 7.1:
+[How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
+
+## Contribute
 
 Please review CONTRIBUTING.md before sending a pull request.
 
-###USAGE WITH OLDER PHP VERSIONS: 
+## Project Wiki and project issues
 
-This script needs PHP 5.3.7 or higher. PHP 5.2 is outdated since 2009, so supporting this would be contra-productive (and is impossible btw).
-**PHP 5.3.7 is REALLY needed** (as this version introduced modern password hashing algorithms). There is no way to work around
-this. For your own security: Please don't use several years old versions of PHP ! This makes you an excellent target
-for attackers. Every good webhost / server provider offers fresh and secure versions of PHP. To get an overview about outdated, supported and
-active versions of PHP, please have a look [on wikipedia](https://en.wikipedia.org/wiki/PHP#Release_history).
+See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff. Have a look on the [issue list](https://github.com/panique/php-login/issues?state=open) for feature request and security discussions.
 
-###USEFUL STUFF
+## Thanks
 
-####How to use PDO (it's really easy!)
-
-http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers
-
-####Multiple projects on one server that should share / not share their sessions
-
-If you want to run multiple instances of this script on one server, maybe like /myproject1/ and /myproject2/ and need to be logged
-in into both applications via ONE session (sound weird, but some people actually need this) please have a look into this ticket, 
-there's a nice solution: https://github.com/panique/php-login/issues/82
-
-####Installing PHP 5.5
-
-Sweet little (3 bash commands) guideline for Ubuntu 12.04:
-[How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/) with 3 simple bash commands.
-
-Same for Debian 7.0 / 7.1:
-[How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
-
-###MORE INFO IN THE WIKI
-
-See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-depth stuff.
-
-###THANKS TO###
+BIG BIG THANKS to JREAM and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ ! The PHP Login Framework is build using code from JReam's framework (I took the base code from "Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site, they are excellent and very sympathic. And it's probably the best
+MVC/framework tutorial on the web. Get started here: [http://www.youtube.com/watch?v=Aw28-krO7ZM](http://www.youtube.com/watch?v=Aw28-krO7ZM)
 
 A big thanks goes out to Anthony Ferrara (ircmaxell) and Nikita Popov (nikic) for creating and documenting the wonderful PHP 5.5 password
 hashing/salting functions and the compatibility pack for PHP 5.3/5.4 ! I love it, when people create things, that make it much much easier
@@ -291,29 +199,21 @@ and safer to use other things. You can find the official info on those functions
 [here](http://benwerd.com/2012/09/12/more-secure-password-hashing-in-php-5-5/) and the official PHP 5.3/5.4 compatibility pack
 [here](https://github.com/ircmaxell/password_compat/blob/master/lib/password.php).
 
-I would also like to thank Jesse from http://jream.com for his excellent framework tutorial (and code). It's probably the best
-MVC/framework tutorial on the web. Get started here: http://www.youtube.com/watch?v=Aw28-krO7ZM
-
-Another very big Thanks to Mark Constable for creating the awesome 0-one-file version of the script. It's unbelievable
-what powerful things you can create within ONE short and readable file!
-
 Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping function.
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-###DONATE SOME DOLLARS IF YOU REALLY USE THIS SCRIPT###
+## Donate with [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
-If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better,
-then donating a small amount would be very cool.
+If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better, then donating a small amount would be very cool.
 
 [![Paypal](http://www.php-login.net/img/paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
-###CHECK MY NEW BLOG: [DEV-METAL.COM](http://www.dev-metal.com)###
+## Official Support Blog: [dev-metal.com](http://www.dev-metal.com)
 
-Have a look on my new dev blog, highly relevant to the login script ! The blog will feature installation guidelines for this script,
-insights about the current development (of php-login), masses of PHP and security stuff, lots of UI/UX related things, talks, slides,
+Have a look on my new dev blog, highly relevant to the login script ! The blog will feature installation guidelines for this script, insights about the current development (of php-login), masses of PHP and linux security stuff, lots of UI/UX related things, talks, slides,
 interviews, tutorials, and some delicious details about the Berlin startup scene.
 
-###AVAILABLE FOR HIRE###
+## Author available for hire
 
-I'm available for freelance work. Remote worldwide or locally around Central Europe. Drop me a line.
+I'm available for freelance work. Remote worldwide or locally around Central Europe. Drop me a line if you like.
