@@ -25,6 +25,11 @@ Same like Advanced Version, but everything comes with a professional MVC framewo
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 
+## Support the project
+
+If you want to support the project, rent your next server at [DigitalOcean ($5 per month, or $0.007 per hour)](https://www.digitalocean.com/?refcode=40d978532a20),
+php-login will get a little reward for each new customer.
+
 ## Requirements
 ####Basic Requirements
 
