@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+September 13th 2013
+* 0-one-file: better installation script
+* 0-one-file: code improvements and optimization
+
 September 9th 2013
 * 0-one-file: fixed PHP_SELF vars that were introduced in last commit to avoid XSS attacks
 

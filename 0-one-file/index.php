@@ -4,11 +4,12 @@
  * Class Login
  * An entire php login script in one file, one class.
  *
- * TODO: POST & GET directly in methods ? would be cleaner to pass this into the methods, right ?
- * TODO: class properties or pass stuff from method to method ?
- * TODO: "don't use else" rule ?
- * TODO: max level intend == 1 ? => not necessary in this little script !
- * TODO: explain the horrible missing of rowCount() in SQLite PDO !
+ * Potential TODO:
+ * 1. POST & GET directly in methods ? would be cleaner to pass this into the methods ?
+ * 2. "Don't use else" rule ? Might be useful in VERY good PHP code, but c'mon, ELSE makes code much more readable,
+ *    especially in this little script
+ * 3. Max level of "if nesting" should be only ONE. But I think in this little script that's not necessary and would
+ *    make things more complicated
  */
 class Login
 {
@@ -70,7 +71,6 @@ class Login
 
     /**
      * This is basically the controller that handles the entire flow of the application.
-     * TODO: get rid of 2 levels deep if/else ?
      */
     public function runApplication()
     {
@@ -134,7 +134,7 @@ class Login
     }
 
     /**
-     *
+     * Set a marker (NOTE: is this method necessary ?)
      */
     private function doLoginWithSessionData()
     {
@@ -142,15 +142,13 @@ class Login
     }
 
     /**
-     * TODO: split checkLoginFormDataPasswordCorrect into CHECK for login data and REALLY LOGGIN IN
+     * Process flow of login with POST data
      */
     private function doLoginWithPostData()
     {
-        // TODO: how to fix 2 levels deep if structure
-        // TODO: not intuitive what happens here
         if ($this->checkLoginFormDataNotEmpty()) {
             if ($this->createDatabaseConnection()) {
-                $this->checkLoginFormDataPasswordCorrect(); // TODO: better name
+                $this->checkPasswordCorrectnessAndLogin();
             }
         }
     }
@@ -163,20 +161,18 @@ class Login
         $_SESSION = array();
         session_destroy();
         $this->user_is_logged_in = false;
-
         $this->feedback = "You were just logged out.";
     }
 
     /**
      * The registration flow
-     * TODO: make this more professional
      * @return bool
      */
     private function doRegistration()
     {
         if ($this->checkRegistrationData()) {
             if ($this->createDatabaseConnection()) {
-                $this->createNewUser(); // TODO: better name ?
+                $this->createNewUser();
             }
         }
         // default return
@@ -202,26 +198,23 @@ class Login
 
     /**
      * Checks if user exits, if so: check if provided password matches the one in the database
-     * TODO: remove 2 levels deep if structure
-     * @return bool User login status
+     * @return bool User login success status
      */
-    private function checkLoginFormDataPasswordCorrect()
+    private function checkPasswordCorrectnessAndLogin()
     {
         $sql = 'SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = :user_name LIMIT 1';
         $query = $this->db_connection->prepare($sql);
         $query->bindValue(':user_name', $_POST['user_name']);
         $query->execute();
 
-        // btw that's the weird way to get num_rows in PDO with SQLite. what a fucking bullshit! but that's the
-        // way to get the rows. $result->numRows() works with SQLite pure, but not with SQLite PDO.
-        // I think that PDO is a bad choice.
-        //if (count($query->fetchAll(PDO::FETCH_NUM)) == 1) {
-
+        // Btw that's the weird way to get num_rows in PDO with SQLite:
+        // if (count($query->fetchAll(PDO::FETCH_NUM)) == 1) {
+        // Holy! But that's how it is. $result->numRows() works with SQLite pure, but not with SQLite PDO.
+        // This is so crappy, but that's how PDO works.
         // As there is no numRows() in SQLite/PDO (!!) we have to do it this way:
         // If you meet the inventor of PDO, punch him. Seriously.
         $result_row = $query->fetchObject();
         if ($result_row) {
-
             // using PHP 5.5's password_verify() function to check password
             if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
                 // write user data into PHP SESSION [a file on your server]
@@ -229,12 +222,15 @@ class Login
                 $_SESSION['user_email'] = $result_row->user_email;
                 $_SESSION['user_is_logged_in'] = true;
                 $this->user_is_logged_in = true;
+                return true;
             } else {
                 $this->feedback = "Wrong password.";
             }
         } else {
             $this->feedback = "This user does not exist.";
         }
+        // default return
+        return false;
     }
 
     /**
@@ -312,7 +308,6 @@ class Login
         $result_row = $query->fetchObject();
         if ($result_row) {
             $this->feedback = "Sorry, that username is already taken. Please choose another one.";
-            return false;
         } else {
             $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
                     VALUES(:user_name, :user_password_hash, :user_email)';
@@ -329,9 +324,10 @@ class Login
                 return true;
             } else {
                 $this->feedback = "Sorry, your registration failed. Please go back and try again.";
-                return false;
             }
         }
+        // default return
+        return false;
     }
 
     /**
@@ -354,8 +350,6 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
 
-        // TODO: should we include a template here ?
-
         echo 'Hello ' . $_SESSION['user_name'] . ', you are logged in.<br/><br/>';
         echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a>';
     }
@@ -371,11 +365,8 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
 
-        // TODO: should we include a template here ?
-
         echo '<h2>Login</h2>';
 
-        // TODO: putting html here is bad...
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="loginform">';
         echo '<label for="login_input_username">Username</label> ';
         echo '<input id="login_input_username" type="text" name="user_name" required /> ';
@@ -397,8 +388,6 @@ class Login
         if ($this->feedback) {
             echo $this->feedback . "<br/><br/>";
         }
-
-        // TODO: should we include a template here ?
 
         echo '<h2>Registration</h2>';
 
