@@ -166,7 +166,7 @@ PHP's session gargabe collector process ;)
 
 ### The PHP 5.5 password hashing functions
 
-1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](https://github.com/panique/php-login/wiki/A-little-guideline-on-how-to-use-the-PHP-5.5-password-hashing-functions-and-it%27s-%22library-plugin%22-based-PHP-5.3-&-5.4-implementation) 
+1. [A little guideline on how to use the PHP 5.5 password hashing functions and it's "library plugin" based PHP 5.3 & 5.4 implementation](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
 2. [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 3. [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 
