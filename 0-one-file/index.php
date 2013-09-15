@@ -10,6 +10,11 @@
  *    especially in this little script
  * 3. Max level of "if nesting" should be only ONE. But I think in this little script that's not necessary and would
  *    make things more complicated
+ *
+ * @package php-login
+ * @author Panique
+ * @link https://github.com/panique/php-login/
+ * @license http://opensource.org/licenses/MIT MIT License
  */
 class Login
 {

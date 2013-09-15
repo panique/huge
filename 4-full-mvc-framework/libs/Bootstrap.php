@@ -12,8 +12,6 @@ class Bootstrap {
     
     /**
      * Starts the Bootstrap
-     * 
-     * @return boolean
      */
     public function __construct()
     {

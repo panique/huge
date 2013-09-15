@@ -16,7 +16,7 @@
  * one shared database connection, PDO, prepared statements, PSR-0/1/2 and documented in phpDocumentor style
  *
  * @package php-login
- * @author Panique <panique@web.de>
+ * @author Panique
  * @link https://github.com/panique/php-login/
  * @license http://opensource.org/licenses/MIT MIT License
  */

@@ -1,37 +1,39 @@
 <?php
 
 /**
+ * Class login
+ *
  * handles the user login/logout/session
  * @author Panique <panique@web.de>
  */
 class Login
 {
     /**
-     * @var object $db_connection The database connection
+     * @var object The database connection
      */
     private $db_connection = null;
     /**
-     * @var string $user_name The user's name
+     * @var string The user's name
      */
     private $user_name = "";
     /**
-     * @var string $user_email The user's mail
+     * @var string The user's mail
      */
     private $user_email = "";
     /**
-     * @var string $user_password_hash The user's password hash
+     * @var string The user's password hash
      */
     private $user_password_hash = "";
     /**
-     * @var boolean $user_is_logged_in The user's login status
+     * @var boolean The user's login status
      */
     private $user_is_logged_in = false;
     /**
-     * @var array $errors Collection of error messages
+     * @var array Collection of error messages
      */
     public $errors = array();
     /**
-     * @var array $messages Collection of success / neutral messages
+     * @var array Collection of success / neutral messages
      */
     public $messages = array();
 
@@ -41,6 +43,9 @@ class Login
      */
     public function __construct()
     {
+
+        // TODO: adapt the minimum check like in 0-one-file version
+
         // create/read session
         session_start();
 
@@ -52,17 +57,14 @@ class Login
 
         // if user tried to log out
         if (isset($_GET["logout"])) {
-
             $this->doLogout();
         }
         // if user has an active session on the server
         elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
-
             $this->loginWithSessionData();
         }
         // if user just submitted a login form
         elseif (isset($_POST["login"])) {
-
             $this->loginWithPostData();
         }
     }
@@ -115,26 +117,17 @@ class Login
                         $this->user_is_logged_in = true;
 
                     } else {
-
                         $this->errors[] = "Wrong password. Try again.";
                     }
-
                 } else {
-
                     $this->errors[] = "This user does not exist.";
                 }
-
             } else {
-
                 $this->errors[] = "Database connection problem.";
             }
-
         } elseif (empty($_POST['user_name'])) {
-
             $this->errors[] = "Username field was empty.";
-
         } elseif (empty($_POST['user_password'])) {
-
             $this->errors[] = "Password field was empty.";
         }
     }
