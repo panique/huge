@@ -4,7 +4,10 @@
  * Class login
  *
  * handles the user login/logout/session
- * @author Panique <panique@web.de>
+ * @author Panique
+ * @link http://www.php-login.net
+ * @link https://github.com/panique/php-login/
+ * @license http://opensource.org/licenses/MIT MIT License
  */
 class Login
 {
