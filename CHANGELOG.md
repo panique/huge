@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+September 19th 2013
+* 2-advanced: polish translation file
+
 September 13th 2013
 * 0-one-file: better installation script
 * 0-one-file: code improvements and optimization
