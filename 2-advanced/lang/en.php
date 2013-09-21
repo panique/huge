@@ -6,11 +6,11 @@ $phplogin_lang = array(
 'Database error'			=> 'Database connection problem.',
 'Empty username'			=> 'Username field was empty',
 'Username exist'			=> 'Sorry, that username is already taken. Please choose another one.',
-'Invalid username'			=> 'Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters',
+'Invalid username'			=> 'Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters',
 'Empty password'			=> 'Password field was empty',
 'Bad confirm password'		=> 'Password and password repeat are not the same',
 'Password too short'		=> 'Password has a minimum length of 6 characters',
-'Email exist'				=> 'This email address is already registered. Please use the "I forgot my password" page if you don\'t remeber it.',
+'Email exist'				=> 'This email address is already registered. Please use the "I forgot my password" page if you don\'t remember it.',
 'Invalid email'				=> 'Your email address is not in a valid email format',
 
 // Registration class
@@ -37,7 +37,7 @@ $phplogin_lang = array(
 'Username change failed'	=> 'Sorry, your chosen username renaming failed',
 'Email changed'				=> 'Your email address has been changed successfully. New email address is ',
 'Email change failed'		=> 'Sorry, your email changing failed.',
-'Password changed'			=> 'Password sucessfully changed!',
+'Password changed'			=> 'Password successfully changed!',
 'Password changed failed'	=> 'Sorry, your password changing failed.',
 'Wrong old password'		=> 'Your OLD password was wrong.',
 'Password mail sent'		=> 'Password reset mail successfully sent!',
@@ -55,7 +55,7 @@ $phplogin_lang = array(
 
 // Register form
 'Register username'			=> 'Username (only letters and numbers, 2 to 64 characters)',
-'Register email'			=> 'User\'s email (please provide a real email adress, you\'ll get a verification mail with an activation link)',
+'Register email'			=> 'User\'s email (please provide a real email address, you\'ll get a verification mail with an activation link)',
 'Register password'			=> 'Password (min. 6 characters!)',
 'Register password repeat'	=> 'Password repeat',
 'Register captcha'			=> 'Please enter those characters',
