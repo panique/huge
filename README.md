@@ -197,6 +197,11 @@ See [the wiki pages here](https://github.com/Panique/PHP-Login/wiki) for in-dept
 
 ## Thanks
 
+This project is kindly powered by **PHPStorm**. Thanks to IntelliJ for giving php-login free licenses of this wonderful IDE.
+I've switched from NetBeans to PHPStorm as it is so much more advanced, bringing config-free support for XDebug,
+Vagrant, composer etc. into your workflow. Try it: [PHPStorm - The PHP IDE](http://www.jetbrains.com/phpstorm/).
+Totally free beta-versions here: [PHPStorm - Free beta version](http://www.jetbrains.com/phpstorm/nextversion/index.html).
+
 BIG BIG THANKS to JREAM and his excellent mvc-framework tutorial / codebase on http://jream.com/lab/ ! The PHP Login Framework is build using code from JReam's framework (I took the base code from "Part 3" and improved with code from "Part 9", "Part 10" and "Part 11", so the code itself is still basic and not too advanced). If you like, have a look on the how-to-build-a-framework-tutorials on his site, they are excellent and very sympathic. And it's probably the best
 MVC/framework tutorial on the web. Get started here: [http://www.youtube.com/watch?v=Aw28-krO7ZM](http://www.youtube.com/watch?v=Aw28-krO7ZM)
 
