@@ -2,6 +2,7 @@
 
 September 21th 2013
 * 2-advanced: netherlands translation file
+* 2-advanced: EN translation file typo fixes
 * README: added PHPStorm/IntelliJ into "thank you" section
 
 September 19th 2013
