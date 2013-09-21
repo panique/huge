@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+September 21th 2013
+* 2-advanced: netherlands translation file
+* README: added PHPStorm/IntelliJ into "thank you" section
+
 September 19th 2013
 * 2-advanced: polish translation file
 
