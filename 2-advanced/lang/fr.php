@@ -55,7 +55,7 @@ $phplogin_lang = array(
 
 // Register form
 'Register username'			=> 'Nom d\'utilisateur (seulement des lettres et des chiffres, de 2 à 64 caractères)',
-'Register email'			=> 'E-mail (merci de fournir une adresse valide car vous recevrez un mail de vérification avec un lien d\'activation)',
+'Register email'			=> 'E-mail (merci de fournir une adresse valide car vous recevrez un mail de vérification contenant un lien d\'activation)',
 'Register password'			=> 'Mot de passe (min. 6 caractères)',
 'Register password repeat'	=> 'Mot de passe repéter',
 'Register captcha'			=> 'Saisir les caractères de l\'image ci-dessus',
