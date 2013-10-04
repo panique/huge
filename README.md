@@ -29,7 +29,8 @@ Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 ## Support the project
 
 If you want to support the project, rent your next server at [DigitalOcean ($5 per month, or $0.007 per hour)](https://www.digitalocean.com/?refcode=40d978532a20).
-The php-login project will get a little reward for each new customer.
+The php-login project will get a little reward for each new customer. Alternativly, feel free to donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
+or [GitTip](https://www.gittip.com/Panique/).
 
 ## Requirements
 ####Basic Requirements
