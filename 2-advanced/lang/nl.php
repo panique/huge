@@ -1,5 +1,8 @@
 <?php
 
+// please note: we can use unencoded characters like ö, é etc here as we use the html5 doctype with utf8 encoding
+// in the application's header (in views/_templates/header.php)
+
 $phplogin_lang = array(
 
 // Login & Registration classes

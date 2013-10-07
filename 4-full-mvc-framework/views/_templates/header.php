@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>My Application</title>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css" />
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery-1.10.1.min.js"></script>
