@@ -1,5 +1,10 @@
 <?php
 
+// please note: we can use unencoded characters like ö, é etc here as we use the html5 doctype with utf8 encoding
+// in the application's header (in views/_templates/header.php)
+
+// TODO: can someone please fix these ugly array keys ? they should look like "database_error", not "Database error"
+
 $phplogin_lang = array(
 
 // Login & Registration classes
