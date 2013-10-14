@@ -8,16 +8,26 @@
  */
 class Login_Model extends Model
 {
+    /**
+     * @var array error collection
+     */
     public $errors = array();
 
-    public function __construct() {
-        
+    /**
+     * constructor
+     */
+    public function __construct()
+    {
         parent::__construct();
-            
     }
 
-    public function login() {
-        
+    /**
+     * login process
+     * TODO: refactor, code conventions etc
+     * @return bool success state
+     */
+    public function login()
+    {
         if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
             // get user's data
@@ -124,10 +134,14 @@ class Login_Model extends Model
         }
 
     }
-    
 
-    public function loginWithCookie() {
-
+    /**
+     * performs the login via cookie
+     * TODO: hardcore refactoring
+     * @return bool success state
+     */
+    public function loginWithCookie()
+    {
         $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
 
         if ($cookie) {
@@ -191,38 +205,36 @@ class Login_Model extends Model
                 return true;
 
             } else {
-
                 $this->errors[] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
-
         } else {
-
             $this->errors[] = FEEDBACK_COOKIE_INVALID;
             return false;
         }
     }
 
     /**
-     * @return string view/location
+     * Gets the last page the user visited from the cookie
+     * Useful for relocating (TODO: explain this better)
+     * @return string view/location the user visited
      */
-    public function getCookieUrl() {
+    public function getCookieUrl()
+    {
+        $url = '';
 
         if (!empty($_COOKIE['lastvisitedpage'])) {
             $url = $_COOKIE['lastvisitedpage'];
-        } else {
-            $url = '';
         }
 
         return $url;
     }
     
     /**
-     * log out
-     * delete cookie, delete session
+     * Log out process, deletes cookie, deletes session
      */
-    public function logout() {
-
+    public function logout()
+    {
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
         // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
@@ -233,10 +245,10 @@ class Login_Model extends Model
     }
 
     /**
-     * deletes the (invalid) remember-cookie to prevent infinitive login loops
+     * Deletes the (invalid) remember-cookie to prevent infinitive login loops
      */
-    public function deleteCookie() {
-
+    public function deleteCookie()
+    {
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
         // that's obivously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
@@ -244,20 +256,19 @@ class Login_Model extends Model
     }
 
     /**
-     * simply return the current state of the user's login
+     * Simply returns the current state of the user's login
      * @return boolean user's login status
      */
-    public function isUserLoggedIn() {
-        
+    public function isUserLoggedIn()
+    {
         return Session::get('user_logged_in');
-        
     }        
         
     /**
-     * edit the user's name, provided in the editing form
+     * Edit the user's name, provided in the editing form
      */
-    public function editUserName() {
-
+    public function editUserName()
+    {
         // email and password provided ?
         if (!empty($_POST['user_name']) && !empty($_POST["user_password"])) {
         
@@ -321,40 +332,26 @@ class Login_Model extends Model
                         }
 
                     } else {
-
                         $this->errors[] = FEEDBACK_PASSWORD_WRONG;
-
                     }
-
                 }
-
             } else {
-
                 $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-
             }
-
         } elseif (!empty($_POST['user_username'])) {
-
             $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
-
         } elseif (!empty($_POST['user_password'])) {
-
             $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
-
         } else {
-
             $this->errors[] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
-
         }
-        
     }
     
     /**
-     * edit the user's email, provided in the editing form
+     * Edit the user's email, provided in the editing form
      */
-    public function editUserEmail() {
-        
+    public function editUserEmail()
+    {
         // email and password provided ?
         if (!empty($_POST['user_email']) && !empty($_POST["user_password"])) {
             
@@ -404,50 +401,31 @@ class Login_Model extends Model
                             $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
 
                         } else {
-
                             $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
-
                         }
-                        
                     } else {
-                        
                         $this->errors[] = FEEDBACK_PASSWORD_WRONG;
-                        
                     }
-                    
                 }
-
             } else {
-
                 $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
-
-            }  
-            
+            }
         } elseif (!empty($_POST['user_email'])) {
-            
             $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
-            
         } elseif (!empty($_POST['user_password'])) {
-            
             $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
-            
         } else {
-            
             $this->errors[] = FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY;
-            
         }
-        
     } 
     
     /**
-     * registerNewUser()
-     * 
-     * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
-     * everything is fine
+     * handles the entire registration process. checks all error possibilities,
+     * and creates a new user in the database if everything is fine
      * @return boolean Gives back the success status of the registration
      */
-    public function registerNewUser() {
-        
+    public function registerNewUser()
+    {
         $captcha = new Captcha();
         
         if (!$captcha->checkCaptcha()) {
@@ -567,16 +545,11 @@ class Login_Model extends Model
                         }
 
                     } else {
-
                         $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
-
                     }
-                }            
-            
+                }
         } else {
-            
             $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
-            
         }          
         
         // standard return. returns only true of really successful (see above)
@@ -584,12 +557,11 @@ class Login_Model extends Model
     }
     
     /**
-     * sendVerificationEmail()
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */    
-    private function sendVerificationEmail() {
-        
+    private function sendVerificationEmail()
+    {
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
@@ -641,8 +613,8 @@ class Login_Model extends Model
      * verifyNewUser()
      * checks the email/verification code combination and set the user's activation status to true (=1) in the database
      */
-    public function verifyNewUser($user_id, $user_verification_code) {
-
+    public function verifyNewUser($user_id, $user_verification_code)
+    {
         $sth = $this->db->prepare("UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash ;");
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
@@ -672,8 +644,8 @@ class Login_Model extends Model
      * @param array $atts Optional, additional key/value attributes to include in the IMG tag
      * @source http://gravatar.com/site/implement/images/php/
      */
-    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() ) {
-        
+    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() )
+    {
         // TODO: why is this set when it's more a get ?
         
         $url = 'http://www.gravatar.com/avatar/';
@@ -701,8 +673,8 @@ class Login_Model extends Model
      * Gets the user's avatar file path
      * @return string
      */
-    public function getUserAvatarFilePath() {
-        
+    public function getUserAvatarFilePath()
+    {
         $sth = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
         $sth->execute(array(':user_id' => $_SESSION['user_id']));
 
@@ -714,8 +686,8 @@ class Login_Model extends Model
         
     }    
     
-    public function createAvatar() {
-        
+    public function createAvatar()
+    {
         if (is_dir(AVATAR_PATH) && is_writable(AVATAR_PATH)) {
             
             if (!empty ($_FILES['avatar_file']['tmp_name'])) {
@@ -745,34 +717,23 @@ class Login_Model extends Model
                             $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
 
                         } else {
-
                             $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
-
                         }
-
                     } else {
-
                         $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
-
                     }
-
                 } else {
-
                     $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
-
                 } 
-            }  
-
+            }
         } else {
-            
             $this->errors[] = FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE;
-            
         }
-      
     }
     
     /**
      * Resize Image
+     * TODO: uh, this looks dirty!
      *
      * Takes the source image and resizes it to the specified width & height or proportionally if crop is off.
      * @access public
@@ -785,116 +746,116 @@ class Login_Model extends Model
      * @param int $quality The quality of the JPG to produce 1 - 100
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
      */
-    function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true) {
+    function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
+    {
+        if ( ! $image_data = getimagesize( $source_image ) ) {
+            return false;
+        }
 
-	if ( ! $image_data = getimagesize( $source_image ) ) {
-		return false;
-	}
+        switch( $image_data['mime'] ) {
+            case 'image/gif':
+                $get_func = 'imagecreatefromgif';
+                $suffix = ".gif";
+            break;
+            case 'image/jpeg';
+                $get_func = 'imagecreatefromjpeg';
+                $suffix = ".jpg";
+            break;
+            case 'image/png':
+                $get_func = 'imagecreatefrompng';
+                $suffix = ".png";
+            break;
+        }
 
-	switch( $image_data['mime'] ) {
-		case 'image/gif':
-			$get_func = 'imagecreatefromgif';
-			$suffix = ".gif";
-		break;
-		case 'image/jpeg';
-			$get_func = 'imagecreatefromjpeg';
-			$suffix = ".jpg";
-		break;
-		case 'image/png':
-			$get_func = 'imagecreatefrompng';
-			$suffix = ".png";
-		break;
-	}
+        $img_original = call_user_func( $get_func, $source_image );
+        $old_width = $image_data[0];
+        $old_height = $image_data[1];
+        $new_width = $width;
+        $new_height = $height;
+        $src_x = 0;
+        $src_y = 0;
+        $current_ratio = round( $old_width / $old_height, 2 );
+        $desired_ratio_after = round( $width / $height, 2 );
+        $desired_ratio_before = round( $height / $width, 2 );
 
-	$img_original = call_user_func( $get_func, $source_image );
-	$old_width = $image_data[0];
-	$old_height = $image_data[1];
-	$new_width = $width;
-	$new_height = $height;
-	$src_x = 0;
-	$src_y = 0;
-	$current_ratio = round( $old_width / $old_height, 2 );
-	$desired_ratio_after = round( $width / $height, 2 );
-	$desired_ratio_before = round( $height / $width, 2 );
+        if ( $old_width < $width || $old_height < $height ) {
 
-	if ( $old_width < $width || $old_height < $height ) {
+             // The desired image size is bigger than the original image.
+             // Best not to do anything at all really.
+            return false;
+        }
 
-		 // The desired image size is bigger than the original image. 
-		 // Best not to do anything at all really.
-		return false;
-	}
+        // If the crop option is left on, it will take an image and best fit it
+        // so it will always come out the exact specified size.
+        if ( $crop ) {
 
-	// If the crop option is left on, it will take an image and best fit it
-	// so it will always come out the exact specified size.
-	if ( $crop ) {
-            
-		// create empty image of the specified size
-		$new_image = imagecreatetruecolor( $width, $height );
+            // create empty image of the specified size
+            $new_image = imagecreatetruecolor( $width, $height );
 
-		// Landscape Image
-		if( $current_ratio > $desired_ratio_after ) {
-			$new_width = $old_width * $height / $old_height;
-		}
+            // Landscape Image
+            if( $current_ratio > $desired_ratio_after ) {
+                $new_width = $old_width * $height / $old_height;
+            }
 
-		// Nearly square ratio image.
-		if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
-                    
-                    if ( $old_width > $old_height ) {                        
-                        $new_height = max( $width, $height );
-                        $new_width = $old_width * $new_height / $old_height;
-                    } else {
+            // Nearly square ratio image.
+            if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
+
+                        if ( $old_width > $old_height ) {
+                            $new_height = max( $width, $height );
+                            $new_width = $old_width * $new_height / $old_height;
+                        } else {
+                            $new_height = $old_height * $width / $old_width;
+                        }
+            }
+
+            // Portrait sized image
+            if ( $current_ratio < $desired_ratio_before  ) {
                         $new_height = $old_height * $width / $old_width;
-                    }
-		}
+            }
 
-		// Portrait sized image
-		if ( $current_ratio < $desired_ratio_before  ) {
-                    $new_height = $old_height * $width / $old_width;
-		}
+            // Find out the ratio of the original photo to it's new, thumbnail-based size
+            // for both the width and the height. It's used to find out where to crop.
+            $width_ratio = $old_width / $new_width;
+            $height_ratio = $old_height / $new_height;
 
-		// Find out the ratio of the original photo to it's new, thumbnail-based size
-		// for both the width and the height. It's used to find out where to crop.
-		$width_ratio = $old_width / $new_width;
-		$height_ratio = $old_height / $new_height;
+            // Calculate where to crop based on the center of the image
+            $src_x = floor( ( ( $new_width - $width ) / 2 ) * $width_ratio );
+            $src_y = round( ( ( $new_height - $height ) / 2 ) * $height_ratio );
+        }
+        // Don't crop the image, just resize it proportionally
+        else {
 
-		// Calculate where to crop based on the center of the image
-		$src_x = floor( ( ( $new_width - $width ) / 2 ) * $width_ratio );
-		$src_y = round( ( ( $new_height - $height ) / 2 ) * $height_ratio );
-	}
-	// Don't crop the image, just resize it proportionally
-	else {
-            
-		if ( $old_width > $old_height ) {
-                    $ratio = max( $old_width, $old_height ) / max( $width, $height );
-		} else {
-                    $ratio = max( $old_width, $old_height ) / min( $width, $height );
-		}
+            if ( $old_width > $old_height ) {
+                        $ratio = max( $old_width, $old_height ) / max( $width, $height );
+            } else {
+                        $ratio = max( $old_width, $old_height ) / min( $width, $height );
+            }
 
-		$new_width = $old_width / $ratio;
-		$new_height = $old_height / $ratio;
+            $new_width = $old_width / $ratio;
+            $new_height = $old_height / $ratio;
 
-		$new_image = imagecreatetruecolor( $new_width, $new_height );
-	}
+            $new_image = imagecreatetruecolor( $new_width, $new_height );
+        }
 
-	// Where all the real magic happens
-	imagecopyresampled( $new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height );
+        // Where all the real magic happens
+        imagecopyresampled( $new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height );
 
-	// Save it as a JPG File with our $destination_filename param.
-	imagejpeg( $new_image, $destination_filename, $quality  );
+        // Save it as a JPG File with our $destination_filename param.
+        imagejpeg( $new_image, $destination_filename, $quality  );
 
-	// Destroy the evidence!
-	imagedestroy( $new_image );
-	imagedestroy( $img_original );
+        // Destroy the evidence!
+        imagedestroy( $new_image );
+        imagedestroy( $img_original );
 
-	// Return true because it worked and we're happy. Let the dancing commence!
-	return true;
+        // Return true because it worked and we're happy. Let the dancing commence!
+        return true;
     }
     
     /**
      * 
      */
-    public function setPasswordResetDatabaseToken() {
-        
+    public function setPasswordResetDatabaseToken()
+    {
         if (empty($_POST['user_name'])) {
           
             $this->errors[] = "Empty username";
@@ -958,8 +919,8 @@ class Login_Model extends Model
         return false;        
     }
     
-    public function sendPasswordResetMail() {
-        
+    public function sendPasswordResetMail()
+    {
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
@@ -996,24 +957,19 @@ class Login_Model extends Model
         $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
 
         if(!$mail->Send()) {
-            
            $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
-           
         } else {
-            
             $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
             return true;
-            
-        }        
-        
+        }
     }    
     
     /**
-     * 
+     * TODO: why is this not camelCase ?
      */
-    public function verifypasswordrequest($user_name, $verification_code) {
-                
+    public function verifypasswordrequest($user_name, $verification_code)
+    {
         // TODO: this is not totally clean, as this is just the form provided username
         $this->user_name                = htmlentities($user_name, ENT_QUOTES);         
         $this->user_password_reset_hash = htmlentities($verification_code, ENT_QUOTES);    
@@ -1039,21 +995,20 @@ class Login_Model extends Model
                 return true;
 
             } else {
-
                 $this->errors[] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
                 return false;
             }
-
         } else {
-
             $this->errors[] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
             return false;
         }
-        
     }
-    
-    public function setNewPassword() {
-        
+
+    /**
+     * @return bool
+     */
+    public function setNewPassword()
+    {
         // TODO: timestamp!
         
         if (!empty($_POST['user_name'])
@@ -1084,11 +1039,11 @@ class Login_Model extends Model
 
                         // write users new hash into database
                         $sth = $this->db->prepare("UPDATE users
-                                            SET user_password_hash = :user_password_hash, 
-                                                user_password_reset_hash = NULL, 
-                                                user_password_reset_timestamp = NULL
-                                            WHERE user_name = :user_name  
-                                               && user_password_reset_hash = :user_password_reset_hash ;");
+                                                   SET user_password_hash = :user_password_hash,
+                                                       user_password_reset_hash = NULL,
+                                                       user_password_reset_timestamp = NULL
+                                                   WHERE user_name = :user_name
+                                                      && user_password_reset_hash = :user_password_reset_hash ;");
 
                         $sth->execute(array(':user_password_hash' => $this->user_password_hash,
                                             ':user_name' => $this->user_name,
@@ -1122,7 +1077,6 @@ class Login_Model extends Model
         
         // default
         return false;
-        
     }
     
     /**
@@ -1130,56 +1084,39 @@ class Login_Model extends Model
      * Currently it's just the field user_account_type in the database that
      * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
      * simply increase or decrease this value to emulate an account upgrade/downgrade.
-     * 
      * Put some more complex stuff in here, maybe a pay-process or whatever you like.
-     * 
      */
-    public function changeAccountType() {
-        
+    public function changeAccountType()
+    {
         if (!empty($_POST["user_account_upgrade"])) {
             
             // do whatever you want to upgrade the account here (pay-process etc)
-            // ....
             
             $sth = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
             $sth->execute(array(':user_id' => $_SESSION["user_id"]));                                  
 
             if ($sth->rowCount() == 1) {
-                
                 // set account type in session to 2
-                Session::set('user_account_type', 2);                
-
+                Session::set('user_account_type', 2);
                 $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
-
             } else {
-
                 $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
-
             }
             
         } elseif (!empty($_POST["user_account_downgrade"])) {
 
             // do whatever you want to downgrade the account here (pay-process etc)
-            // ....            
             
             $sth = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
             $sth->execute(array(':user_id' => $_SESSION["user_id"]));  
             
             if ($sth->rowCount() == 1) {
-                
                 // set account type in session to 1
-                Session::set('user_account_type', 1);                
-
+                Session::set('user_account_type', 1);
                 $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
-
             } else {
-
                 $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
-
-            }         
-            
+            }
         }
-        
     }
-    
 }
