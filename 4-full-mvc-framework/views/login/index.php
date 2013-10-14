@@ -16,7 +16,7 @@
     
     <form action="<?php echo URL; ?>login/login" method="post">
 
-            <label>Username</label>
+            <label>Username (or email)</label>
             <input type="text" name="user_name" required />
             
             <label>Password</label>

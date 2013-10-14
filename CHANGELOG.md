@@ -1,6 +1,8 @@
 # CHANGE LOG #
 
 October 14th 2013
+* 4-full-mvc-framework: user can log in with email now
+* 4-full-mvc-framework: email address is now unique [this is major change in the system!]
 * 4-full-mvc-framework: notes database table has now new name (note -> notes)
 * 4-full-mvc-framework: refactoring of the notes model
 

@@ -41,7 +41,7 @@ class Login_Model extends Model
                                               user_failed_logins, 
                                               user_last_failed_login  
                                        FROM users
-                                       WHERE user_name = :user_name ;");
+                                       WHERE user_name = :user_name OR user_email = :user_name;");
             $sth->execute(array(':user_name' => $_POST['user_name']));
 
             $count =  $sth->rowCount();
@@ -109,7 +109,7 @@ class Login_Model extends Model
                         // increment the failed login counter for that user
                         $sth = $this->db->prepare("UPDATE users "
                                 . "SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login "
-                                . "WHERE user_name = :user_name");
+                                . "WHERE user_name = :user_name OR user_email = :user_name");
                         $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
 
                         $this->errors[] = FEEDBACK_PASSWORD_WRONG;
@@ -363,6 +363,17 @@ class Login_Model extends Model
             } 
             // user mail must be in email format
             elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+
+                // check if user's email already exists
+                $sth = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
+                $sth->execute(array(':user_email' => $_POST['user_email']));
+
+                $count =  $sth->rowCount();
+                if ($count == 1) {
+                    $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+                    // exit the method, return false
+                    return false;
+                }
                 
                 // check if password is right
                 $sth = $this->db->prepare("SELECT user_id,
@@ -422,6 +433,7 @@ class Login_Model extends Model
     /**
      * handles the entire registration process. checks all error possibilities,
      * and creates a new user in the database if everything is fine
+     * TODO: total refactoring, get rid off if/else nesting
      * @return boolean Gives back the success status of the registration
      */
     public function registerNewUser()
@@ -497,7 +509,7 @@ class Login_Model extends Model
                 $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
                 
                 // check if user already exists                
-                $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
+                $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name");
                 $sth->execute(array(':user_name' => $this->user_name));
                 
                 $count =  $sth->rowCount();            
@@ -507,45 +519,58 @@ class Login_Model extends Model
                     $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
 
                 } else {
-                    
-                    // generate random hash for email verification (40 char string)
-                    $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
 
-                    // write new users data into database
-                    //$query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."', '".$this->user_activation_hash."');");
-                    
-                    $sth = $this->db->prepare("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES(:user_name, :user_password_hash, :user_email, :user_activation_hash) ;");
-                    $sth->execute(array(':user_name' => $this->user_name, ':user_password_hash' => $this->user_password_hash, ':user_email' => $this->user_email, ':user_activation_hash' => $this->user_activation_hash));                    
-                    
+                    // check if user's email already exists
+                    $sth = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
+                    $sth->execute(array(':user_email' => $this->user_email));
+
                     $count =  $sth->rowCount();
 
                     if ($count == 1) {
-                        
-                        $this->user_id = $this->db->lastInsertId();                      
-                        
-                        // send a verification email
-                        if ($this->sendVerificationEmail()) {
-                            
-                            // when mail has been send successfully
-                            $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
-                            $this->registration_successful = true;
-                            return true;
-                            
-                        } else {
 
-                            // delete this users account immediately, as we could not send a verification email
-                            // the row (which will be deleted) is identified by PDO's lastinserid method (= the last inserted row)
-                            // @see http://www.php.net/manual/en/pdo.lastinsertid.php
-                            
-                            $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id ;");
-                            $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));                            
-                            
-                            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
-
-                        }
+                        $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
 
                     } else {
-                        $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
+                    
+                        // generate random hash for email verification (40 char string)
+                        $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
+
+                        // write new users data into database
+                        //$query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."', '".$this->user_activation_hash."');");
+
+                        $sth = $this->db->prepare("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES(:user_name, :user_password_hash, :user_email, :user_activation_hash) ;");
+                        $sth->execute(array(':user_name' => $this->user_name, ':user_password_hash' => $this->user_password_hash, ':user_email' => $this->user_email, ':user_activation_hash' => $this->user_activation_hash));
+
+                        $count =  $sth->rowCount();
+
+                        if ($count == 1) {
+
+                            $this->user_id = $this->db->lastInsertId();
+
+                            // send a verification email
+                            if ($this->sendVerificationEmail()) {
+
+                                // when mail has been send successfully
+                                $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
+                                $this->registration_successful = true;
+                                return true;
+
+                            } else {
+
+                                // delete this users account immediately, as we could not send a verification email
+                                // the row (which will be deleted) is identified by PDO's lastinserid method (= the last inserted row)
+                                // @see http://www.php.net/manual/en/pdo.lastinsertid.php
+
+                                $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id ;");
+                                $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));
+
+                                $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+
+                            }
+
+                        } else {
+                            $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
+                        }
                     }
                 }
         } else {
