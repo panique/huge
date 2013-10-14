@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+October 14th 2013
+* 4-full-mvc-framework: notes database table has now new name (note -> notes)
+* 4-full-mvc-framework: refactoring of the notes model
+
 September 21th 2013
 * 2-advanced: netherlands translation file
 * 2-advanced: EN translation file typo fixes
