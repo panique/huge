@@ -1,5 +1,11 @@
 # CHANGE LOG #
 
+November 1st 2013
+* 2-advanced: soft fixes for gravatar
+* 2-advanced: i18n NL fixes
+* 4-full-mvc-framework: soft fixes for gravatar
+* README: typos
+
 October 14th 2013
 * 4-full-mvc-framework: user can log in with email now
 * 4-full-mvc-framework: email address is now unique [this is major change in the system!]
