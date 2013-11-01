@@ -50,7 +50,7 @@ class Login_Model extends Model
                 // fetch one row (we only have one result)
                 $result = $sth->fetch();
                 
-                if ( ($result->user_failed_logins >= 2) && ($result->user_last_failed_login > (time()-30)) ) {
+                if ( ($result->user_failed_logins >= 3) && ($result->user_last_failed_login > (time()-30)) ) {
                     
                     $this->errors[] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
                     return false;                    
