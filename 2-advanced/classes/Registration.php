@@ -123,15 +123,19 @@ class Registration
                     $this->errors[] = ($result[$i]['user_name'] == $user_name) ? $this->lang['Username exist'] : $this->lang['Email exist'];
                 }
             } else {
-                // check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-                $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
+                // construct an array for optional parameters
+                $user_password_hash_options = array();
+                // check if we have a constant HASH_COST_FACTOR defined (in config/config.php),
+                // if so: put it into the options array
+                if (defined('HASH_CONST_FACTOR')) {
+                    $user_password_hash_options['cost'] = HASH_CONST_FACTOR;
+                }
+    
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
                 // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                // want the parameter: as an array with, currently only used with 'cost' => XX.
-                $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+                // compatibility library.
+                $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT, $user_password_hash_options);
+
                 // generate random hash for email verification (40 char string)
                 $user_activation_hash = sha1(uniqid(mt_rand(), true));
 
