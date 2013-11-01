@@ -84,7 +84,7 @@ class Overview_Model extends Model {
         $gravatar_image_link .= md5( strtolower( trim( $email ) ) );
         $gravatar_image_link .= "?s=$s&d=$d&r=$r";
         
-        // the image url (on gravatarr servers), will return in something like
+        // the image url (on gravatar servers), will return in something like
         // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
         // note: the url does NOT have something like .jpg
         return $gravatar_image_link;
