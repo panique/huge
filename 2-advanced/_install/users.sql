@@ -43,6 +43,17 @@ CREATE TABLE `users` (
  UNIQUE KEY `user_email` (`user_email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data';
 
+CREATE TABLE IF NOT EXISTS `authenticated_users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `user_rememberme_token` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_last_visit` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `user_login_agent` text COLLATE utf8_unicode_ci,
+  `user_login_ip` varchar(39) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0.0.0.0',
+  `user_login_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='authenticated user data';
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
