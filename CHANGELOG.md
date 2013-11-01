@@ -4,6 +4,7 @@ November 1st 2013
 * 2-advanced: soft fixes for gravatar
 * 2-advanced: i18n NL fixes
 * 4-full-mvc-framework: soft fixes for gravatar
+* 4-full-mvc-framework: fixed wrong failed-login-counter number [issue #281]
 * README: typos
 
 October 14th 2013
