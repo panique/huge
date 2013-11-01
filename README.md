@@ -157,8 +157,8 @@ Have a look on these 3 lines in your `php.ini`:
 
 `session.gc_maxlifetime` says: 3600 seconds (1 hour) after session initialization, PHP will mark this session as
 "outdated" and flag it as "ready to delete". The session still exists after 1 hour! But it's not deleted.
-The deletion process of all outdated and ready-to-delete file is called "garbage collection" (process), and it is
-triggered - with a specific probability - when another user comes to your page (= another php process is started).
+The deletion process of all outdated and ready-to-delete (session-) files is called "garbage collection" (process), and
+it is triggered - with a specific probability - when another user comes to your page (= another php process is started).
 This probability is calculated by `session.gc_probability` divided by `session.gc_divisor`. Yes, a little bit weird,
 but the people behind PHP have thought about this, and there are reasons for this behaviour.
 
