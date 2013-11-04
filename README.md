@@ -231,6 +231,7 @@ interviews, tutorials, and some delicious details about the Berlin startup scene
 
 I'm available for freelance work. Remote worldwide or locally around Central Europe. Drop me a line if you like.
 
+## GitHub repository stats (by BitDeli)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/panique/php-login/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
