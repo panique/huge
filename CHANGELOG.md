@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+November 7th 2013
+* README: added BitDeli stat counter (to analyze this project on GitHub)
+
 November 1st 2013
 * 2-advanced: soft fixes for gravatar
 * 2-advanced: i18n NL fixes
