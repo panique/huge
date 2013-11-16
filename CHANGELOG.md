@@ -1,5 +1,8 @@
 # CHANGE LOG #
 
+November 16th 2013
+* README: changes in the support/donate section
+
 November 7th 2013
 * README: added BitDeli stat counter (to analyze this project on GitHub)
 
