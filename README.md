@@ -6,7 +6,13 @@ Ask questions in the [Official Support Forum](http://109.75.177.79/forum/) (new!
 
 ## Live Demos
 
-See live demonstrations of **[1. One File Version](http://php-login.net/demo1.html)**, **[2. Minimal Version](http://php-login.net/demo2.html)**, **[3. Advanced Version](http://php-login.net/demo3.html)** and **[4. Full MVC Framework Version](http://php-login.net/demo4.html)**. The server's phpinfo() can be found [here](http://109.75.177.79:80/).
+Live demonstrations of 
++ **[1. One File Version](http://php-login.net/demo1.html)**
++ **[2. Minimal Version](http://php-login.net/demo2.html)**
++ **[3. Advanced Version](http://php-login.net/demo3.html)**
++ **[4. Full MVC Framework Version](http://php-login.net/demo4.html)**
+
+Also have a look on [the server's phpinfo()](http://109.75.177.79:80/).
 
 ## Four different versions
 
