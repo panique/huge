@@ -217,11 +217,15 @@ Huge Thanks to Jay Zawrotny for the beautiful (avatar) image resizing/cropping f
 
 Also a big big "thank you" to the donors of this project, your tips gimme a good feeling and show that it's a useful project!
 
-## Donate with [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) or [GitTip](https://www.gittip.com/Panique/)
+## Support / Donate
 
-If you think this script is useful and saves you a lot of work, a lot of costs (PHP developers are expensive) and let you sleep much better, then donating a small amount would be very cool.
+If you think this script is useful and saves you a lot of work, then think about supporting the project by
 
-[![Paypal](http://www.php-login.net/img/paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG) or via [GitTip](https://www.gittip.com/Panique/)
+1. Donating via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
+   or [GitTip](https://www.gittip.com/Panique/)
+2. Renting your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
+   SSD servers for $5+ per month or $0.007 per hour (!). PHP-MVC will get a small reward for every new customer.
+3. Contributing to this project. Feel free to improve this project with your skills.
 
 ## Official Support Blog: [dev-metal.com](http://www.dev-metal.com)
 
