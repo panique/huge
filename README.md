@@ -1,8 +1,12 @@
 # PHP & MySQL Login
 
-Simple, lightweight and easy to use **Login Script for PHP** that comes in 4 different versions. From one-file version with SQLite database to full-featured MVC framework. Uses the ultra-modern & future-proof PHP 5.5. BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility pack, which makes those functions available in those versions too). Follow the project on **[Twitter](https://twitter.com/simplephplogin)**, **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**
-or **[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog **[Dev Metal](http://www.dev-metal.com)**.
-Ask questions in the [Official Support Forum](http://109.75.177.79/forum/) (new!).
+Simple, lightweight and easy to use **Login Script for PHP** that comes in 4 different versions. From one-file
+version with SQLite database to full-featured MVC framework. Uses the ultra-modern & future-proof PHP 5.5.
+BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility pack, which makes those
+functions available in those versions too). Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
+**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** or
+**[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
+**[Dev Metal](http://www.dev-metal.com)**. Ask questions in the [Official Support Forum](http://109.75.177.79/forum/).
 
 ## Live Demos
 
@@ -17,16 +21,23 @@ Also have a look on [the server's phpinfo()](http://109.75.177.79:80/).
 ## Four different versions
 
 #### One file
-Full login script in one file. Uses a one-file SQLite database (no MySQL needed) and PDO. Features: Register, login, logout.
+Full login script in one file. Uses a one-file SQLite database (no MySQL needed) and PDO. Features: Register,
+login, logout.
 
 #### Minimal
 All the basic functions in a clean file structure, uses MySQL and mysqli. Register, login, logout.
 
 #### Advanced
-Same like minimal (uses MySQL and PDO), but much more features: Register, login, logout, email verification, password reset, edit user data, gravatars, captchas, remember me / stay logged in cookies, login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
+Same like minimal (uses MySQL and PDO), but much more features:
+Register, login, logout, email verification, password reset, edit user data, gravatars, captchas,
+remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
+login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
 #### Full MVC Framework
-Same like Advanced Version, but everything comes with a professional MVC framework structure, perfect for building real applications. Additional features like: URL rewriting, professional usage of controllers and actions, PDO, MySQL, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail), user profile pages, public user profiles, gravatars and local avatars, account upgrade/downgrade etc.  
+Same like Advanced Version, but everything comes with a professional MVC framework structure, perfect for building
+real applications. Additional features like: URL rewriting, professional usage of controllers and actions, PDO, MySQL,
+mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail), user profile pages, public user profiles,
+gravatars and local avatars, account upgrade/downgrade etc.
 
 ## License
 
