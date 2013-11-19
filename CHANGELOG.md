@@ -1,5 +1,9 @@
 # CHANGE LOG #
 
+November 19th 2013
+* 2-advanced: user can be logged in from multiple devices at one without losing cookie
+* 2-advanced: smaller fixes in views (to prevent php notices)
+
 November 16th 2013
 * README: changes in the support/donate section
 
