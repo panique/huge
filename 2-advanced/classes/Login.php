@@ -199,8 +199,9 @@ class Login
                 // cookie looks good, try to select corresponding user
                 if ($this->databaseConnection()) {
                     // get real token from database (and all other data)
-                    $sth = $this->db_connection->prepare("SELECT user_id, user_name, user_email FROM users WHERE user_id = :user_id
-                                                      AND user_rememberme_token = :user_rememberme_token AND user_rememberme_token IS NOT NULL");
+                    $sth = $this->db_connection->prepare("SELECT u.user_id, u.user_name, u.user_email FROM authenticated_users au 
+                                                          LEFT JOIN users u ON au.user_id =u.user_id WHERE au.user_id = :user_id
+                                                          AND au.user_rememberme_token = :user_rememberme_token AND au.user_rememberme_token IS NOT NULL");
                     $sth->bindValue(':user_id', $user_id, PDO::PARAM_INT);
                     $sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
                     $sth->execute();
@@ -221,7 +222,7 @@ class Login
                         $this->user_is_logged_in = true;
 
                         // Cookie token usable only once
-                        $this->newRememberMeCookie();
+                        $this->newRememberMeCookie($token);
                         return true;
                     }
                 }
@@ -290,9 +291,6 @@ class Login
                 // if user has check the "remember me" checkbox, then generate token and write cookie
                 if (isset($user_rememberme)) {
                     $this->newRememberMeCookie();
-                } else {
-                    // Reset rememberme token
-                    $this->deleteRememberMeCookie();
                 }
 
                 // OPTIONAL: recalculate the user's password hash
@@ -326,14 +324,30 @@ class Login
     /**
      * Create all data needed for remember me cookie connection on client and server side
      */
-    private function newRememberMeCookie()
+    private function newRememberMeCookie($current_rememberme_token = '')
     {
         // if database connection opened
         if ($this->databaseConnection()) {
             // generate 64 char random string and store it in current user data
             $random_token_string = hash('sha256', mt_rand());
-            $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
-            $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $_SESSION['user_id']));
+
+            // record the new token for this user/device
+            if ($current_rememberme_token == '') {
+                $sth = $this->db_connection->prepare("INSERT INTO authenticated_users (user_id, user_rememberme_token, user_login_agent, user_login_ip, user_login_datetime) VALUES (:user_id, :user_rememberme_token, :user_login_agent, :user_login_ip, now())");
+                $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $sth->bindValue(':user_rememberme_token', $random_token_string, PDO::PARAM_STR);
+                $sth->bindValue(':user_login_agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
+                $sth->bindValue(':user_login_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+                $sth->execute();
+            }
+            // update current rememberme token hash by a new one
+            else {
+                $sth = $this->db_connection->prepare("UPDATE authenticated_users SET user_rememberme_token = :new_user_rememberme_token, user_last_visit=now() WHERE user_id = :user_id AND user_rememberme_token = :old_user_rememberme_token");
+                $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $sth->bindValue(':old_user_rememberme_token', $current_rememberme_token, PDO::PARAM_STR);
+                $sth->bindValue(':new_user_rememberme_token', $random_token_string, PDO::PARAM_STR);
+                $sth->execute();
+            }
 
             // generate cookie string that consists of userid, randomstring and combined hash of both
             $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
@@ -350,11 +364,19 @@ class Login
      */
     private function deleteRememberMeCookie()
     {
-        // if database connection opened
-        if ($this->databaseConnection()) {
-            // Reset rememberme token
-            $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = NULL WHERE user_id = :user_id");
-            $sth->execute(array(':user_id' => $_SESSION['user_id']));
+        // if database connection opened and remember me cookie exist
+        if ($this->databaseConnection() && isset($_COOKIE['rememberme'])) {
+
+            // extract data from the cookie
+            list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
+            // check cookie hash validity
+            if ($hash == hash('sha256', $user_id . ':' . $token . COOKIE_SECRET_KEY) && !empty($token)) {
+                // Reset THIS rememberme token
+                $sth = $this->db_connection->prepare("DELETE FROM authenticated_users WHERE user_rememberme_token = :user_rememberme_token AND user_id = :user_id");
+                $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
+                $sth->execute();
+            }
         }
 
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
@@ -583,6 +605,7 @@ class Login
         if (EMAIL_USE_SMTP) {
             // Set mailer to use SMTP
             $mail->IsSMTP();
+			$mail->CharSet = 'UTF-8';
             //useful for debugging, shows full SMTP errors
             //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
             // Enable SMTP authentication
@@ -598,6 +621,7 @@ class Login
             $mail->Port = EMAIL_SMTP_PORT;
         } else {
             $mail->IsMail();
+			$mail->CharSet = 'UTF-8';
         }
 
         $mail->From = EMAIL_PASSWORDRESET_FROM;
