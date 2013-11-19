@@ -2,17 +2,18 @@
 // include html header and display php-login message/error
 include('header.php');
 
-// show negative messages
-if ($registration->errors) {
-    foreach ($registration->errors as $error) {
-        echo $error;
+if (isset($registration)) {
+    // show negative messages
+    if ($registration->errors) {
+        foreach ($registration->errors as $error) {
+            echo $error;
+        }
     }
-}
-
-// show positive messages
-if ($registration->messages) {
-    foreach ($registration->messages as $message) {
-        echo $message;
+    // show positive messages
+    if ($registration->messages) {
+        foreach ($registration->messages as $message) {
+            echo $message;
+        }
     }
 }
 

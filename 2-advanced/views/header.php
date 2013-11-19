@@ -26,18 +26,17 @@
 <body>
 <?php
 
-// show negative messages
-if ($login->errors) {
-    foreach ($login->errors as $error) {
-        echo $error;
+if (isset($login)) {
+    // show negative messages
+    if ($login->errors) {
+        foreach ($login->errors as $error) {
+            echo $error;
+        }
+    }
+    // show positive messages
+    if ($login->messages) {
+        foreach ($login->messages as $message) {
+            echo $message;
+        }
     }
 }
-
-// show positive messages
-if ($login->messages) {
-    foreach ($login->messages as $message) {
-        echo $message;
-    }
-}
-
-?>   
