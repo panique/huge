@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css" />
-	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript" src="<?php echo URL; ?>public/js/custom.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="<?php echo URL; ?>public/js/custom.js"></script>
 </head>
 <body>
     
