@@ -129,6 +129,14 @@ If you want to use SMTP mail sending, then get an SMTP accound (gmail.com for ex
 There's already a demo account sheme in the config. To connect to a SMTP service you'll proably need PHP OpenSSL module, which is usually
 preinstalled on php/apache2. If it's not activated, please do so by uncommenting this line `extension=php_openssl.dll` in your php.ini !
 
+HOW TO SET UP PHP'S GD LIBRARY (GRAPHIC PROCESSING & GENERATION)
+
+sudo apt-get install php5-gd
+/etc/init.d/apache2 restart
+
+@see: http://www.cyberciti.biz/faq/ubuntu-linux-install-or-add-php-gd-support-to-apache/
+@see: [PHP Manual] http://www.php.net/manual/en/book.image.php
+
 *IN THE CODE*
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"

@@ -1,5 +1,10 @@
 # CHANGE LOG #
 
+December 1st 2013
+* 4-full-mvc-framework: massive rewrite !
+* 4-full-mvc-framework: PHPMailer updated
+
+
 November 19th 2013
 * 2-advanced: user can be logged in from multiple devices at one without losing cookie
 * 2-advanced: smaller fixes in views (to prevent php notices)
