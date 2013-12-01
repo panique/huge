@@ -11,7 +11,7 @@ function autoload($class) {
     if (file_exists(LIBS . $class . ".php")) {
         require LIBS . $class . ".php";
     } else {
-        require LIBS . "external/" . $class . ".php";
+        //require LIBS . "external/" . $class . ".php";
     }
 }
 

@@ -318,6 +318,23 @@ input[type="submit"] {
     
 }
 
+.login-default-box,
+.login-facebook-box {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+}
+
+.facebook-login-button {
+    display: block;
+    background: transparent url('../img/facebook-login-button.png') no-repeat 0 0;
+    width: 202px;
+    height: 46px;
+}
+.facebook-login-button:hover {
+    background-position: 0 -46px;
+}
+
 /* general */
 .clear-both {
     clear: both;

@@ -1,7 +1,10 @@
 <?php
 
-class View {
-
+/**
+ * Class View
+ */
+class View
+{
     /**
      * simply includes (=shows) the view. this is done from the controller. In the controller, you usually say
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
@@ -9,61 +12,61 @@ class View {
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
      * @param boolean $special_page Optional: Set this to true if you don't want to include header and footer
      */
-    public function render($filename, $special_page = false) {
-        
+    public function render($filename, $special_page = false)
+    {
+        // special page = page withouth header and footer, for whatever reason
         if ($special_page == true) {
-            
             require VIEWS . $filename . '.php';
-            
         } else {
-            
             require VIEWS . '_templates/header.php';
             require VIEWS . $filename . '.php';
             require VIEWS . '_templates/footer.php';
-            
         }
-        
     }
     
-    /*
+    /**
      * useful for handling the navigation's active/non-active link
-     * ...
-     * TODO
+     * (eventually this needs work !)
+     * @param $filename
+     * @param $navigation_controller
+     * @return bool Shows if the controller is used or not
      */
-    private function checkForActiveController($filename, $navigation_controller) {
-        
+    private function checkForActiveController($filename, $navigation_controller)
+    {
         $splitted_filename = explode("/", $filename);
         $active_controller = $splitted_filename[0];
         
         if ($active_controller == $navigation_controller) {
-            
             return true;
-            
-        } else {
-            
-            return false;
         }
-        
+        // default return if not true
+        return false;
     }
-    
-    private function checkForActiveAction($filename, $navigation_action) {
-        
+
+    /**
+     * @param $filename
+     * @param $navigation_action
+     * @return bool Shows if the action/method is used or not
+     */
+    private function checkForActiveAction($filename, $navigation_action)
+    {
         $splitted_filename = explode("/", $filename);
         $active_action = $splitted_filename[1];
         
         if ($active_action == $navigation_action) {
-            
             return true;
-            
-        } else {
-            
-            return false;
         }
-        
-    }    
-    
-    private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action) {
-        
+        // default return of not true
+        return false;
+    }
+
+    /**
+     * @param $filename
+     * @param $navigation_controller_and_action
+     * @return bool
+     */
+    private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action)
+    {
         $splitted_filename = explode("/", $filename);
         $active_controller = $splitted_filename[0];
         $active_action = $splitted_filename[1];
@@ -73,14 +76,9 @@ class View {
         $navigation_action = $splitted_filename[1];        
         
         if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
-            
             return true;
-            
-        } else {
-            
-            return false;
         }
-        
-    }    
-
+        // default return of not true
+        return false;
+    }
 }

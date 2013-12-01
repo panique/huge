@@ -1,1 +1,7 @@
-{}
+{
+    "require":{
+        "ircmaxell/password-compat": "1.0.*",
+        "phpmailer/phpmailer": "5.2.*",
+        "facebook/php-sdk": "@stable"
+    }
+}

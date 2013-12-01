@@ -7,7 +7,6 @@
  */
 class Application
 {
-
     private $_url = null;
     private $_controller = null;
     private $_controllerPath = 'application/controllers/'; // Always include trailing slash

@@ -21,7 +21,8 @@ class Login_Model
     }
 
     /**
-     * login process
+     * login process (for DEFAULT user accounts). user who register/login with Facebook etc. are handled
+     * somewhere else
      * TODO: hardcore refactoring
      * @return bool success state
      */
@@ -38,9 +39,13 @@ class Login_Model
                                               user_account_type,
                                               user_failed_logins, 
                                               user_last_failed_login  
-                                       FROM users
-                                       WHERE user_name = :user_name OR user_email = :user_name;");
-            $sth->execute(array(':user_name' => $_POST['user_name']));
+                                       FROM   users
+                                       WHERE  user_name = :user_name
+                                              OR user_email = :user_name
+                                              AND user_provider_type = :provider_type");
+            // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+            // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+            $sth->execute(array(':user_name' => $_POST['user_name'], ':provider_type' => 'DEFAULT'));
 
             $count =  $sth->rowCount();
             if ($count == 1) {
@@ -61,7 +66,8 @@ class Login_Model
                             Session::set('user_id', $result->user_id);
                             Session::set('user_name', $result->user_name);
                             Session::set('user_email', $result->user_email);
-                            Session::set('user_account_type', $result->user_account_type);                            
+                            Session::set('user_account_type', $result->user_account_type);
+                            Session::set('user_provider_type', 'DEFAULT');
                             
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
@@ -69,8 +75,11 @@ class Login_Model
                             $this->setGravatarImageUrl($result->user_email);
 
                             // reset the failed login counter for that user
-                            $sth = $this->db->prepare("UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL WHERE user_id = :user_id AND user_failed_logins != 0");
-                            $sth->execute(array(':user_id' => $result->user_id));                           
+                            $sql = "UPDATE users
+                                    SET user_failed_logins = 0, user_last_failed_login = NULL
+                                    WHERE user_id = :user_id AND user_failed_logins != 0";
+                            $sth = $this->db->prepare($sql);
+                            $sth->execute(array(':user_id' => $result->user_id));
                             
                             // if user has check the "remember me" checkbox, then write cookie
                             if (isset($_POST['user_rememberme'])) {
@@ -109,28 +118,20 @@ class Login_Model
                         $this->errors[] = FEEDBACK_PASSWORD_WRONG;
                         return false;
                     }
-                    
                 }
-
             } else {
-                
                 $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
                 return false;
             }
-
         } elseif (empty($_POST['user_name'])) {
-
             $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
-
         } elseif (empty($_POST['user_password'])) {
-
             $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         }
-
     }
 
     /**
-     * performs the login via cookie
+     * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
      * TODO: hardcore refactoring
      * @return bool success state
      */
@@ -139,18 +140,14 @@ class Login_Model
         $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
 
         if ($cookie) {
-
             list ($user_id, $token, $hash) = explode(':', $cookie);
-
             if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-
                 $this->errors[] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
 
             // do not log in when token is empty
             if (empty($token)) {
-
                 $this->errors[] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
@@ -168,15 +165,16 @@ class Login_Model
                                          FROM users
                                          WHERE user_id = :user_id
                                            AND user_rememberme_token = :user_rememberme_token
-                                           AND user_rememberme_token IS NOT NULL");
-            $sth->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token));
+                                           AND user_rememberme_token IS NOT NULL
+                                           AND user_provider_type = :provider_type");
+            $sth->execute(array(':user_id' => $user_id,
+                                ':user_rememberme_token' => $token,
+                                ':provider_type' => 'DEFAULT'));
 
             $count =  $sth->rowCount();
             if ($count == 1) {
-
                 // fetch one row (we only have one result)
                 $result = $sth->fetch();
-
                 // TODO: this block is same/similar to the one from login(), maybe we should put this in a method
                 // write data into session
                 Session::init();
@@ -185,7 +183,7 @@ class Login_Model
                 Session::set('user_name', $result->user_name);
                 Session::set('user_email', $result->user_email);
                 Session::set('user_account_type', $result->user_account_type);
-
+                Session::set('user_provider_type', 'DEFAULT');
                 Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
                 // call the setGravatarImageUrl() method which writes gravatar urls into the session
@@ -194,10 +192,8 @@ class Login_Model
                 // NOTE: we don't set another rememberme-cookie here as the current cookie should always
                 // be invalid after a certain amount of time, so the user has to login with username/password
                 // again from time to time. This is good and safe ! ;)
-
                 $this->errors[] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
                 return true;
-
             } else {
                 $this->errors[] = FEEDBACK_COOKIE_INVALID;
                 return false;
@@ -227,8 +223,8 @@ class Login_Model
      */
     public function logout()
     {
-        // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
-        // that's obivously the best practice to kill a cookie via php
+        // set the remember-me-cookie to ten years ago (3600sec * 365 days * 10).
+        // that's obviously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 3650), '/');
         
@@ -265,30 +261,26 @@ class Login_Model
         if (!empty($_POST['user_name']) && !empty($_POST["user_password"])) {
         
             if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
-
                 $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
-
             }
             // username cannot be empty and must be azAZ09 and 2-64 characters
-            // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
             elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
 
                 // check if password is right
                 $sth = $this->db->prepare("SELECT user_id,
                                                   user_password_hash
                                            FROM users
-                                           WHERE user_id = :user_id");
-                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                                           WHERE user_id = :user_id
+                                           AND user_provider_type = :provider_type");
+                $sth->execute(array(':user_id' => $_SESSION['user_id'], ':provider_type' => 'DEFAULT'));
 
                 $count =  $sth->rowCount();
                 if ($count == 1) {
 
                     // fetch one row (we only have one result)
                     $result = $sth->fetch();
-
                     if (password_verify($_POST['user_password'], $result->user_password_hash)) {
-
-                        // escapin' this
+                        // clean the input
                         $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
                         $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
                         $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
@@ -300,32 +292,24 @@ class Login_Model
                         $count =  $sth->rowCount();
 
                         if ($count == 1) {
-
                             $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-
                         } else {
-
                             $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
                             $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));
 
                             $count =  $sth->rowCount();
-
                             if ($count == 1) {
-
                                 Session::set('user_name', $this->user_name);
                                 $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
-
                             } else {
-
                                 $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
-
                             }
-
                         }
-
                     } else {
                         $this->errors[] = FEEDBACK_PASSWORD_WRONG;
                     }
+                } else {
+                    $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
                 }
             } else {
                 $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
@@ -349,13 +333,10 @@ class Login_Model
             
             // check if new email is same like the old one
             if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
-
                 $this->errors[] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
-
             } 
             // user mail must be in email format
             elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-
                 // check if user's email already exists
                 $sth = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
                 $sth->execute(array(':user_email' => $_POST['user_email']));
@@ -371,18 +352,17 @@ class Login_Model
                 $sth = $this->db->prepare("SELECT user_id,
                                                   user_password_hash
                                            FROM users
-                                           WHERE user_id = :user_id");
-                $sth->execute(array(':user_id' => $_SESSION['user_id']));
+                                           WHERE user_id = :user_id
+                                           AND user_provider_type = :provider_type");
+                $sth->execute(array(':user_id' => $_SESSION['user_id'], ':provider_type' => 'DEFAULT'));
 
                 $count =  $sth->rowCount();
                 if ($count == 1) {
-
                     // fetch one row (we only have one result)
                     $result = $sth->fetch();
                       
                     if (password_verify($_POST['user_password'], $result->user_password_hash)) {
-                        
-                        // escapin' this
+                        // cleaning
                         $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
                         // prevent database flooding
                         $this->user_email = substr($this->user_email, 0, 64);
@@ -393,16 +373,12 @@ class Login_Model
                         $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));                        
 
                         $count =  $sth->rowCount();
-
                         if ($count == 1) {
-
                             Session::set('user_email', $this->user_email);
-
                             // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                            $this->setGravatarImageUrl($this->user_email);                
-
+                            $this->setGravatarImageUrl($this->user_email);
+                            // TODO: it's not an error, its a positive feedback
                             $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
-
                         } else {
                             $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
                         }
@@ -423,8 +399,8 @@ class Login_Model
     } 
     
     /**
-     * handles the entire registration process. checks all error possibilities,
-     * and creates a new user in the database if everything is fine
+     * handles the entire registration process for DEFAULT users (not for people who register with
+     * 3rd party services, like facebook) and creates a new user in the database if everything is fine
      * TODO: total refactoring, get rid off if/else nesting
      * @return boolean Gives back the success status of the registration
      */
@@ -433,45 +409,25 @@ class Login_Model
         $captcha = new Captcha();
         
         if (!$captcha->checkCaptcha()) {
-        
             $this->errors[] = FEEDBACK_CAPTCHA_WRONG;
-            
         } elseif (empty($_POST['user_name'])) {
-          
             $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
-
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
-          
-            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;            
-            
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-          
-            $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;   
-            
+            $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;
         } elseif (strlen($_POST['user_password_new']) < 6) {
-            
-            $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;            
-                        
+            $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-            
             $this->errors[] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
-                        
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-            
             $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-            
         } elseif (empty($_POST['user_email'])) {
-            
             $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
-            
         } elseif (strlen($_POST['user_email']) > 64) {
-            
             $this->errors[] = FEEDBACK_EMAIL_TOO_LONG;
-            
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            
             $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
-        
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
                   && strlen($_POST['user_name']) >= 2
@@ -486,14 +442,11 @@ class Login_Model
                 // escapin' this, additionally removing everything that could be (html/javascript-) code
                 $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
                 $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-                
                 // no need to escape as this is only used in the hash function
                 $this->user_password = $_POST['user_password_new'];
-
                 // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
                 // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
                 $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-                
                 // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
                 // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
                 // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
@@ -507,9 +460,7 @@ class Login_Model
                 $count =  $sth->rowCount();            
 
                 if ($count == 1) {
-
                     $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-
                 } else {
 
                     // check if user's email already exists
@@ -519,47 +470,39 @@ class Login_Model
                     $count =  $sth->rowCount();
 
                     if ($count == 1) {
-
                         $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
-
                     } else {
-                    
                         // generate random hash for email verification (40 char string)
                         $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
 
                         // write new users data into database
-                        //$query_new_user_insert = $this->db_connection->query("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES('".$this->user_name."', '".$this->user_password_hash."', '".$this->user_email."', '".$this->user_activation_hash."');");
-
-                        $sth = $this->db->prepare("INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash) VALUES(:user_name, :user_password_hash, :user_email, :user_activation_hash) ;");
-                        $sth->execute(array(':user_name' => $this->user_name, ':user_password_hash' => $this->user_password_hash, ':user_email' => $this->user_email, ':user_activation_hash' => $this->user_activation_hash));
+                        $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash, user_provider_type)
+                                VALUES (:user_name, :user_password_hash, :user_email, :user_activation_hash, :user_provider_type)";
+                        $sth = $this->db->prepare($sql);
+                        $sth->execute(array(':user_name' => $this->user_name,
+                                            ':user_password_hash' => $this->user_password_hash,
+                                            ':user_email' => $this->user_email,
+                                            ':user_activation_hash' => $this->user_activation_hash,
+                                            ':user_provider_type' => 'DEFAULT'));
 
                         $count =  $sth->rowCount();
 
                         if ($count == 1) {
-
                             $this->user_id = $this->db->lastInsertId();
-
                             // send a verification email
                             if ($this->sendVerificationEmail()) {
-
                                 // when mail has been send successfully
                                 $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
                                 $this->registration_successful = true;
                                 return true;
-
                             } else {
-
                                 // delete this users account immediately, as we could not send a verification email
                                 // the row (which will be deleted) is identified by PDO's lastinserid method (= the last inserted row)
                                 // @see http://www.php.net/manual/en/pdo.lastinsertid.php
-
                                 $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id ;");
                                 $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));
-
                                 $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
-
                             }
-
                         } else {
                             $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
                         }
@@ -567,8 +510,7 @@ class Login_Model
                 }
         } else {
             $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
-        }          
-        
+        }
         // standard return. returns only true of really successful (see above)
         return false;
     }
@@ -576,19 +518,18 @@ class Login_Model
     /**
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
-     */    
+     */
     private function sendVerificationEmail()
     {
+        // create PHPMailer object here. This is easily possible as we auto-load the according class(es) via composer
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
-        // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
-            
             // Set mailer to use SMTP
             $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors
-            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            //useful for debugging, shows full SMTP errors, config this in config/config.php
+            $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
             // Enable SMTP authentication
             $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
             // Enable encryption, usually SSL/TLS
@@ -599,10 +540,8 @@ class Login_Model
             $mail->Host = EMAIL_SMTP_HOST;  
             $mail->Username = EMAIL_SMTP_USERNAME;                            
             $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
-            
+            $mail->Port = EMAIL_SMTP_PORT;
         } else {
-            
             $mail->IsMail();            
         }
         
@@ -613,17 +552,12 @@ class Login_Model
         $mail->Body    = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($this->user_id).'/'.urlencode($this->user_activation_hash);
 
         if(!$mail->Send()) {
-            
            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
-           
         } else {
-            
             $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
             return true;
-            
         }
-        
     }
     
     /**
@@ -636,15 +570,10 @@ class Login_Model
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
         if ($sth->rowCount() > 0) {
-
             $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
-
         } else {
-
             $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
-
         }
-        
     }
 
     /**
@@ -664,7 +593,7 @@ class Login_Model
     public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() )
     {
         // TODO: why is this set when it's more a get ?
-        
+        // TODO this thing is messy
         $url = 'http://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&d=$d&r=$r";
@@ -683,7 +612,6 @@ class Login_Model
  
         // the image url like above but with an additional <img src .. /> around
         Session::set('user_gravatar_image_tag', $url_with_tag);
-        
     }
     
     /**
@@ -696,43 +624,34 @@ class Login_Model
         $sth->execute(array(':user_id' => $_SESSION['user_id']));
 
         if ($sth->fetch()->user_has_avatar) {
-         
             return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
-            
         }
-        
-    }    
-    
+    }
+
+    /**
+     *
+     */
     public function createAvatar()
     {
         if (is_dir(AVATAR_PATH) && is_writable(AVATAR_PATH)) {
-            
             if (!empty ($_FILES['avatar_file']['tmp_name'])) {
-
                 // get the image width, height and mime type
                 // btw: why does PHP call this getimagesize when it gets much more than just the size ?
                 $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
-                // dont handle files > 5MB
+                // don't handle files > 5MB
                 if ($_FILES['avatar_file']['size'] <= 5000000 ) {
-
                     if ($image_proportions[0] >= 100 && $image_proportions[1] >= 100) {
-
                         if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
 
                             $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
-                                
                             // creates a 44x44px avatar jpg file in the avatar folder
                             // see the function defintion (also in this class) for more info on how to use
                             $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
-
                             $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
                             $sth->execute(array(':user_id' => $_SESSION['user_id']));
-
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-
                             $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
-
                         } else {
                             $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
                         }
@@ -762,6 +681,7 @@ class Login_Model
      * @param int $height The desired height of the new image.
      * @param int $quality The quality of the JPG to produce 1 - 100
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
+     * @return bool
      */
     function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
     {
@@ -796,7 +716,6 @@ class Login_Model
         $desired_ratio_before = round( $height / $width, 2 );
 
         if ( $old_width < $width || $old_height < $height ) {
-
              // The desired image size is bigger than the original image.
              // Best not to do anything at all really.
             return false;
@@ -805,7 +724,6 @@ class Login_Model
         // If the crop option is left on, it will take an image and best fit it
         // so it will always come out the exact specified size.
         if ( $crop ) {
-
             // create empty image of the specified size
             $new_image = imagecreatetruecolor( $width, $height );
 
@@ -817,17 +735,17 @@ class Login_Model
             // Nearly square ratio image.
             if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
 
-                        if ( $old_width > $old_height ) {
-                            $new_height = max( $width, $height );
-                            $new_width = $old_width * $new_height / $old_height;
-                        } else {
-                            $new_height = $old_height * $width / $old_width;
-                        }
+                if ( $old_width > $old_height ) {
+                    $new_height = max( $width, $height );
+                    $new_width = $old_width * $new_height / $old_height;
+                } else {
+                    $new_height = $old_height * $width / $old_width;
+                }
             }
 
             // Portrait sized image
             if ( $current_ratio < $desired_ratio_before  ) {
-                        $new_height = $old_height * $width / $old_width;
+                $new_height = $old_height * $width / $old_width;
             }
 
             // Find out the ratio of the original photo to it's new, thumbnail-based size
@@ -843,19 +761,18 @@ class Login_Model
         else {
 
             if ( $old_width > $old_height ) {
-                        $ratio = max( $old_width, $old_height ) / max( $width, $height );
+                $ratio = max( $old_width, $old_height ) / max( $width, $height );
             } else {
-                        $ratio = max( $old_width, $old_height ) / min( $width, $height );
+                $ratio = max( $old_width, $old_height ) / min( $width, $height );
             }
 
             $new_width = $old_width / $ratio;
             $new_height = $old_height / $ratio;
-
             $new_image = imagecreatetruecolor( $new_width, $new_height );
         }
 
         // Where all the real magic happens
-        imagecopyresampled( $new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height );
+        imagecopyresampled($new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height);
 
         // Save it as a JPG File with our $destination_filename param.
         imagejpeg( $new_image, $destination_filename, $quality  );
@@ -869,16 +786,13 @@ class Login_Model
     }
     
     /**
-     * 
+     * Set password reset token in database (for DEFAULT user accounts)
      */
     public function setPasswordResetDatabaseToken()
     {
         if (empty($_POST['user_name'])) {
-          
             $this->errors[] = "Empty username";
-            
         } else {
-            
             // generate timestamp (to see when exactly the user (or an attacker) requested the password reset mail)
             // btw this is an integer ;)
             $temporary_timestamp = time();
@@ -889,65 +803,57 @@ class Login_Model
             // TODO: this is not totally clean, as this is just the form provided username
             $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);                
             
-            $sth = $this->db->prepare("SELECT user_id, user_email FROM users WHERE user_name = :user_name ;");
-            $sth->execute(array(':user_name' => $this->user_name));                    
+            $sth = $this->db->prepare("SELECT user_id, user_email
+                                       FROM users
+                                       WHERE user_name = :user_name
+                                       AND user_provider_type = :provider_type");
+            $sth->execute(array(':user_name' => $this->user_name, ':provider_type' => 'DEFAULT'));
 
-            $count =  $sth->rowCount();            
-
+            $count =  $sth->rowCount();
             if ($count == 1) {
-
                 // get result row (as an object)
-                $result_user_row = $result = $sth->fetch();  
-                
+                $result_user_row = $result = $sth->fetch();
                 // database query: 
                 $sth2 = $this->db->prepare("UPDATE users 
-                                           SET user_password_reset_hash = :user_password_reset_hash, 
-                                               user_password_reset_timestamp = :user_password_reset_timestamp 
-                                           WHERE user_name = :user_name ;");
+                                            SET user_password_reset_hash = :user_password_reset_hash,
+                                                user_password_reset_timestamp = :user_password_reset_timestamp
+                                            WHERE user_name = :user_name AND user_provider_type = :provider_type");
                 $sth2->execute(array(':user_password_reset_hash' => $this->user_password_reset_hash,
                                     ':user_password_reset_timestamp' => $temporary_timestamp,
-                                    ':user_name' => $this->user_name));
+                                    ':user_name' => $this->user_name,
+                                    ':provider_type' => 'DEFAULT'));
 
                 // check if exactly one row was successfully changed:
-                $count =  $sth2->rowCount();            
-
+                $count =  $sth2->rowCount();
                 if ($count == 1) {
-
                     // define email
                     $this->user_email = $result_user_row->user_email;
-
                     return true;
-
                 } else {
-
                     $this->errors[] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL; // maybe say something not that technical.
-
-                }                    
-                
+                }
             } else {
-
                 $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
-
             }
-                
         }
-        
         // return false (this method only returns true when the database entry has been set successfully)
         return false;        
     }
-    
+
+    /**
+     * @return bool Has the password reset mail been sent successfully ?
+     */
     public function sendPasswordResetMail()
     {
+        // create PHPMailer object here. This is easily possible as we auto-load the according class(es) via composer
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
-        // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
-            
             // Set mailer to use SMTP
             $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors
-            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            //useful for debugging, shows full SMTP errors, config this in config/config.php
+            $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
             // Enable SMTP authentication
             $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
             // Enable encryption, usually SSL/TLS
@@ -958,10 +864,8 @@ class Login_Model
             $mail->Host = EMAIL_SMTP_HOST;  
             $mail->Username = EMAIL_SMTP_USERNAME;                            
             $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
-            
+            $mail->Port = EMAIL_SMTP_PORT;
         } else {
-            
             $mail->IsMail();            
         }
         
@@ -969,7 +873,6 @@ class Login_Model
         $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
         $mail->AddAddress($this->user_email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
-        
         $link = EMAIL_PASSWORDRESET_URL.'/'.urlencode($this->user_name).'/'.urlencode($this->user_password_reset_hash);
         $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
 
@@ -984,6 +887,7 @@ class Login_Model
     
     /**
      * TODO: why is this not camelCase ?
+     * TODO: it's the password RESET request, but it's not in the name
      */
     public function verifypasswordrequest($user_name, $verification_code)
     {
@@ -994,51 +898,51 @@ class Login_Model
         $sth = $this->db->prepare("SELECT user_id, user_password_reset_timestamp 
                                    FROM users 
                                    WHERE user_name = :user_name 
-                                      && user_password_reset_hash = :user_password_reset_hash;");
+                                     AND user_password_reset_hash = :user_password_reset_hash
+                                     AND user_provider_type = :user_provider_type");
         $sth->execute(array(':user_password_reset_hash' => $verification_code,
-                            ':user_name' => $user_name));
+                            ':user_name' => $user_name,
+                            ':user_provider_type' => 'DEFAULT'));
 
         // if this user exists
         if ($sth->rowCount() == 1) {
-
             // get result row (as an object)
             $result_user_row = $sth->fetch();
             // 3600 seconds are 1 hour
-            $timestamp_one_hour_ago = time() - 3600; 
-
+            $timestamp_one_hour_ago = time() - 3600;
+            // if password reset request was sent within the last hour (this timeout is for security reasons)
             if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
-
-                // verification was sucessful
+                // verification was successful
                 return true;
-
             } else {
+                // password reset request is older than one hour, reject the request
                 $this->errors[] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
                 return false;
             }
         } else {
+            // wrong verification code (=user_password_reset_hash) for this user
             $this->errors[] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
             return false;
         }
     }
 
     /**
+     * Set the new password (for DEFAULT user, FACEBOOK-users don't have a password)
      * @return bool
      */
     public function setNewPassword()
     {
         // TODO: timestamp!
-        
         if (!empty($_POST['user_name'])
             && !empty($_POST['user_password_reset_hash'])
             && !empty($_POST['user_password_new'])
             && !empty($_POST['user_password_repeat'])) {
                 
             if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
-         
                 if (strlen($_POST['user_password_new']) >= 6) {
 
-                        // escapin' this, additionally removing everything that could be (html/javascript-) code
-                        $this->user_name                = htmlentities($_POST['user_name'], ENT_QUOTES);
+                        // escaping, additionally removing everything that could be (html/javascript-) code
+                        $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
                         $this->user_password_reset_hash = htmlentities($_POST['user_password_reset_hash'], ENT_QUOTES);
                         
                         // no need to escape as this is only used in the hash function
@@ -1054,50 +958,40 @@ class Login_Model
                         // want the parameter: as an array with, currently only used with 'cost' => XX.
                         $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
-                        // write users new hash into database
+                        // write users new password hash into database
                         $sth = $this->db->prepare("UPDATE users
                                                    SET user_password_hash = :user_password_hash,
                                                        user_password_reset_hash = NULL,
                                                        user_password_reset_timestamp = NULL
                                                    WHERE user_name = :user_name
-                                                      && user_password_reset_hash = :user_password_reset_hash ;");
+                                                     AND user_password_reset_hash = :user_password_reset_hash
+                                                     AND user_provider_type = :user_provider_type");
 
                         $sth->execute(array(':user_password_hash' => $this->user_password_hash,
                                             ':user_name' => $this->user_name,
-                                            ':user_password_reset_hash' => $this->user_password_reset_hash));
+                                            ':user_password_reset_hash' => $this->user_password_reset_hash,
+                                            ':user_provider_type' => 'DEFAULT'));
                         
                         // check if exactly one row was successfully changed:
                         if ($sth->rowCount() == 1) {
-
                             $this->errors[] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
                             return true;
-
                         } else {
-
                             $this->errors[] = FEEDBACK_PASSWORD_CHANGE_FAILED;
-
                         }
-                    
                 } else {
-                    
                     $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;
-                    
                 }
-                
             } else {
-                
                 $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;
-                
             }
-                
         }
-        
         // default
         return false;
     }
     
     /**
-     * Upgrades/downgrades the user's account
+     * Upgrades/downgrades the user's account (for DEFAULT and FACEBOOK users)
      * Currently it's just the field user_account_type in the database that
      * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
      * simply increase or decrease this value to emulate an account upgrade/downgrade.
@@ -1106,9 +1000,13 @@ class Login_Model
     public function changeAccountType()
     {
         if (!empty($_POST["user_account_upgrade"])) {
-            
+
             // do whatever you want to upgrade the account here (pay-process etc)
-            
+            // ...
+            // ... myPayProcess();
+            // ...
+
+            // upgrade account type
             $sth = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
             $sth->execute(array(':user_id' => $_SESSION["user_id"]));                                  
 
@@ -1119,13 +1017,15 @@ class Login_Model
             } else {
                 $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
             }
-            
         } elseif (!empty($_POST["user_account_downgrade"])) {
 
             // do whatever you want to downgrade the account here (pay-process etc)
+            // ...
+            // ... myWhateverProcess();
+            // ...
             
             $sth = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
-            $sth->execute(array(':user_id' => $_SESSION["user_id"]));  
+            $sth->execute(array(':user_id' => $_SESSION["user_id"]));
             
             if ($sth->rowCount() == 1) {
                 // set account type in session to 1

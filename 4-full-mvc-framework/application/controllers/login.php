@@ -23,7 +23,74 @@ class Login extends Controller
      */
     function index()
     {
+        // Create our Application instance (replace this with your appId and secret).
+        $facebook = new Facebook(array(
+            'appId'  => '275492609264978',
+            'secret' => '0d36d745f544ea2ed42f40ff69c81f3b',
+        ));
+
+
+
+        // Get User ID
+        $user = $facebook->getUser();
+
+        if ($user) {
+            try {
+                // Proceed knowing you have a logged in user who's authenticated.
+                $user_profile = $facebook->api('/me');
+                print_r($user_profile);
+                print_r($_SESSION);
+            } catch (FacebookApiException $e) {
+                error_log($e);
+                $user = null;
+            }
+        }
+
+        echo "<pre>";
+        var_dump($_SESSION);
+        echo "</pre>";
+
+// Login or logout url will be needed depending on current user state.
+        if ($user) {
+            $this->view->facebook_logout_url = $facebook->getLogoutUrl(array(
+                'next'=> URL . 'login/logoutWithFacebook'
+            ));
+            /*
+            $logoutUrl = $facebook->getLogoutUrl(array(
+                'next'=>'http://localhost/facebook/logout.php'
+            ));
+            */
+        } else {
+            $statusUrl = $facebook->getLoginStatusUrl();
+            $loginUrl = $facebook->getLoginUrl();
+        }
+
+
+        if ($user) {
+            echo "<pre>";
+            var_dump($user);
+            echo "</pre>";
+        }
+
+        $this->view->facebook_login_url = $facebook->getLoginUrl();
         $this->view->render('login/index');
+    }
+
+    function logoutWithFacebook()
+    {
+        // Create our Application instance (replace this with your appId and secret).
+        $facebook = new Facebook(array(
+            'appId'  => '275492609264978',
+            'secret' => '0d36d745f544ea2ed42f40ff69c81f3b',
+            'cookie' => true,
+        ));
+
+        //ovewrites the cookie
+        //$facebook->destroySession();
+        session_destroy();
+
+        //redirects to index
+        header('location: ' . URL . 'login/index');
     }
 
     /**

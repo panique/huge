@@ -20,7 +20,7 @@ ini_set("display_errors", 1);
  * if you are using a (differen) port, then put this in here, like http://mydomain:8888/mvc/
  * TODO: when not using sub-folder, is the trailing slash important ?
  */
-define('URL', 'http://127.0.0.1/php-login/4-full-mvc-framework/');
+define('URL', 'http://localhost/php-login/4-full-mvc-framework/');
 
 /**
  * Configuration for: Folders
@@ -119,7 +119,8 @@ define("HASH_COST_FACTOR", "10");
  * works perfectly in August 2013. Change the "xxx" to your needs.
  * Please note that there are several issues with gmail, like gmail will block your server
  * for "spam" reasons or you'll have a daily sending limit. See the readme.md for more info.
- * 
+ *
+ * define("PHPMAILER_DEBUG_MODE", 0);
  * define("EMAIL_USE_SMTP", true);
  * define("EMAIL_SMTP_HOST", 'ssl://smtp.gmail.com');
  * define("EMAIL_SMTP_AUTH", true);
@@ -131,9 +132,12 @@ define("HASH_COST_FACTOR", "10");
  * It's really recommended to use SMTP!
  * 
  */
+// Options: 0 = off, 1 = commands, 2 = commands and data, perfect to see SMTP errors
+define("PHPMAILER_DEBUG_MODE", 0);
 define("EMAIL_USE_SMTP", false);
 define("EMAIL_SMTP_HOST", 'yourhost');
-define("EMAIL_SMTP_AUTH", true); // leave this true until your SMTP can be used without login
+// leave this true until your SMTP can be used without login
+define("EMAIL_SMTP_AUTH", true);
 define("EMAIL_SMTP_USERNAME", 'yourusername');
 define("EMAIL_SMTP_PASSWORD", 'yourpassword');
 define("EMAIL_SMTP_PORT", 465);
