@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `login`.`users` (
  PRIMARY KEY (`user_id`),
  UNIQUE KEY `user_name` (`user_name`),
  UNIQUE KEY `user_email` (`user_email`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data'
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data';
 
 CREATE TABLE IF NOT EXISTS `login`.`notes` (
  `note_id` int(11) NOT NULL AUTO_INCREMENT,
