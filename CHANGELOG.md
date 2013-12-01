@@ -1,7 +1,9 @@
 # CHANGE LOG #
 
 December 1st 2013
-* 4-full-mvc-framework: massive rewrite !
+* 4-full-mvc-framework: massive rewrite: new folder structure
+* 4-full-mvc-framework: massive rewrite: new index, new model structure
+* 4-full-mvc-framework: massive rewrite: controllers can now handle more than one model
 * 4-full-mvc-framework: PHPMailer updated
 
 
