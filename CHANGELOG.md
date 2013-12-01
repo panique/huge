@@ -4,8 +4,10 @@ December 1st 2013
 * 4-full-mvc-framework: massive rewrite: new folder structure
 * 4-full-mvc-framework: massive rewrite: new index, new model structure
 * 4-full-mvc-framework: massive rewrite: controllers can now handle more than one model
-* 4-full-mvc-framework: PHPMailer updated
-
+* 4-full-mvc-framework: PHPMailer is now loaded via composer
+* 4-full-mvc-framework: PHP password compat lib is now loaded via composer
+* 4-full-mvc-framework: Facebook SDK is now loaded via composer
+* 4-full-mvc-framework: minimum PHP version is now declared via composer (5.3.7+)
 
 November 19th 2013
 * 2-advanced: user can be logged in from multiple devices at one without losing cookie

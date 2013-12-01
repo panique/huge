@@ -7,11 +7,11 @@
  * standardized auto-loader https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md, so we do:
  */
 function autoload($class) {
-    // if file does not exist in LIBS folder [set it in config/config.php], then check in LIBS/external
+    // if file does not exist in LIBS folder [set it in config/config.php]
     if (file_exists(LIBS . $class . ".php")) {
         require LIBS . $class . ".php";
     } else {
-        //require LIBS . "external/" . $class . ".php";
+        exit ('The file ' . $class . '.php is missing in the libs folder.');
     }
 }
 

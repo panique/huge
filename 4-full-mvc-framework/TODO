@@ -18,3 +18,10 @@ maybe the last ID should be fetched in a cleaner way (asking for username)
 
 TODO: refactoring the quite deep if/else structures
 TODO: 127.0.0.1 or localhost by default ?
+
+TEST: does PHPMailer work correctly with SMTP provider ?
+
+
+INFO: PHPMailer https://packagist.org/packages/phpmailer/phpmailer
+INFO: PHP password compat https://packagist.org/packages/ircmaxell/password-compat
+INFO: Facebook SDK https://packagist.org/packages/facebook/php-sdk
