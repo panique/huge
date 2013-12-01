@@ -54,6 +54,8 @@ or [GitTip](https://www.gittip.com/Panique/).
 
 1. **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 2. **MySQL 5** database for Minimal, Advanced and Full MVC version. The one-file version does not need a database.
+Please always use a modern versions of MySQL (late 5.1, all 5.5, 5.6, etc.) as old versions are [vulnerable to PDO
+injections](http://stackoverflow.com/q/134099/1114320).
 
 ####Additional Requirements
 3. Minimal version needs the PHP **mysqli** (last letter is an "i") extension activated (default)
