@@ -19,13 +19,16 @@
                 <label class="remember-me-label">Keep me logged in (for 2 weeks)</label>
                 <input type="submit" class="login-submit-button" />
         </form>
-        <a href="<?php echo URL; ?>login/register">Register</a>    |
+        <a href="<?php echo URL; ?>login/register">Register</a>
+        |
         <a href="<?php echo URL; ?>login/requestpasswordreset">Forgot my Password</a>
     </div>
 
+    <?php if (FACEBOOK_LOGIN == true) { ?>
     <div class="login-facebook-box">
         <h1>or</h1>
-        <a href="<?php echo $this->facebook_login_url; ?>" class="facebook-login-button" />
-        <a href="<?php echo $this->facebook_logout_url; ?>">Logout with Facebook</a>
+        <a href="<?php echo $this->facebook_login_url; ?>" class="facebook-login-button"></a>
     </div>
+    <?php } ?>
+
 </div>

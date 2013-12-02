@@ -76,9 +76,6 @@
                 </li>  
                 <li <?php if ($this->checkForActiveControllerAndAction($filename, "login/register")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo URL; ?>login/register">Register</a>
-                </li>         
-                <li <?php if ($this->checkForActiveControllerAndAction($filename, "login/requestpasswordreset")) { echo ' class="active" '; } ?> >
-                    <a href="<?php echo URL; ?>login/requestpasswordreset">Forgot my Password</a>
                 </li>
             <?php endif; ?>
         </ul>   

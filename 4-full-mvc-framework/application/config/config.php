@@ -36,6 +36,14 @@ define('AVATAR_PATH', 'public/avatars/');
 define('CAPTCHA_FONT_PATH', 'application/tools/fonts/times_new_yorker.ttf');
 
 /**
+ * Configuration for: Additional login providers
+ * Currently we only have support for Facebook. More will come!
+ */
+define('FACEBOOK_LOGIN', true);
+define('FACEBOOK_LOGIN_APP_ID', 'XXX');
+define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
+
+/**
  * Configuration for: Avatars/Gravatar support
  * Set to true if you want to use "Gravatars", a service that automatically gets avatar pictures via using
  * the email adresses of users by requesting images from the gravatar.com API.
@@ -235,3 +243,8 @@ define("FEEDBACK_COOKIE_INVALID", "Your remember-me-cookie is invalid.");
 define("FEEDBACK_COOKIE_LOGIN_SUCCESSFUL", "You were successfully logged in via the remember-me-cookie.");
 
 define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
+
+define("FEEDBACK_FACEBOOK_EMAIL_NEEDED", "Sorry, but you need to allow us to see your email address to register.");
+define("FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook ID exists in your database).");
+define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook email exists in your database).");
+define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in your database).");

@@ -18,6 +18,12 @@ maybe the last ID should be fetched in a cleaner way (asking for username)
 
 TODO: refactoring the quite deep if/else structures
 TODO: 127.0.0.1 or localhost by default ?
+TODO: split positive and negative feedback (this->errors)
+
+TODO: deactivate username-changing / email-changing for facebook-users
+TODO: avatars for facebook-users
+TODO: logout for facebook-users
+TODO: remove forgot-password for facebook-users
 
 TEST: does PHPMailer work correctly with SMTP provider ?
 

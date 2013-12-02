@@ -335,6 +335,13 @@ input[type="submit"] {
     background-position: 0 -46px;
 }
 
+.register-default-box,
+.register-facebook-box {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+}
+
 /* general */
 .clear-both {
     clear: both;

@@ -205,6 +205,64 @@ class Login_Model
     }
 
     /**
+     * @return bool
+     */
+    public function loginWithFacebook()
+    {
+        // instantiate the facebook object
+        $facebook = new Facebook(array(
+            'appId'  => FACEBOOK_LOGIN_APP_ID,
+            'secret' => FACEBOOK_LOGIN_APP_SECRET,
+        ));
+
+        // get user id (string)
+        $user = $facebook->getUser();
+
+        // if the user object (array?) exists, the user has identified as a real facebook user
+        if ($user) {
+            try {
+                // Proceed knowing you have a logged in user who's authenticated.
+                $facebook_user_data = $facebook->api('/me');
+
+                // check database for data from exactly that user (identified via Facebook ID)
+                $sth = $this->db->prepare("SELECT user_id,
+                                              user_name,
+                                              user_email,
+                                              user_account_type,
+                                              user_provider_type
+                                       FROM   users
+                                       WHERE  user_facebook_uid = :user_facebook_uid
+                                              AND user_provider_type = :provider_type");
+                $sth->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
+
+                // fetch one row (we only have one result)
+                // TODO: catch errors here
+                $result = $sth->fetch();
+
+                // put user data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result->user_id);
+                Session::set('user_name', $result->user_name);
+                Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);
+                Session::set('user_provider_type', 'FACEBOOK');
+                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+                return true;
+
+            } catch (FacebookApiException $e) {
+                // TODO: handle the catch results, when something goes wrong with FB login
+                // when facebook goes offline
+                error_log($e);
+                $user = null;
+            }
+        }
+        // default return
+        return false;
+    }
+
+    /**
      * Gets the last page the user visited from the cookie
      * Useful for relocating (TODO: explain this better)
      * @return string view/location the user visited
@@ -514,7 +572,7 @@ class Login_Model
         // standard return. returns only true of really successful (see above)
         return false;
     }
-    
+
     /**
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
@@ -1035,5 +1093,121 @@ class Login_Model
                 $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
             }
         }
+    }
+
+    /**
+     * register user with data from the "facebook object"
+     * @param $facebook_user_data
+     * @return bool
+     */
+    public function registerNewUserWithFacebook($facebook_user_data)
+    {
+        // delete dots from facebook's username (it's the common way to do this like that)
+        $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
+
+        $sql = "INSERT INTO users (user_name, user_email, user_active, user_provider_type, user_facebook_uid)
+                VALUES (:user_name, :user_email, :user_active, :user_provider_type, :user_facebook_uid)";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array(':user_name' => $clean_user_name_from_facebook,
+                            ':user_email' => $facebook_user_data["email"],
+                            ':user_active' => 1,
+                            ':user_provider_type' => 'FACEBOOK',
+                            ':user_facebook_uid' => $facebook_user_data["id"]));
+
+        $count =  $sth->rowCount();
+        if ($count == 1) {
+
+            $sth = $this->db->prepare("SELECT user_id,
+                                              user_name,
+                                              user_email,
+                                              user_account_type,
+                                              user_provider_type
+                                       FROM   users
+                                       WHERE  user_name = :user_name
+                                              AND user_provider_type = :provider_type");
+            $sth->execute(array(':user_name' => $clean_user_name_from_facebook, ':provider_type' => 'FACEBOOK'));
+
+            // fetch one row (we only have one result)
+            // TODO: catch errors here
+            $result = $sth->fetch();
+
+            // put user data into session
+            Session::init();
+            Session::set('user_logged_in', true);
+            Session::set('user_id', $result->user_id);
+            Session::set('user_name', $result->user_name);
+            Session::set('user_email', $result->user_email);
+            Session::set('user_account_type', $result->user_account_type);
+            Session::set('user_provider_type', 'FACEBOOK');
+            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+            return true;
+        }
+        // default return
+        return false;
+    }
+
+    /**
+     * @param $facebook_user_data
+     * @return bool
+     */
+    public function facebookUserHasEmail($facebook_user_data)
+    {
+        if (isset($facebook_user_data["email"]) && !empty($facebook_user_data["email"])) {
+            return true;
+        }
+        // default return
+        return false;
+    }
+
+    /**
+     * @param $facebook_user_data
+     * @return bool
+     */
+    public function facebookUserIdExistsAlreadyInDatabase($facebook_user_data)
+    {
+        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_facebook_uid = :user_facebook_uid");
+        $sth->execute(array(':user_facebook_uid' => $facebook_user_data["id"]));
+
+        if ($sth->rowCount() == 1) {
+            return true;
+        }
+        // default return
+        return false;
+    }
+
+    /**
+     * @param $facebook_user_data
+     * @return bool
+     */
+    public function facebookUserNameExistsAlreadyInDatabase($facebook_user_data)
+    {
+        // delete dots from facebook's username (it's the common way to do this like that)
+        $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
+
+        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook");
+        $sth->execute(array(':clean_user_name_from_facebook' => $clean_user_name_from_facebook));
+
+        if ($sth->rowCount() == 1) {
+            return true;
+        }
+        // default return
+        return false;
+    }
+
+    /**
+     * @param $facebook_user_data
+     * @return bool
+     */
+    public function facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)
+    {
+        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :facebook_email");
+        $sth->execute(array(':facebook_email' => $facebook_user_data["email"]));
+
+        if ($sth->rowCount() == 1) {
+            return true;
+        }
+        // default return
+        return false;
     }
 }
