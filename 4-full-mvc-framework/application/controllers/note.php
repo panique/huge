@@ -19,7 +19,7 @@ class Note extends Controller
     public function index()
     {
         // get all notes (of the logged-in user)
-        $note_model = $this->loadModel('Note');
+        $note_model = $this->loadModel('note');
         $this->view->notes = $note_model->getAllNotes();
         $this->view->errors = $note_model->errors;
         $this->view->render('note/index');
@@ -27,14 +27,14 @@ class Note extends Controller
 
     public function create()
     {
-        $note_model = $this->loadModel('Note');
+        $note_model = $this->loadModel('note');
         $note_model->create($_POST['note_text']);
         header('location: ' . URL . 'note');
     }
 
     public function edit($note_id)
     {
-        $note_model = $this->loadModel('Note');
+        $note_model = $this->loadModel('note');
         $this->view->note = $note_model->getNote($note_id);
         $this->view->errors = $note_model->errors;
         $this->view->render('note/edit');
@@ -43,14 +43,14 @@ class Note extends Controller
     public function editSave($note_id)
     {
         // do editSave() in the note_model, passing note_id from URL and note_text from POST via params
-        $note_model = $this->loadModel('Note');
+        $note_model = $this->loadModel('note');
         $note_model->editSave($note_id, $_POST['note_text']);
         header('location: ' . URL . 'note');        
     }
 
     public function delete($note_id)
     {
-        $note_model = $this->loadModel('Note');
+        $note_model = $this->loadModel('note');
         $note_model->delete($note_id);
         header('location: ' . URL . 'note');
     }
