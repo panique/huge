@@ -13,6 +13,9 @@
         Your username: <?php echo Session::get('user_name'); ?>
     </div>
     <div>
+        Your email: <?php echo Session::get('user_email'); ?>
+    </div>
+    <div>
         Your gravatar pic (on gravatar.com): <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
     </div>
     <div>

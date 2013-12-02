@@ -369,8 +369,7 @@ class Login_Model
      */
     public function editUserEmail()
     {
-        // email and password provided ?
-        if (!empty($_POST['user_email']) && !empty($_POST["user_password"])) {
+        if (!empty($_POST['user_email'])) {
             
             // check if new email is same like the old one
             if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
@@ -385,46 +384,24 @@ class Login_Model
                 $count =  $sth->rowCount();
                 if ($count == 1) {
                     $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
-                    // exit the method, return false
-                    return false;
-                }
-                
-                // check if password is right
-                $sth = $this->db->prepare("SELECT user_id,
-                                                  user_password_hash
-                                           FROM users
-                                           WHERE user_id = :user_id
-                                           AND user_provider_type = :provider_type");
-                $sth->execute(array(':user_id' => $_SESSION['user_id'], ':provider_type' => 'DEFAULT'));
+                } else {
+                    // cleaning
+                    $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+                    $this->user_email = substr($this->user_email, 0, 64);
+                    // write new email to database
+                    $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
+                    $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));
 
-                $count =  $sth->rowCount();
-                if ($count == 1) {
-                    // fetch one row (we only have one result)
-                    $result = $sth->fetch();
-                      
-                    if (password_verify($_POST['user_password'], $result->user_password_hash)) {
-                        // cleaning
-                        $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-                        // prevent database flooding
-                        $this->user_email = substr($this->user_email, 0, 64);
-                        // not really necessary, but just in case...
-                        $this->user_id = $_SESSION['user_id']; // TODO: delete this line
-
-                        $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
-                        $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));                        
-
-                        $count =  $sth->rowCount();
-                        if ($count == 1) {
-                            Session::set('user_email', $this->user_email);
-                            // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                            $this->setGravatarImageUrl($this->user_email);
-                            // TODO: it's not an error, its a positive feedback
-                            $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
-                        } else {
-                            $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
-                        }
+                    $count =  $sth->rowCount();
+                    // if successful
+                    if ($count == 1) {
+                        Session::set('user_email', $this->user_email);
+                        // call the setGravatarImageUrl() method which writes gravatar urls into the session
+                        $this->setGravatarImageUrl($this->user_email);
+                        // TODO: it's not an error, its a positive feedback
+                        $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
                     } else {
-                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
+                        $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
                     }
                 }
             } else {
@@ -432,10 +409,6 @@ class Login_Model
             }
         } elseif (!empty($_POST['user_email'])) {
             $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
-        } elseif (!empty($_POST['user_password'])) {
-            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
-        } else {
-            $this->errors[] = FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY;
         }
     } 
     

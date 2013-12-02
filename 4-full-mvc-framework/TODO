@@ -14,3 +14,4 @@ TODO: remove forgot-password for facebook-users
 
 WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab
 
+TODO: get rid of properties in models classes (better use simple $variables)
