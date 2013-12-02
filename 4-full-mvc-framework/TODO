@@ -1,23 +1,10 @@
-SQL statements need utf8
 refactoring !
-
-automaticly loaded via composer autoloader!
-composer: password compat library
-composer: php mailer
-
-
-FACEBOOK REGISTRATION / LOGIN / LOGOUT flow:
-https://github.com/facebook/facebook-php-sdk
-https://developers.facebook.com/docs/facebook-login/checklist
-https://developers.facebook.com/docs/user_registration/flows/
-
 change username/email for facebook-people
 
 lastInsertId() might be a not-optimal choice for multicore-high-traffic-environments,
 maybe the last ID should be fetched in a cleaner way (asking for username)
 
 TODO: refactoring the quite deep if/else structures
-TODO: 127.0.0.1 or localhost by default ?
 TODO: split positive and negative feedback (this->errors)
 
 TODO: deactivate username-changing / email-changing for facebook-users
@@ -25,9 +12,5 @@ TODO: avatars for facebook-users
 TODO: logout for facebook-users
 TODO: remove forgot-password for facebook-users
 
-TEST: does PHPMailer work correctly with SMTP provider ?
+WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab
 
-
-INFO: PHPMailer https://packagist.org/packages/phpmailer/phpmailer
-INFO: PHP password compat https://packagist.org/packages/ircmaxell/password-compat
-INFO: Facebook SDK https://packagist.org/packages/facebook/php-sdk

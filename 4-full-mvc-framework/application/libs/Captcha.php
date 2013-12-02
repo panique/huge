@@ -54,12 +54,12 @@ class Captcha
 
         // create background with 1000 short lines
         /*
-        for($i=0;$i<1000;$i++) {
-            $lines = imagecolorallocate($im, rand(200, 220), rand(200, 220), rand(200, 220));
+        for($i=0;$i<200;$i++) {
+            $lines = imagecolorallocate($im, rand(20, 20), rand(0, 0), rand(0, 0));
             $start_x = rand(0,150);
             $start_y = rand(0,70);
-            $end_x = $start_x + rand(0,5);
-            $end_y = $start_y + rand(0,5);
+            $end_x = $start_x + rand(3,25);
+            $end_y = $start_y + rand(3,25);
             imageline($im, $start_x, $start_y, $end_x, $end_y, $lines);
         }
         */
@@ -89,10 +89,10 @@ class Captcha
      */
     public function checkCaptcha()
     {
-        if (strtolower($_POST["captcha"]) == strtolower($_SESSION['captcha'])) {
+        if (isset($_POST["captcha"]) AND (strtolower($_POST["captcha"]) == strtolower($_SESSION['captcha']))) {
             return true;
-        } else {
-            return false;
         }
+        // default return
+        return false;
     }
 }
