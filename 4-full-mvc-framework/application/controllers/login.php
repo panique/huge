@@ -32,7 +32,7 @@ class Login extends Controller
     function login()
     {
         // run the login() method in the login-model, put the result in $login_successful (true or false)
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         // perform the login method, put result (true or false) into $login_successful
         $login_successful = $login_model->login();
         // put the errors from the login model into the view (so we can display them in the view)
@@ -54,7 +54,7 @@ class Login extends Controller
      */
     function logout()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->logout();
         // redirect user to base URL
         header('location: ' . URL);
@@ -66,7 +66,7 @@ class Login extends Controller
     function loginwithcookie()
     {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_successful = $login_model->loginWithCookie();
 
         if ($login_successful) {
@@ -105,7 +105,7 @@ class Login extends Controller
      */
     function editusername_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->editUserName();
         // put the errors from the login model into the view (so we can display them in the view)
         $this->view->errors = $login_model->errors;
@@ -127,7 +127,7 @@ class Login extends Controller
      */
     function edituseremail_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->editUserEmail();
         $this->view->errors = $login_model->errors;
         $this->view->render('login/edituseremail');
@@ -141,7 +141,7 @@ class Login extends Controller
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $this->view->avatar_file_path = $login_model->getUserAvatarFilePath();
         $this->view->errors = $login_model->errors;
         $this->view->render('login/uploadavatar');        
@@ -152,7 +152,7 @@ class Login extends Controller
      */
     function uploadavatar_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->createAvatar();
         $this->view->errors = $login_model->errors;
         $this->view->render('login/uploadavatar');
@@ -173,7 +173,7 @@ class Login extends Controller
      */
     function changeaccounttype_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->changeAccountType();
         $this->view->errors = $login_model->errors;
         $this->view->render('login/changeaccounttype');          
@@ -192,7 +192,7 @@ class Login extends Controller
      */
     function register_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $registration_successful = $login_model->registerNewUser();
         $this->view->errors = $login_model->errors;
         
@@ -210,7 +210,7 @@ class Login extends Controller
      */
     function verify($user_id, $user_verification_code)
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         $login_model->verifyNewUser($user_id, $user_verification_code);
         $this->view->errors = $login_model->errors;
         $this->view->render('login/verify');
@@ -229,7 +229,7 @@ class Login extends Controller
      */
     function requestpasswordreset_action()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
         // set token (= a random hash string and a timestamp) into database
         // to see that THIS user really requested a password reset
         if ($login_model->setPasswordResetDatabaseToken() == true) {
@@ -246,7 +246,7 @@ class Login extends Controller
      */
     function verifypasswordrequest($user_name, $verification_code)
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
 
         if ($login_model->verifypasswordrequest($user_name, $verification_code)) {
             $this->view->user_name = $login_model->user_name;
@@ -264,7 +264,7 @@ class Login extends Controller
      */
     function setnewpassword()
     {
-        $login_model = $this->loadModel('Login');
+        $login_model = $this->loadModel('login');
 
         if ($login_model->setNewPassword()) {
             $this->view->errors = $login_model->errors;
