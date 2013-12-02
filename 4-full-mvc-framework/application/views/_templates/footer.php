@@ -1,5 +1,5 @@
     <div class="footer">
-        Footer
+        <?php d($_SESSION); ?>
     </div>
 </body>
 </html>
