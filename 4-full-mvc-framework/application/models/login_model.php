@@ -316,6 +316,7 @@ class Login_Model
         
     /**
      * Edit the user's name, provided in the editing form
+     * This works only with DEFAULT users, not FACEBOOK users
      */
     public function editUserName()
     {
@@ -384,7 +385,67 @@ class Login_Model
             $this->errors[] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
         }
     }
-    
+
+    /**
+     * Edit the user's name, provided in the editing form
+     * This works only with FACEBOOK users, for DEFAULT users the editUserName() method is used
+     */
+    public function editUserNameForFacebookUser()
+    {
+        // email provided ?
+        if (!empty($_POST['user_name'])) {
+
+            if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
+                $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
+            }
+            // username cannot be empty and must be azAZ09 and 2-64 characters
+            elseif (!empty($_POST['user_name']) && preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
+
+                // check if password is right
+                $sth = $this->db->prepare("SELECT user_id
+                                           FROM users
+                                           WHERE user_id = :user_id
+                                           AND user_provider_type = :provider_type");
+                $sth->execute(array(':user_id' => $_SESSION['user_id'], ':provider_type' => 'FACEBOOK'));
+
+                $count =  $sth->rowCount();
+                if ($count == 1) {
+                    // clean the input
+                    $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+                    $this->user_name = substr($this->user_name, 0, 64); // TODO: is this really necessary ?
+                    $this->user_id = $_SESSION['user_id']; // TODO: is this really necessary ?
+
+                    // check if new username already exists
+                    $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
+                    $sth->execute(array(':user_name' => $this->user_name));
+
+                    $count =  $sth->rowCount();
+
+                    if ($count == 1) {
+                        $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+                    } else {
+                        $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
+                        $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $this->user_id));
+
+                        $count =  $sth->rowCount();
+                        if ($count == 1) {
+                            Session::set('user_name', $this->user_name);
+                            $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+                        } else {
+                            $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                        }
+                    }
+                } else {
+                    $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
+                }
+            } else {
+                $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+            }
+        } elseif (!empty($_POST['user_username'])) {
+            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+        }
+    }
+
     /**
      * Edit the user's email, provided in the editing form
      */

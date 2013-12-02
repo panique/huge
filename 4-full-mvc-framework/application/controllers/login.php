@@ -136,7 +136,7 @@ class Login extends Controller
     }
 
     /**
-     * Edit user name (show the view with the form)
+     * Edit user name (show the view with the form) for DEFAULT users, FACEBOOK users have a different method
      */
     function editusername()
     {
@@ -146,7 +146,17 @@ class Login extends Controller
     }
 
     /**
-     * Edit user name (perform the real action after form has been submitted)
+     * Edit user name (show the view with the form) for FACEBOOK users, DEFAULT users have a different method
+     */
+    function editusername_for_facebook_user()
+    {
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        Auth::handleLogin();
+        $this->view->render('login/editusername_facebookuser');
+    }
+
+    /**
+     * Edit user name (perform the real action after form has been submitted) (for DEFAULT users)
      */
     function editusername_action()
     {
@@ -156,6 +166,19 @@ class Login extends Controller
         $this->view->errors = $login_model->errors;
         $this->view->render('login/editusername');
     }
+
+    /**
+     * Edit user name (perform the real action after form has been submitted) (for FACEBOOK users)
+     */
+    function editusername_for_facebook_user_action()
+    {
+        $login_model = $this->loadModel('Login');
+        $login_model->editUserNameForFacebookUser();
+        // put the errors from the login model into the view (so we can display them in the view)
+        $this->view->errors = $login_model->errors;
+        $this->view->render('login/editusername_facebookuser');
+    }
+
 
     /**
      * Edit user email (show the view with the form)

@@ -87,6 +87,10 @@ class Overview_Model
      * For deeper info on the different parameter possibilities:
      * @see http://gravatar.com/site/implement/images/
      *
+     * This method will return in something like
+     * http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
+     * Note: the url does NOT have something like ".jpg" ! It works without.
+     *
      * @param string $email The email address
      * @param int|string $s Size in pixels, defaults to 50px [ 1 - 2048 ]
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
@@ -101,10 +105,7 @@ class Overview_Model
         $gravatar_image_link = 'http://www.gravatar.com/avatar/';
         $gravatar_image_link .= md5( strtolower( trim( $email ) ) );
         $gravatar_image_link .= "?s=$s&d=$d&r=$r";
-        
-        // the image url (on gravatar servers), will return in something like
-        // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
-        // note: the url does NOT have something like .jpg
+
         return $gravatar_image_link;
     }
 

@@ -5,7 +5,7 @@
  *
  * handles the session stuff. creates session when no one exists, sets and
  * gets values, and closes the session properly (=logout). Those methods
- * are STATIC, which means you can run them with Session::get(XXX);
+ * are STATIC, which means you can call them with Session::get(XXX);
  */
 class Session
 {
@@ -43,7 +43,7 @@ class Session
     }
 
     /**
-     * deletes the sssions = logs the user out
+     * deletes the session (= logs the user out)
      */
     public static function destroy()
     {

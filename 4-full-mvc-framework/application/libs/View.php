@@ -14,7 +14,7 @@ class View
      */
     public function render($filename, $special_page = false)
     {
-        // special page = page withouth header and footer, for whatever reason
+        // special page = page without header and footer, for whatever reason
         if ($special_page == true) {
             require VIEWS . $filename . '.php';
         } else {

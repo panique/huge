@@ -52,12 +52,17 @@
                     <ul class="sub-menu">
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/changeaccounttype">Change account type</a>
-                        </li>                           
+                        </li>
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
                         </li>                          
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
+                            <!-- FACEBOOK-users have a different controller-action for username editing -->
+                            <?php if (Session::get('user_provider_type') == "FACEBOOK") { ?>
+                                <a href="<?php echo URL; ?>login/editusername_for_facebook_user">Edit my username</a>
+                            <?php } else { ?>
+                                <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
+                            <?php } ?>
                         </li>
                         <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                             <a href="<?php echo URL; ?>login/edituseremail">Edit my email</a>

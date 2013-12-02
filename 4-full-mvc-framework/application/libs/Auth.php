@@ -9,12 +9,13 @@ class Auth
 {
     public static function handleLogin()
     {
+        // initialize the session
         Session::init();
         
-        // if user is still not logged in, then destroy session and handle user as "not logged in"
+        // if user is still not logged in, then destroy session, handle user as "not logged in" and
+        // redirect user to login page
         if (!isset($_SESSION['user_logged_in'])) {
             Session::destroy();
-            // route user to login page
             header('location: ' . URL . 'login');
         }
     }
