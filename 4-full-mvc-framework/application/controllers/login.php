@@ -248,7 +248,7 @@ class Login extends Controller
             'redirect_uri' => $redirect_url_after_facebook_auth
         ));
 
-        $this->view->render('login/register');        
+        $this->view->render('login/register');
     }
 
     /**
@@ -312,8 +312,14 @@ class Login extends Controller
                         if (!$login_model->facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)) {
                             // alle vorraussetzungen erfüllt, user kann angelegt werden
                             if ($login_model->registerNewUserWithFacebook($facebook_user_data)) {
+
+                                // TODO: refactor!
                                 $this->view->errors[] = "You have been successfully registered with Facebook.";
-                                header('location: ' . URL . 'login/index');
+                                $this->view->facebook_login_url = $facebook->getLoginUrl(array(
+                                    'redirect_uri' => URL . 'login/loginWithFacebook'
+                                ));
+                                $this->view->render('login/index');
+
                             } else {
                                 $this->view->errors[] = "Unknown error while creating your account :(";
                             }
