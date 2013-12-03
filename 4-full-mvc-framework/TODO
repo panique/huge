@@ -6,8 +6,8 @@ TODO: refactoring the quite deep if/else structures
 TODO: split positive and negative feedback (this->errors)
 TODO: get rid of properties in models classes (better use simple $variables)
 
-
 BUGS & PROBLEMS
 
+CLARIFY: Does the upper/lowercase in $login_model = $this->loadModel('Login'); matter ?
 WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab (WONTFIX ?)
 BEAUTY: After logging in with Facebook the URL gets an ugly additional hash tag etc. like "#_=_"
