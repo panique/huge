@@ -23,6 +23,7 @@ class Login extends Controller
      */
     function index()
     {
+        // TODO: put this into the model as it is data handling
         // Create our Application instance (replace this with your appId and secret).
         $facebook = new Facebook(array(
             'appId'  => FACEBOOK_LOGIN_APP_ID,
