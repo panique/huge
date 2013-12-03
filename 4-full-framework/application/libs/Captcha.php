@@ -34,10 +34,7 @@ class Captcha
     
     /**
      * renders an image to the browser
-     * 
-     * TODO: this is not really good coding style
-     * as this does return something "binary" (correct me please if i'm talking bullshit).
-     * maybe there's a cleaner method to do this ? all captcha scripts i checked are doing it like this
+     * TODO: is this valid coding style as this returns something "binary" (correct me please if i'm talking bullshit).
      */
     public function showCaptcha()
     {
@@ -45,31 +42,19 @@ class Captcha
         $letters = str_split($_SESSION['captcha']);
         
         // begin to create the image with PHP's GD tools
-        $im = imagecreatetruecolor(150, 70);
+        $image = imagecreatetruecolor(150, 70);
         // TODO: error handling if creating images fails
         //or die("Cannot Initialize new GD image stream");
         
-        $bg = imagecolorallocate($im, 255, 255, 255);
-        imagefill($im, 0, 0, $bg);
-
-        // create background with 1000 short lines
-        /*
-        for($i=0;$i<200;$i++) {
-            $lines = imagecolorallocate($im, rand(20, 20), rand(0, 0), rand(0, 0));
-            $start_x = rand(0,150);
-            $start_y = rand(0,70);
-            $end_x = $start_x + rand(3,25);
-            $end_y = $start_y + rand(3,25);
-            imageline($im, $start_x, $start_y, $end_x, $end_y, $lines);
-        }
-        */
+        $background = imagecolorallocate($image, 255, 255, 255);
+        imagefill($image, 0, 0, $background);
 
         // create letters. for more info on how this works, please
         // @see php.net/manual/en/function.imagefttext.php
         $i = 0;
         foreach ($letters as $letter) {
-            $text_color = imagecolorallocate($im, rand(0,100), rand(10,100), rand(0,100));
-            imagefttext($im, 35, rand(-10, 10), 20+($i*30) + rand(-5, +5), 35 + rand(10, 30),
+            $text_color = imagecolorallocate($image, rand(0,100), rand(10,100), rand(0,100));
+            imagefttext($image, 35, rand(-10, 10), 20+($i*30) + rand(-5, +5), 35 + rand(10, 30),
                 $text_color, CAPTCHA_FONT_PATH, $letter);
             $i++;
         }
@@ -80,8 +65,8 @@ class Captcha
         header('Cache-Control: no-store, no-cache, proxy-revalidate');
         
         // send image to browser, destroy image from php "cache"
-        imagepng($im);
-        imagedestroy($im);
+        imagepng($image);
+        imagedestroy($image);
     }
     
     /**

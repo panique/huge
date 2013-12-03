@@ -13,7 +13,7 @@ class Overview_Model
 
     /**
      * Constructor
-     * @param $db
+     * @param $db Database The database object
      */
     public function __construct($db)
     {
@@ -28,7 +28,6 @@ class Overview_Model
      */
     public function getAllUsersProfiles()
     {
-
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
         $sth->execute();
         
