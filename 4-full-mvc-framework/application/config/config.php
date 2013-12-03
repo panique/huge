@@ -26,9 +26,10 @@ define('URL', 'http://localhost/php-login/4-full-mvc-framework/');
  * Configuration for: Folders
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
  */
-define('LIBS', 'application/libs/');
-define('MODELS', 'application/models/');
-define('VIEWS', 'application/views/');
+define('LIBS_PATH', 'application/libs/');
+define('CONTROLLER_PATH', 'application/controllers/');
+define('MODELS_PATH', 'application/models/');
+define('VIEWS_PATH', 'application/views/');
 // don't forget to make this folder writeable via chmod 775
 // the slash at the end is VERY important!
 define('AVATAR_PATH', 'public/avatars/');

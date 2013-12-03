@@ -36,10 +36,10 @@ class Controller
      */
     public function loadModel($name)
     {
-        $path = MODELS . $name . '_model.php';
+        $path = MODELS_PATH . $name . '_model.php';
 
         if (file_exists($path)) {
-            require MODELS . $name . '_model.php';
+            require MODELS_PATH . $name . '_model.php';
             $modelName = $name . '_Model';
             // return the new model object while passing the database connection to the model
             return new $modelName($this->db);

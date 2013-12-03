@@ -16,11 +16,11 @@ class View
     {
         // special page = page without header and footer, for whatever reason
         if ($special_page == true) {
-            require VIEWS . $filename . '.php';
+            require VIEWS_PATH . $filename . '.php';
         } else {
-            require VIEWS . '_templates/header.php';
-            require VIEWS . $filename . '.php';
-            require VIEWS . '_templates/footer.php';
+            require VIEWS_PATH . '_templates/header.php';
+            require VIEWS_PATH . $filename . '.php';
+            require VIEWS_PATH . '_templates/footer.php';
         }
     }
     
