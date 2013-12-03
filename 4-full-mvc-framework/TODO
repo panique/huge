@@ -10,6 +10,4 @@ TODO: get rid of properties in models classes (better use simple $variables)
 BUGS & PROBLEMS
 
 WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab (WONTFIX ?)
-
-lastInsertId() might be a not-optimal choice for multicore-high-traffic-environments,
-maybe the last ID should be fetched in a cleaner way (asking for username)
+BEAUTY: After logging in with Facebook the URL gets an ugly additional hash tag etc. like "#_=_"

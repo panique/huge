@@ -325,14 +325,20 @@ input[type="submit"] {
     vertical-align: top;
 }
 
-.facebook-login-button {
-    display: block;
-    background: transparent url('../img/facebook-login-button.png') no-repeat 0 0;
-    width: 202px;
-    height: 46px;
+a.facebook-login-button,
+a.facebook-register-button {
+    background-color: #3b5998;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 15px 20px;
+    border-radius: 4px;
 }
-.facebook-login-button:hover {
-    background-position: 0 -46px;
+
+a.facebook-login-button:hover,
+a.facebook-register-button:hover {
+    background-color: #2f477a;
 }
 
 .register-default-box,
