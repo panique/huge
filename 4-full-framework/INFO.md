@@ -1,5 +1,5 @@
 
-## Interesting info on how the facebook login process works
+## How the facebook login process works
 
 https://github.com/facebook/facebook-php-sdk
 https://developers.facebook.com/docs/facebook-login/checklist

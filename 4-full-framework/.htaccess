@@ -2,7 +2,7 @@ RewriteEngine On
 
 #When using the script within a sub-folder, put this path here, like /mysubfolder/
 #If your app is in the root of your web folder, then please delete this line or comment it out like this line
-RewriteBase /php-login/4-full-mvc-framework/
+RewriteBase /php-login/4-full-framework/
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
