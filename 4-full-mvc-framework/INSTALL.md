@@ -41,3 +41,6 @@ Things like "127.0.0.1" don't seem work.
 3. Put your facebook app id and the secret token in FACEBOOK_LOGIN_APP_ID and FACEBOOK_LOGIN_APP_SECRET
 
 TODO: Is it possible to automate things here ?
+NOTE: Currently the app shows the current content of $_SESSION in the footer via kint, an excellent high-end version
+of var_dump(). KINT is installed automatically via composer and called in the footer.php via d($_SESSION);
+See https://github.com/raveren/kint for more...
