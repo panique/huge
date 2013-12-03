@@ -24,7 +24,7 @@ class Overview_Model
      * Gets an array that contains all the users in the database
      * The array's keys are the user ids. Each array element is an object,
      * containing a specific user's data.
-     * @return array
+     * @return array The profiles of all users
      */
     public function getAllUsersProfiles()
     {
@@ -37,10 +37,8 @@ class Overview_Model
             // a new object for every user. This is eventually not really optimal when it comes
             // to performance, but it fits the view style better
             $all_users_profiles[$user->user_id] = new stdClass();
-            // hmm...
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
-            // be careful with public emails in real apps
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
             
             if (USE_GRAVATARS) {
@@ -59,7 +57,7 @@ class Overview_Model
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
-     * @return object
+     * @return object The selected user's profile
      */
     public function getUserProfile($user_id)
     {
@@ -94,12 +92,12 @@ class Overview_Model
      * @param int|string $s Size in pixels, defaults to 50px [ 1 - 2048 ]
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-     * @param array $atts Optional, additional key/value attributes to include in the IMG tag
+     * @param array $options Optional, additional key/value attributes to include in the IMG tag
      * @source http://gravatar.com/site/implement/images/php/
      *
      * @return string
      */
-    public function getGravatarLinkFromEmail($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array())
+    public function getGravatarLinkFromEmail($email, $s = 44, $d = 'mm', $r = 'pg', $options = array())
     {
         $gravatar_image_link = 'http://www.gravatar.com/avatar/';
         $gravatar_image_link .= md5( strtolower( trim( $email ) ) );
@@ -119,5 +117,7 @@ class Overview_Model
         if ($user_has_avatar) {
             return URL . AVATAR_PATH . $user_id . '.jpg';
         }
+        // default return
+        return null;
     }
 }

@@ -9,7 +9,7 @@
     </p>
     
     <p>
-        <span style="color: red;">NOTE: be sure NOT to show email adresses of users in a real app. This is just a demo.</span>
+        <span style="color: red;">NOTE: be sure NOT to show email addresses of users in a real app. This is just a demo.</span>
         
         <table class="overview-table">
         <?php
@@ -22,7 +22,9 @@
                 echo '<tr class="active">';            
             }        
             echo '<td>'.$user->user_id.'</td>';            
-            echo '<td class="avatar"><img src="'.$user->user_avatar_link.'" /></td>';
+            echo '<td class="avatar">';
+            if (isset($user->user_avatar_link)) { echo '<img src="'.$user->user_avatar_link.'" />'; }
+            echo '</td>';
             echo '<td>'.$user->user_name.'</td>';
             echo '<td>'.$user->user_email.'</td>';
             echo '<td>Active: '.$user->user_active.'</td>';            
