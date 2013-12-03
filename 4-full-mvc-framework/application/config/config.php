@@ -17,8 +17,8 @@ ini_set("display_errors", 1);
 /**
  * Configuration for: Base URL
  * This is the base url of our app. if you go live with your app, put your full domain name here.
- * if you are using a (differen) port, then put this in here, like http://mydomain:8888/mvc/
- * TODO: when not using sub-folder, is the trailing slash important ?
+ * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
+ * Note: The trailing slash is important!
  */
 define('URL', 'http://localhost/php-login/4-full-mvc-framework/');
 
@@ -39,14 +39,14 @@ define('CAPTCHA_FONT_PATH', 'application/tools/fonts/times_new_yorker.ttf');
  * Configuration for: Additional login providers
  * Currently we only have support for Facebook. More will come!
  */
-define('FACEBOOK_LOGIN', true);
+define('FACEBOOK_LOGIN', false);
 define('FACEBOOK_LOGIN_APP_ID', 'XXX');
 define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
 
 /**
  * Configuration for: Avatars/Gravatar support
  * Set to true if you want to use "Gravatars", a service that automatically gets avatar pictures via using
- * the email adresses of users by requesting images from the gravatar.com API.
+ * the email addresses of users by requesting images from the gravatar.com API.
  * Set to false to use you own, locally saved avatars.
  */
 define('USE_GRAVATARS', false);
@@ -58,12 +58,15 @@ define('USE_GRAVATARS', false);
  * Note the . in front of the domain. No www, no http, no slash here!
  * For local development .127.0.0.1 is fine, but when deploying you should
  * change this to your real domain, like '.mydomain.com' ! The leading dot makes the cookie available for
- * subdomains too.
+ * sub-domains too.
  * @see http://stackoverflow.com/q/9618217/1114320
  * @see php.net/manual/en/function.setcookie.php
  */
-define('COOKIE_RUNTIME', 1209600); // 1209600 seconds = 2 weeks
-define('COOKIE_DOMAIN', '.127.0.0.1'); // the domain where the cookie is valid for
+// 1209600 seconds = 2 weeks
+define('COOKIE_RUNTIME', 1209600);
+// the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
+// IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
+define('COOKIE_DOMAIN', '.localhost');
 
 /**
  * Configuration for: Database
@@ -86,7 +89,6 @@ define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'login');
 define('DB_USER', 'root');
 define('DB_PASS', 'mysql');
-
 
 /**
  * Configuration for: Hashing strength
@@ -114,7 +116,6 @@ define('DB_PASS', 'mysql');
 // commented out until you need another factor then 10.
 define("HASH_COST_FACTOR", "10");
 
-
 /**
  * Configuration for: Email server credentials
  * 
@@ -138,19 +139,23 @@ define("HASH_COST_FACTOR", "10");
  * define("EMAIL_SMTP_ENCRYPTION", 'ssl');  
  * 
  * It's really recommended to use SMTP!
- * 
  */
-// Options: 0 = off, 1 = commands, 2 = commands and data, perfect to see SMTP errors
+// Options: 0 = off, 1 = commands, 2 = commands and data, perfect to see SMTP errors, see the PHPMailer manual for more
 define("PHPMAILER_DEBUG_MODE", 0);
+// use SMTP or basic mail() ? SMTP is strongly recommended
 define("EMAIL_USE_SMTP", false);
+// name of your host
 define("EMAIL_SMTP_HOST", 'yourhost');
 // leave this true until your SMTP can be used without login
 define("EMAIL_SMTP_AUTH", true);
+// SMTP provider username
 define("EMAIL_SMTP_USERNAME", 'yourusername');
+// SMTP provider password
 define("EMAIL_SMTP_PASSWORD", 'yourpassword');
+// SMTP provider port
 define("EMAIL_SMTP_PORT", 465);
-define("EMAIL_SMTP_ENCRYPTION", 'ssl'); 
-
+// SMTP encryption, usually SMTP providers use "tls" or "ssl", for details see the PHPMailer manual
+define("EMAIL_SMTP_ENCRYPTION", 'ssl');
 
 /**
  * Configuration for: Email content data
@@ -189,9 +194,10 @@ define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your
 /**
  * Configuration for: Error messages and notices
  * 
- * In this project, the error messages, notices etc are alltogether called "feedback".
+ * In this project, the error messages, notices etc are all-together called "feedback".
  */
-define("FEEDBACK_PASSWORD_WRONG_3_TIMES", "You have typed in a wrong password 3 or more times already. Please wait <span id='failed-login-countdown-value'>30</span> seconds to try again.");
+define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
+define("FEEDBACK_PASSWORD_WRONG_3_TIMES", "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.");
 define("FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET", "Your account is not activated yet. Please click on the confirm link in the mail.");
 define("FEEDBACK_PASSWORD_WRONG", "Password was wrong.");
 define("FEEDBACK_USER_DOES_NOT_EXIST", "This user does not exist.");
@@ -241,9 +247,6 @@ define("FEEDBACK_NOTE_EDITING_FAILED", "Note editing failed.");
 define("FEEDBACK_NOTE_DELETION_FAILED", "Note deletion failed.");
 define("FEEDBACK_COOKIE_INVALID", "Your remember-me-cookie is invalid.");
 define("FEEDBACK_COOKIE_LOGIN_SUCCESSFUL", "You were successfully logged in via the remember-me-cookie.");
-
-define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
-
 define("FEEDBACK_FACEBOOK_EMAIL_NEEDED", "Sorry, but you need to allow us to see your email address to register.");
 define("FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook ID exists in your database).");
 define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook email exists in your database).");

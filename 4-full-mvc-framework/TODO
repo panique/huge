@@ -1,17 +1,15 @@
-refactoring !
-change username/email for facebook-people
+
+REFACTORING / IMPROVEMENTS
+
+TODO: Make it impossible to see the login form when logged in (even when directly url-typed)
+TODO: refactoring the quite deep if/else structures
+TODO: split positive and negative feedback (this->errors)
+TODO: get rid of properties in models classes (better use simple $variables)
+
+
+BUGS & PROBLEMS
+
+WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab (WONTFIX ?)
 
 lastInsertId() might be a not-optimal choice for multicore-high-traffic-environments,
 maybe the last ID should be fetched in a cleaner way (asking for username)
-
-TODO: refactoring the quite deep if/else structures
-TODO: split positive and negative feedback (this->errors)
-
-TODO: deactivate username-changing / email-changing for facebook-users
-TODO: avatars for facebook-users
-TODO: logout for facebook-users
-TODO: remove forgot-password for facebook-users
-
-WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab
-
-TODO: get rid of properties in models classes (better use simple $variables)

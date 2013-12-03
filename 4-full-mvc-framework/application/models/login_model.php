@@ -420,8 +420,10 @@ class Login_Model
      */
     public function registerNewUser()
     {
+        // create new Captcha object
         $captcha = new Captcha();
-        
+
+        // perform all necessary form checks
         if (!$captcha->checkCaptcha()) {
             $this->errors[] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
@@ -478,7 +480,7 @@ class Login_Model
                 } else {
 
                     // check if user's email already exists
-                    $sth = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
+                    $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :user_email");
                     $sth->execute(array(':user_email' => $this->user_email));
 
                     $count =  $sth->rowCount();
@@ -500,22 +502,32 @@ class Login_Model
                                             ':user_provider_type' => 'DEFAULT'));
 
                         $count =  $sth->rowCount();
-
                         if ($count == 1) {
-                            $this->user_id = $this->db->lastInsertId();
-                            // send a verification email
-                            if ($this->sendVerificationEmail()) {
-                                // when mail has been send successfully
-                                $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
-                                $this->registration_successful = true;
-                                return true;
+
+                            // get user_id of the user that has been created
+                            // to keep things clean and professional we DON'T use lastInsertId() here
+                            $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
+                            $sth->execute(array(':user_name' => $this->user_name));
+
+                            if ($sth->rowCount() == 1) {
+
+                                $result_user_row = $sth->fetch();
+                                $this->user_id = $result_user_row->user_id;
+
+                                // send a verification email
+                                if ($this->sendVerificationEmail($this->user_id, $this->user_email, $this->user_activation_hash)) {
+                                    // when mail has been send successfully
+                                    $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
+                                    $this->registration_successful = true;
+                                    return true;
+                                } else {
+                                    // if verification email didn't sent, instantly delete the user
+                                    $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
+                                    $sth->execute(array(':last_inserted_id' => $this->user_id));
+                                    $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+                                }
                             } else {
-                                // delete this users account immediately, as we could not send a verification email
-                                // the row (which will be deleted) is identified by PDO's lastinserid method (= the last inserted row)
-                                // @see http://www.php.net/manual/en/pdo.lastinsertid.php
-                                $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id ;");
-                                $sth->execute(array(':last_inserted_id' => $this->db->lastInsertId() ));
-                                $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+                                $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
                             }
                         } else {
                             $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
@@ -531,26 +543,29 @@ class Login_Model
 
     /**
      * sends an email to the provided email address
+     * @param $user_id int user's id
+     * @param $user_email string user's email
+     * @param $user_activation_hash string user's mail verification hash string
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
-    private function sendVerificationEmail()
+    private function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
-        // create PHPMailer object here. This is easily possible as we auto-load the according class(es) via composer
+        // create PHPMailer object (this is easily possible as we auto-load the according class(es) via composer)
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
         if (EMAIL_USE_SMTP) {
-            // Set mailer to use SMTP
+            // set PHPMailer to use SMTP
             $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors, config this in config/config.php
+            // useful for debugging, shows full SMTP errors, config this in config/config.php
             $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
-            // Enable SMTP authentication
+            // enable SMTP authentication
             $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
-            // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
+            // enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
                 $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
             }
-            // Specify host server
+            // set SMTP provider's credentials
             $mail->Host = EMAIL_SMTP_HOST;  
             $mail->Username = EMAIL_SMTP_USERNAME;                            
             $mail->Password = EMAIL_SMTP_PASSWORD;                      
@@ -558,29 +573,37 @@ class Login_Model
         } else {
             $mail->IsMail();            
         }
-        
+
+        // fill mail with data
         $mail->From = EMAIL_VERIFICATION_FROM_EMAIL;
         $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
-        $mail->AddAddress($this->user_email);
+        $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
-        $mail->Body    = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($this->user_id).'/'.urlencode($this->user_activation_hash);
+        $mail->Body = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($user_id).'/'.urlencode($user_activation_hash);
 
-        if(!$mail->Send()) {
-           $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
-           return false;
-        } else {
+        // final sending and check
+        if($mail->Send()) {
             $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
             return true;
+        } else {
+            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
         }
+
+        // default return
+        return false;
     }
     
     /**
      * verifyNewUser()
      * checks the email/verification code combination and set the user's activation status to true (=1) in the database
+     * @param $user_id
+     * @param $user_verification_code
      */
     public function verifyNewUser($user_id, $user_verification_code)
     {
-        $sth = $this->db->prepare("UPDATE users SET user_active = 1, user_activation_hash = NULL WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash ;");
+        $sth = $this->db->prepare("UPDATE users
+                                   SET user_active = 1, user_activation_hash = NULL
+                                   WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash");
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
         if ($sth->rowCount() > 0) {
@@ -630,7 +653,7 @@ class Login_Model
     
     /**
      * Gets the user's avatar file path
-     * @return string
+     * @return string avatar picture path
      */
     public function getUserAvatarFilePath()
     {
@@ -1052,7 +1075,7 @@ class Login_Model
     }
 
     /**
-     * register user with data from the "facebook object"
+     * Register user with data from the "facebook object"
      * @param $facebook_user_data
      * @return bool
      */
@@ -1072,7 +1095,6 @@ class Login_Model
 
         $count =  $sth->rowCount();
         if ($count == 1) {
-
             $sth = $this->db->prepare("SELECT user_id,
                                               user_name,
                                               user_email,
@@ -1104,6 +1126,8 @@ class Login_Model
     }
 
     /**
+     * Checks if the facebook user data array has an email. It's possible that users block this, so we don't have
+     * an email an therefore cannot register this person (registration without email is impossible).
      * @param $facebook_user_data
      * @return bool
      */
@@ -1117,6 +1141,7 @@ class Login_Model
     }
 
     /**
+     * Check if the facebook-user's UID (unique facebook ID) already exists in our database
      * @param $facebook_user_data
      * @return bool
      */
@@ -1133,6 +1158,8 @@ class Login_Model
     }
 
     /**
+     * Checks if the facebook-user's username is already in our database
+     * Note: Facebook-usernames have dots, so we remove all dots.
      * @param $facebook_user_data
      * @return bool
      */
@@ -1152,6 +1179,7 @@ class Login_Model
     }
 
     /**
+     * Checks if the facebook-user's email address is already in our database
      * @param $facebook_user_data
      * @return bool
      */
