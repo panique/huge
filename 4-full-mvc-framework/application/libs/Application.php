@@ -29,6 +29,7 @@ class Application
     
     /**
      * Starts the Application
+     * TODO: get rid of deep if/else nesting
      */
     public function __construct()
     {
@@ -52,7 +53,7 @@ class Application
                 if ($this->url_action) {
                     if (method_exists($this->url_controller, $this->url_action)) {
 
-                        // call the method and pass the parameters to it
+                        // call the method and pass the arguments to it
                         if (isset($this->url_parameter_3)) {
                             $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
                         } elseif (isset($this->url_parameter_2)) {
@@ -60,7 +61,7 @@ class Application
                         } elseif (isset($this->url_parameter_1)) {
                             $this->url_controller->{$this->url_action}($this->url_parameter_1);
                         } else {
-                            // if no parameters given, just call the method without parameters
+                            // if no parameters given, just call the method without arguments
                             $this->url_controller->{$this->url_action}();
                         }
                     } else {
@@ -105,14 +106,14 @@ class Application
             $this->url_parameter_1 = (isset($url[2]) ? $url[2] : null);
             $this->url_parameter_2 = (isset($url[3]) ? $url[3] : null);
             $this->url_parameter_3 = (isset($url[4]) ? $url[4] : null);
-        }
 
-        // DEBUG
-        // echo 'Controller: ' . $this->url_controller . '<br />';
-        // echo 'Action: ' . $this->url_action . '<br />';
-        // echo 'Parameter 1: ' . $this->url_parameter_1 . '<br />';
-        // echo 'Parameter 2: ' . $this->url_parameter_2 . '<br />';
-        // echo 'Parameter 3: ' . $this->url_parameter_3 . '<br />';
+            // DEBUG
+            // echo 'Controller: ' . $this->url_controller . '<br />';
+            // echo 'Action: ' . $this->url_action . '<br />';
+            // echo 'Parameter 1: ' . $this->url_parameter_1 . '<br />';
+            // echo 'Parameter 2: ' . $this->url_parameter_2 . '<br />';
+            // echo 'Parameter 3: ' . $this->url_parameter_3 . '<br />';
+        }
     }
 
     /**
@@ -127,7 +128,7 @@ class Application
         } else {
             $url = "index";
         }
-
+        // set the cookie
         setcookie('lastvisitedpage', $url, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
     }
 }
