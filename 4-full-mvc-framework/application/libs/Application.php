@@ -36,7 +36,7 @@ class Application
 
         // write URL cookie
         $this->writeUrlCookie(array(
-            $this->url_controller, $this->url_action, $this->$url_parameter_1, $this->$url_parameter_2, $this->$url_parameter_3 
+            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3
         ));
 
         // check for controller: is the url_controller NOT empty ?
