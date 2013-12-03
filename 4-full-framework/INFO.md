@@ -1,4 +1,13 @@
 
+## What's new ?
+
+- professional file/folder structure
+- implemented the "always return something" rule, with default return
+- IN PROGRESS: keep if/else nesting as flat as possible
+- implemented dependency injected database connection (we open just one connection, use it for all models)
+- multiple models allowed per controller
+- everything is "as manual as possible"
+
 ## How the facebook login process works
 
 https://github.com/facebook/facebook-php-sdk

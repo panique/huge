@@ -13,7 +13,7 @@ class Note_Model
 
     /**
      * Constructor
-     * @param $db
+     * @param $db Database The database object
      */
     public function __construct($db)
     {
@@ -23,7 +23,7 @@ class Note_Model
     /**
      * Getter for all notes (notes are an implementation of example data, in a real world application this
      * would be data that the user has created)
-     * @return array
+     * @return array an array with several objects (the results)
      */
     public function getAllNotes()
     {
@@ -38,15 +38,13 @@ class Note_Model
     /**
      * Getter for a single note
      * @param $note_id id of the specific note
-     * @return mixed
+     * @return object a single object (the result)
      */
     public function getNote($note_id)
     {
         $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id";
         $query = $this->db->prepare($sql);
-        $query->execute(array(
-            ':user_id' => $_SESSION['user_id'],
-            ':note_id' => $note_id));    
+        $query->execute(array(':user_id' => $_SESSION['user_id'], ':note_id' => $note_id));
 
         // fetch() is the PDO method that gets a single result
         return $query->fetch();
@@ -61,17 +59,16 @@ class Note_Model
     {
         $sql = "INSERT INTO notes (note_text, user_id) VALUES (:note_text, :user_id)";
         $query = $this->db->prepare($sql);
-        $query->execute(array(
-            ':note_text' => $note_text,
-            ':user_id' => $_SESSION['user_id']));   
+        $query->execute(array(':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
         
         $count =  $query->rowCount();
         if ($count == 1) {
             return true;
         } else {
             $this->errors[] = FEEDBACK_NOTE_CREATION_FAILED;
-            return false;
         }
+        // default return
+        return false;
     }
 
     /**
@@ -84,18 +81,16 @@ class Note_Model
     {
         $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id";
         $query = $this->db->prepare($sql);
-        $query->execute(array(
-            ':note_id' => $note_id,
-            ':note_text' => $note_text,
-            ':user_id' => $_SESSION['user_id']));   
+        $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
         
         $count =  $query->rowCount();
         if ($count == 1) {
             return true;
         } else {
             $this->errors[] = FEEDBACK_NOTE_EDITING_FAILED;
-            return false;
         }
+        // default return
+        return false;
     }
 
     /**
@@ -117,7 +112,8 @@ class Note_Model
             return true;
         } else {
             $this->errors[] = FEEDBACK_NOTE_DELETION_FAILED;
-            return false;
-        }     
+        }
+        // default return
+        return false;
     }
 }

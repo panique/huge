@@ -6,6 +6,9 @@
  */
 class Note extends Controller
 {
+    /**
+     * Construct this Note object by extending the basic Controller class
+     */
     public function __construct()
     {
         parent::__construct();
@@ -16,15 +19,20 @@ class Note extends Controller
         Auth::handleLogin();
     }
 
+    /**
+     * Get all notes (of the user)
+     */
     public function index()
     {
-        // get all notes (of the logged-in user)
         $note_model = $this->loadModel('Note');
         $this->view->notes = $note_model->getAllNotes();
         $this->view->errors = $note_model->errors;
         $this->view->render('note/index');
     }
 
+    /**
+     * Create a new note
+     */
     public function create()
     {
         $note_model = $this->loadModel('Note');
@@ -32,22 +40,35 @@ class Note extends Controller
         header('location: ' . URL . 'note');
     }
 
+    /**
+     * Edit a note (show the current content of the note)
+     * @param $note_id int ID of the note
+     */
     public function edit($note_id)
     {
+        // get the note that you want to edit (to show the current content)
         $note_model = $this->loadModel('Note');
         $this->view->note = $note_model->getNote($note_id);
         $this->view->errors = $note_model->errors;
         $this->view->render('note/edit');
     }
 
+    /**
+     * Edit a note (perform the editing after form submit)
+     * @param $note_id int ID of the note
+     */
     public function editSave($note_id)
     {
-        // do editSave() in the note_model, passing note_id from URL and note_text from POST via params
+        // perform the update: passing note_id from URL and note_text from POST
         $note_model = $this->loadModel('Note');
         $note_model->editSave($note_id, $_POST['note_text']);
         header('location: ' . URL . 'note');        
     }
 
+    /**
+     * Delete a note
+     * @param $note_id int ID of the note
+     */
     public function delete($note_id)
     {
         $note_model = $this->loadModel('Note');

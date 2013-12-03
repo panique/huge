@@ -7,6 +7,10 @@
  */
 class Database extends PDO
 {
+    /**
+     * Construct this Database object, extending the PDO object
+     * By the way, the PDO object is built into PHP by default
+     */
     public function __construct()
     {
         // set the (optional) options of the PDO connection. in this case, we set the fetch mode to
