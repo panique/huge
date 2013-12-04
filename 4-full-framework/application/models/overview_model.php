@@ -57,7 +57,7 @@ class Overview_Model
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
-     * @return object The selected user's profile
+     * @return object/null The selected user's profile
      */
     public function getUserProfile($user_id)
     {
@@ -67,12 +67,19 @@ class Overview_Model
         $sth->execute(array(':user_id' => $user_id));
         
         $user = $sth->fetch();
-        
-        if (USE_GRAVATARS) {            
-            $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+        $count =  $sth->rowCount();
+
+        if ($count == 1) {
+            if (USE_GRAVATARS) {
+                $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+            } else {
+                $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+            }
         } else {
-            $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+            // hardcoded string as this is just a demo
+            $this->errors[] = "This user does not exist";
         }
+
         return $user;
     }
 
