@@ -11,3 +11,7 @@ BUGS & PROBLEMS
 CLARIFY: Does the upper/lowercase in $login_model = $this->loadModel('Login'); matter ?
 WEIRD: When tab is pinned in Firefox, the Facebook-Login will open another tab (WONTFIX ?)
 BEAUTY: After logging in with Facebook the URL gets an ugly additional hash tag etc. like "#_=_"
+
+GENERAL
+
+1. Promote the usage of "better" passwords (long random "sentences", not letter-number-specialchar)
