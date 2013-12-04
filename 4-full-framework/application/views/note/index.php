@@ -14,7 +14,7 @@
         if ($this->notes) {
             foreach($this->notes as $key => $value) {
                 echo '<tr>';
-                echo '<td>' . $value->note_text . '</td>';
+                echo '<td>' . htmlentities($value->note_text) . '</td>';
                 echo '<td><a href="'. URL . 'note/edit/' . $value->note_id.'">Edit</a></td>';
                 echo '<td><a href="'. URL . 'note/delete/' . $value->note_id.'">Delete</a></td>';
                 echo '</tr>';

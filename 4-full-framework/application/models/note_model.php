@@ -57,6 +57,9 @@ class Note_Model
      */
     public function create($note_text)
     {
+        // clean the input to prevent for example javascript within the notes.
+        $note_text = strip_tags($note_text);
+
         $sql = "INSERT INTO notes (note_text, user_id) VALUES (:note_text, :user_id)";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
@@ -79,6 +82,9 @@ class Note_Model
      */
     public function editSave($note_id, $note_text)
     {
+        // clean the input to prevent for example javascript within the notes.
+        $note_text = strip_tags($note_text);
+
         $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));

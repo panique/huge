@@ -4,7 +4,8 @@
     <?php if ($this->note) { ?>
         <form method="post" action="<?php echo URL; ?>note/editSave/<?php echo $this->note->note_id; ?>">
             <label>Change text of note: </label>
-            <input type="text" name="note_text" value="<?php echo $this->note->note_text; ?>" />
+            <!-- we use htmlentities() here to prevent user input with " etc. break the HTML -->
+            <input type="text" name="note_text" value="<?php echo htmlentities($this->note->note_text); ?>" />
             <input type="submit" value='Change' />
         </form>
     <?php } else { ?>
