@@ -153,7 +153,7 @@ class Login
      * @return user data as an object if existing user
      * @return false if user_name is not found in the database
      * TODO: @devplanete This returns two different types. Maybe this is valid, but it feels bad. We should rework this.
-     * TODO: @devplanete After some resarch I'm VERY sure that this is not good coding style! Please fix this.
+     * TODO: @devplanete After some resarch I'm VERY sure that this is not good coding style! Let us fix this.
      */
     private function getUserData($user_name)
     {
