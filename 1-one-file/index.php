@@ -207,7 +207,11 @@ class Login
      */
     private function checkPasswordCorrectnessAndLogin()
     {
-        $sql = 'SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = :user_name LIMIT 1';
+        // remember: the user can log in with username or email address
+        $sql = 'SELECT user_name, user_email, user_password_hash
+                FROM users
+                WHERE user_name = :user_name OR user_email = :user_name
+                LIMIT 1';
         $query = $this->db_connection->prepare($sql);
         $query->bindValue(':user_name', $_POST['user_name']);
         $query->execute();
@@ -373,7 +377,7 @@ class Login
         echo '<h2>Login</h2>';
 
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="loginform">';
-        echo '<label for="login_input_username">Username</label> ';
+        echo '<label for="login_input_username">Username (or email)</label> ';
         echo '<input id="login_input_username" type="text" name="user_name" required /> ';
         echo '<label for="login_input_password">Password</label> ';
         echo '<input id="login_input_password" type="password" name="user_password" required /> ';

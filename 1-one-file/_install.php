@@ -21,7 +21,9 @@ $sql = 'CREATE TABLE IF NOT EXISTS `users` (
         `user_name` varchar(64),
         `user_password_hash` varchar(255),
         `user_email` varchar(64));
-        CREATE UNIQUE INDEX `user_name_UNIQUE` ON `users` (`user_name` ASC);';
+        CREATE UNIQUE INDEX `user_name_UNIQUE` ON `users` (`user_name` ASC);
+        CREATE UNIQUE INDEX `user_email_UNIQUE` ON `users` (`user_email` ASC);
+        ';
 
 // execute the above query
 $query = $db_connection->prepare($sql);
