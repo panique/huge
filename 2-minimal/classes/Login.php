@@ -46,7 +46,6 @@ class Login
      */
     public function __construct()
     {
-
         // TODO: adapt the minimum check like in 0-one-file version
 
         // create/read session
@@ -99,8 +98,12 @@ class Login
 
                 // escape the POST stuff
                 $this->user_name = $this->db_connection->real_escape_string($_POST['user_name']);
+
                 // database query, getting all the info of the selected user
-                $checklogin = $this->db_connection->query("SELECT user_name, user_email, user_password_hash FROM users WHERE user_name = '" . $this->user_name . "';");
+                $sql = "SELECT user_name, user_email, user_password_hash
+                        FROM users
+                        WHERE user_name = '" . $this->user_name . "' OR user_email = '" . $this->user_name . "';";
+                $checklogin = $this->db_connection->query($sql);
 
                 // if this user exists
                 if ($checklogin->num_rows == 1) {
