@@ -97,6 +97,11 @@ class Registration
             // creating a database connection
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
+            // change character set to utf8 and check it
+            if (!$this->db_connection->set_charset("utf8")) {
+                printf("Error loading character set utf8: %s\n", $this->db_connection->error);
+            }
+
             // if no connection errors (= working database connection)
             if (!$this->db_connection->connect_errno) {
 

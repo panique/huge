@@ -65,7 +65,7 @@ class Registration
         } else {
             // create a database connection, using the constants from config/config.php
             try {
-                $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
+                $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
                 return true;
             // If an error is catched, database connection failed
             } catch (PDOException $e) {

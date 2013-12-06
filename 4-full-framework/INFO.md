@@ -8,6 +8,12 @@
 - multiple models allowed per controller
 - everything is "as manual as possible"
 
+## Security improvements
+
+1. All PDO and MySQLi connect statements have a charset (more here in the "Connecting to MySQL section":
+http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
+2.
+
 ## How the facebook login process works
 
 https://github.com/facebook/facebook-php-sdk
