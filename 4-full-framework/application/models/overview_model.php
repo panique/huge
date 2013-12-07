@@ -7,9 +7,9 @@
 class Overview_Model
 {
     /**
-     * @var array Collection of errors that happen in this model
+     * @var array Collection of feedback from this model
      */
-    public $errors = array();
+    public $feedback = array();
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ class Overview_Model
     {
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
         $sth->execute();
-        
+
         $all_users_profiles = array();
 
         foreach ($sth->fetchAll() as $user) {
@@ -40,7 +40,7 @@ class Overview_Model
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
-            
+
             if (USE_GRAVATARS) {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
                     $this->getGravatarLinkFromEmail($user->user_email);
@@ -48,12 +48,12 @@ class Overview_Model
                 $all_users_profiles[$user->user_id]->user_avatar_link =
                     $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
-            
+
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
         }
         return $all_users_profiles;
     }    
-    
+
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
@@ -77,7 +77,7 @@ class Overview_Model
             }
         } else {
             // hardcoded string as this is just a demo
-            $this->errors[] = "This user does not exist";
+            $this->feedback["error"][] = FEEDBACK_USER_DOES_NOT_EXIST;
         }
 
         return $user;

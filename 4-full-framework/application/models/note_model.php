@@ -7,9 +7,9 @@
 class Note_Model
 {
     /**
-     * @var array Collection of errors that happen in this model
+     * @var array Collection of feedback from this model
      */
-    public $errors = array();
+    public $feedback = array();
 
     /**
      * Constructor
@@ -68,7 +68,7 @@ class Note_Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = FEEDBACK_NOTE_CREATION_FAILED;
+            $this->feedback["error"][] = FEEDBACK_NOTE_CREATION_FAILED;
         }
         // default return
         return false;
@@ -93,7 +93,7 @@ class Note_Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = FEEDBACK_NOTE_EDITING_FAILED;
+            $this->feedback["error"][] = FEEDBACK_NOTE_EDITING_FAILED;
         }
         // default return
         return false;
@@ -117,7 +117,7 @@ class Note_Model
         if ($count == 1) {
             return true;
         } else {
-            $this->errors[] = FEEDBACK_NOTE_DELETION_FAILED;
+            $this->feedback["error"][] = FEEDBACK_NOTE_DELETION_FAILED;
         }
         // default return
         return false;

@@ -26,7 +26,7 @@ class Note extends Controller
     {
         $note_model = $this->loadModel('Note');
         $this->view->notes = $note_model->getAllNotes();
-        $this->view->errors = $note_model->errors;
+        $this->view->feedback = $note_model->feedback;
         $this->view->render('note/index');
     }
 
@@ -49,7 +49,7 @@ class Note extends Controller
         // get the note that you want to edit (to show the current content)
         $note_model = $this->loadModel('Note');
         $this->view->note = $note_model->getNote($note_id);
-        $this->view->errors = $note_model->errors;
+        $this->view->feedback = $note_model->feedback;
         $this->view->render('note/edit');
     }
 
