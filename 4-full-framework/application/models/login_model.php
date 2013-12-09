@@ -7,9 +7,9 @@
 class Login_Model
 {
     /**
-     * @var array Collection of errors that happen in this model
+     * @var array Collection of feedback from this model
      */
-    public $errors = array();
+    public $feedback = array();
 
     /**
      * Constructor
@@ -53,7 +53,7 @@ class Login_Model
                 $result = $sth->fetch();
                 
                 if ( ($result->user_failed_logins >= 3) && ($result->user_last_failed_login > (time()-30)) ) {
-                    $this->errors[] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
+                    $this->feedback["error"][] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
                     return false;
                 } else {
 
@@ -98,15 +98,13 @@ class Login_Model
                                 // set cookie
                                 setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
                             }
-                            
-                            return true;                                
 
+                            return true;
                         } else {
 
-                            $this->errors[] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
+                            $this->feedback["error"][] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
                             return false;
                         }
-
                     } else {
 
                         // increment the failed login counter for that user
@@ -115,18 +113,18 @@ class Login_Model
                                 . "WHERE user_name = :user_name OR user_email = :user_name");
                         $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
 
-                        $this->errors[] = FEEDBACK_PASSWORD_WRONG;
+                        $this->feedback["error"][] = FEEDBACK_PASSWORD_WRONG;
                         return false;
                     }
                 }
             } else {
-                $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
+                $this->feedback["error"][] = FEEDBACK_USER_DOES_NOT_EXIST;
                 return false;
             }
         } elseif (empty($_POST['user_name'])) {
-            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
         } elseif (empty($_POST['user_password'])) {
-            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         }
     }
 
@@ -142,13 +140,13 @@ class Login_Model
         if ($cookie) {
             list ($user_id, $token, $hash) = explode(':', $cookie);
             if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                $this->feedback["error"][] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
 
             // do not log in when token is empty
             if (empty($token)) {
-                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                $this->feedback["error"][] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
 
@@ -192,14 +190,14 @@ class Login_Model
                 // NOTE: we don't set another rememberme-cookie here as the current cookie should always
                 // be invalid after a certain amount of time, so the user has to login with username/password
                 // again from time to time. This is good and safe ! ;)
-                $this->errors[] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
+                $this->feedback["success"][] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
                 return true;
             } else {
-                $this->errors[] = FEEDBACK_COOKIE_INVALID;
+                $this->feedback["error"][] = FEEDBACK_COOKIE_INVALID;
                 return false;
             }
         } else {
-            $this->errors[] = FEEDBACK_COOKIE_INVALID;
+            $this->feedback["error"][] = FEEDBACK_COOKIE_INVALID;
             return false;
         }
     }
@@ -253,7 +251,7 @@ class Login_Model
 
                     return true;
                 } else {
-                    $this->errors[] = "Sorry, you don't have an account here. Please register first.";
+                    $this->feedback["error"][] = FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED;
                 }
             } catch (FacebookApiException $e) {
                 // TODO: handle the catch results, when something goes wrong with FB login
@@ -322,7 +320,7 @@ class Login_Model
         if (!empty($_POST['user_name'])) {
         
             if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
-                $this->errors[] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
+                $this->feedback["error"][] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
             }
             // username cannot be empty and must be azAZ09 and 2-64 characters
             elseif (!empty($_POST['user_name'])
@@ -339,7 +337,7 @@ class Login_Model
                 $count =  $sth->rowCount();
 
                 if ($count == 1) {
-                    $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+                    $this->feedback["error"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
                 } else {
                     $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
                     $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $_SESSION['user_id']));
@@ -347,20 +345,20 @@ class Login_Model
                     $count =  $sth->rowCount();
                     if ($count == 1) {
                         Session::set('user_name', $this->user_name);
-                        $this->errors[] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+                        $this->feedback["success"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
                     } else {
-                        $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                        $this->feedback["error"][] = FEEDBACK_UNKNOWN_ERROR;
                     }
                 }
             } else {
-                $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+                $this->feedback["error"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
             }
         } elseif (!empty($_POST['user_username'])) {
-            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         } elseif (!empty($_POST['user_password'])) {
-            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
         } else {
-            $this->errors[] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
         }
     }
 
@@ -373,7 +371,7 @@ class Login_Model
             
             // check if new email is same like the old one
             if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
-                $this->errors[] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
+                $this->feedback["error"][] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
             } 
             // user mail must be in email format
             elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
@@ -383,7 +381,7 @@ class Login_Model
 
                 $count =  $sth->rowCount();
                 if ($count == 1) {
-                    $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+                    $this->feedback["error"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
                 } else {
                     // cleaning
                     $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
@@ -398,17 +396,17 @@ class Login_Model
                         Session::set('user_email', $this->user_email);
                         // call the setGravatarImageUrl() method which writes gravatar urls into the session
                         $this->setGravatarImageUrl($this->user_email);
-                        // TODO: it's not an error, its a positive feedback
-                        $this->errors[] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
+
+                        $this->feedback["success"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
                     } else {
-                        $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                        $this->feedback["error"][] = FEEDBACK_UNKNOWN_ERROR;
                     }
                 }
             } else {
-                $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+                $this->feedback["error"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
             }
         } elseif (!empty($_POST['user_email'])) {
-            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         }
     } 
     
@@ -425,25 +423,25 @@ class Login_Model
 
         // perform all necessary form checks
         if (!$captcha->checkCaptcha()) {
-            $this->errors[] = FEEDBACK_CAPTCHA_WRONG;
+            $this->feedback["error"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
-            $this->errors[] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
-            $this->errors[] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-            $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
         } elseif (strlen($_POST['user_password_new']) < 6) {
-            $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_TOO_SHORT;
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-            $this->errors[] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-            $this->errors[] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+            $this->feedback["error"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
         } elseif (empty($_POST['user_email'])) {
-            $this->errors[] = FEEDBACK_EMAIL_FIELD_EMPTY;
+            $this->feedback["error"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
         } elseif (strlen($_POST['user_email']) > 64) {
-            $this->errors[] = FEEDBACK_EMAIL_TOO_LONG;
+            $this->feedback["error"][] = FEEDBACK_EMAIL_TOO_LONG;
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $this->errors[] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+            $this->feedback["error"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
         } elseif (!empty($_POST['user_name'])
                   && strlen($_POST['user_name']) <= 64
                   && strlen($_POST['user_name']) >= 2
@@ -476,7 +474,7 @@ class Login_Model
                 $count =  $sth->rowCount();            
 
                 if ($count == 1) {
-                    $this->errors[] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+                    $this->feedback["error"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
                 } else {
 
                     // check if user's email already exists
@@ -486,7 +484,7 @@ class Login_Model
                     $count =  $sth->rowCount();
 
                     if ($count == 1) {
-                        $this->errors[] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+                        $this->feedback["error"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
                     } else {
                         // generate random hash for email verification (40 char string)
                         $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
@@ -524,18 +522,18 @@ class Login_Model
                                     // if verification email didn't sent, instantly delete the user
                                     $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
                                     $sth->execute(array(':last_inserted_id' => $this->user_id));
-                                    $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+                                    $this->feedback["error"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
                                 }
                             } else {
-                                $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+                                $this->feedback["error"][] = FEEDBACK_UNKNOWN_ERROR;
                             }
                         } else {
-                            $this->errors[] = FEEDBACK_ACCOUNT_CREATION_FAILED;
+                            $this->feedback["error"][] = FEEDBACK_ACCOUNT_CREATION_FAILED;
                         }
                     }
                 }
         } else {
-            $this->errors[] = FEEDBACK_UNKNOWN_ERROR;
+            $this->feedback["error"][] = FEEDBACK_UNKNOWN_ERROR;
         }
         // standard return. returns only true of really successful (see above)
         return false;
@@ -583,10 +581,10 @@ class Login_Model
 
         // final sending and check
         if($mail->Send()) {
-            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
+            $this->feedback["success"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
             return true;
         } else {
-            $this->errors[] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+            $this->feedback["error"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
         }
 
         // default return
@@ -607,9 +605,9 @@ class Login_Model
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
         if ($sth->rowCount() > 0) {
-            $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
+            $this->feedback["success"][] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
         } else {
-            $this->errors[] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
+            $this->feedback["error"][] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
         }
     }
 
@@ -688,19 +686,19 @@ class Login_Model
                             $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
                             $sth->execute(array(':user_id' => $_SESSION['user_id']));
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-                            $this->errors[] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+                            $this->feedback["success"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
                         } else {
-                            $this->errors[] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+                            $this->feedback["error"][] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
                         }
                     } else {
-                        $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
+                        $this->feedback["error"][] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
                     }
                 } else {
-                    $this->errors[] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
+                    $this->feedback["error"][] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
                 } 
             }
         } else {
-            $this->errors[] = FEEDBACK_AVATAR_FOLDER_NOT_WRITABLE;
+            $this->feedback["error"][] = FEEDBACK_AVATAR_FOLDER_NOT_WRITABLE;
         }
     }
     
@@ -828,7 +826,7 @@ class Login_Model
     public function setPasswordResetDatabaseToken()
     {
         if (empty($_POST['user_name'])) {
-            $this->errors[] = "Empty username";
+            $this->feedback["error"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
         } else {
             // generate timestamp (to see when exactly the user (or an attacker) requested the password reset mail)
             // btw this is an integer ;)
@@ -867,10 +865,10 @@ class Login_Model
                     $this->user_email = $result_user_row->user_email;
                     return true;
                 } else {
-                    $this->errors[] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL; // maybe say something not that technical.
+                    $this->feedback["error"][] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL; // maybe say something not that technical.
                 }
             } else {
-                $this->errors[] = FEEDBACK_USER_DOES_NOT_EXIST;
+                $this->feedback["error"][] = FEEDBACK_USER_DOES_NOT_EXIST;
             }
         }
         // return false (this method only returns true when the database entry has been set successfully)
@@ -914,10 +912,10 @@ class Login_Model
         $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
 
         if(!$mail->Send()) {
-           $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+           $this->feedback["error"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
            return false;
         } else {
-            $this->errors[] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
+            $this->feedback["success"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
             return true;
         }
     }    
@@ -953,12 +951,12 @@ class Login_Model
                 return true;
             } else {
                 // password reset request is older than one hour, reject the request
-                $this->errors[] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
+                $this->feedback["error"][] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
                 return false;
             }
         } else {
             // wrong verification code (=user_password_reset_hash) for this user
-            $this->errors[] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
+            $this->feedback["error"][] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
             return false;
         }
     }
@@ -1011,22 +1009,22 @@ class Login_Model
                         
                         // check if exactly one row was successfully changed:
                         if ($sth->rowCount() == 1) {
-                            $this->errors[] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
+                            $this->feedback["success"][] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
                             return true;
                         } else {
-                            $this->errors[] = FEEDBACK_PASSWORD_CHANGE_FAILED;
+                            $this->feedback["error"][] = FEEDBACK_PASSWORD_CHANGE_FAILED;
                         }
                 } else {
-                    $this->errors[] = FEEDBACK_PASSWORD_TOO_SHORT;
+                    $this->feedback["error"][] = FEEDBACK_PASSWORD_TOO_SHORT;
                 }
             } else {
-                $this->errors[] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+                $this->feedback["error"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
             }
         }
         // default
         return false;
     }
-    
+
     /**
      * Upgrades/downgrades the user's account (for DEFAULT and FACEBOOK users)
      * Currently it's just the field user_account_type in the database that
@@ -1050,9 +1048,9 @@ class Login_Model
             if ($sth->rowCount() == 1) {
                 // set account type in session to 2
                 Session::set('user_account_type', 2);
-                $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
+                $this->feedback["success"][] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
             } else {
-                $this->errors[] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
+                $this->feedback["error"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
             }
         } elseif (!empty($_POST["user_account_downgrade"])) {
 
@@ -1067,9 +1065,9 @@ class Login_Model
             if ($sth->rowCount() == 1) {
                 // set account type in session to 1
                 Session::set('user_account_type', 1);
-                $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
+                $this->feedback["success"][] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
             } else {
-                $this->errors[] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
+                $this->feedback["error"][] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
             }
         }
     }
