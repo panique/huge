@@ -7,28 +7,29 @@
 class Application
 {
     /**
-     * @var null The controller
+     * @var null The controller part of the URL
      */
-    private $url_controller = null;
+    private $url_controller;
     /**
-     * @var null The method (of the above controller)
+     * @var null The method part (of the above controller) of the URL
      */
-    private $url_action = null;
+    private $url_action;
     /**
-     * @var null Parameter one
+     * @var null Parameter one of the URL
      */
-    private $url_parameter_1 = null;
+    private $url_parameter_1;
     /**
-     * @var null Parameter two
+     * @var null Parameter two of the URL
      */
-    private $url_parameter_2 = null;
+    private $url_parameter_2;
     /**
-     * @var null Parameter three
+     * @var null Parameter three of the URL
      */
-    private $url_parameter_3 = null;
+    private $url_parameter_3;
     
     /**
      * Starts the Application
+     * Takes the parts of the URL and loads the according controller & method and passes the parameter arguments to it
      * TODO: get rid of deep if/else nesting
      */
     public function __construct()
@@ -42,7 +43,7 @@ class Application
 
         // check for controller: is the url_controller NOT empty ?
         if ($this->url_controller) {
-            // check for controller: does such an controller exist ?
+            // check for controller: does such a controller exist ?
             if (file_exists(CONTROLLER_PATH . $this->url_controller . '.php')) {
                 // if so, then load this file and create this controller
                 // example: if controller would be "car", then this line would translate into: $this->car = new car();
