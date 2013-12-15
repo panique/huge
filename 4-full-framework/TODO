@@ -5,6 +5,7 @@ TODO: Make it impossible to see the login form when logged in (even when directl
 TODO: refactoring the quite deep if/else structures
 TODO: split positive and negative feedback (this->errors)
 TODO: get rid of properties in models classes (better use simple $variables)
+TODO: use Captcha tool instead of own (https://packagist.org/packages/gregwar/captcha, https://github.com/Gregwar/Captcha)
 
 BUGS & PROBLEMS
 
