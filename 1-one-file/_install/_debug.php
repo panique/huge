@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 
 // config
 $db_type = "sqlite";
-$db_sqlite_path = "database/users.db";
+$db_sqlite_path = "../database/users.db";
 
 // create new database connection
 $db_connection = new PDO($db_type . ':' . $db_sqlite_path);

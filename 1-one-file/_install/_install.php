@@ -10,9 +10,9 @@ error_reporting(E_ALL);
 
 // config
 $db_type = "sqlite";
-$db_sqlite_path = "database/users.db";
+$db_sqlite_path = "../database/users.db";
 
-// create new database file / connection (the file will be automaticly created the first time a connection is made up)
+// create new database file / connection (the file will be automatically created the first time a connection is made up)
 $db_connection = new PDO($db_type . ':' . $db_sqlite_path);
 
 // create new empty table inside the database (if table does not already exist)
