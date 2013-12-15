@@ -1,9 +1,0 @@
-{
-    "require":{
-        "php": ">=5.3.7",
-        "ircmaxell/password-compat": "1.0.*",
-        "phpmailer/phpmailer": "5.2.*",
-        "facebook/php-sdk": "@stable",
-        "raveren/kint": "dev-1.0.0-wip"
-    }
-}

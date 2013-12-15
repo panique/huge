@@ -1,17 +1,10 @@
 <?php
 
 /**
- * A simple, clean and secure PHP Login Script
+ * A simple, clean and secure PHP Login Script embedded into a small framework.
  *
  * MVC FRAMEWORK VERSION
- * Check GitHub for other versions
- * Check develop branch on GitHub for bleeding edge versions
  *
- * A simple PHP Login Script embedded into a small framework.
- * Uses PHP sessions, the most modern password-hashing and salting
- * and gives all major functions a proper login system needs.
- *
- * @package php-login
  * @author Panique
  * @link http://www.php-login.net
  * @link https://github.com/panique/php-login/

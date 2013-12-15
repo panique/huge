@@ -1,7 +1,7 @@
 <?php
 
 /**
- * THIS IS THE CONFIGURATION FILE
+ * Configuration
  * 
  * For more info about constants please @see http://php.net/manual/en/function.define.php
  * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/q/2447791/1114320
@@ -20,7 +20,7 @@ ini_set("display_errors", 1);
  * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
  * Note: The trailing slash is important!
  */
-define('URL', 'http://localhost/php-login/4-full-framework/');
+define('URL', 'http://localhost/php-login/');
 
 /**
  * Configuration for: Folders
@@ -40,9 +40,9 @@ define('CAPTCHA_FONT_PATH', 'application/tools/fonts/times_new_yorker.ttf');
  * Configuration for: Additional login providers
  * Currently we only have support for Facebook. More will come!
  */
-define('FACEBOOK_LOGIN', false);
-define('FACEBOOK_LOGIN_APP_ID', 'XXX');
-define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
+define('FACEBOOK_LOGIN', true);
+define('FACEBOOK_LOGIN_APP_ID', '275492609264978');
+define('FACEBOOK_LOGIN_APP_SECRET', '0d36d745f544ea2ed42f40ff69c81f3b');
 
 /**
  * Configuration for: Avatars/Gravatar support

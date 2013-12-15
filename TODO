@@ -1,6 +1,8 @@
 
 REFACTORING / IMPROVEMENTS
 
+TODO: complete rewrite of all READMEs
+
 TODO: Make it impossible to see the login form when logged in (even when directly url-typed)
 TODO: refactoring the quite deep if/else structures
 TODO: split positive and negative feedback (this->errors)
