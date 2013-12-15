@@ -108,9 +108,7 @@ class Note_Model
     {
         $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id";
         $query = $this->db->prepare($sql);
-        $query->execute(array(
-            ':note_id' => $note_id,
-            ':user_id' => $_SESSION['user_id']));   
+        $query->execute(array(':note_id' => $note_id, ':user_id' => $_SESSION['user_id']));
         
         $count =  $query->rowCount();
         

@@ -33,8 +33,8 @@ class View
      */
     private function checkForActiveController($filename, $navigation_controller)
     {
-        $splitted_filename = explode("/", $filename);
-        $active_controller = $splitted_filename[0];
+        $split_filename = explode("/", $filename);
+        $active_controller = $split_filename[0];
         
         if ($active_controller == $navigation_controller) {
             return true;
@@ -50,8 +50,8 @@ class View
      */
     private function checkForActiveAction($filename, $navigation_action)
     {
-        $splitted_filename = explode("/", $filename);
-        $active_action = $splitted_filename[1];
+        $split_filename = explode("/", $filename);
+        $active_action = $split_filename[1];
         
         if ($active_action == $navigation_action) {
             return true;
@@ -67,13 +67,13 @@ class View
      */
     private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action)
     {
-        $splitted_filename = explode("/", $filename);
-        $active_controller = $splitted_filename[0];
-        $active_action = $splitted_filename[1];
+        $split_filename = explode("/", $filename);
+        $active_controller = $split_filename[0];
+        $active_action = $split_filename[1];
         
-        $splitted_filename = explode("/", $navigation_controller_and_action);
-        $navigation_controller = $splitted_filename[0];
-        $navigation_action = $splitted_filename[1];        
+        $split_filename = explode("/", $navigation_controller_and_action);
+        $navigation_controller = $split_filename[0];
+        $navigation_action = $split_filename[1];
         
         if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
             return true;

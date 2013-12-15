@@ -3,7 +3,7 @@
 /**
  * Class Error
  * This controller simply shows a page that will be displayed when a controller/method is not found.
- * Simply 404 handling.
+ * Simple 404 handling.
  */
 class Error extends Controller
 {

@@ -29,7 +29,7 @@ class Captcha
         $secure_text = implode('', $selected_letters);
         
         // write the 4 selected letters into a SESSION variable
-        $_SESSION['captcha'] = $secure_text;        
+        $_SESSION['captcha'] = $secure_text;
     }
     
     /**
