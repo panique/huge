@@ -9,8 +9,11 @@ class Model {
     function __construct() {
 
         try {
-
-            $this->db = new Database();
+            
+            //We verify that it has never been instantiated.
+            if(! isset($this->db)){
+				$this->db = new Database();
+			}
 
         } catch (PDOException $e) {
 
