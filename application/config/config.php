@@ -40,9 +40,9 @@ define('CAPTCHA_FONT_PATH', 'application/tools/fonts/times_new_yorker.ttf');
  * Configuration for: Additional login providers
  * Currently we only have support for Facebook. More will come!
  */
-define('FACEBOOK_LOGIN', true);
-define('FACEBOOK_LOGIN_APP_ID', '275492609264978');
-define('FACEBOOK_LOGIN_APP_SECRET', '0d36d745f544ea2ed42f40ff69c81f3b');
+define('FACEBOOK_LOGIN', false);
+define('FACEBOOK_LOGIN_APP_ID', 'XXX');
+define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
 
 /**
  * Configuration for: Avatars/Gravatar support
