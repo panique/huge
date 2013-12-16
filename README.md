@@ -248,11 +248,10 @@ Also a big big "thank you" to the donors of this project, your tips gimme a good
 
 If you think this script is useful and saves you a lot of work, then think about supporting the project by
 
-1. Donating via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
+1. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
    or [GitTip](https://www.gittip.com/Panique/)
-2. Renting your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
-   SSD servers for $5+ per month or $0.007 per hour (!). PHP-MVC will get a small reward for every new customer.
-3. Contributing to this project. Feel free to improve this project with your skills.
+2. Rent your next server at [A2 Hosting](http://www.dev-metal.com/a2hosting.png) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
+3. Contribute to this project. Feel free to improve this project with your skills.
 
 ## Official Support Blog: [dev-metal.com](http://www.dev-metal.com)
 
