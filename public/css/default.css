@@ -111,22 +111,21 @@ table td {
     padding: 10px;
 }
 
-.system_message {
+.feedback {
     border: 1px solid black;
     color: black;
-    padding: 20px;    
+    padding: 20px;
     font-size: 16px;
     margin-bottom: 35px;
 }
-.system_message.red {
+.feedback.error {
     border: 1px solid red;
     color: red;
 }
-.system_message.green {
+.feedback.success {
     border: 1px solid green;
     color: green;
 }
-
 
 /*Initialize*/
 ul#menu, ul#menu ul.sub-menu {
