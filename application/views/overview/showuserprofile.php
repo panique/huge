@@ -6,17 +6,8 @@
         This controller/action/view shows all public information about a certain user.
     </p>
 
-    <?php
-    if (isset($this->feedback["success"])) {
-        foreach ($this->feedback["success"] as $feedback) {
-            echo '<div class="feedback success">'.$feedback.'</div>';
-        }
-    } elseif (isset($this->feedback["error"])) {
-        foreach ($this->feedback["error"] as $feedback) {
-            echo '<div class="feedback error">'.$feedback.'</div>';
-        }
-    }
-    ?>
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
 
     <?php if ($this->user) { ?>
     <p>

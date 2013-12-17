@@ -1,6 +1,9 @@
 <div class="content">
     
     <h1>Overview</h1>
+
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
     
     <p>
         This controller/action/view shows a list of all users in the system.

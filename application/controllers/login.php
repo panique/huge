@@ -45,8 +45,6 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         // perform the login method, put result (true or false) into $login_successful
         $login_successful = $login_model->login();
-        // put the feedback from the login model into the view (so we can display it in the view)
-        $this->view->feedback = $login_model->feedback;
 
         // check login status
         if ($login_successful) {
@@ -81,8 +79,6 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         // perform the login method, put result (true or false) into $login_successful
         $login_successful = $login_model->loginWithFacebook();
-        // put the feedback from the login model into the view (so we can display it in the view)
-        $this->view->feedback = $login_model->feedback;
 
         // check login status
         if ($login_successful) {
@@ -153,8 +149,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserName();
-        // put the feedback from the login model into the view (so we can display it in the view)
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/editusername');
     }
 
@@ -175,7 +169,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserEmail();
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/edituseremail');
     }
 
@@ -188,7 +181,6 @@ class Login extends Controller
         Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $this->view->avatar_file_path = $login_model->getUserAvatarFilePath();
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/uploadavatar');        
     }
 
@@ -199,7 +191,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->createAvatar();
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/uploadavatar');
     }
 
@@ -220,7 +211,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->changeAccountType();
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/changeaccounttype');          
     }
 
@@ -258,7 +248,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $registration_successful = $login_model->registerNewUser();
-        $this->view->feedback = $login_model->feedback;
 
         if ($registration_successful == true) {
             $this->view->render('login/index');
@@ -314,28 +303,28 @@ class Login extends Controller
                             if ($login_model->registerNewUserWithFacebook($facebook_user_data)) {
 
                                 // TODO: refactor!
-                                $this->view->feedback["success"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
+                                $_SESSION["feedback_positive"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
                                 $this->view->facebook_login_url = $facebook->getLoginUrl(array(
                                     'redirect_uri' => URL . 'login/loginWithFacebook'
                                 ));
                                 $this->view->render('login/index');
 
                             } else {
-                                $this->view->feedback["error"][] = "Unknown error while creating your account :(";
+                                $_SESSION["feedback_negative"][] = "Unknown error while creating your account :(";
                             }
                         } else {
-                            $this->view->feedback["error"][] = FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS;
+                            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS;
                         }
                     } else {
-                        $this->view->feedback["error"][] = FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS;
+                        $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS;
                     }
                 } else {
                     // a user with that facebook user id (UID) has already registered here
-                    $this->view->feedback["error"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
+                    $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
                 }
             } else {
                 // registration will only work when user agrees to provide email address
-                $this->view->feedback["error"][] = FEEDBACK_FACEBOOK_EMAIL_NEEDED;
+                $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_NEEDED;
             }
         }
 
@@ -351,7 +340,6 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->verifyNewUser($user_id, $user_verification_code);
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/verify');
     }
 
@@ -375,7 +363,6 @@ class Login extends Controller
             // send a mail to the user, containing a link with that token hash string
             $login_model->sendPasswordResetMail();
         }
-        $this->view->feedback = $login_model->feedback;
         $this->view->render('login/requestpasswordreset');        
     }
 
@@ -390,10 +377,8 @@ class Login extends Controller
         if ($login_model->verifypasswordrequest($user_name, $verification_code)) {
             $this->view->user_name = $login_model->user_name;
             $this->view->user_password_reset_hash = $login_model->user_password_reset_hash;
-            $this->view->feedback = $login_model->feedback;
             $this->view->render('login/changepassword');
         } else {
-            $this->view->feedback = $login_model->feedback;
             $this->view->render('login/verificationfailed');
         }
     }
@@ -406,10 +391,8 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
 
         if ($login_model->setNewPassword()) {
-            $this->view->feedback = $login_model->feedback;
             $this->view->render('login/index');
         } else {
-            $this->view->feedback = $login_model->feedback;
             $this->view->render('login/changepassword');
         }
     }    

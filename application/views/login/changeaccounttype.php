@@ -13,17 +13,8 @@
         The model used is login->changeAccountType().        
     </p>
 
-    <?php
-    if (isset($this->feedback["success"])) {
-        foreach ($this->feedback["success"] as $feedback) {
-            echo '<div class="feedback success">'.$feedback.'</div>';
-        }
-    } elseif (isset($this->feedback["error"])) {
-        foreach ($this->feedback["error"] as $feedback) {
-            echo '<div class="feedback error">'.$feedback.'</div>';
-        }
-    }
-    ?>
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
 
     <h2>Currently your account type is: <?php echo Session::get('user_account_type'); ?></h2>
     <!-- basic implementation for two account type: type 1 and type 2 -->    

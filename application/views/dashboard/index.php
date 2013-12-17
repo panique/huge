@@ -1,17 +1,8 @@
 <div class="content">
     <h1>Dashboard</h1>
 
-    <?php
-    if (isset($this->feedback["success"])) {
-        foreach ($this->feedback["success"] as $feedback) {
-            echo '<div class="feedback success">'.$feedback.'</div>';
-        }
-    } elseif (isset($this->feedback["error"])) {
-        foreach ($this->feedback["error"] as $feedback) {
-            echo '<div class="feedback error">'.$feedback.'</div>';
-        }
-    }
-    ?>
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
 
     <h3>This is an area that's only visible for logged in users</h3>
     Try to log out, an go to /dashboard/ again. You'll be redirected to /index/ as you are not logged in.

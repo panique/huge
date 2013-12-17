@@ -1,6 +1,9 @@
 <div class="content">
     <h1>Edit a note</h1>
 
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
+
     <?php if ($this->note) { ?>
         <form method="post" action="<?php echo URL; ?>note/editSave/<?php echo $this->note->note_id; ?>">
             <label>Change text of note: </label>

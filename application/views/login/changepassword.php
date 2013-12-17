@@ -1,17 +1,8 @@
 <div class="content">
     <h1>Set new password</h1>
 
-    <?php
-    if (isset($this->feedback["success"])) {
-        foreach ($this->feedback["success"] as $feedback) {
-            echo '<div class="feedback success">'.$feedback.'</div>';
-        }
-    } elseif (isset($this->feedback["error"])) {
-        foreach ($this->feedback["error"] as $feedback) {
-            echo '<div class="feedback error">'.$feedback.'</div>';
-        }
-    }
-    ?>
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
 
     <!-- new password form box -->
     <form method="post" action="<?php echo URL; ?>login/setnewpassword" name="new_password_form">

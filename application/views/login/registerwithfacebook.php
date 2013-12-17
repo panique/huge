@@ -1,17 +1,6 @@
 <div class="content">
 
-    <?php
-    if (isset($this->feedback["success"])) {
-        foreach ($this->feedback["success"] as $feedback) {
-            echo '<div class="feedback success">'.$feedback.'</div>';
-        }
-    } elseif (isset($this->feedback["error"])) {
-        foreach ($this->feedback["error"] as $feedback) {
-            echo '<div class="feedback error">'.$feedback.'</div>';
-        }
-    }
-    ?>
-
-    <?php ?>
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
 
 </div>

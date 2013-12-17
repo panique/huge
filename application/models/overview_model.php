@@ -7,11 +7,6 @@
 class Overview_Model
 {
     /**
-     * @var array Collection of feedback from this model
-     */
-    public $feedback = array();
-
-    /**
      * Constructor
      * @param $db Database The database object
      */
@@ -76,7 +71,7 @@ class Overview_Model
                 $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
         } else {
-            $this->feedback["error"][] = FEEDBACK_USER_DOES_NOT_EXIST;
+            $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
         }
 
         return $user;

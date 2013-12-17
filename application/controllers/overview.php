@@ -24,7 +24,6 @@ class Overview extends Controller
     {
         $overview_model = $this->loadModel('Overview');
         $this->view->user = $overview_model->getUserProfile($user_id);
-        $this->view->feedback = $overview_model->feedback;
         $this->view->render('overview/showuserprofile');
     }
 }
