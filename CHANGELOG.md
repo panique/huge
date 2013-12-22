@@ -1,8 +1,13 @@
-# CHANGE LOG #
+# CHANGE LOG
+
+**December 22nd 2013**
+
+* removed the self-built captcha, implemented external captcha lib (loaded via Composer)
+* lots of smaller improvements
 
 **December 15st 2013**
 
-* other versions (one-file, minimal, advanced) of the project have been deleted and moved to own repos
+* other versions (one-file, minimal, advanced) of the project have been deleted and moved to own repositories
 
 **December 1st 2013**
 
@@ -10,6 +15,6 @@
 * massive rewrite: new index, new model structure
 * massive rewrite: controllers can now handle more than one model
 * PHPMailer is now loaded via composer
-* PHP password compat lib is now loaded via composer
+* PHP password compatibility lib is now loaded via composer
 * Facebook SDK is now loaded via composer
 * minimum PHP version is now declared via composer (5.3.7+)
