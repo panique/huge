@@ -2,6 +2,7 @@
 
 /**
  * A simple, clean and secure PHP Login Script embedded into a small framework.
+ * Also available in other version: one-file, minimal, advanced. See php-login.net for more info.
  *
  * MVC FRAMEWORK VERSION
  *
@@ -22,5 +23,5 @@ if (file_exists('vendor/autoload.php')) {
     require 'vendor/autoload.php';
 }
 
-// start our app
+// Start our application
 $app = new Application();
