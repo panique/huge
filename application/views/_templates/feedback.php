@@ -1,6 +1,6 @@
 <?php
 
-// get the feedbacks (they are arrays, to make multiple positive/negative messages possible)
+// get the feedback (they are arrays, to make multiple positive/negative messages possible)
 $feedback_positive = Session::get('feedback_positive');
 $feedback_negative = Session::get('feedback_negative');
 
