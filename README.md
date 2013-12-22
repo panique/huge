@@ -72,6 +72,18 @@ Bookmark the highly related partner-project "[php-login-styles](https://github.c
 
 This script has been made to run out-of-the-box. Not more configuration than necessary. For a full installation guideline please have a look into these blog posts from the official support blog:
 
+TODO XXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
+
+
+
+
+
+
 #####HOW TO INSTALL 0-ONE-FILE VERSION
 
 A very detailed guideline on how to install the `0-one-file` version [here in this blog post](http://www.dev-metal.com/how-to-install-php-login-nets-0-one-file-login-script-on-ubuntu/).
@@ -84,7 +96,7 @@ Please note that the `database` folder needs to be writable and you need to have
 A very detailed guideline on how to install the `1-minimal` version [here in this blog post](http://www.dev-metal.com/install-php-login-nets-1-minimal-login-script-ubuntu/).
 
 * 1. create database "login" and table "users" via the sql statements or the .sql file in folder "_install"
-* 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
+                                                                                        * 2. change mySQL user and or mySQL password in config/db.php ("DB_USER" and "DB_PASS").
 
 #####HOW TO INSTALL 2-ADVANCED VERSION
 
