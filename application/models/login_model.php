@@ -2,17 +2,17 @@
 
 /**
  * Login_Model
- * handles the user's login, logout, username editing, password changing...
+ *
+ * Handles the user's login, logout, username editing, password changing...
  */
 
-// import the Captcha lib
 use Gregwar\Captcha\CaptchaBuilder;
 
 class Login_Model
 {
     /**
-     * Constructor
-     * @param $db
+     * Constructor, expects a Database connection
+     * @param $db object The PDO database object
      */
     public function __construct($db)
     {
@@ -20,8 +20,8 @@ class Login_Model
     }
 
     /**
-     * login process (for DEFAULT user accounts). user who register/login with Facebook etc. are handled
-     * somewhere else
+     * Login process (for DEFAULT user accounts).
+     * Users who register/login with Facebook etc. are handled with loginWithFacebook()
      * TODO: hardcore refactoring
      * @return bool success state
      */
