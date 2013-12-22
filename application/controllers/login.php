@@ -4,6 +4,7 @@
  * Login Controller
  * Controls the login processes
  */
+
 class Login extends Controller
 {
     /**
@@ -218,7 +219,6 @@ class Login extends Controller
      * Register page
      * 1. Shows the register form
      * 2. Shows the register-with-facebook button
-     * 3. looks if there's
      */
     function register()
     {
@@ -384,7 +384,7 @@ class Login extends Controller
     }
 
     /**
-     *
+     * Sets the new password
      */
     function setnewpassword()
     {
@@ -398,16 +398,16 @@ class Login extends Controller
     }    
     
     /**
-     * special helper method:
-     * showCaptcha() returns an image, so we can use it in img tags in the views, like
-     * <img src="......./login/showCaptcha" />
+     * Generates a captcha, write the characters into $_SESSION['captcha'] and returns a real image which will be used
+     * like this: <img src="......./login/showCaptcha" />
+     * IMPORTANT: As this action is called via <img ...> AFTER the real application has finished executing (!), the
+     * SESSION["captcha"] has no content when the application is loaded. The SESSION["captcha"] gets filled at the
+     * moment the end-user requests the <img .. >
+     * If you don't know what this means: Don't worry, simply leave everything like it is ;)
      */    
     function showCaptcha()
     {
-        $captcha = new Captcha();
-        // generate new string with captcha characters and write them into $_SESSION['captcha']
-        $captcha->generateCaptcha();
-        // render a img showing the characters (=the captcha)
-        $captcha->showCaptcha();
+        $login_model = $this->loadModel('Login');
+        $login_model->generateCaptcha();
     }
 }

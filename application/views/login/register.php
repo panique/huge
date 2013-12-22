@@ -38,9 +38,18 @@
             <!-- show the captcha by calling the login/showCaptcha-method in the src attribute of the img tag -->
             <!-- to avoid weird with-slash-without-slash issues: simply always use the URL constant here -->
             <img src="<?php echo URL; ?>login/showCaptcha" />
-            <label>Please enter those characters</label>
+            <label>
+                Please enter these characters
+                <span style="display: block; font-size: 11px; color: #999;">
+                    Please note: This captcha will be generated when the img tag requests the captcha-generation
+                    (and a real image) from YOURURL/login/showcaptcha. As this is a client-side triggered request, the
+                    $_SESSION["captcha"] dump in the footer will not show the captcha characters. The captcha generation
+                    happens AFTER the rendering of the footer.
+                </span>
+            </label>
             <input type="text" name="captcha" required />
             <input type="submit"  name="register" value="Register" />
+
         </form>
     </div>
 

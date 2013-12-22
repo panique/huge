@@ -4,6 +4,10 @@
  * Login_Model
  * handles the user's login, logout, username editing, password changing...
  */
+
+// import the Captcha lib
+use Gregwar\Captcha\CaptchaBuilder;
+
 class Login_Model
 {
     /**
@@ -413,11 +417,9 @@ class Login_Model
      */
     public function registerNewUser()
     {
-        // create new Captcha object
-        $captcha = new Captcha();
 
         // perform all necessary form checks
-        if (!$captcha->checkCaptcha()) {
+        if (!$this->checkCaptcha()) {
             $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
@@ -1065,6 +1067,36 @@ class Login_Model
                 $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
             }
         }
+    }
+
+    /**
+     * Generates the captcha, returns a real image,
+     * this is why there is header('Content-type: image/jpeg')
+     */
+    public function generateCaptcha()
+    {
+        // create a captcha with the CaptchaBuilder lib
+        $builder = new CaptchaBuilder;
+        $builder->build();
+
+        // write the captcha character into session
+        $_SESSION['captcha'] = $builder->getPhrase();
+
+        // render an image showing the characters (=the captcha)
+        header('Content-type: image/jpeg');
+        $builder->output();
+    }
+
+    /**
+     * simply checks if the entered captcha is the same like the one from the rendered image
+     */
+    private function checkCaptcha()
+    {
+        if (isset($_POST["captcha"]) AND ($_POST["captcha"] == $_SESSION['captcha'])) {
+            return true;
+        }
+        // default return
+        return false;
     }
 
     /**
