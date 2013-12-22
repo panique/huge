@@ -2,6 +2,8 @@
 
 /**
  * Class View
+ *
+ * Provides the methods all views will have
  */
 class View
 {
@@ -10,12 +12,12 @@ class View
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
      * Usually the Class and the method are the same like the view, but sometimes you need to show different views.
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
-     * @param boolean $special_page Optional: Set this to true if you don't want to include header and footer
+     * @param boolean $render_without_header_and_footer Optional: Set this to true if you don't want to include header and footer
      */
-    public function render($filename, $special_page = false)
+    public function render($filename, $render_without_header_and_footer = false)
     {
-        // special page = page without header and footer, for whatever reason
-        if ($special_page == true) {
+        // page without header and footer, for whatever reason
+        if ($render_without_header_and_footer == true) {
             require VIEWS_PATH . $filename . '.php';
         } else {
             require VIEWS_PATH . '_templates/header.php';
@@ -24,6 +26,9 @@ class View
         }
     }
 
+    /**
+     * renders the feedback messages into the view
+     */
     public function renderFeedbackMessages()
     {
         // echo out the feedback messages (errors and success messages etc.),
@@ -34,11 +39,9 @@ class View
         Session::set('feedback_positive', null);
         Session::set('feedback_negative', null);
     }
-
     
     /**
      * useful for handling the navigation's active/non-active link
-     * (eventually this needs work !)
      * @param $filename
      * @param $navigation_controller
      * @return bool Shows if the controller is used or not
@@ -56,6 +59,7 @@ class View
     }
 
     /**
+     * useful for handling the navigation's active/non-active link
      * @param $filename
      * @param $navigation_action
      * @return bool Shows if the action/method is used or not
@@ -73,6 +77,7 @@ class View
     }
 
     /**
+     * useful for handling the navigation's active/non-active link
      * @param $filename
      * @param $navigation_controller_and_action
      * @return bool
