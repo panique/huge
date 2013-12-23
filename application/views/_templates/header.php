@@ -87,7 +87,7 @@
                     Hello <?php echo Session::get('user_name'); ?> !
                 </div>
                 <div class="avatar">
-                    <?php if (USE_GRAVATARS) { ?>
+                    <?php if (USE_GRAVATAR) { ?>
                         <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
                     <?php } else { ?>
                         <img src='<?php echo Session::get('user_avatar_file'); ?>' />

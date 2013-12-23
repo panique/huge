@@ -30,7 +30,7 @@ define('LIBS_PATH', 'application/libs/');
 define('CONTROLLER_PATH', 'application/controllers/');
 define('MODELS_PATH', 'application/models/');
 define('VIEWS_PATH', 'application/views/');
-// don't forget to make this folder writeable via chmod 775
+// don't forget to make this folder writable via chmod 775 or 777 (?)
 // the slash at the end is VERY important!
 define('AVATAR_PATH', 'public/avatars/');
 // font-path relative to the index.php of the entire app
@@ -50,7 +50,7 @@ define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
  * the email addresses of users by requesting images from the gravatar.com API.
  * Set to false to use you own, locally saved avatars.
  */
-define('USE_GRAVATARS', false);
+define('USE_GRAVATAR', false);
 
 /**
  * Configuration for: Cookies

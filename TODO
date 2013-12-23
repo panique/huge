@@ -1,14 +1,9 @@
 
 REFACTORING / IMPROVEMENTS
 
-TODO: complete rewrite of all READMEs
-
 TODO: Make it impossible to see the login form when logged in (even when directly url-typed)
-TODO: refactoring the quite deep if/else structures
-TODO: get rid of properties in models classes (better use simple $variables)
-TODO: use Captcha tool instead of own (https://packagist.org/packages/gregwar/captcha, https://github.com/Gregwar/Captcha)
-TODO: rememberme renaming to remember_me
-
+TODO: refactor the deep if/else structures
+TODO: rename rememberme to remember_me
 
 BUGS & PROBLEMS
 

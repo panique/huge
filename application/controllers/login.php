@@ -34,6 +34,8 @@ class Login extends Controller
         $this->view->facebook_login_url = $facebook->getLoginUrl(array(
             'redirect_uri' => URL . 'login/loginWithFacebook'
         ));
+
+        // show the view
         $this->view->render('login/index');
     }
 

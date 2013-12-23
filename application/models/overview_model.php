@@ -36,7 +36,7 @@ class Overview_Model
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
             
-            if (USE_GRAVATARS) {
+            if (USE_GRAVATAR) {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
                     $this->getGravatarLinkFromEmail($user->user_email);
             } else {
@@ -65,7 +65,7 @@ class Overview_Model
         $count =  $sth->rowCount();
 
         if ($count == 1) {
-            if (USE_GRAVATARS) {
+            if (USE_GRAVATAR) {
                 $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
             } else {
                 $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
