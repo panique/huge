@@ -23,17 +23,21 @@
                 echo '<tr class="inactive">';            
             } else {
                 echo '<tr class="active">';            
-            }        
+            }
+
             echo '<td>'.$user->user_id.'</td>';            
             echo '<td class="avatar">';
-            if (isset($user->user_avatar_link)) { echo '<img src="'.$user->user_avatar_link.'" />'; }
+
+            if (isset($user->user_avatar_link)) {
+                echo '<img src="'.$user->user_avatar_link.'" />';
+            }
+
             echo '</td>';
             echo '<td>'.$user->user_name.'</td>';
             echo '<td>'.$user->user_email.'</td>';
             echo '<td>Active: '.$user->user_active.'</td>';            
             echo '<td><a href="'.URL.'overview/showuserprofile/'.$user->user_id.'">Show user\'s profile</a></td>';
             echo "</tr>";
-            
         }
         
         ?>        
