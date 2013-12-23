@@ -84,6 +84,7 @@ class Overview_Model
      * The URL (or image) returns always a .jpg file !
      * For deeper info on the different parameter possibilities:
      * @see http://gravatar.com/site/implement/images/
+     * @source http://gravatar.com/site/implement/images/php/
      *
      * This method will return in something like
      * http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
@@ -94,8 +95,6 @@ class Overview_Model
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
      * @param array $options Optional, additional key/value attributes to include in the IMG tag
-     * @source http://gravatar.com/site/implement/images/php/
-     *
      * @return string
      */
     public function getGravatarLinkFromEmail($email, $s = 44, $d = 'mm', $r = 'pg', $options = array())
