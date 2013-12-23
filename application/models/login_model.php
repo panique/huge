@@ -3,9 +3,8 @@
 /**
  * Login_Model
  *
- * Handles the user's login, logout, username editing, password changing...
+ * Handles the user's login / logout / registration stuff
  */
-
 use Gregwar\Captcha\CaptchaBuilder;
 
 class Login_Model
@@ -266,8 +265,10 @@ class Login_Model
     }
 
     /**
-     * Gets the last page the user visited from the cookie
-     * Useful for relocating (TODO: explain this better)
+     * Gets the last page the user visited
+     * writeUrlCookie() in libs/Application.php writes the URL of the user's page location into the cookie at every
+     * page request. This is useful to redirect the user (after login via cookie) back to the last seen page before
+     * his/her session expired or he/she closed the browser
      * @return string view/location the user visited
      */
     public function getCookieUrl()
@@ -299,7 +300,7 @@ class Login_Model
     public function deleteCookie()
     {
         // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
-        // that's obivously the best practice to kill a cookie via php
+        // that's obviously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 3650), '/');
     }
