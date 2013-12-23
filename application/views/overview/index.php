@@ -1,5 +1,4 @@
 <div class="content">
-    
     <h1>Overview</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
@@ -12,8 +11,7 @@
     </p>
     
     <p>
-        <span style="color: red;">NOTE: be sure NOT to show email addresses of users in a real app. This is just a demo.</span>
-        
+        <span style="color: red;">NOTE: be sure NOT to show email addresses of users in a real app.</span>
         <table class="overview-table">
         <?php
         
@@ -42,6 +40,5 @@
         
         ?>        
         </table>
-    </p>    
-    
+    </p>
 </div>
