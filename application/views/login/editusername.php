@@ -9,5 +9,4 @@
         <input type="text" name="user_name" required />
         <input type="submit" value="Submit" />
     </form>
-    
 </div>
