@@ -32,7 +32,7 @@ class Note_Model
 
     /**
      * Getter for a single note
-     * @param $note_id id of the specific note
+     * @param $note_id int id of the specific note
      * @return object a single object (the result)
      */
     public function getNote($note_id)
@@ -71,8 +71,8 @@ class Note_Model
 
     /**
      * Setter for a note (update)
-     * @param $note_id id of the specific note
-     * @param $note_text new text of the specific note
+     * @param $note_id int id of the specific note
+     * @param $note_text string new text of the specific note
      * @return bool feedback (was the update successful ?)
      */
     public function editSave($note_id, $note_text)
@@ -96,7 +96,7 @@ class Note_Model
 
     /**
      * Deletes a specific note
-     * @param $note_id id of the note
+     * @param $note_id int id of the note
      * @return bool feedback (was the note deleted properly ?)
      */
     public function delete($note_id)
