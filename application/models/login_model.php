@@ -117,7 +117,9 @@ class Login_Model
                     }
                 }
             } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
+                // was FEEDBACK_USER_DOES_NOT_EXIST before, but has changed to FEEDBACK_LOGIN_FAILED
+                // to prevent potential attackers showing if the user exists
+                $_SESSION["feedback_negative"][] = FEEDBACK_LOGIN_FAILED;
                 return false;
             }
         } elseif (empty($_POST['user_name'])) {
@@ -862,9 +864,10 @@ class Login_Model
                     $this->user_email = $result_user_row->user_email;
                     return true;
                 } else {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL; // maybe say something not that technical.
+                    $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL;
                 }
             } else {
+
                 $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
             }
         }
