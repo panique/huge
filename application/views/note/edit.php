@@ -14,5 +14,4 @@
     <?php } else { ?>
         <p>This note does not exist.</p>
     <?php } ?>
-    
 </div>

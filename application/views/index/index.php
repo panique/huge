@@ -10,9 +10,9 @@
         <br/>
         It's rendered by the index-method within the index-controller (in controllers/index.php).
     </p>
-    <h3>Some general infos on this little framework</h3>
+    <h3>General information on this little framework</h3>
     <p>
-        "C'mooonnn! Framework #1000 ? Why do we need this ?" Indeed, there are a lot of good
+        "C'mon! Framework #1000 ? Why do we need this ?" Indeed, there are a lot of good
         (and a lot of bad, too) PHP frameworks on the web. But most of them have something in common:
         They don't have a proper login system. And even if they have, then it's using outdated
         password hashing/salting technologies, it's not future-proof, don't provide email verification,
