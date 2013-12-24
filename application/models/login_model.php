@@ -922,10 +922,9 @@ class LoginModel
     }    
     
     /**
-     * TODO: why is this not camelCase ?
-     * TODO: it's the password RESET request, but it's not in the name
+     * Verifies the password reset request via the verification hash token (that's only valid for one hour)
      */
-    public function verifypasswordrequest($user_name, $verification_code)
+    public function verifyPasswordReset($user_name, $verification_code)
     {
         // TODO: this is not totally clean, as this is just the form provided username
         $this->user_name                = htmlentities($user_name, ENT_QUOTES);         
@@ -964,6 +963,7 @@ class LoginModel
 
     /**
      * Set the new password (for DEFAULT user, FACEBOOK-users don't have a password)
+     * TODO remove class properties
      * @return bool
      */
     public function setNewPassword()

@@ -368,11 +368,11 @@ class Login extends Controller
      * @param $user_name
      * @param $verification_code
      */
-    function verifypasswordrequest($user_name, $verification_code)
+    function verifyPasswordReset($user_name, $verification_code)
     {
         $login_model = $this->loadModel('Login');
 
-        if ($login_model->verifypasswordrequest($user_name, $verification_code)) {
+        if ($login_model->verifyPasswordReset($user_name, $verification_code)) {
             $this->view->user_name = $login_model->user_name;
             $this->view->user_password_reset_hash = $login_model->user_password_reset_hash;
             $this->view->render('login/changepassword');
