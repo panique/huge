@@ -8,7 +8,7 @@
 class Login extends Controller
 {
     /**
-     * Constructor
+     * Construct this object by extending the basic Controller class
      */
     function __construct()
     {

@@ -7,7 +7,7 @@
 class Note extends Controller
 {
     /**
-     * Construct this note object by extending the basic Controller class
+     * Construct this object by extending the basic Controller class
      */
     public function __construct()
     {

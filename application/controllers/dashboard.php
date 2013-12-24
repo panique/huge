@@ -7,6 +7,9 @@
  */
 class Dashboard extends Controller
 {
+    /**
+     * Construct this object by extending the basic Controller class
+     */
 	function __construct()
     {
 		parent::__construct();
