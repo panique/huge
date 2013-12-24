@@ -905,12 +905,12 @@ class LoginModel
             $mail->IsMail();            
         }
         
-        $mail->From = EMAIL_PASSWORDRESET_FROM_EMAIL;
-        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
+        $mail->From = EMAIL_PASSWORD_RESET_FROM_EMAIL;
+        $mail->FromName = EMAIL_PASSWORD_RESET_FROM_NAME;
         $mail->AddAddress($this->user_email);
-        $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
-        $link = EMAIL_PASSWORDRESET_URL.'/'.urlencode($this->user_name).'/'.urlencode($this->user_password_reset_hash);
-        $mail->Body = EMAIL_PASSWORDRESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
+        $mail->Subject = EMAIL_PASSWORD_RESET_SUBJECT;
+        $link = EMAIL_PASSWORD_RESET_URL.'/'.urlencode($this->user_name).'/'.urlencode($this->user_password_reset_hash);
+        $mail->Body = EMAIL_PASSWORD_RESET_CONTENT.' <a href="'.$link.'">'.$link.'</a>';
 
         if(!$mail->Send()) {
            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;

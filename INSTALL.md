@@ -23,7 +23,7 @@ to a lot of reasons.
 
 10. Go into the base folder of your application (where composer.json is) and do "composer install" on the command line
 
-10. OPTIONAL: Change the text, reply-mail-adress etc. of the EMAIL_PASSWORDRESET_SUBJECT etc. in
+10. OPTIONAL: Change the text, reply-mail-adress etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc. in
 application/config/config.php
 
 ## To use the (additional) facebook login
