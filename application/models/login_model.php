@@ -682,7 +682,7 @@ class LoginModel
                             $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
                             // creates a 44x44px avatar jpg file in the avatar folder
                             // see the function defintion (also in this class) for more info on how to use
-                            $this->resize_image($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+                            $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
                             $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
                             $sth->execute(array(':user_id' => $_SESSION['user_id']));
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
@@ -704,21 +704,22 @@ class LoginModel
     
     /**
      * Resize Image
-     * TODO: uh, this looks dirty!
+     * TODO: uh, this looks dirty! heavy refactoring
+     * TODO: avatar size should get a config variable
      *
      * Takes the source image and resizes it to the specified width & height or proportionally if crop is off.
-     * @access public
      * @author Jay Zawrotny <jayzawrotny@gmail.com>
      * @license Do whatever you want with it.
+     *
      * @param string $source_image The location to the original raw image.
      * @param string $destination_filename The location to save the new image.
      * @param int $width The desired width of the new image
      * @param int $height The desired height of the new image.
      * @param int $quality The quality of the JPG to produce 1 - 100
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
-     * @return bool
+     * @return bool success state
      */
-    function resize_image($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
+    function resizeAvatarImage($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
     {
         if ( ! $image_data = getimagesize( $source_image ) ) {
             return false;
@@ -822,6 +823,7 @@ class LoginModel
     
     /**
      * Set password reset token in database (for DEFAULT user accounts)
+     * TODO: refactoring
      */
     public function setPasswordResetDatabaseToken()
     {
@@ -877,6 +879,8 @@ class LoginModel
     }
 
     /**
+     * sends the password reset mail
+     * TODO: get rid of the class properties, get the data via parameter arguments [session does not exist!]
      * @return bool Has the password reset mail been sent successfully ?
      */
     public function sendPasswordResetMail()
@@ -904,7 +908,8 @@ class LoginModel
         } else {
             $mail->IsMail();            
         }
-        
+
+        // build the email
         $mail->From = EMAIL_PASSWORD_RESET_FROM_EMAIL;
         $mail->FromName = EMAIL_PASSWORD_RESET_FROM_NAME;
         $mail->AddAddress($this->user_email);
