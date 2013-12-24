@@ -926,10 +926,6 @@ class LoginModel
      */
     public function verifyPasswordReset($user_name, $verification_code)
     {
-        // TODO: this is not totally clean, as this is just the form provided username
-        $this->user_name                = htmlentities($user_name, ENT_QUOTES);         
-        $this->user_password_reset_hash = htmlentities($verification_code, ENT_QUOTES);    
-
         $sth = $this->db->prepare("SELECT user_id, user_password_reset_timestamp 
                                    FROM users 
                                    WHERE user_name = :user_name 
@@ -939,7 +935,7 @@ class LoginModel
                             ':user_name' => $user_name,
                             ':user_provider_type' => 'DEFAULT'));
 
-        // if this user exists
+        // if this user with exactly this verification hash code exists
         if ($sth->rowCount() == 1) {
             // get result row (as an object)
             $result_user_row = $sth->fetch();
@@ -950,15 +946,13 @@ class LoginModel
                 // verification was successful
                 return true;
             } else {
-                // password reset request is older than one hour, reject the request
                 $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
-                return false;
             }
         } else {
-            // wrong verification code (=user_password_reset_hash) for this user
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
-            return false;
         }
+        // default return
+        return false;
     }
 
     /**
