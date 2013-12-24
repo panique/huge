@@ -2,7 +2,7 @@
 
 /**
  * Class Overview
- * This controller shows date of one or all user(s)
+ * This controller shows the (public) account data of one or all user(s)
  */
 class Overview extends Controller
 {
@@ -11,16 +11,23 @@ class Overview extends Controller
         parent::__construct();
     }
 
+    /**
+     * This method controls what happens when you move to /overview/index in your app.
+     * Shows a list of all users.
+     */
     function index()
     {
-        // get all users that exist and put the result into $this->view->users
-        // in the view this is available in $this->users
         $overview_model = $this->loadModel('Overview');
         $this->view->users = $overview_model->getAllUsersProfiles();
         $this->view->render('overview/index');
     }
 
-    function showuserprofile($user_id)
+    /**
+     * This method controls what happens when you move to /overview/showuserprofile in your app.
+     * Shows the (public) details of the selected user.
+     * @param $user_id int id the the user
+     */
+    function showUserProfile($user_id)
     {
         $overview_model = $this->loadModel('Overview');
         $this->view->user = $overview_model->getUserProfile($user_id);
