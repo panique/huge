@@ -664,7 +664,8 @@ class LoginModel
     }
 
     /**
-     *
+     * Create an avatar picture (and checks all necessary things too)
+     * TODO: refactoring
      */
     public function createAvatar()
     {
@@ -703,11 +704,11 @@ class LoginModel
     }
     
     /**
-     * Resize Image
+     * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
      * TODO: uh, this looks dirty! heavy refactoring
      * TODO: avatar size should get a config variable
      *
-     * Takes the source image and resizes it to the specified width & height or proportionally if crop is off.
+     * Uses original code by:
      * @author Jay Zawrotny <jayzawrotny@gmail.com>
      * @license Do whatever you want with it.
      *
@@ -719,7 +720,7 @@ class LoginModel
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
      * @return bool success state
      */
-    function resizeAvatarImage($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
+    public function resizeAvatarImage($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
     {
         if ( ! $image_data = getimagesize( $source_image ) ) {
             return false;
