@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Login_Model
+ * LoginModel
  *
  * Handles the user's login / logout / registration stuff
  */
 use Gregwar\Captcha\CaptchaBuilder;
 
-class Login_Model
+class LoginModel
 {
     /**
      * Constructor, expects a Database connection

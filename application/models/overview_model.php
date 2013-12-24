@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Overview_Model
+ * OverviewModel
  * Handles data for overviews (pages that show user profiles / lists)
  */
-class Overview_Model
+class OverviewModel
 {
     /**
      * Constructor

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Note_Model
+ * NoteModel
  * This is basically a simple CRUD (Create/Read/Update/Delete) demonstration.
  */
-class Note_Model
+class NoteModel
 {
     /**
      * Constructor

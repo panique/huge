@@ -32,7 +32,7 @@ class Controller
 
     /**
      * loads the model with the given name.
-     * @param string $name The name of the model
+     * @param $name string name of the model
      */
     public function loadModel($name)
     {
@@ -40,7 +40,9 @@ class Controller
 
         if (file_exists($path)) {
             require MODELS_PATH . $name . '_model.php';
-            $modelName = $name . '_Model';
+            // The "Model" has a capital letter as this is the second part of the model class name,
+            // all models have names like "LoginModel"
+            $modelName = $name . 'Model';
             // return the new model object while passing the database connection to the model
             return new $modelName($this->db);
         }

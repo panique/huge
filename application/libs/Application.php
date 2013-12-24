@@ -6,31 +6,22 @@
  */
 class Application
 {
-    /**
-     * @var null The controller part of the URL
-     */
+    /** @var null The controller part of the URL */
     private $url_controller;
-    /**
-     * @var null The method part (of the above controller) of the URL
-     */
+    /** @var null The method part (of the above controller) of the URL */
     private $url_action;
-    /**
-     * @var null Parameter one of the URL
-     */
+    /** @var null Parameter one of the URL */
     private $url_parameter_1;
-    /**
-     * @var null Parameter two of the URL
-     */
+    /** @var null Parameter two of the URL */
     private $url_parameter_2;
-    /**
-     * @var null Parameter three of the URL
-     */
+    /** @var null Parameter three of the URL */
     private $url_parameter_3;
     
     /**
      * Starts the Application
      * Takes the parts of the URL and loads the according controller & method and passes the parameter arguments to it
      * TODO: get rid of deep if/else nesting
+     * TODO: make the hardcoded locations ("error/index", "index.php", new Index()) dynamic, maybe via config.php
      */
     public function __construct()
     {
