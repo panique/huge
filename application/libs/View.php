@@ -41,9 +41,10 @@ class View
     }
     
     /**
-     * useful for handling the navigation's active/non-active link
-     * @param $filename
-     * @param $navigation_controller
+     * Checks if the passed string is the currently active controller.
+     * Useful for handling the navigation's active/non-active link.
+     * @param string $filename
+     * @param string $navigation_controller
      * @return bool Shows if the controller is used or not
      */
     private function checkForActiveController($filename, $navigation_controller)
@@ -54,14 +55,15 @@ class View
         if ($active_controller == $navigation_controller) {
             return true;
         }
-        // default return if not true
+        // default return
         return false;
     }
 
     /**
-     * useful for handling the navigation's active/non-active link
-     * @param $filename
-     * @param $navigation_action
+     * Checks if the passed string is the currently active controller-action (=method).
+     * Useful for handling the navigation's active/non-active link.
+     * @param string $filename
+     * @param string $navigation_action
      * @return bool Shows if the action/method is used or not
      */
     private function checkForActiveAction($filename, $navigation_action)
@@ -77,9 +79,10 @@ class View
     }
 
     /**
-     * useful for handling the navigation's active/non-active link
-     * @param $filename
-     * @param $navigation_controller_and_action
+     * Checks if the passed string is the currently active controller and controller-action.
+     * Useful for handling the navigation's active/non-active link.
+     * @param string $filename
+     * @param string $navigation_controller_and_action
      * @return bool
      */
     private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action)
