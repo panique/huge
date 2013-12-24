@@ -926,19 +926,19 @@ class LoginModel
      */
     public function verifyPasswordReset($user_name, $verification_code)
     {
-        $sth = $this->db->prepare("SELECT user_id, user_password_reset_timestamp 
+        $query = $this->db->prepare("SELECT user_id, user_password_reset_timestamp
                                    FROM users 
                                    WHERE user_name = :user_name 
                                      AND user_password_reset_hash = :user_password_reset_hash
                                      AND user_provider_type = :user_provider_type");
-        $sth->execute(array(':user_password_reset_hash' => $verification_code,
+        $query->execute(array(':user_password_reset_hash' => $verification_code,
                             ':user_name' => $user_name,
                             ':user_provider_type' => 'DEFAULT'));
 
         // if this user with exactly this verification hash code exists
-        if ($sth->rowCount() == 1) {
+        if ($query->rowCount() == 1) {
             // get result row (as an object)
-            $result_user_row = $sth->fetch();
+            $result_user_row = $query->fetch();
             // 3600 seconds are 1 hour
             $timestamp_one_hour_ago = time() - 3600;
             // if password reset request was sent within the last hour (this timeout is for security reasons)
