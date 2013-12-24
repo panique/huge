@@ -46,11 +46,12 @@ define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
 
 /**
  * Configuration for: Avatars/Gravatar support
- * Set to true if you want to use "Gravatars", a service that automatically gets avatar pictures via using
- * the email addresses of users by requesting images from the gravatar.com API.
- * Set to false to use you own, locally saved avatars.
+ * Set to true if you want to use "Gravatar(s)", a service that automatically gets avatar pictures via using email
+ * addresses of users by requesting images from the gravatar.com API. Set to false to use own locally saved avatars.
+ * AVATAR_SIZE set the pixel size of avatars/gravatars (will be 44x44 by default). Avatars are always squares.
  */
 define('USE_GRAVATAR', false);
+define('AVATAR_SIZE', 44);
 
 /**
  * Configuration for: Cookies

@@ -16,9 +16,8 @@ class OverviewModel
     }
 
     /**
-     * Gets an array that contains all the users in the database
-     * The array's keys are the user ids. Each array element is an object,
-     * containing a specific user's data.
+     * Gets an array that contains all the users in the database. The array's keys are the user ids.
+     * Each array element is an object, containing a specific user's data.
      * @return array The profiles of all users
      */
     public function getAllUsersProfiles()
@@ -47,7 +46,7 @@ class OverviewModel
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
         }
         return $all_users_profiles;
-    }    
+    }
     
     /**
      * Gets a user's profile data, according to the given $user_id
@@ -97,7 +96,7 @@ class OverviewModel
      * @param array $options Optional, additional key/value attributes to include in the IMG tag
      * @return string
      */
-    public function getGravatarLinkFromEmail($email, $s = 44, $d = 'mm', $r = 'pg', $options = array())
+    public function getGravatarLinkFromEmail($email, $s = AVATAR_SIZE, $d = 'mm', $r = 'pg', $options = array())
     {
         $gravatar_image_link = 'http://www.gravatar.com/avatar/';
         $gravatar_image_link .= md5( strtolower( trim( $email ) ) );
