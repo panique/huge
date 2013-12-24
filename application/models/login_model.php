@@ -11,9 +11,9 @@ class LoginModel
 {
     /**
      * Constructor, expects a Database connection
-     * @param $db object The PDO database object
+     * @param Database $db The Database object
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         $this->db = $db;
     }
@@ -541,9 +541,9 @@ class LoginModel
 
     /**
      * sends an email to the provided email address
-     * @param $user_id int user's id
-     * @param $user_email string user's email
-     * @param $user_activation_hash string user's mail verification hash string
+     * @param int $user_id user's id
+     * @param string $user_email user's email
+     * @param string $user_activation_hash user's mail verification hash string
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
     private function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
@@ -594,8 +594,8 @@ class LoginModel
     /**
      * verifyNewUser()
      * checks the email/verification code combination and set the user's activation status to true (=1) in the database
-     * @param $user_id
-     * @param $user_verification_code
+     * @param int $user_id
+     * @param string $user_verification_code
      */
     public function verifyNewUser($user_id, $user_verification_code)
     {
@@ -1106,7 +1106,7 @@ class LoginModel
 
     /**
      * Register user with data from the "facebook object"
-     * @param $facebook_user_data array stuff from the facebook class
+     * @param array $facebook_user_data stuff from the facebook class
      * @return bool success state
      */
     public function registerNewUserWithFacebook($facebook_user_data)
@@ -1153,7 +1153,7 @@ class LoginModel
     /**
      * Checks if the facebook-user data array has an email. It's possible that users block this, so we don't have
      * an email and therefore cannot register this person (registration without email is impossible).
-     * @param $facebook_user_data array stuff from the facebook class
+     * @param array $facebook_user_data stuff from the facebook class
      * @return bool user has email yes/no
      */
     public function facebookUserHasEmail($facebook_user_data)
@@ -1167,7 +1167,7 @@ class LoginModel
 
     /**
      * Check if the facebook-user's UID (unique facebook ID) already exists in our database
-     * @param $facebook_user_data array stuff from the facebook class
+     * @param array $facebook_user_data stuff from the facebook class
      * @return bool success state
      */
     public function facebookUserIdExistsAlreadyInDatabase($facebook_user_data)
@@ -1185,7 +1185,7 @@ class LoginModel
     /**
      * Checks if the facebook-user's username is already in our database
      * Note: facebook's user-names have dots, so we remove all dots.
-     * @param $facebook_user_data array stuff from the facebook class
+     * @param array $facebook_user_data stuff from the facebook class
      * @return bool success state
      */
     public function facebookUserNameExistsAlreadyInDatabase($facebook_user_data)
@@ -1205,7 +1205,7 @@ class LoginModel
 
     /**
      * Checks if the facebook-user's email address is already in our database
-     * @param $facebook_user_data array stuff from the facebook class
+     * @param array $facebook_user_data stuff from the facebook class
      * @return bool success state
      */
     public function facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)

@@ -7,10 +7,10 @@
 class NoteModel
 {
     /**
-     * Constructor
-     * @param $db Database The database object
+     * Constructor, expects a Database connection
+     * @param Database $db The Database object
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         $this->db = $db;
     }
@@ -32,7 +32,7 @@ class NoteModel
 
     /**
      * Getter for a single note
-     * @param $note_id int id of the specific note
+     * @param int $note_id id of the specific note
      * @return object a single object (the result)
      */
     public function getNote($note_id)
@@ -47,7 +47,7 @@ class NoteModel
 
     /**
      * Setter for a note (create)
-     * @param $note_text note text that will be created
+     * @param string $note_text note text that will be created
      * @return bool feedback (was the note created properly ?)
      */
     public function create($note_text)
@@ -71,8 +71,8 @@ class NoteModel
 
     /**
      * Setter for a note (update)
-     * @param $note_id int id of the specific note
-     * @param $note_text string new text of the specific note
+     * @param int $note_id id of the specific note
+     * @param string $note_text new text of the specific note
      * @return bool feedback (was the update successful ?)
      */
     public function editSave($note_id, $note_text)
@@ -96,7 +96,7 @@ class NoteModel
 
     /**
      * Deletes a specific note
-     * @param $note_id int id of the note
+     * @param int $note_id id of the note
      * @return bool feedback (was the note deleted properly ?)
      */
     public function delete($note_id)

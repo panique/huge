@@ -7,10 +7,10 @@
 class OverviewModel
 {
     /**
-     * Constructor
-     * @param $db Database The database object
+     * Constructor, expects a Database connection
+     * @param Database $db The Database object
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         $this->db = $db;
     }
@@ -108,9 +108,9 @@ class OverviewModel
 
     /**
      * Gets the user's avatar file path
-     * @param $user_has_avatar
-     * @param $user_id
-     * @return string
+     * @param int $user_has_avatar Marker from database
+     * @param int $user_id User's id
+     * @return string Avatar file path
      */
     public function getUserAvatarFilePath($user_has_avatar, $user_id)
     {

@@ -59,7 +59,7 @@ class Note extends Controller
     /**
      * This method controls what happens when you move to /note/editsave(/XX) in your app.
      * Edits a note (performs the editing after form submit).
-     * @param $note_id int id of the note
+     * @param int $note_id id of the note
      */
     public function editSave($note_id)
     {
@@ -75,7 +75,7 @@ class Note extends Controller
      * This method controls what happens when you move to /note/delete(/XX) in your app.
      * Deletes a note. In a real application a deletion via GET/URL is not recommended, but for demo purposes it's
      * totally okay.
-     * @param $note_id int id of the note
+     * @param int $note_id id of the note
      */
     public function delete($note_id)
     {

@@ -331,8 +331,8 @@ class Login extends Controller
 
     /**
      * Verify user after activation mail sent
-     * @param $user_id
-     * @param $user_verification_code
+     * @param int $user_id User's id
+     * @param string $user_verification_code User's verify hash token
      */
     function verify($user_id, $user_verification_code)
     {
@@ -365,8 +365,8 @@ class Login extends Controller
     }
 
     /**
-     * @param $user_name
-     * @param $verification_code
+     * @param string $user_name
+     * @param string $verification_code
      */
     function verifyPasswordReset($user_name, $verification_code)
     {
