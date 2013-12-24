@@ -957,66 +957,63 @@ class LoginModel
 
     /**
      * Set the new password (for DEFAULT user, FACEBOOK-users don't have a password)
-     * TODO remove class properties
-     * @return bool
+     * Please note: At this point the user has already pre-verified via verifyPasswordReset() (within one hour),
+     * so we don't need to check again for the 60min-limit here. In this method we authenticate
+     * via username & password-reset-hash
+     * @return bool success state of the password reset
      */
     public function setNewPassword()
     {
-        // TODO: timestamp!
         if (!empty($_POST['user_name'])
             && !empty($_POST['user_password_reset_hash'])
             && !empty($_POST['user_password_new'])
             && !empty($_POST['user_password_repeat'])) {
-                
-            if ($_POST['user_password_new'] === $_POST['user_password_repeat']) {
-                if (strlen($_POST['user_password_new']) >= 6) {
 
-                        // escaping, additionally removing everything that could be (html/javascript-) code
-                        $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-                        $this->user_password_reset_hash = htmlentities($_POST['user_password_reset_hash'], ENT_QUOTES);
-                        
-                        // no need to escape as this is only used in the hash function
-                        $this->user_password = $_POST['user_password_new'];
-
-                        // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                        // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
-                        $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
-                        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                        // want the parameter: as an array with, currently only used with 'cost' => XX.
-                        $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
-
-                        // write users new password hash into database
-                        $sth = $this->db->prepare("UPDATE users
-                                                   SET user_password_hash = :user_password_hash,
-                                                       user_password_reset_hash = NULL,
-                                                       user_password_reset_timestamp = NULL
-                                                   WHERE user_name = :user_name
-                                                     AND user_password_reset_hash = :user_password_reset_hash
-                                                     AND user_provider_type = :user_provider_type");
-
-                        $sth->execute(array(':user_password_hash' => $this->user_password_hash,
-                                            ':user_name' => $this->user_name,
-                                            ':user_password_reset_hash' => $this->user_password_reset_hash,
-                                            ':user_provider_type' => 'DEFAULT'));
-                        
-                        // check if exactly one row was successfully changed:
-                        if ($sth->rowCount() == 1) {
-                            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
-                            return true;
-                        } else {
-                            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_CHANGE_FAILED;
-                        }
-                } else {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
-                }
-            } else {
+            // "negative first" checks to prevent deep if/else nesting
+            if ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
                 $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+                return false;
+            }
+
+            // "negative first" checks to prevent deep if/else nesting
+            if (strlen($_POST['user_password_new']) < 6) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+                return false;
+            }
+
+            // check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
+            // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
+            $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+
+            // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+            // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+            // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+            // want the parameter: as an array with, currently only used with 'cost' => XX.
+            $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+
+            // write users new password hash into database
+            $query = $this->db->prepare("UPDATE users
+                                       SET user_password_hash = :user_password_hash,
+                                           user_password_reset_hash = NULL,
+                                           user_password_reset_timestamp = NULL
+                                       WHERE user_name = :user_name
+                                         AND user_password_reset_hash = :user_password_reset_hash
+                                         AND user_provider_type = :user_provider_type");
+
+            $query->execute(array(':user_password_hash' => $user_password_hash,
+                                ':user_name' => $_POST['user_name'],
+                                ':user_password_reset_hash' => $_POST['user_password_reset_hash'],
+                                ':user_provider_type' => 'DEFAULT'));
+
+            // check if exactly one row was successfully changed:
+            if ($query->rowCount() == 1) {
+                // successful password change!
+                $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
+                return true;
             }
         }
-        // default
+        // default return
+        $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_CHANGE_FAILED;
         return false;
     }
 
