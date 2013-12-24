@@ -10,7 +10,10 @@ class Help extends Controller
     {
 		parent::__construct();
 	}
-	
+
+    /**
+     * This method controls what happens when you move to /help/index in your app.
+     */
 	function index()
     {
 		$this->view->render('help/index');	

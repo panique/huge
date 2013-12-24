@@ -11,7 +11,10 @@ class Error extends Controller
     {
 		parent::__construct();
 	}
-	
+
+    /**
+     * This method controls what happens / what the user sees when an error happens (404)
+     */
 	function index()
     {
 		$this->view->render('error/index');

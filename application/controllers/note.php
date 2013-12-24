@@ -7,7 +7,7 @@
 class Note extends Controller
 {
     /**
-     * Construct this Note object by extending the basic Controller class
+     * Construct this note object by extending the basic Controller class
      */
     public function __construct()
     {
@@ -20,7 +20,8 @@ class Note extends Controller
     }
 
     /**
-     * Get all notes (of the user)
+     * This method controls what happens when you move to /note/index in your app.
+     * Gets all notes (of the user).
      */
     public function index()
     {
@@ -30,18 +31,22 @@ class Note extends Controller
     }
 
     /**
-     * Create a new note
+     * This method controls what happens when you move to /dashboard/create in your app.
+     * Creates a new note. This is usually the target of form submit actions.
      */
     public function create()
     {
-        $note_model = $this->loadModel('Note');
-        $note_model->create($_POST['note_text']);
+        if (isset($_POST['note_text'])) {
+            $note_model = $this->loadModel('Note');
+            $note_model->create($_POST['note_text']);
+        }
         header('location: ' . URL . 'note');
     }
 
     /**
-     * Edit a note (show the current content of the note)
-     * @param $note_id int ID of the note
+     * This method controls what happens when you move to /note/edit(/XX) in your app.
+     * Shows the current content of the note and an editing form.
+     * @param $note_id int id of the note
      */
     public function edit($note_id)
     {
@@ -52,20 +57,25 @@ class Note extends Controller
     }
 
     /**
-     * Edit a note (perform the editing after form submit)
-     * @param $note_id int ID of the note
+     * This method controls what happens when you move to /note/editsave(/XX) in your app.
+     * Edits a note (performs the editing after form submit).
+     * @param $note_id int id of the note
      */
     public function editSave($note_id)
     {
-        // perform the update: passing note_id from URL and note_text from POST
-        $note_model = $this->loadModel('Note');
-        $note_model->editSave($note_id, $_POST['note_text']);
+        if (isset($_POST['note_text'])) {
+            // perform the update: pass note_id from URL and note_text from POST
+            $note_model = $this->loadModel('Note');
+            $note_model->editSave($note_id, $_POST['note_text']);
+        }
         header('location: ' . URL . 'note');        
     }
 
     /**
-     * Delete a note
-     * @param $note_id int ID of the note
+     * This method controls what happens when you move to /note/delete(/XX) in your app.
+     * Deletes a note. In a real application a deletion via GET/URL is not recommended, but for demo purposes it's
+     * totally okay.
+     * @param $note_id int id of the note
      */
     public function delete($note_id)
     {

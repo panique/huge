@@ -1,9 +1,7 @@
 
 REFACTORING / IMPROVEMENTS
 
-TODO: Make it impossible to see the login form when logged in (even when directly url-typed)
 TODO: refactor the deep if/else structures
-TODO: rename rememberme to remember_me
 
 BUGS & PROBLEMS
 

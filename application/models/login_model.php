@@ -1035,7 +1035,7 @@ class Login_Model
      */
     public function changeAccountType()
     {
-        if (!empty($_POST["user_account_upgrade"])) {
+        if (isset($_POST["user_account_upgrade"]) AND !empty($_POST["user_account_upgrade"])) {
 
             // do whatever you want to upgrade the account here (pay-process etc)
             // ...
@@ -1043,27 +1043,27 @@ class Login_Model
             // ...
 
             // upgrade account type
-            $sth = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
-            $sth->execute(array(':user_id' => $_SESSION["user_id"]));                                  
+            $query = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
+            $query->execute(array(':user_id' => $_SESSION["user_id"]));
 
-            if ($sth->rowCount() == 1) {
+            if ($query->rowCount() == 1) {
                 // set account type in session to 2
                 Session::set('user_account_type', 2);
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
             } else {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
             }
-        } elseif (!empty($_POST["user_account_downgrade"])) {
+        } elseif (isset($_POST["user_account_downgrade"]) AND !empty($_POST["user_account_downgrade"])) {
 
             // do whatever you want to downgrade the account here (pay-process etc)
             // ...
             // ... myWhateverProcess();
             // ...
             
-            $sth = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
-            $sth->execute(array(':user_id' => $_SESSION["user_id"]));
+            $query = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
+            $query->execute(array(':user_id' => $_SESSION["user_id"]));
             
-            if ($sth->rowCount() == 1) {
+            if ($query->rowCount() == 1) {
                 // set account type in session to 1
                 Session::set('user_account_type', 1);
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
@@ -1074,8 +1074,10 @@ class Login_Model
     }
 
     /**
-     * Generates the captcha, returns a real image,
+     * Generates the captcha, "returns" a real image,
      * this is why there is header('Content-type: image/jpeg')
+     * Note: This is a very special method, as this is echoes out binary data.
+     * Eventually this is something to refactor
      */
     public function generateCaptcha()
     {
@@ -1092,7 +1094,9 @@ class Login_Model
     }
 
     /**
-     * simply checks if the entered captcha is the same like the one from the rendered image
+     * Checks if the entered captcha is the same like the one from the rendered image
+     * which has been saved in session
+     * @return bool success of captcha check
      */
     private function checkCaptcha()
     {
@@ -1105,60 +1109,55 @@ class Login_Model
 
     /**
      * Register user with data from the "facebook object"
-     * @param $facebook_user_data
-     * @return bool
+     * @param $facebook_user_data array stuff from the facebook class
+     * @return bool success state
      */
     public function registerNewUserWithFacebook($facebook_user_data)
     {
-        // delete dots from facebook's username (it's the common way to do this like that)
+        // delete dots from facebook-username (it's the common way to do this like that)
         $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
 
         $sql = "INSERT INTO users (user_name, user_email, user_active, user_provider_type, user_facebook_uid)
                 VALUES (:user_name, :user_email, :user_active, :user_provider_type, :user_facebook_uid)";
-        $sth = $this->db->prepare($sql);
-        $sth->execute(array(':user_name' => $clean_user_name_from_facebook,
-                            ':user_email' => $facebook_user_data["email"],
-                            ':user_active' => 1,
-                            ':user_provider_type' => 'FACEBOOK',
-                            ':user_facebook_uid' => $facebook_user_data["id"]));
+        $query = $this->db->prepare($sql);
+        $query->execute(array(':user_name' => $clean_user_name_from_facebook,
+                              ':user_email' => $facebook_user_data["email"],
+                              ':user_active' => 1,
+                              ':user_provider_type' => 'FACEBOOK',
+                              ':user_facebook_uid' => $facebook_user_data["id"]));
 
-        $count =  $sth->rowCount();
+        $count = $query->rowCount();
         if ($count == 1) {
-            $sth = $this->db->prepare("SELECT user_id,
-                                              user_name,
-                                              user_email,
-                                              user_account_type,
-                                              user_provider_type
-                                       FROM   users
-                                       WHERE  user_name = :user_name
-                                              AND user_provider_type = :provider_type");
-            $sth->execute(array(':user_name' => $clean_user_name_from_facebook, ':provider_type' => 'FACEBOOK'));
+            $query = $this->db->prepare("SELECT user_id, user_name, user_email, user_account_type, user_provider_type
+                                         FROM   users
+                                         WHERE  user_name = :user_name AND user_provider_type = :provider_type");
+            $query->execute(array(':user_name' => $clean_user_name_from_facebook, ':provider_type' => 'FACEBOOK'));
+            $count = $query->rowCount();
+            if ($count == 1) {
+                // fetch one row (we have only one result)
+                $result = $query->fetch();
+                // put user data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result->user_id);
+                Session::set('user_name', $result->user_name);
+                Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);
+                Session::set('user_provider_type', 'FACEBOOK');
+                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
-            // fetch one row (we only have one result)
-            // TODO: catch errors here
-            $result = $sth->fetch();
-
-            // put user data into session
-            Session::init();
-            Session::set('user_logged_in', true);
-            Session::set('user_id', $result->user_id);
-            Session::set('user_name', $result->user_name);
-            Session::set('user_email', $result->user_email);
-            Session::set('user_account_type', $result->user_account_type);
-            Session::set('user_provider_type', 'FACEBOOK');
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-
-            return true;
+                return true;
+            }
         }
         // default return
         return false;
     }
 
     /**
-     * Checks if the facebook user data array has an email. It's possible that users block this, so we don't have
-     * an email an therefore cannot register this person (registration without email is impossible).
-     * @param $facebook_user_data
-     * @return bool
+     * Checks if the facebook-user data array has an email. It's possible that users block this, so we don't have
+     * an email and therefore cannot register this person (registration without email is impossible).
+     * @param $facebook_user_data array stuff from the facebook class
+     * @return bool user has email yes/no
      */
     public function facebookUserHasEmail($facebook_user_data)
     {
@@ -1171,15 +1170,15 @@ class Login_Model
 
     /**
      * Check if the facebook-user's UID (unique facebook ID) already exists in our database
-     * @param $facebook_user_data
-     * @return bool
+     * @param $facebook_user_data array stuff from the facebook class
+     * @return bool success state
      */
     public function facebookUserIdExistsAlreadyInDatabase($facebook_user_data)
     {
-        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_facebook_uid = :user_facebook_uid");
-        $sth->execute(array(':user_facebook_uid' => $facebook_user_data["id"]));
+        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_facebook_uid = :user_facebook_uid");
+        $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"]));
 
-        if ($sth->rowCount() == 1) {
+        if ($query->rowCount() == 1) {
             return true;
         }
         // default return
@@ -1188,19 +1187,19 @@ class Login_Model
 
     /**
      * Checks if the facebook-user's username is already in our database
-     * Note: Facebook-usernames have dots, so we remove all dots.
-     * @param $facebook_user_data
-     * @return bool
+     * Note: facebook's user-names have dots, so we remove all dots.
+     * @param $facebook_user_data array stuff from the facebook class
+     * @return bool success state
      */
     public function facebookUserNameExistsAlreadyInDatabase($facebook_user_data)
     {
         // delete dots from facebook's username (it's the common way to do this like that)
         $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
 
-        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook");
-        $sth->execute(array(':clean_user_name_from_facebook' => $clean_user_name_from_facebook));
+        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook");
+        $query->execute(array(':clean_user_name_from_facebook' => $clean_user_name_from_facebook));
 
-        if ($sth->rowCount() == 1) {
+        if ($query->rowCount() == 1) {
             return true;
         }
         // default return
@@ -1209,15 +1208,15 @@ class Login_Model
 
     /**
      * Checks if the facebook-user's email address is already in our database
-     * @param $facebook_user_data
-     * @return bool
+     * @param $facebook_user_data array stuff from the facebook class
+     * @return bool success state
      */
     public function facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)
     {
-        $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :facebook_email");
-        $sth->execute(array(':facebook_email' => $facebook_user_data["email"]));
+        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :facebook_email");
+        $query->execute(array(':facebook_email' => $facebook_user_data["email"]));
 
-        if ($sth->rowCount() == 1) {
+        if ($query->rowCount() == 1) {
             return true;
         }
         // default return
