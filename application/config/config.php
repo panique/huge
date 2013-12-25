@@ -52,6 +52,7 @@ define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
  */
 define('USE_GRAVATAR', false);
 define('AVATAR_SIZE', 44);
+define('AVATAR_JPEG_QUALITY', 85);
 
 /**
  * Configuration for: Cookies

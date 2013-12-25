@@ -683,7 +683,7 @@ class LoginModel
                             $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
                             // creates a 44x44px avatar jpg file in the avatar folder
                             // see the function defintion (also in this class) for more info on how to use
-                            $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, 44, 44, 85, true);
+                            $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY, true);
                             $sth = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
                             $sth->execute(array(':user_id' => $_SESSION['user_id']));
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
@@ -705,9 +705,7 @@ class LoginModel
     
     /**
      * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
-     * TODO: uh, this looks dirty! heavy refactoring
-     *
-     * Uses original code by:
+     * Originally written by:
      * @author Jay Zawrotny <jayzawrotny@gmail.com>
      * @license Do whatever you want with it.
      *
@@ -719,13 +717,16 @@ class LoginModel
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
      * @return bool success state
      */
-    public function resizeAvatarImage($source_image, $destination_filename, $width = AVATAR_SIZE, $height = AVATAR_SIZE, $quality = 85, $crop = true)
+    public function resizeAvatarImage(
+        $source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
     {
-        if ( ! $image_data = getimagesize( $source_image ) ) {
+        $image_data = getimagesize($source_image);
+        if (!$image_data) {
             return false;
         }
 
-        switch( $image_data['mime'] ) {
+        // set to-be-used function according to filetype
+        switch ($image_data['mime']) {
             case 'image/gif':
                 $get_func = 'imagecreatefromgif';
                 $suffix = ".gif";
@@ -740,85 +741,84 @@ class LoginModel
             break;
         }
 
-        $img_original = call_user_func( $get_func, $source_image );
+        $img_original = call_user_func($get_func, $source_image );
         $old_width = $image_data[0];
         $old_height = $image_data[1];
         $new_width = $width;
         $new_height = $height;
         $src_x = 0;
         $src_y = 0;
-        $current_ratio = round( $old_width / $old_height, 2 );
-        $desired_ratio_after = round( $width / $height, 2 );
-        $desired_ratio_before = round( $height / $width, 2 );
+        $current_ratio = round($old_width / $old_height, 2);
+        $desired_ratio_after = round($width / $height, 2);
+        $desired_ratio_before = round($height / $width, 2);
 
-        if ( $old_width < $width || $old_height < $height ) {
-             // The desired image size is bigger than the original image.
-             // Best not to do anything at all really.
+        if ($old_width < $width OR $old_height < $height) {
+             // the desired image size is bigger than the original image. Best not to do anything at all really.
             return false;
         }
 
-        // If the crop option is left on, it will take an image and best fit it
-        // so it will always come out the exact specified size.
-        if ( $crop ) {
+        // if crop is on: it will take an image and best fit it so it will always come out the exact specified size.
+        if ($crop) {
             // create empty image of the specified size
-            $new_image = imagecreatetruecolor( $width, $height );
+            $new_image = imagecreatetruecolor($width, $height);
 
-            // Landscape Image
-            if( $current_ratio > $desired_ratio_after ) {
+            // landscape image
+            if ($current_ratio > $desired_ratio_after) {
                 $new_width = $old_width * $height / $old_height;
             }
 
-            // Nearly square ratio image.
-            if ( $current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after ) {
+            // nearly square ratio image
+            if ($current_ratio > $desired_ratio_before AND $current_ratio < $desired_ratio_after) {
 
-                if ( $old_width > $old_height ) {
-                    $new_height = max( $width, $height );
+                if ($old_width > $old_height) {
+                    $new_height = max($width, $height);
                     $new_width = $old_width * $new_height / $old_height;
                 } else {
                     $new_height = $old_height * $width / $old_width;
                 }
             }
 
-            // Portrait sized image
-            if ( $current_ratio < $desired_ratio_before  ) {
+            // portrait sized image
+            if ($current_ratio < $desired_ratio_before) {
                 $new_height = $old_height * $width / $old_width;
             }
 
-            // Find out the ratio of the original photo to it's new, thumbnail-based size
-            // for both the width and the height. It's used to find out where to crop.
+            // find ratio of original image to find where to crop
             $width_ratio = $old_width / $new_width;
             $height_ratio = $old_height / $new_height;
 
-            // Calculate where to crop based on the center of the image
-            $src_x = floor( ( ( $new_width - $width ) / 2 ) * $width_ratio );
-            $src_y = round( ( ( $new_height - $height ) / 2 ) * $height_ratio );
+            // calculate where to crop based on the center of the image
+            $src_x = floor((($new_width - $width) / 2) * $width_ratio);
+            $src_y = round((($new_height - $height) / 2) * $height_ratio);
         }
-        // Don't crop the image, just resize it proportionally
+        // don't crop the image, just resize it proportionally
         else {
-
-            if ( $old_width > $old_height ) {
-                $ratio = max( $old_width, $old_height ) / max( $width, $height );
+            if ($old_width > $old_height) {
+                $ratio = max($old_width, $old_height) / max($width, $height);
             } else {
-                $ratio = max( $old_width, $old_height ) / min( $width, $height );
+                $ratio = max($old_width, $old_height) / min($width, $height);
             }
 
             $new_width = $old_width / $ratio;
             $new_height = $old_height / $ratio;
-            $new_image = imagecreatetruecolor( $new_width, $new_height );
+            $new_image = imagecreatetruecolor($new_width, $new_height);
         }
 
-        // Where all the real magic happens
+        // create avatar thumbnail
         imagecopyresampled($new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height);
 
-        // Save it as a JPG File with our $destination_filename param.
-        imagejpeg( $new_image, $destination_filename, $quality  );
+        // save it as a .jpg file with our $destination_filename parameter
+        imagejpeg($new_image, $destination_filename, $quality);
 
-        // Destroy the evidence!
-        imagedestroy( $new_image );
-        imagedestroy( $img_original );
+        // delete "working copy" and original file, keep the thumbnail
+        imagedestroy($new_image);
+        imagedestroy($img_original);
 
-        // Return true because it worked and we're happy. Let the dancing commence!
-        return true;
+        if (file_exists($destination_filename)) {
+            return true;
+        }
+        // default return
+        return false;
     }
     
     /**
