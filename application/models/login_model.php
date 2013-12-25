@@ -1096,9 +1096,8 @@ class LoginModel
         // way to login via Facebook with PHP. Constants come from config/config.php.
         $facebook = new Facebook(array('appId'  => FACEBOOK_LOGIN_APP_ID, 'secret' => FACEBOOK_LOGIN_APP_SECRET));
 
-        // get the "login"-URL: This is the URL the user will be redirected after clicking the
-        // "login via facebook"-button (a URL on Facebook's servers). On this URL the user will be then
-        // authenticated and send back to your application. Don't touch this until you know exactly what you do.
+        // get the "login"-URL: This is the URL the user will be redirected to after being sent to the Facebook Auth
+        // server by clicking the "login via facebook"-button. Don't touch this until you know exactly what you do.
         $facebook_login_url = $facebook->getLoginUrl(array('redirect_uri' => URL . FACEBOOK_LOGIN_PATH));
 
         return $facebook_login_url;

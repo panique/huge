@@ -50,7 +50,8 @@ class Login extends Controller
     }
 
     /**
-     * The login action, this is where the user is directed after clicking the facebook-login button
+     * The login action, this is where the user is directed after being checked by the Facebook server by
+     * clicking the facebook-login button
      */
     function loginWithFacebook()
     {
@@ -61,12 +62,11 @@ class Login extends Controller
 
         // check login status
         if ($login_successful) {
-            // if YES, then move user to dashboard/index
-            // please note: this is a browser-redirection, not a rendered view
+            // if YES, then move user to dashboard/index (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'dashboard/index');
         } else {
-            // if NO, then show the login/index (login form) again
-            $this->view->render('login/index');
+            // if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
+            header('location: ' . URL . 'login/index');
         }
     }
 
@@ -211,7 +211,7 @@ class Login extends Controller
         // basically, when the user clicks the Facebook register button, the following arguments will be passed
         // to Facebook: In this case a request for getting the email (not shown by default btw) and the URL
         // when facebook will send the user after he/she has authenticated
-        $this->view->facebook_login_url = $facebook->getLoginUrl(array(
+        $this->view->facebook_register_url = $facebook->getLoginUrl(array(
             'scope' => 'email',
             'redirect_uri' => $redirect_url_after_facebook_auth
         ));
@@ -285,7 +285,9 @@ class Login extends Controller
                                 $this->view->facebook_login_url = $facebook->getLoginUrl(array(
                                     'redirect_uri' => URL . 'login/loginWithFacebook'
                                 ));
+
                                 $this->view->render('login/index');
+                                return true;
 
                             } else {
                                 $_SESSION["feedback_negative"][] = "Unknown error while creating your account :(";
@@ -306,7 +308,9 @@ class Login extends Controller
             }
         }
 
+
         $this->view->render('login/registerwithfacebook');
+        return false;
     }
 
     /**

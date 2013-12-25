@@ -56,7 +56,7 @@
     <?php if (FACEBOOK_LOGIN == true) { ?>
         <div class="register-facebook-box">
             <h1>or</h1>
-            <a href="<?php echo $this->facebook_login_url; ?>" class="facebook-login-button">Register with Facebook</a>
+            <a href="<?php echo $this->facebook_register_url; ?>" class="facebook-login-button">Register with Facebook</a>
         </div>
     <?php } ?>
 
