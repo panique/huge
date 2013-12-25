@@ -592,7 +592,6 @@ class LoginModel
     }
     
     /**
-     * verifyNewUser()
      * checks the email/verification code combination and set the user's activation status to true in the database
      * @param int $user_id
      * @param string $user_verification_code
