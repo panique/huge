@@ -706,7 +706,6 @@ class LoginModel
     /**
      * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
      * TODO: uh, this looks dirty! heavy refactoring
-     * TODO: avatar size should get a config variable
      *
      * Uses original code by:
      * @author Jay Zawrotny <jayzawrotny@gmail.com>
@@ -720,7 +719,7 @@ class LoginModel
      * @param bool $crop Whether to crop the image or not. It always crops from the center.
      * @return bool success state
      */
-    public function resizeAvatarImage($source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
+    public function resizeAvatarImage($source_image, $destination_filename, $width = AVATAR_SIZE, $height = AVATAR_SIZE, $quality = 85, $crop = true)
     {
         if ( ! $image_data = getimagesize( $source_image ) ) {
             return false;
@@ -925,10 +924,13 @@ class LoginModel
             $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
             return true;
         }
-    }    
-    
+    }
+
     /**
      * Verifies the password reset request via the verification hash token (that's only valid for one hour)
+     * @param string $user_name Username
+     * @param string $verification_code Hash token
+     * @return bool Success status
      */
     public function verifyPasswordReset($user_name, $verification_code)
     {
