@@ -415,24 +415,22 @@ class LoginModel
     /**
      * handles the entire registration process for DEFAULT users (not for people who register with
      * 3rd party services, like facebook) and creates a new user in the database if everything is fine
-     * TODO: total refactoring, get rid off if/else nesting
      * @return boolean Gives back the success status of the registration
      */
     public function registerNewUser()
     {
-
         // perform all necessary form checks
         if (!$this->checkCaptcha()) {
             $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
-        } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
+        } elseif (empty($_POST['user_password_new']) OR empty($_POST['user_password_repeat'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
         } elseif (strlen($_POST['user_password_new']) < 6) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
-        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
+        } elseif (strlen($_POST['user_name']) > 64 OR strlen($_POST['user_name']) < 2) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
@@ -443,99 +441,87 @@ class LoginModel
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
         } elseif (!empty($_POST['user_name'])
-                  && strlen($_POST['user_name']) <= 64
-                  && strlen($_POST['user_name']) >= 2
-                  && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
-                  && !empty($_POST['user_email'])
-                  && strlen($_POST['user_email']) <= 64
-                  && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
-                  && !empty($_POST['user_password_new']) 
-                  && !empty($_POST['user_password_repeat']) 
-                  && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
+            AND strlen($_POST['user_name']) <= 64
+            AND strlen($_POST['user_name']) >= 2
+            AND preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+            AND !empty($_POST['user_email'])
+            AND strlen($_POST['user_email']) <= 64
+            AND filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
+            AND !empty($_POST['user_password_new'])
+            AND !empty($_POST['user_password_repeat'])
+            AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
             
-                // escapin' this, additionally removing everything that could be (html/javascript-) code
-                $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-                $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-                // no need to escape as this is only used in the hash function
-                $this->user_password = $_POST['user_password_new'];
-                // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                // if so: put the value into $this->hash_cost_factor, if not, make $this->hash_cost_factor = null
-                $this->hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-                // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                // want the parameter: as an array with, currently only used with 'cost' => XX.
-                $this->user_password_hash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
-                
-                // check if user already exists                
-                $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name");
-                $sth->execute(array(':user_name' => $this->user_name));
-                
-                $count =  $sth->rowCount();            
+            // clean the input
+            $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+            $user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
 
-                if ($count == 1) {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-                } else {
+            // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character
+            // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4,
+            // by the password hashing compatibility library. the third parameter looks a little bit shitty, but that's
+            // how those PHP 5.5 functions want the parameter: as an array with, currently only used with 'cost' => XX
+            $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+            $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
 
-                    // check if user's email already exists
-                    $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :user_email");
-                    $sth->execute(array(':user_email' => $this->user_email));
+            // check if username already exists
+            $query = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name");
+            $query->execute(array(':user_name' => $user_name));
+            $count =  $query->rowCount();
+            if ($count == 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+                return false;
+            }
 
-                    $count =  $sth->rowCount();
+            // check if email already exists
+            $query = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :user_email");
+            $query->execute(array(':user_email' => $user_email));
+            $count =  $query->rowCount();
+            if ($count == 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+                return false;
+            }
 
-                    if ($count == 1) {
-                        $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
-                    } else {
-                        // generate random hash for email verification (40 char string)
-                        $this->user_activation_hash = sha1(uniqid(mt_rand(), true));
+            // generate random hash for email verification (40 char string)
+            $user_activation_hash = sha1(uniqid(mt_rand(), true));
 
-                        // write new users data into database
-                        $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash, user_provider_type)
-                                VALUES (:user_name, :user_password_hash, :user_email, :user_activation_hash, :user_provider_type)";
-                        $sth = $this->db->prepare($sql);
-                        $sth->execute(array(':user_name' => $this->user_name,
-                                            ':user_password_hash' => $this->user_password_hash,
-                                            ':user_email' => $this->user_email,
-                                            ':user_activation_hash' => $this->user_activation_hash,
-                                            ':user_provider_type' => 'DEFAULT'));
+            // write new users data into database
+            $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_activation_hash, :user_provider_type)";
+            $query = $this->db->prepare($sql);
+            $query->execute(array(':user_name' => $user_name,
+                                  ':user_password_hash' => $user_password_hash,
+                                  ':user_email' => $user_email,
+                                  ':user_activation_hash' => $user_activation_hash,
+                                  ':user_provider_type' => 'DEFAULT'));
+            $count =  $query->rowCount();
+            if ($count != 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_CREATION_FAILED;
+                return false;
+            }
 
-                        $count =  $sth->rowCount();
-                        if ($count == 1) {
+            // get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
+            $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
+            $query->execute(array(':user_name' => $user_name));
+            if ($query->rowCount() != 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+                return false;
+            }
+            $result_user_row = $query->fetch();
+            $user_id = $result_user_row->user_id;
 
-                            // get user_id of the user that has been created
-                            // to keep things clean and professional we DON'T use lastInsertId() here
-                            $sth = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
-                            $sth->execute(array(':user_name' => $this->user_name));
-
-                            if ($sth->rowCount() == 1) {
-
-                                $result_user_row = $sth->fetch();
-                                $this->user_id = $result_user_row->user_id;
-
-                                // send a verification email
-                                if ($this->sendVerificationEmail($this->user_id, $this->user_email, $this->user_activation_hash)) {
-                                    // when mail has been send successfully
-                                    $this->messages[] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
-                                    $this->registration_successful = true;
-                                    return true;
-                                } else {
-                                    // if verification email didn't sent, instantly delete the user
-                                    $sth = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
-                                    $sth->execute(array(':last_inserted_id' => $this->user_id));
-                                    $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
-                                }
-                            } else {
-                                $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
-                            }
-                        } else {
-                            $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_CREATION_FAILED;
-                        }
-                    }
-                }
+            // send verification email, if verification email sending failed: instantly delete the user
+            if ($this->sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
+                return true;
+            } else {
+                $query = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
+                $query->execute(array(':last_inserted_id' => $user_id));
+                $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+                return false;
+            }
         } else {
             $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
         }
-        // standard return. returns only true of really successful (see above)
+        // default return, returns only true of really successful (see above)
         return false;
     }
 
