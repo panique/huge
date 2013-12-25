@@ -593,9 +593,10 @@ class LoginModel
     
     /**
      * verifyNewUser()
-     * checks the email/verification code combination and set the user's activation status to true (=1) in the database
+     * checks the email/verification code combination and set the user's activation status to true in the database
      * @param int $user_id
      * @param string $user_verification_code
+     * @return bool success status
      */
     public function verifyNewUser($user_id, $user_verification_code)
     {
@@ -604,10 +605,12 @@ class LoginModel
                                    WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash");
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_verification_code));                                  
 
-        if ($sth->rowCount() > 0) {
+        if ($sth->rowCount() == 1) {
             $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
+            return true;
         } else {
             $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
+            return false;
         }
     }
 
