@@ -655,11 +655,13 @@ class LoginModel
      */
     public function getUserAvatarFilePath()
     {
-        $sth = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
-        $sth->execute(array(':user_id' => $_SESSION['user_id']));
+        $query = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
+        $query->execute(array(':user_id' => $_SESSION['user_id']));
 
-        if ($sth->fetch()->user_has_avatar) {
+        if ($query->fetch()->user_has_avatar) {
             return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
+        } else {
+            return URL . AVATAR_PATH . 'default' . '.jpg';
         }
     }
 

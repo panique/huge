@@ -88,9 +88,11 @@
                 </div>
                 <div class="avatar">
                     <?php if (USE_GRAVATAR) { ?>
-                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
+                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>'
+                             style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
                     <?php } else { ?>
-                        <img src='<?php echo Session::get('user_avatar_file'); ?>' />
+                        <img src='<?php echo Session::get('user_avatar_file'); ?>'
+                             style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
                     <?php } ?>
                 </div>
             </div>
