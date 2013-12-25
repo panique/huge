@@ -70,7 +70,7 @@ class LoginModel
                             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
                             // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                            $this->setGravatarImageUrl($result->user_email);
+                            $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
 
                             // reset the failed login counter for that user
                             $sql = "UPDATE users
@@ -185,7 +185,7 @@ class LoginModel
                 Session::set('user_avatar_file', $this->getUserAvatarFilePath());
 
                 // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                $this->setGravatarImageUrl($result->user_email);
+                $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
 
                 // NOTE: we don't set another rememberme-cookie here as the current cookie should always
                 // be invalid after a certain amount of time, so the user has to login with username/password
@@ -397,7 +397,7 @@ class LoginModel
                     if ($count == 1) {
                         Session::set('user_email', $this->user_email);
                         // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                        $this->setGravatarImageUrl($this->user_email);
+                        $this->setGravatarImageUrl($this->user_email, AVATAR_SIZE);
 
                         $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
                     } else {
@@ -614,39 +614,34 @@ class LoginModel
     /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
      * Gravatar is the #1 (free) provider for email address based global avatar hosting.
-     * The URL (or image) returns always a .jpg file !
+     * The image url (on gravatar servers), will return in something like (note that there's no .jpg)
+     * http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
+     *
      * For deeper info on the different parameter possibilities:
      * @see http://gravatar.com/site/implement/images/
+     * @source http://gravatar.com/site/implement/images/php/
      *
      * @param string $email The email address
-     * @param int|string $s Size in pixels, defaults to 50px [ 1 - 2048 ]
+     * @param int $s Size in pixels [ 1 - 2048 ]
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-     * @param array $atts Optional, additional key/value attributes to include in the IMG tag
-     * @source http://gravatar.com/site/implement/images/php/
+     * @param array $attributes Optional, additional key/value attributes to include in the IMG tag
      */
-    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $atts = array() )
+    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $attributes = array())
     {
-        // TODO: why is this set when it's more a get ?
-        // TODO this thing is messy
-        $url = 'http://www.gravatar.com/avatar/';
-        $url .= md5( strtolower( trim( $email ) ) );
-        $url .= "?s=$s&d=$d&r=$r";
-        
-        // the image url (on gravatar servers), will return in something like
-        // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
-        // note: the url does NOT have something like .jpg
-        Session::set('user_gravatar_image_url', $url);
+        // create image URL, write it into session
+        $image_url = 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) .  "?s=$s&d=$d&r=$r";
+        Session::set('user_gravatar_image_url', $image_url);
 
-        // build img tag around
-        $url_with_tag = '<img src="' . $url . '"';
-        foreach ( $atts as $key => $val ) {
-            $url_with_tag .= ' ' . $key . '="' . $val . '"';
+        // build <img /> tag around the URL
+        $image_url_with_tag = '<img src="' . $image_url . '"';
+        foreach ($attributes as $key => $val) {
+            $image_url_with_tag .= ' ' . $key . '="' . $val . '"';
         }
-        $url_with_tag .= ' />';            
+        $image_url_with_tag .= ' />';
  
-        // the image url like above but with an additional <img src .. /> around
-        Session::set('user_gravatar_image_tag', $url_with_tag);
+        // the image url like above but with an additional <img src .. /> around, write to session
+        Session::set('user_gravatar_image_tag', $image_url_with_tag);
     }
     
     /**
