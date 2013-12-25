@@ -316,51 +316,50 @@ class LoginModel
         
     /**
      * Edit the user's name, provided in the editing form
+     * @return bool success status
      */
     public function editUserName()
     {
-        if (!empty($_POST['user_name'])) {
-        
-            if (!empty($_POST['user_name']) && $_POST['user_name'] == $_SESSION["user_name"]) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
-            }
-            // username cannot be empty and must be azAZ09 and 2-64 characters
-            elseif (!empty($_POST['user_name'])
-                    AND preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
-
-                // clean the input
-                $this->user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-                $this->user_name = substr($this->user_name, 0, 64);
-
-                // check if new username already exists
-                $sth = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name ;");
-                $sth->execute(array(':user_name' => $this->user_name));
-
-                $count =  $sth->rowCount();
-
-                if ($count == 1) {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
-                } else {
-                    $sth = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id ;");
-                    $sth->execute(array(':user_name' => $this->user_name, ':user_id' => $_SESSION['user_id']));
-
-                    $count =  $sth->rowCount();
-                    if ($count == 1) {
-                        Session::set('user_name', $this->user_name);
-                        $_SESSION["feedback_positive"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
-                    } else {
-                        $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
-                    }
-                }
-            } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-            }
-        } elseif (!empty($_POST['user_username'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
-        } elseif (!empty($_POST['user_password'])) {
+        // new username provided ?
+        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            return false;
+        }
+
+        // new username same as old one ?
+        if ($_POST['user_name'] == $_SESSION["user_name"]) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
+            return false;
+        }
+
+        // username cannot be empty and must be azAZ09 and 2-64 characters
+        if (!preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+            return false;
+        }
+
+        // clean the input
+        $user_name = substr(htmlentities($_POST['user_name'], ENT_QUOTES), 0, 64);
+
+        // check if new username already exists
+        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
+        $query->execute(array(':user_name' => $user_name));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+            return false;
+        }
+
+        $query = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id");
+        $query->execute(array(':user_name' => $user_name, ':user_id' => $_SESSION['user_id']));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            Session::set('user_name', $user_name);
+            $_SESSION["feedback_positive"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+            return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            return false;
         }
     }
 
