@@ -60,19 +60,6 @@ class Login extends Controller
      */
     function loginWithFacebook()
     {
-        /*
-        // Create our Application instance (replace this with your appId and secret).
-        $facebook = new Facebook(array(
-            'appId'  => FACEBOOK_LOGIN_APP_ID,
-            'secret' => FACEBOOK_LOGIN_APP_SECRET,
-        ));
-
-        $this->view->facebook_login_url = $facebook->getLoginUrl(array(
-            'redirect_uri' => URL . 'login/loginWithFacebook'
-        ));
-        // TODO: this is duplicate !?!??!
-        */
-
         // run the login() method in the login-model, put the result in $login_successful (true or false)
         $login_model = $this->loadModel('Login');
         // perform the login method, put result (true or false) into $login_successful
