@@ -37,12 +37,14 @@ define('AVATAR_PATH', 'public/avatars/');
 define('CAPTCHA_FONT_PATH', 'application/tools/fonts/times_new_yorker.ttf');
 
 /**
- * Configuration for: Additional login providers
- * Currently we only have support for Facebook. More will come!
+ * Configuration for: Additional login providers: Facebook
+ * Self-explaining. The FACEBOOK_LOGIN_PATH is the controller-action where the user is redirected to after getting
+ * authenticated via Facebook. Leave it like that unless you know exactly what you do.
  */
 define('FACEBOOK_LOGIN', false);
 define('FACEBOOK_LOGIN_APP_ID', 'XXX');
 define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
+define('FACEBOOK_LOGIN_PATH', 'login/loginWithFacebook');
 
 /**
  * Configuration for: Avatars/Gravatar support
@@ -255,7 +257,7 @@ define("FEEDBACK_COOKIE_INVALID", "Your remember-me-cookie is invalid.");
 define("FEEDBACK_COOKIE_LOGIN_SUCCESSFUL", "You were successfully logged in via the remember-me-cookie.");
 define("FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED", "Sorry, you don't have an account here. Please register first.");
 define("FEEDBACK_FACEBOOK_EMAIL_NEEDED", "Sorry, but you need to allow us to see your email address to register.");
-define("FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook ID exists in your database).");
-define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook email exists in your database).");
-define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in your database).");
+define("FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook ID exists in our database).");
+define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook email exists in our database).");
+define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in our database).");
 define("FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL", "You have been successfully registered with Facebook.");

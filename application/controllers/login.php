@@ -20,16 +20,10 @@ class Login extends Controller
      */
     function index()
     {
-        // TODO: put this into the model as it is data handling
-        // Create our Application instance (replace this with your appId and secret).
-        $facebook = new Facebook(array(
-            'appId'  => FACEBOOK_LOGIN_APP_ID,
-            'secret' => FACEBOOK_LOGIN_APP_SECRET,
-        ));
-
-        $this->view->facebook_login_url = $facebook->getLoginUrl(array(
-            'redirect_uri' => URL . 'login/loginWithFacebook'
-        ));
+        // create a login model to perform the getFacebookLoginUrl() method
+        $login_model = $this->loadModel('Login');
+        // this is necessary as we need the facebook_login_url in the login form (in the view)
+        $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
 
         // show the view
         $this->view->render('login/index');
