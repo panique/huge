@@ -306,8 +306,8 @@ class LoginModel
     }
 
     /**
-     * Simply returns the current state of the user's login
-     * @return boolean user's login status
+     * Returns the current state of the user's login
+     * @return bool user's login status
      */
     public function isUserLoggedIn()
     {
