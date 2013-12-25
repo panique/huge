@@ -366,50 +366,52 @@ class LoginModel
 
     /**
      * Edit the user's email, provided in the editing form
+     * @return bool success status
      */
     public function editUserEmail()
     {
-        if (!empty($_POST['user_email'])) {
-            
-            // check if new email is same like the old one
-            if (!empty($_POST['user_email']) && $_POST['user_email'] == $_SESSION["user_email"]) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
-            } 
-            // user mail must be in email format
-            elseif (filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-                // check if user's email already exists
-                $sth = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
-                $sth->execute(array(':user_email' => $_POST['user_email']));
-
-                $count =  $sth->rowCount();
-                if ($count == 1) {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
-                } else {
-                    // cleaning
-                    $this->user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
-                    $this->user_email = substr($this->user_email, 0, 64);
-                    // write new email to database
-                    $sth = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id ;");
-                    $sth->execute(array(':user_email' => $this->user_email, ':user_id' => $_SESSION['user_id']));
-
-                    $count =  $sth->rowCount();
-                    // if successful
-                    if ($count == 1) {
-                        Session::set('user_email', $this->user_email);
-                        // call the setGravatarImageUrl() method which writes gravatar urls into the session
-                        $this->setGravatarImageUrl($this->user_email, AVATAR_SIZE);
-
-                        $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
-                    } else {
-                        $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
-                    }
-                }
-            } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
-            }
-        } elseif (!empty($_POST['user_email'])) {
+        // email provided ?
+        if (!isset($_POST['user_email']) OR empty($_POST['user_email'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            return false;
         }
+
+        // check if new email is same like the old one
+        if ($_POST['user_email'] == $_SESSION["user_email"]) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
+            return false;
+        }
+
+        // user's email must be in valid email format
+        if (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+            return false;
+        }
+
+        // check if user's email already exists
+        $query = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email");
+        $query->execute(array(':user_email' => $_POST['user_email']));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+            return false;
+        }
+
+        // cleaning and write new email to database
+        $user_email = substr(htmlentities($_POST['user_email'], ENT_QUOTES), 0, 64);
+        $query = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id");
+        $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
+        $count =  $query->rowCount();
+        if ($count != 1) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            return false;
+        }
+
+        Session::set('user_email', $user_email);
+        // call the setGravatarImageUrl() method which writes gravatar URLs into the session
+        $this->setGravatarImageUrl($user_email, AVATAR_SIZE);
+        $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
+        return false;
     } 
     
     /**
