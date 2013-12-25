@@ -203,58 +203,50 @@ class LoginModel
     }
 
     /**
+     * Tries to log the user in via Facebook-authentication
      * @return bool
      */
     public function loginWithFacebook()
     {
         // instantiate the facebook object
-        $facebook = new Facebook(array(
-            'appId'  => FACEBOOK_LOGIN_APP_ID,
-            'secret' => FACEBOOK_LOGIN_APP_SECRET,
-        ));
+        $facebook = new Facebook(array('appId' => FACEBOOK_LOGIN_APP_ID, 'secret' => FACEBOOK_LOGIN_APP_SECRET));
 
-        // get user id (string)
+        // get "user", if the user object (array?) exists, the user has identified as a real facebook user
         $user = $facebook->getUser();
-
-        // if the user object (array?) exists, the user has identified as a real facebook user
         if ($user) {
             try {
-                // Proceed knowing you have a logged in user who's authenticated.
+                // proceed knowing you have a logged in user who's authenticated.
                 $facebook_user_data = $facebook->api('/me');
 
                 // check database for data from exactly that user (identified via Facebook ID)
-                $sth = $this->db->prepare("SELECT user_id,
+                $query = $this->db->prepare("SELECT user_id,
                                               user_name,
                                               user_email,
                                               user_account_type,
                                               user_provider_type
-                                       FROM   users
-                                       WHERE  user_facebook_uid = :user_facebook_uid
-                                              AND user_provider_type = :provider_type");
-                $sth->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
-
-                $count =  $sth->rowCount();
-                if ($count == 1) {
-                    // fetch one row (we only have one result)
-                    // TODO: catch errors here
-                    $result = $sth->fetch();
-
-                    // put user data into session
-                    Session::init();
-                    Session::set('user_logged_in', true);
-                    Session::set('user_id', $result->user_id);
-                    Session::set('user_name', $result->user_name);
-                    Session::set('user_email', $result->user_email);
-                    Session::set('user_account_type', $result->user_account_type);
-                    Session::set('user_provider_type', 'FACEBOOK');
-                    Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-
-                    return true;
-                } else {
+                                           FROM users
+                                           WHERE user_facebook_uid = :user_facebook_uid
+                                             AND user_provider_type = :provider_type");
+                $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
+                $count =  $query->rowCount();
+                if ($count != 1) {
                     $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED;
+                    return false;
                 }
+
+                $result = $query->fetch();
+                // put user data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result->user_id);
+                Session::set('user_name', $result->user_name);
+                Session::set('user_email', $result->user_email);
+                Session::set('user_account_type', $result->user_account_type);
+                Session::set('user_provider_type', 'FACEBOOK');
+                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                return true;
+
             } catch (FacebookApiException $e) {
-                // TODO: handle the catch results, when something goes wrong with FB login
                 // when facebook goes offline
                 error_log($e);
                 $user = null;
