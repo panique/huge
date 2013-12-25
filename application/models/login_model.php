@@ -577,7 +577,7 @@ class LoginModel
         $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
-        $mail->Body = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL.'/'.urlencode($user_id).'/'.urlencode($user_activation_hash);
+        $mail->Body = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
 
         // final sending and check
         if($mail->Send()) {
@@ -585,10 +585,8 @@ class LoginModel
             return true;
         } else {
             $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+            return false;
         }
-
-        // default return
-        return false;
     }
     
     /**
