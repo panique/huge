@@ -84,7 +84,7 @@ class Login extends Controller
     /**
      * Login with cookie
      */
-    function loginwithcookie()
+    function loginWithCookie()
     {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
         $login_model = $this->loadModel('Login');
@@ -104,7 +104,7 @@ class Login extends Controller
     /**
      * Show user's profile
      */
-    function showprofile()
+    function showProfile()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();        
@@ -114,7 +114,7 @@ class Login extends Controller
     /**
      * Edit user name (show the view with the form)
      */
-    function editusername()
+    function editUsername()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();                
@@ -124,7 +124,7 @@ class Login extends Controller
     /**
      * Edit user name (perform the real action after form has been submitted)
      */
-    function editusername_action()
+    function editUsername_action()
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserName();
@@ -134,7 +134,7 @@ class Login extends Controller
     /**
      * Edit user email (show the view with the form)
      */
-    function edituseremail()
+    function editUserEmail()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();                
@@ -144,7 +144,7 @@ class Login extends Controller
     /**
      * Edit user email (perform the real action after form has been submitted)
      */
-    function edituseremail_action()
+    function editUserEmail_action()
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserEmail();
@@ -154,7 +154,7 @@ class Login extends Controller
     /**
      * Upload avatar
      */
-    function uploadavatar()
+    function uploadAvatar()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
@@ -166,7 +166,7 @@ class Login extends Controller
     /**
      *
      */
-    function uploadavatar_action()
+    function uploadAvatar_action()
     {
         $login_model = $this->loadModel('Login');
         $login_model->createAvatar();
@@ -176,7 +176,7 @@ class Login extends Controller
     /**
      *
      */
-    function changeaccounttype()
+    function changeAccountType()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
@@ -186,7 +186,7 @@ class Login extends Controller
     /**
      *
      */
-    function changeaccounttype_action()
+    function changeAccountType_action()
     {
         $login_model = $this->loadModel('Login');
         $login_model->changeAccountType();
@@ -328,7 +328,7 @@ class Login extends Controller
     /**
      * Request password reset page
      */
-    function requestpasswordreset()
+    function requestPasswordReset()
     {
         $this->view->render('login/requestpasswordreset');        
     }
@@ -336,7 +336,7 @@ class Login extends Controller
     /**
      * Request password reset action (after form submit)
      */
-    function requestpasswordreset_action()
+    function requestPasswordReset_action()
     {
         $login_model = $this->loadModel('Login');
         // set token (= a random hash string and a timestamp) into database
@@ -349,6 +349,7 @@ class Login extends Controller
     }
 
     /**
+     * Verify the verification token of that user
      * @param string $user_name
      * @param string $verification_code
      */
@@ -366,9 +367,9 @@ class Login extends Controller
     }
 
     /**
-     * Sets the new password
+     * Set the new password
      */
-    function setnewpassword()
+    function setNewPassword()
     {
         $login_model = $this->loadModel('Login');
 
@@ -380,7 +381,7 @@ class Login extends Controller
     }    
     
     /**
-     * Generates a captcha, write the characters into $_SESSION['captcha'] and returns a real image which will be used
+     * Generate a captcha, write the characters into $_SESSION['captcha'] and returns a real image which will be used
      * like this: <img src="......./login/showCaptcha" />
      * IMPORTANT: As this action is called via <img ...> AFTER the real application has finished executing (!), the
      * SESSION["captcha"] has no content when the application is loaded. The SESSION["captcha"] gets filled at the
