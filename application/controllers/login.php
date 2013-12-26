@@ -195,26 +195,13 @@ class Login extends Controller
 
     /**
      * Register page
-     * 1. Shows the register form
-     * 2. Shows the register-with-facebook button
+     * Show the register form (with the register-with-facebook button). We need the facebook-register-URL for that.
      */
     function register()
     {
-        // Create our Application instance (necessary to request Facebook data)
-        $facebook = new Facebook(array(
-            'appId'  => FACEBOOK_LOGIN_APP_ID,
-            'secret' => FACEBOOK_LOGIN_APP_SECRET,
-        ));
-
-        $redirect_url_after_facebook_auth = URL . 'login/registerwithfacebook';
-        // hard to explain, read the Facebook PHP SDK for more
-        // basically, when the user clicks the Facebook register button, the following arguments will be passed
-        // to Facebook: In this case a request for getting the email (not shown by default btw) and the URL
-        // when facebook will send the user after he/she has authenticated
-        $this->view->facebook_register_url = $facebook->getLoginUrl(array(
-            'scope' => 'email',
-            'redirect_uri' => $redirect_url_after_facebook_auth
-        ));
+        $login_model = $this->loadModel('Login');
+        // this is necessary as we need the facebook_register_url in the login form (in the view)
+        $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
 
         $this->view->render('login/register');
     }
@@ -239,78 +226,18 @@ class Login extends Controller
      */
     function registerWithFacebook()
     {
-        // TODO: put this into the model
+        $login_model = $this->loadModel('Login');
+        // perform the register method, put result (true or false) into $registration_successful
+        $registration_successful = $login_model->registerWithFacebook();
 
-        // instantiate the facebook object
-        $facebook = new Facebook(array(
-            'appId'  => FACEBOOK_LOGIN_APP_ID,
-            'secret' => FACEBOOK_LOGIN_APP_SECRET,
-        ));
-
-        // get user id (string)
-        $user = $facebook->getUser();
-
-        // if the user object (array?) exists, the user has identified as a real facebook user
-        if ($user) {
-            try {
-                // Proceed knowing you have a logged in user who's authenticated.
-                $facebook_user_data = $facebook->api('/me');
-            } catch (FacebookApiException $e) {
-                // TODO: handle the catch results, when something goes wrong with FB login
-                // when facebook goes offline
-                error_log($e);
-                $user = null;
-            }
+        // check registration status
+        if ($registration_successful) {
+            // if YES, then move user to login/index (this is a browser-redirection, not a rendered view)
+            header('location: ' . URL . 'login/index');
+        } else {
+            // if NO, then move user to login/register (this is a browser-redirection, not a rendered view)
+            header('location: ' . URL . 'login/register');
         }
-
-        // TODO: get rid of deep if-nesting!
-        // check if we got the user's data array (=$facebook_user_data)
-        if ($facebook_user_data) {
-            $login_model = $this->loadModel('Login');
-            // checken ob user email hat, ansonsten fehler ausgeben
-            if ($login_model->facebookUserHasEmail($facebook_user_data)) {
-                // checken ob uid schon vorhanden
-                if (!$login_model->facebookUserIdExistsAlreadyInDatabase($facebook_user_data)) {
-                    // TODO: implement possibility to let potential Facebook user choose another username ?
-                    // TODO: automatically rename username (auto-pattern, like adding numbers)
-                    // checken ob username schon vorhanden (ohne punkte)
-                    if (!$login_model->facebookUserNameExistsAlreadyInDatabase($facebook_user_data)) {
-                        // checken ob email vorhanden
-                        if (!$login_model->facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)) {
-                            // alle vorraussetzungen erfüllt, user kann angelegt werden
-                            if ($login_model->registerNewUserWithFacebook($facebook_user_data)) {
-
-                                // TODO: refactor!
-                                $_SESSION["feedback_positive"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
-                                $this->view->facebook_login_url = $facebook->getLoginUrl(array(
-                                    'redirect_uri' => URL . 'login/loginWithFacebook'
-                                ));
-
-                                $this->view->render('login/index');
-                                return true;
-
-                            } else {
-                                $_SESSION["feedback_negative"][] = "Unknown error while creating your account :(";
-                            }
-                        } else {
-                            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS;
-                        }
-                    } else {
-                        $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS;
-                    }
-                } else {
-                    // a user with that facebook user id (UID) has already registered here
-                    $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
-                }
-            } else {
-                // registration will only work when user agrees to provide email address
-                $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_NEEDED;
-            }
-        }
-
-
-        $this->view->render('login/registerwithfacebook');
-        return false;
     }
 
     /**

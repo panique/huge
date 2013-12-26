@@ -1104,6 +1104,104 @@ class LoginModel
     }
 
     /**
+     * Gets the URL where the "Register with Facebook"-button redirects the user to
+     * @return string The URL
+     */
+    public function getFacebookRegisterUrl()
+    {
+        // create our Application instance (necessary to request Facebook data)
+        $facebook = new Facebook(array('appId'  => FACEBOOK_LOGIN_APP_ID, 'secret' => FACEBOOK_LOGIN_APP_SECRET));
+
+        // build the URL where the user will be redirected to after being authenticated on the Facebook server
+        // Note: Facebook needs to know that URL, that's why we pass this
+        $redirect_url_after_facebook_auth = URL . FACEBOOK_REGISTER_PATH;
+
+        // hard to explain, read the Facebook PHP SDK for more information!
+        // basically, when the user clicks the Facebook register button, the following arguments will be passed
+        // to Facebook: In this case a request for getting the email (not shown by default btw) and the URL
+        // when facebook will send the user after he/she has authenticated
+        // "scope" => 'email' means that we need read-access to the user's "public" data plus his/her email address
+        // (not public by default)
+        $facebook_register_url = $facebook->getLoginUrl(array(
+            'scope' => 'email',
+            'redirect_uri' => $redirect_url_after_facebook_auth
+        ));
+
+        return $facebook_register_url;
+    }
+
+    /**
+     * This is the main method to handle the full facebook registration process
+     * @return bool The entire facebook registration's success status
+     */
+    public function registerWithFacebook()
+    {
+        // instantiate the facebook object
+        $facebook = new Facebook(array('appId'  => FACEBOOK_LOGIN_APP_ID, 'secret' => FACEBOOK_LOGIN_APP_SECRET));
+
+        // get user id (string)
+        $user = $facebook->getUser();
+
+        // if the user object (array?) exists, the user has identified as a real facebook user
+        if ($user) {
+            try {
+                // Proceed knowing you have a logged in user who's authenticated
+                $facebook_user_data = $facebook->api('/me');
+            } catch (FacebookApiException $e) {
+                // when facebook goes offline or armageddon comes or some shit like that
+                error_log($e);
+                $user = null;
+                $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_OFFLINE;
+                return false;
+            }
+        }
+
+        // if we don't have the facebook-user array variable, leave the method
+        if (!$facebook_user_data) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
+            return false;
+        }
+
+        // check if user provides mail address (registration will only work when user agrees to provide email address)
+        if (!$this->facebookUserHasEmail($facebook_user_data)) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_NEEDED;
+            return false;
+        }
+
+        // check if a user with that facebook user id (UID) has already registered
+        if ($this->facebookUserIdExistsAlreadyInDatabase($facebook_user_data)) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
+            return false;
+        }
+
+        // check if a user with that username already exists in our database
+        // note: Facebook's internal username is usually the person's full name plus a number (and dots between)
+        // TODO: if username is already taken, add number etc. to potential username and repeat this step
+        if ($this->facebookUserNameExistsAlreadyInDatabase($facebook_user_data)) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS;
+            return false;
+        }
+
+        // check if that email address already exists in our database
+        if ($this->facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS;
+            return false;
+        }
+
+        // all necessary things have been checked, so let's create that user
+        if ($this->registerNewUserWithFacebook($facebook_user_data)) {
+            $_SESSION["feedback_positive"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
+            return true;
+        } else {
+            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            return false;
+        }
+
+        // default return
+        return false;
+    }
+
+    /**
      * Register user with data from the "facebook object"
      * @param array $facebook_user_data stuff from the facebook class
      * @return bool success state
@@ -1128,20 +1226,9 @@ class LoginModel
                                          FROM   users
                                          WHERE  user_name = :user_name AND user_provider_type = :provider_type");
             $query->execute(array(':user_name' => $clean_user_name_from_facebook, ':provider_type' => 'FACEBOOK'));
-            $count = $query->rowCount();
-            if ($count == 1) {
-                // fetch one row (we have only one result)
-                $result = $query->fetch();
-                // put user data into session
-                Session::init();
-                Session::set('user_logged_in', true);
-                Session::set('user_id', $result->user_id);
-                Session::set('user_name', $result->user_name);
-                Session::set('user_email', $result->user_email);
-                Session::set('user_account_type', $result->user_account_type);
-                Session::set('user_provider_type', 'FACEBOOK');
-                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-
+            $count_from_select_statement = $query->rowCount();
+            if ($count_from_select_statement == 1) {
+                // registration successful
                 return true;
             }
         }

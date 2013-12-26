@@ -45,6 +45,7 @@ define('FACEBOOK_LOGIN', false);
 define('FACEBOOK_LOGIN_APP_ID', 'XXX');
 define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
 define('FACEBOOK_LOGIN_PATH', 'login/loginWithFacebook');
+define('FACEBOOK_REGISTER_PATH', 'login/registerWithFacebook');
 
 /**
  * Configuration for: Avatars/Gravatar support
@@ -261,3 +262,4 @@ define("FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS", "Sorry, but you have already regi
 define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook email exists in our database).");
 define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in our database).");
 define("FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL", "You have been successfully registered with Facebook.");
+define("FEEDBACK_FACEBOOK_OFFLINE", "We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).");
