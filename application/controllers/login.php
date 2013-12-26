@@ -206,7 +206,6 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         // this is necessary as we need the facebook_register_url in the login form (in the view)
         $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
-
         $this->view->render('login/register');
     }
 
@@ -219,14 +218,14 @@ class Login extends Controller
         $registration_successful = $login_model->registerNewUser();
 
         if ($registration_successful == true) {
-            $this->view->render('login/index');
+            header('location: ' . URL . 'login/index');
         } else {
-            $this->view->render('login/register');
+            header('location: ' . URL . 'login/register');
         }
     }
 
     /**
-     *
+     * Register a user via Facebook-authentication
      */
     function registerWithFacebook()
     {
@@ -245,14 +244,14 @@ class Login extends Controller
     }
 
     /**
-     * Verify user after activation mail sent
-     * @param int $user_id User's id
-     * @param string $user_verification_code User's verify hash token
+     * Verify user after activation mail link opened
+     * @param int $user_id user's id
+     * @param string $user_activation_verification_code sser's verification token
      */
-    function verify($user_id, $user_verification_code)
+    function verify($user_id, $user_activation_verification_code)
     {
         $login_model = $this->loadModel('Login');
-        $login_model->verifyNewUser($user_id, $user_verification_code);
+        $login_model->verifyNewUser($user_id, $user_activation_verification_code);
         $this->view->render('login/verify');
     }
 
@@ -270,30 +269,25 @@ class Login extends Controller
     function requestPasswordReset_action()
     {
         $login_model = $this->loadModel('Login');
-        // set token (= a random hash string and a timestamp) into database
-        // to see that THIS user really requested a password reset
-        if ($login_model->setPasswordResetDatabaseToken() == true) {
-            // send a mail to the user, containing a link with that token hash string
-            $login_model->sendPasswordResetMail();
-        }
+        $login_model->requestPasswordReset();
         $this->view->render('login/requestpasswordreset');        
     }
 
     /**
-     * Verify the verification token of that user
-     * @param string $user_name
-     * @param string $verification_code
+     * Verify the verification token of that user (to show the user the password editing view or not)
+     * @param string $user_name username
+     * @param string $verification_code password reset verification token
      */
     function verifyPasswordReset($user_name, $verification_code)
     {
         $login_model = $this->loadModel('Login');
-
         if ($login_model->verifyPasswordReset($user_name, $verification_code)) {
-            $this->view->user_name = $login_model->user_name;
-            $this->view->user_password_reset_hash = $login_model->user_password_reset_hash;
+            // get variables for the view
+            $this->view->user_name = $user_name;
+            $this->view->user_password_reset_hash = $verification_code;
             $this->view->render('login/changepassword');
         } else {
-            $this->view->render('login/verificationfailed');
+            header('location: ' . URL . 'login/index');
         }
     }
 
@@ -303,13 +297,12 @@ class Login extends Controller
     function setNewPassword()
     {
         $login_model = $this->loadModel('Login');
-
-        if ($login_model->setNewPassword()) {
-            $this->view->render('login/index');
-        } else {
-            $this->view->render('login/changepassword');
-        }
-    }    
+        // try the password reset (user identified via hidden form inputs ($user_name, $verification_code)), see
+        // verifyPasswordReset() for more
+        $login_model->setNewPassword();
+        // regardless of result: go to index page (user will get success/error result via feedback message)
+        header('location: ' . URL . 'login/index');
+    }
     
     /**
      * Generate a captcha, write the characters into $_SESSION['captcha'] and returns a real image which will be used
@@ -318,7 +311,7 @@ class Login extends Controller
      * SESSION["captcha"] has no content when the application is loaded. The SESSION["captcha"] gets filled at the
      * moment the end-user requests the <img .. >
      * If you don't know what this means: Don't worry, simply leave everything like it is ;)
-     */    
+     */
     function showCaptcha()
     {
         $login_model = $this->loadModel('Login');
