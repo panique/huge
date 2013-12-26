@@ -115,6 +115,8 @@ class OverviewModel
     {
         if ($user_has_avatar) {
             return URL . AVATAR_PATH . $user_id . '.jpg';
+        } else {
+            return URL . AVATAR_PATH . AVATAR_DEFAULT_IMAGE;
         }
         // default return
         return null;

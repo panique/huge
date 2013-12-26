@@ -662,7 +662,7 @@ class LoginModel
         if ($query->fetch()->user_has_avatar) {
             return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
         } else {
-            return URL . AVATAR_PATH . 'default' . '.jpg';
+            return URL . AVATAR_PATH . AVATAR_DEFAULT_IMAGE;
         }
     }
 
@@ -1042,9 +1042,9 @@ class LoginModel
                                         SET user_password_hash = :user_password_hash,
                                             user_password_reset_hash = NULL,
                                             user_password_reset_timestamp = NULL
-                                        WHERE user_name = :user_name
-                                          AND user_password_reset_hash = :user_password_reset_hash
-                                          AND user_provider_type = :user_provider_type");
+                                      WHERE user_name = :user_name
+                                        AND user_password_reset_hash = :user_password_reset_hash
+                                        AND user_provider_type = :user_provider_type");
 
         $query->execute(array(':user_password_hash' => $user_password_hash,
                               ':user_name' => $_POST['user_name'],

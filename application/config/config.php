@@ -52,10 +52,12 @@ define('FACEBOOK_REGISTER_PATH', 'login/registerWithFacebook');
  * Set to true if you want to use "Gravatar(s)", a service that automatically gets avatar pictures via using email
  * addresses of users by requesting images from the gravatar.com API. Set to false to use own locally saved avatars.
  * AVATAR_SIZE set the pixel size of avatars/gravatars (will be 44x44 by default). Avatars are always squares.
+ * AVATAR_DEFAULT_IMAGE is the default image in public/avatars/
  */
 define('USE_GRAVATAR', false);
 define('AVATAR_SIZE', 44);
 define('AVATAR_JPEG_QUALITY', 85);
+define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 
 /**
  * Configuration for: Cookies
