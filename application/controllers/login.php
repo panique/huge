@@ -92,12 +92,16 @@ class Login extends Controller
 
         if ($login_successful) {
             $location = $login_model->getCookieUrl();
-            header('location: ' . URL . $location);
+            if ($location) {
+                header('location: ' . URL . $location);
+            } else {
+                header('location: ' . URL . 'dashboard/index');
+            }
         } else {
             // delete the invalid cookie to prevent infinite login loops
             $login_model->deleteCookie();
-            // render login/index view
-            $this->view->render('login/index');
+            // if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
+            header('location: ' . URL . 'login/index');
         }
     }
 
