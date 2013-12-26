@@ -20,7 +20,7 @@ class LoginModel
 
     /**
      * Login process (for DEFAULT user accounts).
-     * Users who register/login with Facebook etc. are handled with loginWithFacebook()
+     * Users who login with Facebook etc. are handled with loginWithFacebook()
      * @return bool success state
      */
     public function login()
@@ -92,12 +92,19 @@ class LoginModel
 
             // reset the failed login counter for that user (if necessary)
             if ($result->user_last_failed_login > 0) {
-                $sql = "UPDATE users
-                        SET user_failed_logins = 0, user_last_failed_login = NULL
+                $sql = "UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL
                         WHERE user_id = :user_id AND user_failed_logins != 0";
                 $sth = $this->db->prepare($sql);
                 $sth->execute(array(':user_id' => $result->user_id));
             }
+
+            // generate integer-timestamp for saving of last-login date
+            $user_last_login_timestamp = time();
+            // write timestamp of this login into database (we only write "real" logins via login form into the
+            // database, not the session-login on every page request
+            $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id";
+            $sth = $this->db->prepare($sql);
+            $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
             // if user has checked the "remember me" checkbox, then write cookie
             if (isset($_POST['user_rememberme'])) {
@@ -188,9 +195,16 @@ class LoginModel
             Session::set('user_account_type', $result->user_account_type);
             Session::set('user_provider_type', 'DEFAULT');
             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-
             // call the setGravatarImageUrl() method which writes gravatar urls into the session
             $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
+
+            // generate integer-timestamp for saving of last-login date
+            $user_last_login_timestamp = time();
+            // write timestamp of this login into database (we only write "real" logins via login form into the
+            // database, not the session-login on every page request
+            $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id";
+            $sth = $this->db->prepare($sql);
+            $sth->execute(array(':user_id' => $user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
             // NOTE: we don't set another rememberme-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
@@ -245,6 +259,15 @@ class LoginModel
                 Session::set('user_account_type', $result->user_account_type);
                 Session::set('user_provider_type', 'FACEBOOK');
                 Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+
+                // generate integer-timestamp for saving of last-login date
+                $user_last_login_timestamp = time();
+                // write timestamp of this login into database (we only write "real" logins via login form into the
+                // database, not the session-login on every page request
+                $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id";
+                $sth = $this->db->prepare($sql);
+                $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
+
                 return true;
 
             } catch (FacebookApiException $e) {
@@ -476,14 +499,17 @@ class LoginModel
 
             // generate random hash for email verification (40 char string)
             $user_activation_hash = sha1(uniqid(mt_rand(), true));
+            // generate integer-timestamp for saving of account-creating date
+            $user_creation_timestamp = time();
 
             // write new users data into database
-            $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_activation_hash, :user_provider_type)";
+            $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
             $query = $this->db->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
                                   ':user_password_hash' => $user_password_hash,
                                   ':user_email' => $user_email,
+                                  ':user_creation_timestamp' => $user_creation_timestamp,
                                   ':user_activation_hash' => $user_activation_hash,
                                   ':user_provider_type' => 'DEFAULT'));
             $count =  $query->rowCount();
@@ -1241,12 +1267,15 @@ class LoginModel
     {
         // delete dots from facebook-username (it's the common way to do this like that)
         $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
+        // generate integer-timestamp for saving of account-creating date
+        $user_creation_timestamp = time();
 
-        $sql = "INSERT INTO users (user_name, user_email, user_active, user_provider_type, user_facebook_uid)
-                VALUES (:user_name, :user_email, :user_active, :user_provider_type, :user_facebook_uid)";
+        $sql = "INSERT INTO users (user_name, user_email, user_creation_timestamp, user_active, user_provider_type, user_facebook_uid)
+                VALUES (:user_name, :user_email, :user_creation_timestamp, :user_active, :user_provider_type, :user_facebook_uid)";
         $query = $this->db->prepare($sql);
         $query->execute(array(':user_name' => $clean_user_name_from_facebook,
                               ':user_email' => $facebook_user_data["email"],
+                              ':user_creation_timestamp' => $user_creation_timestamp,
                               ':user_active' => 1,
                               ':user_provider_type' => 'FACEBOOK',
                               ':user_facebook_uid' => $facebook_user_data["id"]));
