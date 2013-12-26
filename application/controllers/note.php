@@ -36,7 +36,11 @@ class Note extends Controller
      */
     public function create()
     {
-        if (isset($_POST['note_text'])) {
+        // optimal MVC structure handles POST data in the controller, not in the model.
+        // personally, I like POST-handling in the model much better (skinny controllers, fat models), so the login
+        // stuff handles POST in the model. in this note-controller/model, the POST data is intentionally handled
+        // in the controller, to show people how to do it "correctly". But I still think this is ugly.
+        if (isset($_POST['note_text']) AND !empty($_POST['note_text'])) {
             $note_model = $this->loadModel('Note');
             $note_model->create($_POST['note_text']);
         }
