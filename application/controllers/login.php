@@ -44,8 +44,8 @@ class Login extends Controller
             // if YES, then move user to dashboard/index (btw this is a browser-redirection, not a rendered view!)
             header('location: ' . URL . 'dashboard/index');
         } else {
-            // if NO, then show the login/index (login form) again
-            $this->view->render('login/index');
+            // if NO, then move user to login/index (login form) again
+            header('location: ' . URL . 'login/index');
         }
     }
 
