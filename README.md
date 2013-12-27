@@ -1,7 +1,7 @@
 php-login
 =========
 
-### A full-featured PHP login script built into a skeleton MVC application.
+### A PHP & MySQL login script built into a skeleton MVC application.
 
 This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
 This script here is the MVC framework version.
