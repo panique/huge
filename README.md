@@ -1,14 +1,16 @@
 php-login
 =========
 
-### A full-featured PHP login script built into a barebone MVC application.
+### A full-featured PHP login script built into a skeleton MVC application.
 
-This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases. This script here is the MVC framework version. 
+This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
+This script here is the MVC framework version.
 Find the official portal page of the project here: **[php-login.net](http://www.php-login.net)**.
 Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** or
 **[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
-**[Dev Metal](http://www.dev-metal.com)**. Ask questions in the **[Official Support Forum](http://109.75.177.79/forum/)**.
+**[Dev Metal](http://www.dev-metal.com)**.
+Ask questions in the **[Official Support Forum](http://109.75.177.79/forum/)**.
 
 
 ### MVC Framework Version 2.0 (this one here)
@@ -63,7 +65,7 @@ See a [live demonstration of this script](http://php-login.net/demo4.html) or [s
 * installed PHP extensions: PDO, gd (the tutorial shows how to do)
 * installed tools on your server: git, curl, openssl, composer (the tutorial shows how to do)
 * for professional mail sending: an SMTP account
-* actived mod_rewrite on your server (the tutorial shows how to do)
+* activated mod_rewrite on your server (the tutorial shows how to do)
 
 ## License
 
