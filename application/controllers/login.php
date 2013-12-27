@@ -22,8 +22,11 @@ class Login extends Controller
     {
         // create a login model to perform the getFacebookLoginUrl() method
         $login_model = $this->loadModel('Login');
-        // this is necessary as we need the facebook_login_url in the login form (in the view)
-        $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+
+        // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
+        if (FACEBOOK_LOGIN == true) {
+            $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+        }
 
         // show the view
         $this->view->render('login/index');
@@ -57,7 +60,6 @@ class Login extends Controller
     {
         // run the login() method in the login-model, put the result in $login_successful (true or false)
         $login_model = $this->loadModel('Login');
-        // perform the login method, put result (true or false) into $login_successful
         $login_successful = $login_model->loginWithFacebook();
 
         // check login status
@@ -204,8 +206,12 @@ class Login extends Controller
     function register()
     {
         $login_model = $this->loadModel('Login');
-        // this is necessary as we need the facebook_register_url in the login form (in the view)
-        $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
+
+        // if we use Facebook: this is necessary as we need the facebook_register_url in the login form (in the view)
+        if (FACEBOOK_LOGIN == true) {
+            $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
+        }
+
         $this->view->render('login/register');
     }
 
