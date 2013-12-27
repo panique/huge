@@ -79,10 +79,10 @@ Please commit only in *develop* branch. The *master* branch will always contain 
 
 If you think this script is useful and saves you a lot of work, then think about supporting the project:
 
-1. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
+1. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
+2. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
    or [GitTip](https://www.gittip.com/Panique/)
-2. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
-3. Contribute to this project. Feel free to improve this project with your skills.gets a massive makeover, all versions get their own repos. What you see is in-development.
+3. Contribute to this project.
 
 ## Themes / User Interfaces / Styles
 
@@ -119,7 +119,7 @@ You can find more in the project's [github wiki](https://github.com/panique/php-
 
 ## Thanks
 
-This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm/)**. Thanks to IntelliJ for giving php-login free licenses of this wonderful IDE.
+This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm/)**. A big "Thank You!" to IntelliJ for giving php-login free licenses of this wonderful IDE.
 
 ## Hire me
 
