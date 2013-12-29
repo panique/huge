@@ -128,7 +128,8 @@ For more, see [this StackOverflow question](http://stackoverflow.com/questions/2
 6. remove all files from the */var/www* (should only be Apache's index.html and your phpinfo()-containing .php right now) with `rm -r /var/www/*`,
 otherwise things will get messy and git won't download the repo into a non-empty folder
 7. copy the contents of the extracted php-login repository into /var/www ! In this tutorial we don't use a sub-folder,  so your index.php should go into /var/www !
-Best way to do is cloning via git: `git clone https://github.com/panique/php-login.git /var/www`
+Best way to do is cloning via git: `git clone https://github.com/panique/php-login.git /var/www` or by creating the
+project via Composer: `composer create-project panique/php-login /var/www dev-master`
 8. Make the repo's folder *public/avatars* writable via `chmod 775 /var/www/public/avatars` and check its rights with `stat /var/www/public/avatars`
 9. Run the three SQL statements in the *application/_installation/sql_statements* folder (the installation folder has an underscore in front of its name, but GitHub doesn't show this due to
 a bug in its README-parser), via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
