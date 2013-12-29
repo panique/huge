@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+** December 29th 2013
+- beta-release into master branch
+- added to packagist / Composer
+
 ** December 28th 2013
 - full installation guideline
 - much improved readme
