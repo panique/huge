@@ -117,10 +117,10 @@ a bug in its README-parser), via PHPMyAdmin (look at the files directly on https
 
 #### IN THE CODE:
 10. in *application/config/config.php*:
-11 enter your database credentials in DB_USER, DB_PASS etc.
-12 enter your project URL into URL
-13 edit COOKIE_DOMAIN to the above URL
-14 in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
+11. enter your database credentials in DB_USER, DB_PASS etc.
+12. enter your project URL into URL
+13. edit COOKIE_DOMAIN to the above URL
+14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
 For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
 15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
@@ -134,16 +134,17 @@ If your app is in the root of your web folder, then delete this line or comment 
 Voila! You app should now run fine.
 
 #### To use the (optional) Facebook login
-14. Go to https://developers.facebook.com/apps/ and create a new app.
-14.1. The type needs to be "Website with Facebook-authentication"
-14.2. In "App Domains" put the URL of your project, like example.com ! For local development "localhost" works.
-Things like "127.0.0.1" don't seem work.
-14.3. In sandbox mode, select "deactivated"
-14.4. In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
+
+Go to https://developers.facebook.com/apps/ and create a new app.
+The type needs to be "Website with Facebook-authentication".
+In "App Domains" put the URL of your project, like example.com ! For local development "localhost" works.
+Things like "127.0.0.1" don't seem work. In sandbox mode, select "deactivated".
+In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
 "http://localhost/" works. Things like "http://127.0.0.1" don't seem work.
-14.5. Can you see your facebook app id and the secret token now ? Perfect!
-14.6. Set `FACEBOOK_LOGIN` in application/config/config.php to  true
-15.7. Put your facebook app id and the secret token in FACEBOOK_LOGIN_APP_ID and FACEBOOK_LOGIN_APP_SECRET
+Can you see your facebook app id and the secret token now ? Perfect!
+
+Set `FACEBOOK_LOGIN` in *application/config/config.php* to `true` and put your Facebook app id and the secret token
+in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
 
 ## Useful links
 
