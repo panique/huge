@@ -105,6 +105,9 @@ the project starts in early 2014.
 
 ## Installation
 
+You can find a more detailed version of this guideline in this blog post tutorial:
+[How to install php-login.net’s php-login script (MVC version) on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/).
+
 This installation guideline uses Ubuntu 12.04 LTS (as it is the standard and by far the most long-term supported
 mainstream server OS (supported until 2017). For more, see the
 [Wikipedia page of Ubuntu versions](http://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Table_of_versions).
