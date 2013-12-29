@@ -13,7 +13,7 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 Ask questions in the **[Official Support Forum](http://109.75.177.79/forum/)**.
 
 
-### MVC Framework Version 2.0 (this one here)
+### MVC Framework Version 2.0-beta (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * users can register and login via Facebook (official Facebook PHP SDK used)
@@ -105,7 +105,7 @@ the project starts in early 2014.
 
 ## Installation
 
-You can find a more detailed version of this guideline in this blog post tutorial: TODO ! 
+You can find a more detailed version of this guideline in this blog post tutorial: TODO !
 [How to install php-login.net’s php-login script (MVC version) on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/).
 
 This installation guideline uses Ubuntu 12.04 LTS (as it is the standard and by far the most long-term supported
