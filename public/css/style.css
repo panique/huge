@@ -1,0 +1,423 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #fff;
+    font-family: Arial;
+    font-size: 14px;
+    color: #000;
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2, h3 {
+    margin-bottom: 40px;
+}
+
+p {
+    margin-bottom: 10px;
+    line-height: 22px;
+}
+
+/* TODO: this should be part of the real header */
+.title-box {
+    font-size: 25px; 
+    padding: 15px; 
+    background-color: #1e2029; 
+    color: #fff; 
+    font-weight: 700;
+}
+
+.title-box a {
+    color: #fff; 
+    text-decoration: none;
+}
+
+.header {
+    background-color: #42444f;
+    /*margin:20px 10px 0 10px;*/
+    margin: 0;
+    color: #acadb1;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.header_left_box {
+    float: left;
+}
+
+.header_right_box {
+    float: right;
+}
+
+.header a {
+    text-decoration: none;
+    
+}
+
+.header li.active a,
+.header li.active:hover a {
+    color: #fff;
+    background-color: #2c2f3b;
+}
+
+.header li:hover a {
+    color: #fff;
+    /*background-color: #1c2428;*/
+}
+
+.content {
+    /*background-color: #fcfcfd;*/
+    /*
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    */
+    padding: 45px 35px;
+    /*margin:0 10px;*/
+    margin: 0;
+    min-height: 250px;
+}
+
+.content a {
+    text-decoration: underline;
+    color: #2C2F3B;
+}
+
+.footer {
+    background-color: #42444f;
+    color: #acadb1;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 30px 35px;    
+    /*margin:0 10px 20px 10px;*/
+    margin: 0;
+}
+
+
+h1 {
+    font-size: 40px;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 25px;
+    margin-top: 0;
+}
+
+table td {
+    padding: 10px;
+}
+
+.feedback {
+    border: 1px solid black;
+    color: black;
+    padding: 20px;
+    font-size: 16px;
+    margin-bottom: 35px;
+}
+.feedback.error {
+    border: 1px solid red;
+    color: red;
+}
+.feedback.success {
+    border: 1px solid green;
+    color: green;
+}
+
+/*Initialize*/
+ul#menu, ul#menu ul.sub-menu {
+    padding:0;
+    margin: 0;
+}
+
+ul#menu {
+    /*margin-left: 30px;*/
+}
+
+ul#menu li, ul#menu ul.sub-menu li {
+    list-style-type: none;
+    display: inline-block;
+}
+
+/* http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+ul#menu li {
+    margin-left: -4px;
+}
+ul#menu li:first-of-type {
+    margin-left: 0;
+}
+
+ul#menu ul.sub-menu {
+    /*
+    padding-top: 12px;
+    padding-bottom: 12px;
+    */
+    padding-bottom: 5px;
+}
+
+ul#menu ul.sub-menu li {
+    margin-left: 0;
+}
+
+/*Link Appearance*/
+ul#menu li a {
+    /*background: transparent;*/
+    color: #acadb1;
+    text-decoration: none;
+    padding: 15px;    
+    font-weight: bolder;
+}
+
+ul#menu li a, ul#menu li ul.sub-menu li a {
+    text-decoration: none;
+    /*color: #000;*/
+    /*background: #eee;*/
+    /*padding: 5px;*/
+    display:inline-block;
+    white-space: nowrap; /* prevents line breaks */    
+}
+/*
+ul#menu li.active a ul.sub-menu li {
+    background-color: #2c2f3b;
+    color: #fff;
+}
+ul#menu li.active a ul.sub-menu li a {
+    color: #fff;    
+}
+*/
+ul#menu li a:hover {
+    /*background-color: #1c2428;*/
+    color: #fff;
+}
+
+ul#menu li.active a {
+    color: #fff;    
+}
+ul#menu li.active ul a {
+    color: #acadb1;
+}
+
+
+ul#menu li ul.sub-menu li a:hover {
+    /*background-color: #999;*/
+    color: #fff;
+}
+
+/*Make the parent of sub-menu relative*/
+ul#menu li {
+    position: relative;
+}
+/*sub menu*/
+ul#menu li ul.sub-menu {
+    display:none;
+    position: absolute;
+    top: 44px; /* dirty! */
+    left: 0;
+    /*width: 150px;*/
+    background-color: #42444f;
+}
+
+ul#menu li.active ul.sub-menu {
+    background-color: #2c2f3b;
+}
+
+ul#menu li ul.sub-menu li a {
+    padding: 10px 15px;        
+    font-size: 12px;
+}
+
+
+ul#menu li:hover ul.sub-menu {
+    display:block;
+    
+}
+
+.header .namebox {
+    float: right;
+    background-color: #1e2029;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    height: 100%;
+    line-height: 44px;
+    padding: 0 30px;
+    text-decoration: none;
+}
+
+.header .avatar {
+    float: left;
+    width: 44px;
+    height: 44px;    
+}
+
+/* input boxes */
+/* html5 reset. this is necessary to properly align input fields in html5 */
+input, select, textarea {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    line-height: 20px;
+}
+
+input {
+    display: block;
+    margin-bottom: 15px;
+    min-width: 200px;
+    padding: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    border: 1px solid #ddd;
+    color: #555;
+    font-weight: bold;
+    /*padding: 10px;    */
+    
+    /*
+    border: 0;
+    background-color: #eaedf2;
+    color: #777;
+    font-weight: bold;
+    padding: 15px;
+    */
+}
+
+input[type="submit"] {
+    border: 0;
+    background-color: #2C2F3B;
+    color: #fff;
+    font-weight: bold;
+    /*padding: 10px;*/
+    cursor: pointer;
+}
+.remember-me-checkbox {
+    float: left; min-width: 0; margin: 3px 10px 15px 0;
+}
+.remember-me-label {
+    float:left; min-width: 0; font-size: 12px; color: #888;
+}
+.login-submit-button {
+    float: none; clear: both;
+}
+
+.login-form-password-pattern-reminder {
+    display: block;
+    /*width: 200px;*/
+    color: #999;
+    font-size: 11px;
+    
+}
+
+.login-default-box,
+.login-facebook-box {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+}
+
+a.facebook-login-button,
+a.facebook-register-button {
+    background-color: #3b5998;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 15px 20px;
+    border-radius: 4px;
+}
+
+a.facebook-login-button:hover,
+a.facebook-register-button:hover {
+    background-color: #2f477a;
+}
+
+.register-default-box,
+.register-facebook-box {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+}
+
+/* general */
+.clear-both {
+    clear: both;
+}
+
+
+/* overview pages */
+table.overview-table tr.inactive {
+    opacity: 0.3;
+}
+
+table.overview-table td {
+    padding: 6px 10px;
+    /*border: 1px solid #ccc;*/
+    vertical-align: middle;
+}
+table.overview-table td.avatar {
+    padding: 0 !important;
+}
+
+/* debug helper */
+.debug-helper-box {
+    position: fixed;
+    bottom: 20px;
+    right: 0;
+    padding: 20px;
+    color: #fff;
+    background-color: red;
+    font-weight: bold;
+}
+
+
+/* basic responsive stuff */
+@media only screen and (max-width:800px) {
+    
+    .header_left_box,
+    .header .avatar {
+        float: none;
+    }
+    
+    .header_right_box {
+        width: 100%;
+        background-color: #1E2029;
+    }
+    
+    ul#menu li {
+        width: 100%;
+        text-align: center;
+        margin-left: 0; /* reset -4px hack */
+    }
+    
+    ul#menu li a {
+        display: block;
+    }
+    
+    ul#menu li ul.sub-menu {
+        display: block;
+        position: relative;
+        top: 0;
+    }    
+    
+    ul#menu li ul.sub-menu li {
+        font-size: 12px;
+        background-color: #4a4c55;
+    }
+    ul#menu li.active ul.sub-menu li {
+        background-color: #2C2F3B;
+    }
+    
+    ul#menu ul.sub-menu {
+        padding-bottom: 0;
+    }
+    
+}
