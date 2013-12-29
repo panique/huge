@@ -169,6 +169,11 @@ Can you see your facebook app id and the secret token now ? Perfect!
 Set `FACEBOOK_LOGIN` in *application/config/config.php* to `true` and put your Facebook app id and the secret token
 in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
 
+## If you like the project's folder/file structure ...
+
+... then have a look into the partner project PHP-MVC on http://www.php-mvc.net and https://github.com/panique/php-mvc.
+A super-reduced and naked bare-bone application.
+
 ## Useful links
 
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
