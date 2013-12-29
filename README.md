@@ -62,9 +62,9 @@ See a [live demonstration of this script](http://php-login.net/demo4.html) or [s
 
 * **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * **MySQL 5** database (better use versions 5.5+ as very old versions have a [PDO injection bug](http://stackoverflow.com/q/134099/1114320)
-* installed PHP extensions: PDO, gd (the tutorial shows how to do)
-* installed tools on your server: git, curl, openssl, composer (the tutorial shows how to do)
-* for professional mail sending: an SMTP account
+* installed PHP extensions: pdo, gd, openssl (the tutorial shows how to do)
+* installed tools on your server: git, curl, composer (the tutorial shows how to do)
+* for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=panique))
 * activated mod_rewrite on your server (the tutorial shows how to do)
 
 ## License
@@ -92,18 +92,57 @@ the project starts in early 2014.
 
 ## Installation
 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
+This installation guideline uses Ubuntu 12.04 LTS (as it is the standard and by far the most long-term supported
+mainstream server OS (supported until 2017). For more, see the
+[Wikipedia page of Ubuntu versions](http://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Table_of_versions).
 
+When developing in a Vagrant box: please note that it's quite difficult to identify a Vagrant box to Facebook's App API,
+so currently there's no guideline on how to use the Facebook login-feature when using a LOCAL Vagrant box.
+For more, see [this StackOverflow question](http://stackoverflow.com/questions/20615924/how-to-run-a-facebook-app-on-an-ip-domain-works-localhost-works-ip-does-not).
+
+#### ON YOUR SERVER (we use Ubuntu 12.04 LTS here):
+1. install Apache, MySQL, PHP and eventually PHPMyAdmin: [How to setup a basic LAMP stack on Ubuntu 12.04](http://www.dev-metal.com/setup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-12-04/)
+2. install mod_rewrite and activate it: [How to enable mod_rewrite in Ubuntu 12.04 LTS](http://www.dev-metal.com/enable-mod_rewrite-ubuntu-12-04-lts/)
+3. install Composer: [How to install Composer on Ubuntu](http://www.dev-metal.com/install-update-composer-windows-7-ubuntu-debian-centos/)
+4. install GD (PHP graphic processing tools for the Captcha): `sudo apt-get install php5-gd`, restart Apache `sudo service apache2 restart`
+5. install OpenSSL (to send mails): `sudo apt-get install openssl`, restart Apache `sudo service apache2 restart`
+6. remove all files from the */var/www* (should only be Apache's index.html and your phpinfo()-containing .php right now) with `rm -r /var/www/*`,
+otherwise things will get messy and git won't download the repo into a non-empty folder
+7. copy the contents of the extracted php-login repository into /var/www ! In this tutorial we don't use a sub-folder,  so your index.php should go into /var/www !
+Best way to do is cloning via git: `git clone https://github.com/panique/php-login.git /var/www`
+8. Make the repo's folder *public/avatars* writable via `chmod 775 /var/www/public/avatars` and check its rights with `stat /var/www/public/avatars`
+9. Run the three SQL statements in the *application/_installation/sql_statements* folder,
+via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
+
+#### IN THE CODE:
+10. in *application/config/config.php*:
+10.1 enter your database credentials in DB_USER, DB_PASS etc.
+10.2 enter your project URL into URL
+10.3 edit COOKIE_DOMAIN to the above URL
+10.4 in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
+You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
+For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
+11. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
+reply-mail-adress etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc. in application/config/config.php
+12. change the RewriteBase in *.htaccess* ! When using the script within a sub-folder, put this path here, like */mysubfolder/* !
+If your app is in the root of your web folder, then delete this line or comment it out.
+
+#### COMPOSER:
+13. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do "composer install" on the command line
+
+Voila! You app should now run fine.
+
+#### To use the (optional) Facebook login
+14. Go to https://developers.facebook.com/apps/ and create a new app.
+14.1. The type needs to be "Website with Facebook-authentication"
+14.2. In "App Domains" put the URL of your project, like example.com ! For local development "localhost" works.
+Things like "127.0.0.1" don't seem work.
+14.3. In sandbox mode, select "deactivated"
+14.4. In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
+"http://localhost/" works. Things like "http://127.0.0.1" don't seem work.
+14.5. Can you see your facebook app id and the secret token now ? Perfect!
+14.6. Set `FACEBOOK_LOGIN` in application/config/config.php to  true
+15.7. Put your facebook app id and the secret token in FACEBOOK_LOGIN_APP_ID and FACEBOOK_LOGIN_APP_SECRET
 
 ## Useful links
 
