@@ -146,9 +146,9 @@ Change the RewriteBase: when using the script within a sub-folder, put this path
 If your app is in the root of your web folder, then delete this line or comment it out.
 
 #### RUN COMPOSER:
-17. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do "composer install" on the command line
+17. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do `composer install` on the command line
 
-Voila! You app should now run fine.
+**Voila!** You app should now run fine.
 
 #### To use the (optional) Facebook login
 
