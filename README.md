@@ -138,15 +138,15 @@ In *application/config/config.php*:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
 For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
 15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
-reply-mail-adress etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc. in application/config/config.php
+reply-mail-address etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc.
 
 In *.htaccess*:
 
-Change the RewriteBase: when using the script within a sub-folder, put this path here, like */mysubfolder/* !
+1. Change the RewriteBase: when using the script within a sub-folder, put this path here, like */mysubfolder/* !
 If your app is in the root of your web folder, then delete this line or comment it out.
 
 #### RUN COMPOSER:
-17. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do `composer install` on the command line
+1. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do `composer install` on the command line
 
 **Voila!** You app should now run fine.
 
