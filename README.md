@@ -116,7 +116,9 @@ Best way to do is cloning via git: `git clone https://github.com/panique/php-log
 a bug in its README-parser), via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
 
 #### IN THE CODE:
-10. in *application/config/config.php*:
+
+In *application/config/config.php*:
+
 11. enter your database credentials in DB_USER, DB_PASS etc.
 12. enter your project URL into URL
 13. edit COOKIE_DOMAIN to the above URL
@@ -125,7 +127,10 @@ You cannot simply send emails with PHP's mail() function, this does not really w
 For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
 15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
 reply-mail-adress etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc. in application/config/config.php
-16. change the RewriteBase in *.htaccess* ! When using the script within a sub-folder, put this path here, like */mysubfolder/* !
+
+In *.htaccess*:
+
+Change the RewriteBase: when using the script within a sub-folder, put this path here, like */mysubfolder/* !
 If your app is in the root of your web folder, then delete this line or comment it out.
 
 #### COMPOSER:
