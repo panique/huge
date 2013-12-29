@@ -54,6 +54,18 @@ Register, login, logout, email verification, password reset, edit user data, gra
 remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
 login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
+## What's new ?
+
+- professional file/folder structure
+- Composer
+- Facebook login/registration
+- mostly implemented the "always return something" rule, with default return
+- if/else nesting as flat as possible
+- implemented dependency injected database connection (we open just one connection, use it for all models)
+- multiple models allowed per controller
+- everything is "as manual as possible"
+- massive refactoring
+
 ## Live Demo (TODO)
 
 See a [live demonstration of the 1.0 version of this script](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://109.75.177.79:80/).
@@ -115,7 +127,7 @@ Best way to do is cloning via git: `git clone https://github.com/panique/php-log
 9. Run the three SQL statements in the *application/_installation/sql_statements* folder (the installation folder has an underscore in front of its name, but GitHub doesn't show this due to
 a bug in its README-parser), via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
 
-#### IN THE CODE:
+#### CONFIGS IN THE CODE:
 
 In *application/config/config.php*:
 
@@ -133,7 +145,7 @@ In *.htaccess*:
 Change the RewriteBase: when using the script within a sub-folder, put this path here, like */mysubfolder/* !
 If your app is in the root of your web folder, then delete this line or comment it out.
 
-#### COMPOSER:
+#### RUN COMPOSER:
 17. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do "composer install" on the command line
 
 Voila! You app should now run fine.
@@ -162,6 +174,29 @@ in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
 
 You can find more in the project's [github wiki](https://github.com/panique/php-login/wiki).
+
+## How the facebook login process works
+
+https://github.com/facebook/facebook-php-sdk
+https://developers.facebook.com/docs/facebook-login/checklist
+https://developers.facebook.com/docs/user_registration/flows/
+
+## Used packages (via composer)
+
+PHPMailer
+https://packagist.org/packages/phpmailer/phpmailer
+
+PHP password compatibility library
+https://packagist.org/packages/ircmaxell/password-compat
+
+Facebook SDK
+https://packagist.org/packages/facebook/php-sdk
+
+Gregwar's Captcha
+https://packagist.org/packages/gregwar/captcha
+
+Kint (a better var_dump)
+https://packagist.org/packages/raveren/kint
 
 ## Thanks
 
