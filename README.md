@@ -178,7 +178,9 @@ You can find more in the project's [github wiki](https://github.com/panique/php-
 ## How the facebook login process works
 
 https://github.com/facebook/facebook-php-sdk
+
 https://developers.facebook.com/docs/facebook-login/checklist
+
 https://developers.facebook.com/docs/user_registration/flows/
 
 ## Used packages (via composer)
