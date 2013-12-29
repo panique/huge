@@ -181,6 +181,11 @@ in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
 
 You can find more in the project's [github wiki](https://github.com/panique/php-login/wiki).
 
+#### If you like the folder/file structure
+
+Then have a look into the partner project PHP-MVC on http://www.php-mvc.net and https://github.com/panique/php-mvc.
+A super-reduced and naked bare-bone application.
+
 ## How the facebook login process works
 
 https://github.com/facebook/facebook-php-sdk
