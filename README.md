@@ -1,6 +1,10 @@
 php-login
 =========
 
+*Welcome to the NEW 2.0 version of the php-login! All 4 scripts have their own repos now and "php-login" is the new home
+of the former 4-full-mvc-framework version. What you see is a beta, please test it out like hell, the official release
+will be in the first weeks of January. Thanks for your support, nearly 800 stars and 300 forks! ;) Have a great 2014!*
+
 ### A PHP & MySQL login script built into a skeleton MVC application
 
 This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
@@ -11,7 +15,6 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
 **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://109.75.177.79/forum/)**.
-
 
 ### MVC Framework Version 2.0-beta (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
