@@ -1,7 +1,7 @@
 php-login
 =========
 
-### A PHP & MySQL login script built into a skeleton MVC application.
+### A PHP & MySQL login script built into a skeleton MVC application
 
 This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
 This script here is the MVC framework version.
@@ -54,9 +54,10 @@ Register, login, logout, email verification, password reset, edit user data, gra
 remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
 login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
-## Live Demo
+## Live Demo (TODO)
 
-See a [live demonstration of this script](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://109.75.177.79:80/).
+See a [live demonstration of the 1.0 version of this script](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://109.75.177.79:80/).
+THIS here is the 2.0 version, which introduces new features, fixes and login via Facebook. A live demo of this version is planned for the next days.
 
 ## Requirements
 
@@ -101,34 +102,34 @@ so currently there's no guideline on how to use the Facebook login-feature when 
 For more, see [this StackOverflow question](http://stackoverflow.com/questions/20615924/how-to-run-a-facebook-app-on-an-ip-domain-works-localhost-works-ip-does-not).
 
 #### ON YOUR SERVER (we use Ubuntu 12.04 LTS here):
-1. install Apache, MySQL, PHP and eventually PHPMyAdmin: [How to setup a basic LAMP stack on Ubuntu 12.04](http://www.dev-metal.com/setup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-12-04/)
+1. install Apache, MySQL, PHP and eventually PHPMyAdmin: [How to setup a LAMP stack on Ubuntu 12.04](http://www.dev-metal.com/setup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-12-04/)
 2. install mod_rewrite and activate it: [How to enable mod_rewrite in Ubuntu 12.04 LTS](http://www.dev-metal.com/enable-mod_rewrite-ubuntu-12-04-lts/)
 3. install Composer: [How to install Composer on Ubuntu](http://www.dev-metal.com/install-update-composer-windows-7-ubuntu-debian-centos/)
-4. install GD (PHP graphic processing tools for the Captcha): `sudo apt-get install php5-gd`, restart Apache `sudo service apache2 restart`
+4. install GD (for the Captcha): `sudo apt-get install php5-gd`, restart Apache `sudo service apache2 restart`
 5. install OpenSSL (to send mails): `sudo apt-get install openssl`, restart Apache `sudo service apache2 restart`
 6. remove all files from the */var/www* (should only be Apache's index.html and your phpinfo()-containing .php right now) with `rm -r /var/www/*`,
 otherwise things will get messy and git won't download the repo into a non-empty folder
 7. copy the contents of the extracted php-login repository into /var/www ! In this tutorial we don't use a sub-folder,  so your index.php should go into /var/www !
 Best way to do is cloning via git: `git clone https://github.com/panique/php-login.git /var/www`
 8. Make the repo's folder *public/avatars* writable via `chmod 775 /var/www/public/avatars` and check its rights with `stat /var/www/public/avatars`
-9. Run the three SQL statements in the *application/_installation/sql_statements* folder,
-via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
+9. Run the three SQL statements in the *application/_installation/sql_statements* folder (the installation folder has an underscore in front of its name, but GitHub doesn't show this due to
+a bug in its README-parser), via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
 
 #### IN THE CODE:
 10. in *application/config/config.php*:
-10.1 enter your database credentials in DB_USER, DB_PASS etc.
-10.2 enter your project URL into URL
-10.3 edit COOKIE_DOMAIN to the above URL
-10.4 in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
+11 enter your database credentials in DB_USER, DB_PASS etc.
+12 enter your project URL into URL
+13 edit COOKIE_DOMAIN to the above URL
+14 in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
 For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
-11. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
+15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
 reply-mail-adress etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc. in application/config/config.php
-12. change the RewriteBase in *.htaccess* ! When using the script within a sub-folder, put this path here, like */mysubfolder/* !
+16. change the RewriteBase in *.htaccess* ! When using the script within a sub-folder, put this path here, like */mysubfolder/* !
 If your app is in the root of your web folder, then delete this line or comment it out.
 
 #### COMPOSER:
-13. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do "composer install" on the command line
+17. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do "composer install" on the command line
 
 Voila! You app should now run fine.
 
