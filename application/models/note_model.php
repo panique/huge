@@ -23,8 +23,8 @@ class NoteModel
     public function getAllNotes()
     {
         $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id";
-		$query = $this->db->prepare($sql);
-		$query->execute(array(':user_id' => $_SESSION['user_id']));
+        $query = $this->db->prepare($sql);
+        $query->execute(array(':user_id' => $_SESSION['user_id']));
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();

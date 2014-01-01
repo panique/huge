@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS -->
     <link rel="stylesheet" href="<?php echo URL; ?>public/css/reset.css" />
-	<link rel="stylesheet" href="<?php echo URL; ?>public/css/style.css" />
+    <link rel="stylesheet" href="<?php echo URL; ?>public/css/style.css" />
     <!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-	<script type="text/javascript" src="<?php echo URL; ?>public/js/application.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="<?php echo URL; ?>public/js/application.js"></script>
 </head>
 <body>
 
@@ -37,7 +37,7 @@
             </li>            
             <?php if (Session::get('user_logged_in') == true):?>
             <li <?php if ($this->checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
-                <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>	
+                <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>    
             </li>   
             <?php endif; ?>                    
             <?php if (Session::get('user_logged_in') == true):?>
