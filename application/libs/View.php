@@ -39,7 +39,7 @@ class View
         Session::set('feedback_positive', null);
         Session::set('feedback_negative', null);
     }
-    
+
     /**
      * Checks if the passed string is the currently active controller.
      * Useful for handling the navigation's active/non-active link.
@@ -51,7 +51,7 @@ class View
     {
         $split_filename = explode("/", $filename);
         $active_controller = $split_filename[0];
-        
+
         if ($active_controller == $navigation_controller) {
             return true;
         }
@@ -70,7 +70,7 @@ class View
     {
         $split_filename = explode("/", $filename);
         $active_action = $split_filename[1];
-        
+
         if ($active_action == $navigation_action) {
             return true;
         }
@@ -90,11 +90,11 @@ class View
         $split_filename = explode("/", $filename);
         $active_controller = $split_filename[0];
         $active_action = $split_filename[1];
-        
+
         $split_filename = explode("/", $navigation_controller_and_action);
         $navigation_controller = $split_filename[0];
         $navigation_action = $split_filename[1];
-        
+
         if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
             return true;
         }

@@ -113,7 +113,7 @@ class Login extends Controller
     function showProfile()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
-        Auth::handleLogin();        
+        Auth::handleLogin();
         $this->view->render('login/showprofile');
     }
 
@@ -123,7 +123,7 @@ class Login extends Controller
     function editUsername()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
-        Auth::handleLogin();                
+        Auth::handleLogin();
         $this->view->render('login/editusername');
     }
 
@@ -143,7 +143,7 @@ class Login extends Controller
     function editUserEmail()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
-        Auth::handleLogin();                
+        Auth::handleLogin();
         $this->view->render('login/edituseremail');
     }
 
@@ -166,7 +166,7 @@ class Login extends Controller
         Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $this->view->avatar_file_path = $login_model->getUserAvatarFilePath();
-        $this->view->render('login/uploadavatar');        
+        $this->view->render('login/uploadavatar');
     }
 
     /**
@@ -196,7 +196,7 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->changeAccountType();
-        $this->view->render('login/changeaccounttype');          
+        $this->view->render('login/changeaccounttype');
     }
 
     /**
@@ -266,7 +266,7 @@ class Login extends Controller
      */
     function requestPasswordReset()
     {
-        $this->view->render('login/requestpasswordreset');        
+        $this->view->render('login/requestpasswordreset');
     }
 
     /**
@@ -276,7 +276,7 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->requestPasswordReset();
-        $this->view->render('login/requestpasswordreset');        
+        $this->view->render('login/requestpasswordreset');
     }
 
     /**
@@ -309,7 +309,7 @@ class Login extends Controller
         // regardless of result: go to index page (user will get success/error result via feedback message)
         header('location: ' . URL . 'login/index');
     }
-    
+
     /**
      * Generate a captcha, write the characters into $_SESSION['captcha'] and returns a real image which will be used
      * like this: <img src="......./login/showCaptcha" />

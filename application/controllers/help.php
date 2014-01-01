@@ -19,6 +19,6 @@ class Help extends Controller
      */
     function index()
     {
-        $this->view->render('help/index');    
+        $this->view->render('help/index');
     }
 }
