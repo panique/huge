@@ -3,7 +3,7 @@
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
-    
+
     <p>
         This box (everything between header and footer) is the content of views/index/index.php,
         so it's the index/index view.

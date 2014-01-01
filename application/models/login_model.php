@@ -295,7 +295,7 @@ class LoginModel
         }
         return $url;
     }
-    
+
     /**
      * Log out process, deletes cookie, deletes session
      */
@@ -305,7 +305,7 @@ class LoginModel
         // that's obviously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 3650), '/');
-        
+
         // delete the session
         Session::destroy();
     }
@@ -328,8 +328,8 @@ class LoginModel
     public function isUserLoggedIn()
     {
         return Session::get('user_logged_in');
-    }        
-        
+    }
+
     /**
      * Edit the user's name, provided in the editing form
      * @return bool success status
@@ -427,8 +427,8 @@ class LoginModel
         $this->setGravatarImageUrl($user_email, AVATAR_SIZE);
         $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
         return false;
-    } 
-    
+    }
+
     /**
      * handles the entire registration process for DEFAULT users (not for people who register with
      * 3rd party services, like facebook) and creates a new user in the database if everything is fine
@@ -467,7 +467,7 @@ class LoginModel
             AND !empty($_POST['user_password_new'])
             AND !empty($_POST['user_password_repeat'])
             AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
-            
+
             // clean the input
             $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
             $user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
@@ -564,18 +564,18 @@ class LoginModel
             // useful for debugging, shows full SMTP errors, config this in config/config.php
             $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
             // enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // enable encryption, usually SSL/TLS
             if (defined(EMAIL_SMTP_ENCRYPTION)) {
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // set SMTP provider's credentials
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->Username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
             $mail->Port = EMAIL_SMTP_PORT;
         } else {
-            $mail->IsMail();            
+            $mail->IsMail();
         }
 
         // fill mail with data
@@ -594,7 +594,7 @@ class LoginModel
             return false;
         }
     }
-    
+
     /**
      * checks the email/verification code combination and set the user's activation status to true in the database
      * @param int $user_id user id
@@ -645,11 +645,11 @@ class LoginModel
             $image_url_with_tag .= ' ' . $key . '="' . $val . '"';
         }
         $image_url_with_tag .= ' />';
- 
+
         // the image url like above but with an additional <img src .. /> around, write to session
         Session::set('user_gravatar_image_tag', $image_url_with_tag);
     }
-    
+
     /**
      * Gets the user's avatar file path
      * @return string avatar picture path
@@ -710,7 +710,7 @@ class LoginModel
             return false;
         }
     }
-    
+
     /**
      * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
      * Originally written by:
@@ -871,7 +871,7 @@ class LoginModel
         // default return
         return false;
     }
-    
+
     /**
      * Set password reset token in database (for DEFAULT user accounts)
      * @param string $user_name username
@@ -919,18 +919,18 @@ class LoginModel
             //useful for debugging, shows full SMTP errors, config this in config/config.php
             $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
             // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->Username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
             $mail->Port = EMAIL_SMTP_PORT;
         } else {
-            $mail->IsMail();            
+            $mail->IsMail();
         }
 
         // build the email
@@ -1096,10 +1096,10 @@ class LoginModel
             // ...
             // ... myWhateverProcess();
             // ...
-            
+
             $query = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
             $query->execute(array(':user_id' => $_SESSION["user_id"]));
-            
+
             if ($query->rowCount() == 1) {
                 // set account type in session to 1
                 Session::set('user_account_type', 1);
