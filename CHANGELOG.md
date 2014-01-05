@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**January 4th 2014**
+- fixed mod_rewrite issue when having a controller named index (which makes route problems)
+
 **December 30th 2013**
 - fixed case-sensitive model file loading
 - changed ChangeLog layout

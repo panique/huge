@@ -3,7 +3,7 @@
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
-    
+
     <p>
         This box (everything between header and footer) is the content of views/help/index.php,
         so it's the help/index view. It's rendered by the index-method within the help-controller

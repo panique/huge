@@ -23,8 +23,8 @@ class NoteModel
     public function getAllNotes()
     {
         $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id";
-		$query = $this->db->prepare($sql);
-		$query->execute(array(':user_id' => $_SESSION['user_id']));
+        $query = $this->db->prepare($sql);
+        $query->execute(array(':user_id' => $_SESSION['user_id']));
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();
@@ -58,7 +58,7 @@ class NoteModel
         $sql = "INSERT INTO notes (note_text, user_id) VALUES (:note_text, :user_id)";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
-        
+
         $count =  $query->rowCount();
         if ($count == 1) {
             return true;
@@ -83,7 +83,7 @@ class NoteModel
         $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
-        
+
         $count =  $query->rowCount();
         if ($count == 1) {
             return true;
@@ -104,9 +104,9 @@ class NoteModel
         $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_id' => $note_id, ':user_id' => $_SESSION['user_id']));
-        
+
         $count =  $query->rowCount();
-        
+
         if ($count == 1) {
             return true;
         } else {
