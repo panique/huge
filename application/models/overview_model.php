@@ -24,7 +24,7 @@ class OverviewModel
     {
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
         $sth->execute();
-        
+
         $all_users_profiles = array();
 
         foreach ($sth->fetchAll() as $user) {
@@ -34,7 +34,7 @@ class OverviewModel
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
-            
+
             if (USE_GRAVATAR) {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
                     $this->getGravatarLinkFromEmail($user->user_email);
@@ -42,12 +42,12 @@ class OverviewModel
                 $all_users_profiles[$user->user_id]->user_avatar_link =
                     $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
-            
+
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
         }
         return $all_users_profiles;
     }
-    
+
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
@@ -59,7 +59,7 @@ class OverviewModel
                 FROM users WHERE user_id = :user_id";
         $sth = $this->db->prepare($sql);
         $sth->execute(array(':user_id' => $user_id));
-        
+
         $user = $sth->fetch();
         $count =  $sth->rowCount();
 

@@ -72,7 +72,7 @@ class Note extends Controller
             $note_model = $this->loadModel('Note');
             $note_model->editSave($note_id, $_POST['note_text']);
         }
-        header('location: ' . URL . 'note');        
+        header('location: ' . URL . 'note');
     }
 
     /**

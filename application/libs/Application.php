@@ -16,7 +16,7 @@ class Application
     private $url_parameter_2;
     /** @var null Parameter three of the URL */
     private $url_parameter_3;
-    
+
     /**
      * Starts the Application
      * Takes the parts of the URL and loads the according controller & method and passes the parameter arguments to it

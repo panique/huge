@@ -23,15 +23,15 @@ p {
 
 /* TODO: this should be part of the real header */
 .title-box {
-    font-size: 25px; 
-    padding: 15px; 
-    background-color: #1e2029; 
-    color: #fff; 
+    font-size: 25px;
+    padding: 15px;
+    background-color: #1e2029;
+    color: #fff;
     font-weight: 700;
 }
 
 .title-box a {
-    color: #fff; 
+    color: #fff;
     text-decoration: none;
 }
 
@@ -55,7 +55,7 @@ p {
 
 .header a {
     text-decoration: none;
-    
+
 }
 
 .header li.active a,
@@ -91,7 +91,7 @@ p {
     color: #acadb1;
     font-size: 15px;
     font-weight: bold;
-    padding: 30px 35px;    
+    padding: 30px 35px;
     /*margin:0 10px 20px 10px;*/
     margin: 0;
 }
@@ -167,7 +167,7 @@ ul#menu li a {
     /*background: transparent;*/
     color: #acadb1;
     text-decoration: none;
-    padding: 15px;    
+    padding: 15px;
     font-weight: bolder;
 }
 
@@ -177,7 +177,7 @@ ul#menu li a, ul#menu li ul.sub-menu li a {
     /*background: #eee;*/
     /*padding: 5px;*/
     display:inline-block;
-    white-space: nowrap; /* prevents line breaks */    
+    white-space: nowrap; /* prevents line breaks */
 }
 /*
 ul#menu li.active a ul.sub-menu li {
@@ -185,7 +185,7 @@ ul#menu li.active a ul.sub-menu li {
     color: #fff;
 }
 ul#menu li.active a ul.sub-menu li a {
-    color: #fff;    
+    color: #fff;
 }
 */
 ul#menu li a:hover {
@@ -194,7 +194,7 @@ ul#menu li a:hover {
 }
 
 ul#menu li.active a {
-    color: #fff;    
+    color: #fff;
 }
 ul#menu li.active ul a {
     color: #acadb1;
@@ -225,14 +225,14 @@ ul#menu li.active ul.sub-menu {
 }
 
 ul#menu li ul.sub-menu li a {
-    padding: 10px 15px;        
+    padding: 10px 15px;
     font-size: 12px;
 }
 
 
 ul#menu li:hover ul.sub-menu {
     display:block;
-    
+
 }
 
 .header .namebox {
@@ -250,7 +250,7 @@ ul#menu li:hover ul.sub-menu {
 .header .avatar {
     float: left;
     width: 44px;
-    height: 44px;    
+    height: 44px;
 }
 
 /* input boxes */
@@ -281,7 +281,7 @@ input[type="password"] {
     color: #555;
     font-weight: bold;
     /*padding: 10px;    */
-    
+
     /*
     border: 0;
     background-color: #eaedf2;
@@ -314,7 +314,7 @@ input[type="submit"] {
     /*width: 200px;*/
     color: #999;
     font-size: 11px;
-    
+
 }
 
 .login-default-box,
@@ -381,33 +381,33 @@ table.overview-table td.avatar {
 
 /* basic responsive stuff */
 @media only screen and (max-width:800px) {
-    
+
     .header_left_box,
     .header .avatar {
         float: none;
     }
-    
+
     .header_right_box {
         width: 100%;
         background-color: #1E2029;
     }
-    
+
     ul#menu li {
         width: 100%;
         text-align: center;
         margin-left: 0; /* reset -4px hack */
     }
-    
+
     ul#menu li a {
         display: block;
     }
-    
+
     ul#menu li ul.sub-menu {
         display: block;
         position: relative;
         top: 0;
-    }    
-    
+    }
+
     ul#menu li ul.sub-menu li {
         font-size: 12px;
         background-color: #4a4c55;
@@ -415,9 +415,9 @@ table.overview-table td.avatar {
     ul#menu li.active ul.sub-menu li {
         background-color: #2C2F3B;
     }
-    
+
     ul#menu ul.sub-menu {
         padding-bottom: 0;
     }
-    
+
 }

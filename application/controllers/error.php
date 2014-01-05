@@ -10,16 +10,16 @@ class Error extends Controller
     /**
      * Construct this object by extending the basic Controller class
      */
-	function __construct()
+    function __construct()
     {
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
     /**
      * This method controls what happens / what the user sees when an error happens (404)
      */
-	function index()
+    function index()
     {
-		$this->view->render('error/index');
-	}
+        $this->view->render('error/index');
+    }
 }
