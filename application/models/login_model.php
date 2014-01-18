@@ -691,7 +691,7 @@ class LoginModel
             return false;
         }
         // if input file too small
-        if ($image_proportions[0] < 100 OR $image_proportions[1] < 100) {
+        if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
             $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
             return false;
         }
