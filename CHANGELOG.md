@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**January 18th 2014**
+- better avatar size check (issue #344), thanks to Yacine-krk for the fix
+
 **January 4th 2014**
 - fixed mod_rewrite issue when having a controller named index (which makes route problems)
 
