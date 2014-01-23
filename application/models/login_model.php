@@ -1080,12 +1080,14 @@ class LoginModel
             // ...
 
             // upgrade account type
-            $query = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
+            //$query = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id");
+            $query = $this->db->prepare("UPDATE users SET user_account_type=user_account_type+1 WHERE user_id = :user_id");
             $query->execute(array(':user_id' => $_SESSION["user_id"]));
 
             if ($query->rowCount() == 1) {
                 // set account type in session to 2
-                Session::set('user_account_type', 2);
+                //Session::set('user_account_type', 2);
+                Session::set('user_account_type', (Session::get('user_account_type')+1));
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
             } else {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
@@ -1097,12 +1099,14 @@ class LoginModel
             // ... myWhateverProcess();
             // ...
 
-            $query = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
+            //$query = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id");
+            $query = $this->db->prepare("UPDATE users SET user_account_type=user_account_type-1 WHERE user_id = :user_id");
             $query->execute(array(':user_id' => $_SESSION["user_id"]));
 
             if ($query->rowCount() == 1) {
                 // set account type in session to 1
-                Session::set('user_account_type', 1);
+                //Session::set('user_account_type', 1);
+                Session::set('user_account_type', (Session::get('user_account_type')+1));
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
             } else {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
