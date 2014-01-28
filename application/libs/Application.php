@@ -4,8 +4,7 @@
  * Class Application
  * The heart of the app
  */
-class Application
-{
+class Application {
     /** @var null The controller part of the URL */
     private $url_controller;
     /** @var null The method part (of the above controller) of the URL */
@@ -29,7 +28,8 @@ class Application
 
         // write URL cookie
         $this->writeUrlCookie(array(
-            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3
+            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2,
+            $this->url_parameter_3
         ));
 
         // check for controller: is the url_controller NOT empty ?
@@ -46,7 +46,8 @@ class Application
                     if ($this->checkValidMethod()) {
                         // call the method and pass the arguments to it
                         if (isset($this->url_parameter_3)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
+                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2,
+                                $this->url_parameter_3);
                         } elseif (isset($this->url_parameter_2)) {
                             $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2);
                         } elseif (isset($this->url_parameter_1)) {
@@ -122,21 +123,22 @@ class Application
      * Checks if the to call method exists and the number of params
      * available matches the required number for the specified method
      */
-    private function checkValidMethod() {
-    	if(!method_exists($this->url_controller, $this->url_action)) {
-    		return false;
-    	}
-    	
-    	$reflection = new \ReflectionMethod($this->url_controller, $this->url_action);
-			
-			$num = 0;
-			$num = isset($this->url_parameter_1) ? 1 : $num;
-			$num = isset($this->url_parameter_2) ? 2 : $num;
-			$num = isset($this->url_parameter_3) ? 3 : $num;
-			
-    	if($num < $reflection->getNumberOfRequiredParameters()) {
-    		return false;
-    	}
-    	return true;
+    private function checkValidMethod()
+    {
+        if (!method_exists($this->url_controller, $this->url_action)) {
+            return false;
+        }
+
+        $reflection = new \ReflectionMethod($this->url_controller, $this->url_action);
+
+        $num = 0;
+        $num = isset($this->url_parameter_1) ? 1 : $num;
+        $num = isset($this->url_parameter_2) ? 2 : $num;
+        $num = isset($this->url_parameter_3) ? 3 : $num;
+
+        if ($num < $reflection->getNumberOfRequiredParameters()) {
+            return false;
+        }
+        return true;
     }
 }
