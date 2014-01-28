@@ -46,9 +46,11 @@ class Login extends Controller
         if ($login_successful) {
             // if YES, then move user to dashboard/index (btw this is a browser-redirection, not a rendered view!)
             header('location: ' . URL . 'dashboard/index');
+            die();
         } else {
             // if NO, then move user to login/index (login form) again
             header('location: ' . URL . 'login/index');
+            die();
         }
     }
 
@@ -66,9 +68,11 @@ class Login extends Controller
         if ($login_successful) {
             // if YES, then move user to dashboard/index (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'dashboard/index');
+            die();
         } else {
             // if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'login/index');
+            die();
         }
     }
 
@@ -81,6 +85,7 @@ class Login extends Controller
         $login_model->logout();
         // redirect user to base URL
         header('location: ' . URL);
+        die();
     }
 
     /**
@@ -96,14 +101,17 @@ class Login extends Controller
             $location = $login_model->getCookieUrl();
             if ($location) {
                 header('location: ' . URL . $location);
+                die();
             } else {
                 header('location: ' . URL . 'dashboard/index');
+                die();
             }
         } else {
             // delete the invalid cookie to prevent infinite login loops
             $login_model->deleteCookie();
             // if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'login/index');
+            die();
         }
     }
 
@@ -225,8 +233,10 @@ class Login extends Controller
 
         if ($registration_successful == true) {
             header('location: ' . URL . 'login/index');
+            die();
         } else {
             header('location: ' . URL . 'login/register');
+            die();
         }
     }
 
@@ -243,9 +253,11 @@ class Login extends Controller
         if ($registration_successful) {
             // if YES, then move user to login/index (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'login/index');
+            die();
         } else {
             // if NO, then move user to login/register (this is a browser-redirection, not a rendered view)
             header('location: ' . URL . 'login/register');
+            die();
         }
     }
 
@@ -294,6 +306,7 @@ class Login extends Controller
             $this->view->render('login/changepassword');
         } else {
             header('location: ' . URL . 'login/index');
+            die();
         }
     }
 
@@ -308,6 +321,7 @@ class Login extends Controller
         $login_model->setNewPassword();
         // regardless of result: go to index page (user will get success/error result via feedback message)
         header('location: ' . URL . 'login/index');
+        die();
     }
 
     /**
