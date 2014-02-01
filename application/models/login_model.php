@@ -1386,7 +1386,6 @@ class LoginModel
     	do {
             $n = $n+1;
             $new_username = $existing_name . $n;
-
             $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :name_with_number");
             $query->execute(array(':name_with_number' => $new_username));
     	 	 
