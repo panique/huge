@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**February 1st 2014**
+- when facebook-provided username already exists, a new one will be created, thanks to atdotslashdot for the feature
+
 **January 18th 2014**
 - better avatar size check (issue #344), thanks to Yacine-krk for the fix
 
