@@ -355,7 +355,7 @@ class LoginModel
         }
 
         // clean the input
-        $user_name = substr(htmlentities($_POST['user_name'], ENT_QUOTES), 0, 64);
+        $user_name = substr(strip_tags($_POST['user_name']), 0, 64);
 
         // check if new username already exists
         $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
@@ -413,7 +413,7 @@ class LoginModel
         }
 
         // cleaning and write new email to database
-        $user_email = substr(htmlentities($_POST['user_email'], ENT_QUOTES), 0, 64);
+        $user_email = substr(strip_tags($_POST['user_email']), 0, 64);
         $query = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id");
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
@@ -469,8 +469,8 @@ class LoginModel
             AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
 
             // clean the input
-            $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
-            $user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+            $user_name = strip_tags($_POST['user_name']);
+            $user_email = strip_tags($_POST['user_email']);
 
             // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character
             // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4,
@@ -845,7 +845,7 @@ class LoginModel
         // generate random hash for email password reset verification (40 char string)
         $user_password_reset_hash = sha1(uniqid(mt_rand(), true));
         // clean user input
-        $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
+        $user_name = strip_tags($_POST['user_name']);
 
         // check if that username exists
         $query = $this->db->prepare("SELECT user_id, user_email FROM users
