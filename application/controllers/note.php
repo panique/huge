@@ -45,7 +45,6 @@ class Note extends Controller
             $note_model->create($_POST['note_text']);
         }
         header('location: ' . URL . 'note');
-        die();
     }
 
     /**
@@ -74,7 +73,6 @@ class Note extends Controller
             $note_model->editSave($note_id, $_POST['note_text']);
         }
         header('location: ' . URL . 'note');
-        die();
     }
 
     /**
@@ -88,6 +86,5 @@ class Note extends Controller
         $note_model = $this->loadModel('Note');
         $note_model->delete($note_id);
         header('location: ' . URL . 'note');
-        die();
     }
 }
