@@ -4,7 +4,8 @@
  * Class Application
  * The heart of the app
  */
-class Application {
+class Application
+{
     /** @var null The controller part of the URL */
     private $url_controller;
     /** @var null The method part (of the above controller) of the URL */
