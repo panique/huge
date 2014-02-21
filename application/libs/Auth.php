@@ -17,6 +17,7 @@ class Auth
         if (!isset($_SESSION['user_logged_in'])) {
             Session::destroy();
             header('location: ' . URL . 'login');
+            die();
         }
     }
 }

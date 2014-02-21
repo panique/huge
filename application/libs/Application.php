@@ -29,7 +29,8 @@ class Application
 
         // write URL cookie
         $this->writeUrlCookie(array(
-            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3
+            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2,
+            $this->url_parameter_3
         ));
 
         // check for controller: is the url_controller NOT empty ?
@@ -43,11 +44,11 @@ class Application
 
                 // check for method: does such a method exist in the controller ?
                 if ($this->url_action) {
-                    if (method_exists($this->url_controller, $this->url_action)) {
-
+                    if ($this->checkValidMethod()) {
                         // call the method and pass the arguments to it
                         if (isset($this->url_parameter_3)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
+                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2,
+                                $this->url_parameter_3);
                         } elseif (isset($this->url_parameter_2)) {
                             $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2);
                         } elseif (isset($this->url_parameter_1)) {
@@ -59,6 +60,7 @@ class Application
                     } else {
                         // redirect user to error page (there's a controller for that)
                         header('location: ' . URL . 'error/index');
+                        die();
                     }
                 } else {
                     // default/fallback: call the index() method of a selected controller
@@ -68,6 +70,7 @@ class Application
             } else {
                 // redirect user to error page (there's a controller for that)
                 header('location: ' . URL . 'error/index');
+                die();
             }
         // if url_controller is empty, simply show the main page (index/index)
         } else {
@@ -115,5 +118,28 @@ class Application
         }
         // set the cookie
         setcookie('lastvisitedpage', $url, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+    }
+    
+    /**
+     * Checks if the to call method exists and the number of params
+     * available matches the required number for the specified method
+     */
+    private function checkValidMethod()
+    {
+        if (!method_exists($this->url_controller, $this->url_action)) {
+            return false;
+        }
+
+        $reflection = new \ReflectionMethod($this->url_controller, $this->url_action);
+
+        $num = 0;
+        $num = isset($this->url_parameter_1) ? 1 : $num;
+        $num = isset($this->url_parameter_2) ? 2 : $num;
+        $num = isset($this->url_parameter_3) ? 3 : $num;
+
+        if ($num < $reflection->getNumberOfRequiredParameters()) {
+            return false;
+        }
+        return true;
     }
 }
