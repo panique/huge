@@ -80,7 +80,7 @@ THIS here is the 2.0 version, which introduces new features, fixes and login via
 * **MySQL 5** database (better use versions 5.5+ as very old versions have a [PDO injection bug](http://stackoverflow.com/q/134099/1114320)
 * installed PHP extensions: pdo, gd, openssl (the tutorial shows how to do)
 * installed tools on your server: git, curl, composer (the tutorial shows how to do)
-* for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=panique))
+* for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the tutorial shows how to do)
 
 ## License
@@ -141,7 +141,7 @@ In *application/config/config.php*:
 11. enter your database credentials in DB_USER, DB_PASS etc.
 12. enter your project URL into URL
 13. edit COOKIE_DOMAIN to the above URL
-14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=panique))). Please remember:
+14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))). Please remember:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
 For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
 15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,

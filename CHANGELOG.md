@@ -1,5 +1,15 @@
 # CHANGE LOG
 
+**February 22th 2014**
+- fixed #364 (Cookie deletion bug)
+
+**February 1st 2014**
+- when facebook-provided username already exists, a new one will be created, thanks to atdotslashdot for the feature
+- cleaning of input is now strip_tags, not htmlentities() #341
+
+**January 18th 2014**
+- better avatar size check (issue #344), thanks to Yacine-krk for the fix
+
 **January 4th 2014**
 - fixed mod_rewrite issue when having a controller named index (which makes route problems)
 
