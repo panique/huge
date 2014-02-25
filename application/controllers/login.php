@@ -93,12 +93,7 @@ class Login extends Controller
         $login_successful = $login_model->loginWithCookie();
 
         if ($login_successful) {
-            $location = $login_model->getCookieUrl();
-            if ($location) {
-                header('location: ' . URL . $location);
-            } else {
-                header('location: ' . URL . 'dashboard/index');
-            }
+            header('location: ' . URL . 'dashboard/index');
         } else {
             // delete the invalid cookie to prevent infinite login loops
             $login_model->deleteCookie();

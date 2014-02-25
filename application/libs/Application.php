@@ -27,11 +27,6 @@ class Application
     {
         $this->splitUrl();
 
-        // write URL cookie
-        $this->writeUrlCookie(array(
-            $this->url_controller, $this->url_action, $this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3
-        ));
-
         // check for controller: is the url_controller NOT empty ?
         if ($this->url_controller) {
             // check for controller: does such a controller exist ?
@@ -99,21 +94,5 @@ class Application
             $this->url_parameter_2 = (isset($url[3]) ? $url[3] : null);
             $this->url_parameter_3 = (isset($url[4]) ? $url[4] : null);
         }
-    }
-
-    /**
-     * EXPERIMENTAL!
-     * write a cookie that says where exactly the user currently is
-     * (to help finding your last location after coming back to the page)
-     */
-    private function writeUrlCookie($url_array)
-    {
-        if (count($url_array) > 0) {
-            $url = implode("/", $url_array);
-        } else {
-            $url = "index";
-        }
-        // set the cookie
-        setcookie('lastvisitedpage', $url, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
     }
 }

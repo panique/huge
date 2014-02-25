@@ -69,7 +69,7 @@ login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or
 - everything is "as manual as possible"
 - massive refactoring
 
-## Live Demo (TODO)
+## Live Demo
 
 See a [live demonstration of the 1.0 version of this script](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://109.75.177.79:80/).
 THIS here is the 2.0 version, which introduces new features, fixes and login via Facebook. A live demo of this version is planned for the next days.
@@ -139,7 +139,7 @@ a bug in its README-parser), via PHPMyAdmin (look at the files directly on https
 In *application/config/config.php*:
 
 11. enter your database credentials in DB_USER, DB_PASS etc.
-12. enter your project URL into URL
+12. enter your project URL into URL, don't forget the trailing slash!
 13. edit COOKIE_DOMAIN to the above URL
 14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))). Please remember:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
@@ -159,16 +159,17 @@ If your app is in the root of your web folder, then delete this line or comment 
 
 #### To use the (optional) Facebook login
 
-Go to https://developers.facebook.com/apps/ and create a new app.
-The type needs to be "Website with Facebook-authentication".
-In "App Domains" put the URL of your project, like example.com ! For local development "localhost" works.
-Things like "127.0.0.1" don't seem work. In sandbox mode, select "deactivated".
-In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
-"http://localhost/" works. Things like "http://127.0.0.1" don't seem work.
-Can you see your facebook app id and the secret token now ? Perfect!
+Note: Facebook changes the look, the UI and the way the Facebook App pages work permanently. But you'll find out what's
+meant. Go to https://developers.facebook.com/apps/ and create a new app.
+Go to "preferences" or whatever it is called, enter your email adress, leave "App Domain" empty, click on "Add platform"
+and put your URL in "Site URL" (completely with "http://www."), save. For local development "localhost" works.
+Things like "127.0.0.1" don't seem work. In earlier version of Facebook's App API you needed to set "sandbox mode" to
+"deactivated", now... well... I don't know, they have removed the button but the app still says "in development mode".
 
 Set `FACEBOOK_LOGIN` in *application/config/config.php* to `true` and put your Facebook app id and the secret token
 in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
+
+You should see the Facebook login / register buttons on the login / register page of your php-login app now.
 
 ## Useful links
 

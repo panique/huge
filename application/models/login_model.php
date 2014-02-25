@@ -281,22 +281,6 @@ class LoginModel
     }
 
     /**
-     * Gets the last page the user visited
-     * writeUrlCookie() in libs/Application.php writes the URL of the user's page location into the cookie at every
-     * page request. This is useful to redirect the user (after login via cookie) back to the last seen page before
-     * his/her session expired or he/she closed the browser
-     * @return string view/location the user visited
-     */
-    public function getCookieUrl()
-    {
-        $url = '';
-        if (!empty($_COOKIE['lastvisitedpage'])) {
-            $url = $_COOKIE['lastvisitedpage'];
-        }
-        return $url;
-    }
-
-    /**
      * Log out process, deletes cookie, deletes session
      */
     public function logout()
@@ -304,7 +288,7 @@ class LoginModel
         // set the remember-me-cookie to ten years ago (3600sec * 365 days * 10).
         // that's obviously the best practice to kill a cookie via php
         // @see http://stackoverflow.com/a/686166/1114320
-        setcookie('rememberme', false, time() - (3600 * 3650), '/');
+        setcookie('rememberme', false, time() - (3600 * 3650), '/', COOKIE_DOMAIN);
 
         // delete the session
         Session::destroy();
