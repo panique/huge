@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+**February 25th 2014**
+- fixed the broken logout (guys, check your commits!), introduced with last commit
+- removed the last-visited-page feature
+
 **February 22th 2014**
 - fixed #364 (Cookie deletion bug)
 

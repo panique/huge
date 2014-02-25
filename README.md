@@ -160,18 +160,16 @@ If your app is in the root of your web folder, then delete this line or comment 
 #### To use the (optional) Facebook login
 
 Note: Facebook changes the look, the UI and the way the Facebook App pages work permanently. But you'll find out what's
-meant.
-
-Go to https://developers.facebook.com/apps/ and create a new app.
-The type needs to be "Website with Facebook-authentication".
-In "App Domains" put the URL of your project, like example.com (WITHOUT "http://www." !) ! For local development "localhost" works.
-Things like "127.0.0.1" don't seem work. In sandbox mode, select "deactivated".
-In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
-"http://localhost/" works. Things like "http://127.0.0.1" don't seem work.
-Can you see your facebook app id and the secret token now ? Perfect!
+meant. Go to https://developers.facebook.com/apps/ and create a new app.
+Go to "preferences" or whatever it is called, enter your email adress, leave "App Domain" empty, click on "Add platform"
+and put your URL in "Site URL" (completely with "http://www."), save. For local development "localhost" works.
+Things like "127.0.0.1" don't seem work. In earlier version of Facebook's App API you needed to set "sandbox mode" to
+"deactivated", now... well... I don't know, they have removed the button but the app still says "in development mode".
 
 Set `FACEBOOK_LOGIN` in *application/config/config.php* to `true` and put your Facebook app id and the secret token
 in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
+
+You should see the Facebook login / register buttons on the login / register page of your php-login app now.
 
 ## Useful links
 
