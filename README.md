@@ -69,7 +69,7 @@ login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or
 - everything is "as manual as possible"
 - massive refactoring
 
-## Live Demo (TODO)
+## Live Demo
 
 See a [live demonstration of the 1.0 version of this script](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://109.75.177.79:80/).
 THIS here is the 2.0 version, which introduces new features, fixes and login via Facebook. A live demo of this version is planned for the next days.
