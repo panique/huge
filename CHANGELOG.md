@@ -4,6 +4,7 @@
 - fixed the broken logout (guys, check your commits!), introduced with last commit
 - removed the last-visited-page feature
 - quick fix for avatar size in .css
+- added new links to new 2.0 live demo
 
 **February 22th 2014**
 - fixed #364 (Cookie deletion bug)
