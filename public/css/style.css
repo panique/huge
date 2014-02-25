@@ -421,3 +421,9 @@ table.overview-table td.avatar {
     }
 
 }
+
+/* quick fix */
+.avatar img {
+    width: 44px;
+    height: 44px;
+}
