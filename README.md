@@ -139,7 +139,7 @@ a bug in its README-parser), via PHPMyAdmin (look at the files directly on https
 In *application/config/config.php*:
 
 11. enter your database credentials in DB_USER, DB_PASS etc.
-12. enter your project URL into URL
+12. enter your project URL into URL, don't forget the trailing slash!
 13. edit COOKIE_DOMAIN to the above URL
 14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))). Please remember:
 You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
@@ -159,9 +159,12 @@ If your app is in the root of your web folder, then delete this line or comment 
 
 #### To use the (optional) Facebook login
 
+Note: Facebook changes the look, the UI and the way the Facebook App pages work permanently. But you'll find out what's
+meant.
+
 Go to https://developers.facebook.com/apps/ and create a new app.
 The type needs to be "Website with Facebook-authentication".
-In "App Domains" put the URL of your project, like example.com ! For local development "localhost" works.
+In "App Domains" put the URL of your project, like example.com (WITHOUT "http://www." !) ! For local development "localhost" works.
 Things like "127.0.0.1" don't seem work. In sandbox mode, select "deactivated".
 In "Site address", put your URL with the protocol in front, like "http://www.example.com". For local development,
 "http://localhost/" works. Things like "http://127.0.0.1" don't seem work.
