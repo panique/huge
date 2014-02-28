@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+**February 28th 2014**
+- placeholder picture and _tutorial folder added (for upcoming graphical quickstart, like on
+  https://github.com/panique/php-mvc)
+
 **February 25th 2014**
 - fixed the broken logout (guys, check your commits!), introduced with last commit
 - removed the last-visited-page feature
