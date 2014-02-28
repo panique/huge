@@ -1,9 +1,9 @@
-php-login
-=========
+![php-login introduction & quickstart placeholder picture](_tutorial/placeholder.jpg)
+
+# php-login
 
 *Welcome to the NEW 2.0 version of the php-login! All 4 scripts have their own repos now and "php-login" is the new home
-of the former 4-full-mvc-framework version. What you see is a beta, please test it out like hell, the official release
-will be in the first weeks of January. Thanks for your support, nearly 800 stars and 300 forks! ;) Have a great 2014!*
+of the former 4-full-mvc-framework version. Thanks for your support, 900+ stars and 380+ forks, simply WOW!*
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
