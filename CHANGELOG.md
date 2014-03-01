@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+** March 1st 2014**
+- changed link to new support forum
+
 **February 28th 2014**
 - placeholder picture and _tutorial folder added (for upcoming graphical quickstart, like on
   https://github.com/panique/php-mvc)

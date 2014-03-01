@@ -14,7 +14,7 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** or
 **[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
 **[Dev Metal](http://www.dev-metal.com)**.
-Ask questions in the **[Official Support Forum](http://109.75.177.79/forum/)**.
+Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
 ### MVC Framework Version 2.0-beta (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
