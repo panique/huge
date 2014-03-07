@@ -195,6 +195,8 @@ class LoginModel
             Session::set('user_account_type', $result->user_account_type);
             Session::set('user_provider_type', 'DEFAULT');
             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+            //Cookie login flag
+            Session::set('loged_in_with_cookie',true);
             // call the setGravatarImageUrl() method which writes gravatar urls into the session
             $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
 
