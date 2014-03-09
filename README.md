@@ -105,6 +105,14 @@ Bookmark the highly related partner-project "[php-login-styles](https://github.c
 will host beautiful themes for all the php-login versions. Currently this is only a placeholder,
 the project starts in early 2014.
 
+## Current and further development
+
+See active issues and requested features here:
+https://github.com/panique/php-login/issues?state=open
+
+See the milestone tracking of 2.0 and the upcoming 3.0 (early 2015) here:
+https://github.com/panique/php-login/issues/milestones
+
 ## Installation
 
 You can find a more detailed version of this guideline in this blog post tutorial:
