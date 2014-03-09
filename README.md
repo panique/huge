@@ -102,8 +102,8 @@ If you think this script is useful and saves you a lot of work, then think about
 ## Themes / User Interfaces / Styles
 
 Bookmark the highly related partner-project "[php-login-styles](https://github.com/panique/php-login-styles)" which
-will host beautiful themes for all the php-login versions. Currently this is only a placeholder,
-the project starts in early 2014.
+will host beautiful themes for php-login and the eventually also for the smaller version (see above).
+This project has not been started yet.
 
 ## Current and further development
 
