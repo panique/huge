@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-** March 1st 2014**
+**March 1st 2014**
 - changed link to new support forum
 
 **February 28th 2014**
