@@ -33,11 +33,11 @@ class View extends Smarty
         }
         // page without header and footer, for whatever reason
         if ($render_without_header_and_footer == true) {
-            require VIEWS_PATH . $filename . '.php';
+            require VIEWS_PATH_OLD . $filename . '.php';
         } else {
-            require VIEWS_PATH . '_templates/header.php';
-            require VIEWS_PATH . $filename . '.php';
-            require VIEWS_PATH . '_templates/footer.php';
+            require VIEWS_PATH_OLD . '_templates/header.php';
+            require VIEWS_PATH_OLD . $filename . '.php';
+            require VIEWS_PATH_OLD . '_templates/footer.php';
         }
     }
 
@@ -71,7 +71,7 @@ class View extends Smarty
     {
         // echo out the feedback messages (errors and success messages etc.),
         // they are in $_SESSION["feedback_positive"] and $_SESSION["feedback_negative"]
-        require VIEWS_PATH . '_templates/feedback.php';
+        require VIEWS_PATH_OLD . '_templates/feedback.php';
 
         // delete these messages (as they are not needed anymore and we want to avoid to show them twice
         Session::set('feedback_positive', null);

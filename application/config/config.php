@@ -30,6 +30,7 @@ define('LIBS_PATH', 'application/libs/');
 define('CONTROLLER_PATH', 'application/controllers/');
 define('MODELS_PATH', 'application/models/');
 define('VIEWS_PATH', 'application/views/');
+define('VIEWS_PATH_OLD', 'application/views/__old/');
 // don't forget to make this folder writable via chmod 775 or 777 (?)
 // the slash at the end is VERY important!
 define('AVATAR_PATH', 'public/avatars/');
