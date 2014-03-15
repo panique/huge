@@ -25,11 +25,9 @@ class Controller
         } catch (PDOException $e) {
             die('Database connection could not be established.');
         }
-
         // create a view object (that does nothing, but provides the view render() method)
         $this->view = new View();
     }
-
     /**
      * loads the model with the given name.
      * @param $name string name of the model

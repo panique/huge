@@ -20,7 +20,7 @@ ini_set("display_errors", 1);
  * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
  * Note: The trailing slash is important!
  */
-define('URL', 'http://localhost/php-login/');
+define('URL', 'http://localhost/phplogin/');
 
 /**
  * Configuration for: Folders
@@ -72,7 +72,7 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 define('COOKIE_RUNTIME', 1209600);
 // the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
 // IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
-define('COOKIE_DOMAIN', '.localhost');
+define('COOKIE_DOMAIN', '.localhost/phplogin');
 
 /**
  * Configuration for: Database
@@ -91,10 +91,10 @@ define('COOKIE_DOMAIN', '.localhost');
  * define('DB_PASS', 'xxx');
  */
 define('DB_TYPE', 'mysql');
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'login');
+define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', 'mysql');
+define('DB_PASS', 'root');
+define('DB_NAME', 'login');
 
 /**
  * Configuration for: Hashing strength
@@ -120,7 +120,7 @@ define('DB_PASS', 'mysql');
 
 // the hash cost factor, PHP's internal default is 10. You can leave this line
 // commented out until you need another factor then 10.
-define("HASH_COST_FACTOR", "10");
+define("HASH_COST_FACTOR", "11");
 
 /**
  * Configuration for: Email server credentials
@@ -196,6 +196,19 @@ define("EMAIL_VERIFICATION_FROM_EMAIL", "no-reply@example.com");
 define("EMAIL_VERIFICATION_FROM_NAME", "My Project");
 define("EMAIL_VERIFICATION_SUBJECT", "Account activation for PROJECT XY");
 define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account: ");
+
+/**
+ * Smarty Settings
+ * 
+ * For use with the Smarty templating engine 
+ */
+define("SMARTY_ENABLED", true);
+define("SMARTY_FORCE_COMPILE", true);
+define("SMARTY_TEMPLATE_DIRECTORY", "/var/www/phplogin/application/views/");
+define("SMARTY_COMPILE_DIRECTORY", "/var/www/phplogin/templates_c/");
+//the following is default using composer
+define("SMARTY_PLUGINS_DIRECTORY", "/var/www/phplogin/vendor/smarty/smarty/distribution/libs/plugins/");
+
 
 /**
  * Configuration for: Error messages and notices

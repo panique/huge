@@ -5,8 +5,19 @@
  *
  * Provides the methods all views will have
  */
-class View
+class View extends Smarty
 {
+    public $css = array();
+    public $js = array();
+    
+    function __construct()
+    {
+        $this->smarty = new Smarty();
+        $this->smarty->force_compile = SMARTY_FORCE_COMPILE;
+        $this->smarty->template_dir = SMARTY_TEMPLATE_DIRECTORY."default/";
+        $this->smarty->compile_dir = SMARTY_COMPILE_DIRECTORY;
+        $this->smarty->plugins_dir = SMARTY_PLUGINS_DIRECTORY;   
+    }
     /**
      * simply includes (=shows) the view. this is done from the controller. In the controller, you usually say
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
@@ -16,6 +27,10 @@ class View
      */
     public function render($filename, $render_without_header_and_footer = false)
     {
+        if(SMARTY_ENABLED)
+        {          
+            return self::renderSmarty($filename, $render_without_header_and_footer);
+        }
         // page without header and footer, for whatever reason
         if ($render_without_header_and_footer == true) {
             require VIEWS_PATH . $filename . '.php';
@@ -26,6 +41,25 @@ class View
         }
     }
 
+    private function renderSmarty($filename, $render_without_header_and_footer = false)
+    {
+        
+        $array = array();
+          
+        // page without header and footer, for whatever reason
+        if ($render_without_header_and_footer == true) {
+            array_push($array, $this->smarty->fetch($filename.".tpl"));
+        } else {
+            $this->loadCommonHeaderFiles();
+            $this->smarty->assign("js", $this->js);
+            $this->smarty->assign("css", $this->css);
+            array_push($array, $this->smarty->fetch("_templates/header.tpl"));
+            array_push($array, $this->smarty->fetch($filename.".tpl"));
+            array_push($array, $this->smarty->fetch("_templates/footer.tpl"));
+        }      
+        $this->smarty->assign("displayArray", $array);
+        $this->smarty->display("./display.tpl");
+    }
     /**
      * renders the feedback messages into the view
      */
@@ -40,24 +74,32 @@ class View
         Session::set('feedback_negative', null);
     }
 
+    private function loadCommonHeaderFiles()
+    {
+        $jquery = "jquery.js";
+        if(preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT']))
+        {
+            $jquery = "jquery_ie_old.js";
+        }        
+        
+        array_unshift($this->js, $jquery);
+        array_unshift($this->css, "reset.css");
+    }
+    
     /**
      * Checks if the passed string is the currently active controller.
      * Useful for handling the navigation's active/non-active link.
      * @param string $filename
      * @param string $navigation_controller
      * @return bool Shows if the controller is used or not
-     */
+     * /
     private function checkForActiveController($filename, $navigation_controller)
     {
         $split_filename = explode("/", $filename);
         $active_controller = $split_filename[0];
 
-        if ($active_controller == $navigation_controller) {
-            return true;
-        }
-        // default return
-        return false;
-    }
+        return $active_controller == $navigation_controller;
+    }*/
 
     /**
      * Checks if the passed string is the currently active controller-action (=method).
@@ -65,18 +107,14 @@ class View
      * @param string $filename
      * @param string $navigation_action
      * @return bool Shows if the action/method is used or not
-     */
+     * /
     private function checkForActiveAction($filename, $navigation_action)
     {
         $split_filename = explode("/", $filename);
         $active_action = $split_filename[1];
 
-        if ($active_action == $navigation_action) {
-            return true;
-        }
-        // default return of not true
-        return false;
-    }
+        return $active_action == $navigation_action;
+    }*/
 
     /**
      * Checks if the passed string is the currently active controller and controller-action.
@@ -84,7 +122,7 @@ class View
      * @param string $filename
      * @param string $navigation_controller_and_action
      * @return bool
-     */
+     * /
     private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action)
     {
         $split_filename = explode("/", $filename);
@@ -95,10 +133,6 @@ class View
         $navigation_controller = $split_filename[0];
         $navigation_action = $split_filename[1];
 
-        if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
-            return true;
-        }
-        // default return of not true
-        return false;
-    }
+        return $active_controller == $navigation_controller && $active_action == $navigation_action;
+    }*/
 }
