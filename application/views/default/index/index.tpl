@@ -2,7 +2,7 @@
     <h1>Index</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
+    {$feedback}
 
     <p>
         This box (everything between header and footer) is the content of views/index/index.php,

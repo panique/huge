@@ -45,14 +45,18 @@ class View extends Smarty
     {
         
         $array = array();
+        
+        $this->loadCommonHeaderFiles();
+        $this->loadFeedbackMessages();
+        $this->smarty->assign("js", $this->js);
+        $this->smarty->assign("css", $this->css);
+        $this->smarty->assign("feedback", $this->smarty->fetch("_templates/feedback.tpl"));
+        //$this->smarty->assign("feedback", $this->smarty->fetch("_templates/feedback.tpl"));
           
         // page without header and footer, for whatever reason
         if ($render_without_header_and_footer == true) {
             array_push($array, $this->smarty->fetch($filename.".tpl"));
         } else {
-            $this->loadCommonHeaderFiles();
-            $this->smarty->assign("js", $this->js);
-            $this->smarty->assign("css", $this->css);
             array_push($array, $this->smarty->fetch("_templates/header.tpl"));
             array_push($array, $this->smarty->fetch($filename.".tpl"));
             array_push($array, $this->smarty->fetch("_templates/footer.tpl"));
@@ -68,6 +72,16 @@ class View extends Smarty
         // echo out the feedback messages (errors and success messages etc.),
         // they are in $_SESSION["feedback_positive"] and $_SESSION["feedback_negative"]
         require VIEWS_PATH . '_templates/feedback.php';
+
+        // delete these messages (as they are not needed anymore and we want to avoid to show them twice
+        Session::set('feedback_positive', null);
+        Session::set('feedback_negative', null);
+    }
+
+    private function loadFeedbackMessages()
+    {
+        $this->smarty->assign("feedbackNegative", Session::get('feedback_negative'));
+        $this->smarty->assign("feedbackPositive", Session::get('feedback_positive'));        
 
         // delete these messages (as they are not needed anymore and we want to avoid to show them twice
         Session::set('feedback_positive', null);
