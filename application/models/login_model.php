@@ -26,11 +26,11 @@ class LoginModel
     public function login()
     {
         // we do negative-first checks here
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+        if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
             return false;
         }
-        if (!isset($_POST['user_password']) OR empty($_POST['user_password'])) {
+        if (!isset($_POST['user_password']) || empty($_POST['user_password'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
             return false;
         }
@@ -44,10 +44,11 @@ class LoginModel
                                           user_active,
                                           user_account_type,
                                           user_failed_logins,
-                                          user_last_failed_login
+                                          user_last_failed_login,
+                                          user_language
                                    FROM   users
-                                   WHERE  (user_name = :user_name OR user_email = :user_name)
-                                          AND user_provider_type = :provider_type");
+                                   WHERE  (user_name = :user_name || user_email = :user_name)
+                                          && user_provider_type = :provider_type");
         // DEFAULT is the marker for "normal" accounts (that have a password etc.)
         // There are other types of accounts that don't have passwords etc. (FACEBOOK)
         $sth->execute(array(':user_name' => $_POST['user_name'], ':provider_type' => 'DEFAULT'));
@@ -63,8 +64,8 @@ class LoginModel
         // fetch one row (we only have one result)
         $result = $sth->fetch();
 
-        // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-        if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time()-30))) {
+        // block login attempt if somebody has already failed 3 times && the last login attempt is less than 30sec ago
+        if (($result->user_failed_logins >= 3) && ($result->user_last_failed_login > (time()-30))) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
             return false;
         }
@@ -84,6 +85,7 @@ class LoginModel
             Session::set('user_name', $result->user_name);
             Session::set('user_email', $result->user_email);
             Session::set('user_account_type', $result->user_account_type);
+            Session::set('user_language', $result->user_language);
             Session::set('user_provider_type', 'DEFAULT');
             // put native avatar path into session
             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
@@ -93,7 +95,7 @@ class LoginModel
             // reset the failed login counter for that user (if necessary)
             if ($result->user_last_failed_login > 0) {
                 $sql = "UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL
-                        WHERE user_id = :user_id AND user_failed_logins != 0";
+                        WHERE user_id = :user_id && user_failed_logins != 0";
                 $sth = $this->db->prepare($sql);
                 $sth->execute(array(':user_id' => $result->user_id));
             }
@@ -117,7 +119,7 @@ class LoginModel
                 $sth = $this->db->prepare($sql);
                 $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $result->user_id));
 
-                // generate cookie string that consists of user id, random string and combined hash of both
+                // generate cookie string that consists of user id, random string && combined hash of both
                 $cookie_string_first_part = $result->user_id . ':' . $random_token_string;
                 $cookie_string_hash = hash('sha256', $cookie_string_first_part);
                 $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
@@ -133,7 +135,7 @@ class LoginModel
             // increment the failed login counter for that user
             $sql = "UPDATE users
                     SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
-                    WHERE user_name = :user_name OR user_email = :user_name";
+                    WHERE user_name = :user_name || user_email = :user_name";
             $sth = $this->db->prepare($sql);
             $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
             // feedback message
@@ -174,12 +176,12 @@ class LoginModel
 
         // get real token from database (and all other data)
         $query = $this->db->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
-                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
+                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login, user_language
                                      FROM users
                                      WHERE user_id = :user_id
-                                       AND user_rememberme_token = :user_rememberme_token
-                                       AND user_rememberme_token IS NOT NULL
-                                       AND user_provider_type = :provider_type");
+                                       && user_rememberme_token = :user_rememberme_token
+                                       && user_rememberme_token IS NOT NULL
+                                       && user_provider_type = :provider_type");
         $query->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token, ':provider_type' => 'DEFAULT'));
         $count =  $query->rowCount();
         if ($count == 1) {
@@ -193,6 +195,7 @@ class LoginModel
             Session::set('user_name', $result->user_name);
             Session::set('user_email', $result->user_email);
             Session::set('user_account_type', $result->user_account_type);
+            Session::set('user_language', $result->user_language);
             Session::set('user_provider_type', 'DEFAULT');
             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
             // call the setGravatarImageUrl() method which writes gravatar urls into the session
@@ -208,7 +211,7 @@ class LoginModel
 
             // NOTE: we don't set another rememberme-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
-            // again from time to time. This is good and safe ! ;)
+            // again from time to time. This is good && safe ! ;)
             $_SESSION["feedback_positive"][] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
             return true;
         } else {
@@ -238,10 +241,11 @@ class LoginModel
                                               user_name,
                                               user_email,
                                               user_account_type,
-                                              user_provider_type
+                                              user_provider_type,
+                                              user_language
                                            FROM users
                                            WHERE user_facebook_uid = :user_facebook_uid
-                                             AND user_provider_type = :provider_type");
+                                             && user_provider_type = :provider_type");
                 $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
                 $count =  $query->rowCount();
                 if ($count != 1) {
@@ -256,6 +260,7 @@ class LoginModel
                 Session::set('user_id', $result->user_id);
                 Session::set('user_name', $result->user_name);
                 Session::set('user_email', $result->user_email);
+                Session::set('user_language', $result->user_language);
                 Session::set('user_account_type', $result->user_account_type);
                 Session::set('user_provider_type', 'FACEBOOK');
                 Session::set('user_avatar_file', $this->getUserAvatarFilePath());
@@ -321,7 +326,7 @@ class LoginModel
     public function editUserName()
     {
         // new username provided ?
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+        if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
             return false;
         }
@@ -332,7 +337,7 @@ class LoginModel
             return false;
         }
 
-        // username cannot be empty and must be azAZ09 and 2-64 characters
+        // username cannot be empty && must be azAZ09 && 2-64 characters
         if (!preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
             return false;
@@ -370,7 +375,7 @@ class LoginModel
     public function editUserEmail()
     {
         // email provided ?
-        if (!isset($_POST['user_email']) OR empty($_POST['user_email'])) {
+        if (!isset($_POST['user_email']) || empty($_POST['user_email'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
             return false;
         }
@@ -396,7 +401,7 @@ class LoginModel
             return false;
         }
 
-        // cleaning and write new email to database
+        // cleaning && write new email to database
         $user_email = substr(strip_tags($_POST['user_email']), 0, 64);
         $query = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id");
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
@@ -415,7 +420,7 @@ class LoginModel
 
     /**
      * handles the entire registration process for DEFAULT users (not for people who register with
-     * 3rd party services, like facebook) and creates a new user in the database if everything is fine
+     * 3rd party services, like facebook) && creates a new user in the database if everything is fine
      * @return boolean Gives back the success status of the registration
      */
     public function registerNewUser()
@@ -425,13 +430,13 @@ class LoginModel
             $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
-        } elseif (empty($_POST['user_password_new']) OR empty($_POST['user_password_repeat'])) {
+        } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
         } elseif (strlen($_POST['user_password_new']) < 6) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
-        } elseif (strlen($_POST['user_name']) > 64 OR strlen($_POST['user_name']) < 2) {
+        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
@@ -442,22 +447,22 @@ class LoginModel
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
         } elseif (!empty($_POST['user_name'])
-            AND strlen($_POST['user_name']) <= 64
-            AND strlen($_POST['user_name']) >= 2
-            AND preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
-            AND !empty($_POST['user_email'])
-            AND strlen($_POST['user_email']) <= 64
-            AND filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
-            AND !empty($_POST['user_password_new'])
-            AND !empty($_POST['user_password_repeat'])
-            AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
+            && strlen($_POST['user_name']) <= 64
+            && strlen($_POST['user_name']) >= 2
+            && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+            && !empty($_POST['user_email'])
+            && strlen($_POST['user_email']) <= 64
+            && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
+            && !empty($_POST['user_password_new'])
+            && !empty($_POST['user_password_repeat'])
+            && ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
 
             // clean the input
             $user_name = strip_tags($_POST['user_name']);
             $user_email = strip_tags($_POST['user_email']);
 
             // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character
-            // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4,
+            // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, || if you are using PHP 5.3/5.4,
             // by the password hashing compatibility library. the third parameter looks a little bit shitty, but that's
             // how those PHP 5.5 functions want the parameter: as an array with, currently only used with 'cost' => XX
             $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
@@ -569,7 +574,7 @@ class LoginModel
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
         $mail->Body = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
 
-        // final sending and check
+        // final sending && check
         if($mail->Send()) {
             $_SESSION["feedback_positive"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
             return true;
@@ -580,7 +585,7 @@ class LoginModel
     }
 
     /**
-     * checks the email/verification code combination and set the user's activation status to true in the database
+     * checks the email/verification code combination && set the user's activation status to true in the database
      * @param int $user_id user id
      * @param string $user_activation_verification_code verification token
      * @return bool success status
@@ -589,7 +594,7 @@ class LoginModel
     {
         $sth = $this->db->prepare("UPDATE users
                                    SET user_active = 1, user_activation_hash = NULL
-                                   WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash");
+                                   WHERE user_id = :user_id && user_activation_hash = :user_activation_hash");
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
         if ($sth->rowCount() == 1) {
@@ -602,7 +607,7 @@ class LoginModel
     }
 
     /**
-     * Get either a Gravatar URL or complete image tag for a specified email address.
+     * Get either a Gravatar URL || complete image tag for a specified email address.
      * Gravatar is the #1 (free) provider for email address based global avatar hosting.
      * The image url (on gravatar servers), will return in something like (note that there's no .jpg)
      * http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
@@ -656,17 +661,17 @@ class LoginModel
      */
     public function createAvatar()
     {
-        if (!is_dir(AVATAR_PATH) OR !is_writable(AVATAR_PATH)) {
+        if (!is_dir(AVATAR_PATH) || !is_writable(AVATAR_PATH)) {
             $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE;
             return false;
         }
 
-        if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
+        if (!isset($_FILES['avatar_file']) || empty ($_FILES['avatar_file']['tmp_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED;
             return false;
         }
 
-        // get the image width, height and mime type
+        // get the image width, height && mime type
         $image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
         // if input file too big (>5MB)
@@ -675,7 +680,7 @@ class LoginModel
             return false;
         }
         // if input file too small
-        if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
+        if ($image_proportions[0] < AVATAR_SIZE || $image_proportions[1] < AVATAR_SIZE) {
             $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
             return false;
         }
@@ -696,7 +701,7 @@ class LoginModel
     }
 
     /**
-     * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
+     * Resize avatar image (while keeping aspect ratio && cropping it off sexy)
      * Originally written by:
      * @author Jay Zawrotny <jayzawrotny@gmail.com>
      * @license Do whatever you want with it.
@@ -706,7 +711,7 @@ class LoginModel
      * @param int $width The desired width of the new image
      * @param int $height The desired height of the new image.
      * @param int $quality The quality of the JPG to produce 1 - 100
-     * @param bool $crop Whether to crop the image or not. It always crops from the center.
+     * @param bool $crop Whether to crop the image || not. It always crops from the center.
      * @return bool success state
      */
     public function resizeAvatarImage(
@@ -744,12 +749,12 @@ class LoginModel
         $desired_ratio_after = round($width / $height, 2);
         $desired_ratio_before = round($height / $width, 2);
 
-        if ($old_width < $width OR $old_height < $height) {
+        if ($old_width < $width || $old_height < $height) {
              // the desired image size is bigger than the original image. Best not to do anything at all really.
             return false;
         }
 
-        // if crop is on: it will take an image and best fit it so it will always come out the exact specified size.
+        // if crop is on: it will take an image && best fit it so it will always come out the exact specified size.
         if ($crop) {
             // create empty image of the specified size
             $new_image = imagecreatetruecolor($width, $height);
@@ -760,7 +765,7 @@ class LoginModel
             }
 
             // nearly square ratio image
-            if ($current_ratio > $desired_ratio_before AND $current_ratio < $desired_ratio_after) {
+            if ($current_ratio > $desired_ratio_before && $current_ratio < $desired_ratio_after) {
 
                 if ($old_width > $old_height) {
                     $new_height = max($width, $height);
@@ -802,7 +807,7 @@ class LoginModel
         // save it as a .jpg file with our $destination_filename parameter
         imagejpeg($new_image, $destination_filename, $quality);
 
-        // delete "working copy" and original file, keep the thumbnail
+        // delete "working copy" && original file, keep the thumbnail
         imagedestroy($new_image);
         imagedestroy($img_original);
 
@@ -819,7 +824,7 @@ class LoginModel
      */
     public function requestPasswordReset()
     {
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+        if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
             return false;
         }
@@ -833,7 +838,7 @@ class LoginModel
 
         // check if that username exists
         $query = $this->db->prepare("SELECT user_id, user_email FROM users
-                                     WHERE user_name = :user_name AND user_provider_type = :provider_type");
+                                     WHERE user_name = :user_name && user_provider_type = :provider_type");
         $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
         $count = $query->rowCount();
         if ($count != 1) {
@@ -845,9 +850,9 @@ class LoginModel
         $result_user_row = $result = $query->fetch();
         $user_email = $result_user_row->user_email;
 
-        // set token (= a random hash string and a timestamp) into database
+        // set token (= a random hash string && a timestamp) into database
         if ($this->setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp) == true) {
-            // send a mail to the user, containing a link with username and token hash string
+            // send a mail to the user, containing a link with username && token hash string
             if ($this->sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)) {
                 return true;
             }
@@ -868,7 +873,7 @@ class LoginModel
         $query_two = $this->db->prepare("UPDATE users
                                             SET user_password_reset_hash = :user_password_reset_hash,
                                                 user_password_reset_timestamp = :user_password_reset_timestamp
-                                          WHERE user_name = :user_name AND user_provider_type = :provider_type");
+                                          WHERE user_name = :user_name && user_provider_type = :provider_type");
         $query_two->execute(array(':user_password_reset_hash' => $user_password_reset_hash,
                                   ':user_password_reset_timestamp' => $temporary_timestamp,
                                   ':user_name' => $user_name,
@@ -947,8 +952,8 @@ class LoginModel
         $query = $this->db->prepare("SELECT user_id, user_password_reset_timestamp
                                        FROM users
                                       WHERE user_name = :user_name
-                                        AND user_password_reset_hash = :user_password_reset_hash
-                                        AND user_provider_type = :user_provider_type");
+                                        && user_password_reset_hash = :user_password_reset_hash
+                                        && user_provider_type = :user_provider_type");
         $query->execute(array(':user_password_reset_hash' => $verification_code,
                               ':user_name' => $user_name,
                               ':user_provider_type' => 'DEFAULT'));
@@ -984,19 +989,19 @@ class LoginModel
     public function setNewPassword()
     {
         // basic checks
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+        if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
             return false;
         }
-        if (!isset($_POST['user_password_reset_hash']) OR empty($_POST['user_password_reset_hash'])) {
+        if (!isset($_POST['user_password_reset_hash']) || empty($_POST['user_password_reset_hash'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_MISSING;
             return false;
         }
-        if (!isset($_POST['user_password_new']) OR empty($_POST['user_password_new'])) {
+        if (!isset($_POST['user_password_new']) || empty($_POST['user_password_new'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
             return false;
         }
-        if (!isset($_POST['user_password_repeat']) OR empty($_POST['user_password_repeat'])) {
+        if (!isset($_POST['user_password_repeat']) || empty($_POST['user_password_repeat'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
             return false;
         }
@@ -1016,7 +1021,7 @@ class LoginModel
         $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
 
         // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, || if you are using PHP 5.3/5.4, by the password hashing
         // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
         // want the parameter: as an array with, currently only used with 'cost' => XX.
         $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
@@ -1027,8 +1032,8 @@ class LoginModel
                                             user_password_reset_hash = NULL,
                                             user_password_reset_timestamp = NULL
                                       WHERE user_name = :user_name
-                                        AND user_password_reset_hash = :user_password_reset_hash
-                                        AND user_provider_type = :user_provider_type");
+                                        && user_password_reset_hash = :user_password_reset_hash
+                                        && user_provider_type = :user_provider_type");
 
         $query->execute(array(':user_password_hash' => $user_password_hash,
                               ':user_name' => $_POST['user_name'],
@@ -1047,16 +1052,51 @@ class LoginModel
         return false;
     }
 
+    public function setDefaultLanguage($lang = "")
+    {
+        if ( $lang == "" && ( !isset($_POST['user_language']) || empty($_POST['user_language']) ) ) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_SET;
+            return false;
+        } 
+        //check if a post form submitted the language when lang is empty
+        $lang = $lang == "" ? $_POST['user_language'] : $lang;
+        
+        try{
+            if(Language::validate($lang))
+            {
+                Session::set('user_language', $lang);
+                if( $this->isUserLoggedIn() )
+                {
+                    $query = $this->db->prepare("UPDATE users
+                                                    SET user_language = :user_language
+                                                  WHERE user_id = :user_id");
+
+                    $query->execute(array(':user_language' => $lang, ':user_id' => $_SESSION["user_id"]));                    
+                }
+            }
+            else
+            {
+                $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_EXIST;
+            }
+        } catch (Exception $e)
+        {
+            $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_VALID;
+            return false;
+        }
+        
+        return true;
+    }
+    
     /**
-     * Upgrades/downgrades the user's account (for DEFAULT and FACEBOOK users)
+     * Upgrades/downgrades the user's account (for DEFAULT && FACEBOOK users)
      * Currently it's just the field user_account_type in the database that
-     * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
-     * simply increase or decrease this value to emulate an account upgrade/downgrade.
-     * Put some more complex stuff in here, maybe a pay-process or whatever you like.
+     * can be 1 || 2 (maybe "basic" || "premium"). In this basic method we
+     * simply increase || decrease this value to emulate an account upgrade/downgrade.
+     * Put some more complex stuff in here, maybe a pay-process || whatever you like.
      */
     public function changeAccountType()
     {
-        if (isset($_POST["user_account_upgrade"]) AND !empty($_POST["user_account_upgrade"])) {
+        if (isset($_POST["user_account_upgrade"]) && !empty($_POST["user_account_upgrade"])) {
 
             // do whatever you want to upgrade the account here (pay-process etc)
             // ...
@@ -1074,7 +1114,7 @@ class LoginModel
             } else {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
             }
-        } elseif (isset($_POST["user_account_downgrade"]) AND !empty($_POST["user_account_downgrade"])) {
+        } elseif (isset($_POST["user_account_downgrade"]) && !empty($_POST["user_account_downgrade"])) {
 
             // do whatever you want to downgrade the account here (pay-process etc)
             // ...
@@ -1120,7 +1160,7 @@ class LoginModel
      */
     private function checkCaptcha()
     {
-        if (isset($_POST["captcha"]) AND ($_POST["captcha"] == $_SESSION['captcha'])) {
+        if (isset($_POST["captcha"]) && ($_POST["captcha"] == $_SESSION['captcha'])) {
             return true;
         }
         // default return
@@ -1159,7 +1199,7 @@ class LoginModel
 
         // hard to explain, read the Facebook PHP SDK for more information!
         // basically, when the user clicks the Facebook register button, the following arguments will be passed
-        // to Facebook: In this case a request for getting the email (not shown by default btw) and the URL
+        // to Facebook: In this case a request for getting the email (not shown by default btw) && the URL
         // when facebook will send the user after he/she has authenticated
         // "scope" => 'email' means that we need read-access to the user's "public" data plus his/her email address
         // (not public by default)
@@ -1189,7 +1229,7 @@ class LoginModel
                 // Proceed knowing you have a logged in user who's authenticated
                 $facebook_user_data = $facebook->api('/me');
             } catch (FacebookApiException $e) {
-                // when facebook goes offline or armageddon comes or some shit like that
+                // when facebook goes offline || armageddon comes || some shit like that
                 error_log($e);
                 $user = null;
                 $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_OFFLINE;
@@ -1272,7 +1312,7 @@ class LoginModel
         if ($count == 1) {
             $query = $this->db->prepare("SELECT user_id, user_name, user_email, user_account_type, user_provider_type
                                          FROM   users
-                                         WHERE  user_name = :user_name AND user_provider_type = :provider_type");
+                                         WHERE  user_name = :user_name && user_provider_type = :provider_type");
             $query->execute(array(':user_name' => $clean_user_name_from_facebook, ':provider_type' => 'FACEBOOK'));
             $count_from_select_statement = $query->rowCount();
             if ($count_from_select_statement == 1) {
@@ -1286,7 +1326,7 @@ class LoginModel
 
     /**
      * Checks if the facebook-user data array has an email. It's possible that users block this, so we don't have
-     * an email and therefore cannot register this person (registration without email is impossible).
+     * an email && therefore cannot register this person (registration without email is impossible).
      * @param array $facebook_user_data stuff from the facebook class
      * @return bool user has email yes/no
      */
@@ -1361,7 +1401,7 @@ class LoginModel
      */
     public function generateUniqueUserNameFromExistingUserName($existing_name)
     {
-    	//strip any dots, trailing numbers and white spaces
+    	//strip any dots, trailing numbers && white spaces
         $existing_name = str_replace(".", "", $existing_name);
         $existing_name = preg_replace('/\s*\d+$/', '', $existing_name);
 

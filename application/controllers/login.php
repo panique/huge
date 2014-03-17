@@ -318,4 +318,13 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         $login_model->generateCaptcha();
     }
+    
+    /**
+     * Update the user's language in this session
+     */
+    function updateLanguage()
+    {
+        $login_model = $this->loadModel('Login');
+        $login_model->updateUserLanguage();
+    } 
 }

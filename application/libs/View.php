@@ -7,6 +7,7 @@
  */
 class View extends Smarty
 {
+    public $lang = "";
     public $css = array();
     public $js = array();
     
@@ -27,8 +28,11 @@ class View extends Smarty
      */
     public function render($filename, $render_without_header_and_footer = false)
     {
+        
         if(SMARTY_ENABLED)
         {          
+            //set language for Smarty right before rendering
+            $this->lang = Language::init();
             return self::renderSmarty($filename, $render_without_header_and_footer);
         }
         // page without header and footer, for whatever reason
@@ -43,9 +47,10 @@ class View extends Smarty
 
     private function renderSmarty($filename, $render_without_header_and_footer = false)
     {
-        
+        include_once $this->lang;
         $array = array();
         
+        $this->smarty->assign("lang", $lang);
         $this->loadCommonHeaderFiles();
         $this->loadFeedbackMessages();
         $this->smarty->assign("js", $this->js);

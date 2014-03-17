@@ -205,16 +205,20 @@ define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your
  */
 define("SMARTY_ENABLED", true);
 define("SMARTY_FORCE_COMPILE", true);
-define("SMARTY_TEMPLATE_DIRECTORY", "/var/www/phplogin/application/views/");
-define("SMARTY_COMPILE_DIRECTORY", "/var/www/phplogin/templates_c/");
+define("SMARTY_TEMPLATE_DIRECTORY", "./application/views/");
+define("SMARTY_COMPILE_DIRECTORY", "./templates_c/");
 //the following is default using composer
-define("SMARTY_PLUGINS_DIRECTORY", "/var/www/phplogin/vendor/smarty/smarty/distribution/libs/plugins/");
+define("SMARTY_PLUGINS_DIRECTORY", "./vendor/smarty/smarty/distribution/libs/plugins/");
 
+//default language for smarty - without smarty, the text is directly in the page file
+define("LANGUAGE_PATH", "./application/lang/");
+define("DEFAULT_LANGUAGE", "en");
 
 /**
  * Configuration for: Error messages and notices
  *
  * In this project, the error messages, notices etc are all-together called "feedback".
+ * Keep this for compatibility
  */
 define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
 define("FEEDBACK_PASSWORD_WRONG_3_TIMES", "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.");
@@ -279,3 +283,6 @@ define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already re
 define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in our database).");
 define("FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL", "You have been successfully registered with Facebook.");
 define("FEEDBACK_FACEBOOK_OFFLINE", "We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).");
+define("FEEDBACK_LANGUAGE_NOT_SET", "No language passed");
+define("FEEDBACK_LANGUAGE_NOT_VALID", "Chosen language not valid");
+define("FEEDBACK_LANGUAGE_NOT_EXIST", "No language was selected");
