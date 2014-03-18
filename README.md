@@ -113,7 +113,7 @@ https://github.com/panique/php-login/issues?state=open
 See the milestone tracking of 2.0 and the upcoming 3.0 (early 2015) here:
 https://github.com/panique/php-login/issues/milestones
 
-## External installation guidelines (detailed blog posts)
+## External installation guidelines
 
 [How to install php-login on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/)
 
