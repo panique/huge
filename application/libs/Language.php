@@ -13,12 +13,11 @@ class Language {
 
     public static function init() {
         $lang = DEFAULT_LANGUAGE;
-        echo "1";
+        
         if(Session::get('user_language')) {
-            echo "2";
             $lang = Session::get('user_language');
         }
-        echo "3";
+        
         if(self::validateLangFile($lang))
         {
             return LANGUAGE_PATH.$lang.".php";

@@ -205,6 +205,7 @@ define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your
  */
 define("SMARTY_ENABLED", true);
 define("SMARTY_FORCE_COMPILE", true);
+//do not put the default template here incase you have several templates so they can be dynamically loaded
 define("SMARTY_TEMPLATE_DIRECTORY", "./application/views/");
 define("SMARTY_COMPILE_DIRECTORY", "./templates_c/");
 //the following is default using composer
@@ -213,6 +214,7 @@ define("SMARTY_PLUGINS_DIRECTORY", "./vendor/smarty/smarty/distribution/libs/plu
 //default language for smarty - without smarty, the text is directly in the page file
 define("LANGUAGE_PATH", "./application/lang/");
 define("DEFAULT_LANGUAGE", "en");
+define("DEFAULT_TEMPLATE", "default/");
 
 /**
  * Configuration for: Error messages and notices

@@ -11,11 +11,21 @@ class View extends Smarty
     public $css = array();
     public $js = array();
     
-    function __construct()
+    function __construct($js = "" , $css = "")
     {
+        //set up page specific files
+        $this->js = is_array($js) ? $js : $this->js;
+        $this->css = is_array($css) ? $css : $this->css;
+        
+        $template = Session::get("templatePath");
+        if(!$template)
+        {
+            $template = DEFAULT_TEMPLATE;
+        }
+        
         $this->smarty = new Smarty();
         $this->smarty->force_compile = SMARTY_FORCE_COMPILE;
-        $this->smarty->template_dir = SMARTY_TEMPLATE_DIRECTORY."default/";
+        $this->smarty->template_dir = SMARTY_TEMPLATE_DIRECTORY.$template;
         $this->smarty->compile_dir = SMARTY_COMPILE_DIRECTORY;
         $this->smarty->plugins_dir = SMARTY_PLUGINS_DIRECTORY;   
     }
@@ -49,16 +59,22 @@ class View extends Smarty
     {
         include_once $this->lang;
         $array = array();
+        //add common text
+        $array = isset($lang["ALL"]) ? array_merge($lang["ALL"] ) : array_merge(array());
+        //add controller text
+        $folder = explode("/", $filename)[0];
+        $array += isset($lang[$folder]) ? array_merge($lang[$folder]) : array_merge(array());
         
-        $this->smarty->assign("lang", $lang);
-        $this->loadCommonHeaderFiles();
-        $this->loadFeedbackMessages();
+        $this->smarty->assign("lang", $array);
+        $this->loadCommonHeaderFiles();//loads common JS and CSS files
+        $this->loadFeedbackMessages();//loads feedback messages if any
         $this->smarty->assign("js", $this->js);
         $this->smarty->assign("css", $this->css);
+        //always get feedback, even if empty
         $this->smarty->assign("feedback", $this->smarty->fetch("_templates/feedback.tpl"));
-        //$this->smarty->assign("feedback", $this->smarty->fetch("_templates/feedback.tpl"));
           
         // page without header and footer, for whatever reason
+        $array = array();//clear array
         if ($render_without_header_and_footer == true) {
             array_push($array, $this->smarty->fetch($filename.".tpl"));
         } else {
