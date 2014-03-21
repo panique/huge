@@ -1,4 +1,14 @@
 <?php
+/*
+ * each lang item has the following syntax:
+ *      $lang["folder name in views"]["line name"]
+ * The line name can be anything as long as it is properly set in the file
+ * The folder name must match the views folder it is to be used in
+ * If something is to be used in every folder, then it goes in ["ALL"] 
+ * Keep the caps of ["ALL"] properties to make sure folder properties don't get over written
+ *      This means the template is case sensitive too.
+ */
+
 //keep the all in caps 
 $lang["ALL"]["TEST"] = utf8_encode("testing:en");
 
