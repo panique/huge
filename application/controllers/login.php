@@ -23,12 +23,15 @@ class Login extends Controller
         // create a login model to perform the getFacebookLoginUrl() method
         $login_model = $this->loadModel('Login');
 
+        $parameters["fblogin"] = FACEBOOK_LOGIN;
         // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
         if (FACEBOOK_LOGIN == true) {
-            $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+            $parameters["fbloginurl"] = $login_model->getFacebookLoginUrl();
         }
 
         // show the view
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/index');
     }
 

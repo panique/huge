@@ -1,7 +1,7 @@
 <div class="content">
     <a href="lang/set/en">en</a>
     <a href="lang/set/fr">fr</a>
-    <h1>Index</h1>
+    <h1>{$lang.header}</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
     {$feedback}
@@ -14,8 +14,11 @@
         {$lang.frmw1}
         <br/><br/>
         {$lang.frmw2}
-        <span style='font-weight: bold;'>{$lang.frmw3}</span>,
+        <span style='font-weight: bold;'>{$lang.frmw3}</span>
         {$lang.frmw4}
     </p> 
     
+    <p>
+        {$lang.login1} <a href="./login">{$lang.login2}</a>
+    </p>
 </div>

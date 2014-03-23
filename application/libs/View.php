@@ -10,6 +10,7 @@ class View extends Smarty
     private $lang = "";
     private $css = array();
     private $js = array();
+    private $parameters = array();
     
     function __construct()
     {        
@@ -69,6 +70,7 @@ class View extends Smarty
         $this->smarty->assign("lang", $array);
         $this->loadCommonHeaderFiles();//loads common JS and CSS files
         $this->loadFeedbackMessages();//loads feedback messages if any
+        $this->assignParameters();//loads feedback messages if any
         $this->smarty->assign("js", $this->js);
         $this->smarty->assign("css", $this->css);
         //always get feedback, even if empty
@@ -88,7 +90,7 @@ class View extends Smarty
     }
     /**
      * renders the feedback messages into the view
-     */
+     
     public function renderFeedbackMessages()
     {
         // echo out the feedback messages (errors and success messages etc.),
@@ -99,7 +101,15 @@ class View extends Smarty
         Session::set('feedback_positive', null);
         Session::set('feedback_negative', null);
     }
-
+*/
+    private function assignParameters()
+    {
+        foreach ($this->parameters as $key => $value)
+        {
+            $this->smarty->assign($key, $value);
+        }
+    }
+    
     private function loadFeedbackMessages()
     {
         $this->smarty->assign("feedbackNegative", Session::get('feedback_negative'));
