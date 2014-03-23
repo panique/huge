@@ -7,16 +7,12 @@
  */
 class View extends Smarty
 {
-    public $lang = "";
-    public $css = array();
-    public $js = array();
+    private $lang = "";
+    private $css = array();
+    private $js = array();
     
-    function __construct($js = "" , $css = "")
-    {
-        //set up page specific files
-        $this->js = is_array($js) ? $js : $this->js;
-        $this->css = is_array($css) ? $css : $this->css;
-        
+    function __construct()
+    {        
         $template = Session::get("templatePath");
         if(!$template)
         {
@@ -34,19 +30,19 @@ class View extends Smarty
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
      * Usually the Class and the method are the same like the view, but sometimes you need to show different views.
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
-     * @param boolean $render_without_header_and_footer Optional: Set this to true if you don't want to include header and footer
+     * @param boolean $file_only Optional: Set this to true if you don't want to include header and footer
      */
-    public function render($filename, $render_without_header_and_footer = false)
+    public function render($filename, $file_only = false)
     {
         
         if(SMARTY_ENABLED)
         {          
             //set language for Smarty right before rendering
             $this->lang = Language::init();
-            return self::renderSmarty($filename, $render_without_header_and_footer);
+            return self::renderSmarty($filename, $file_only);
         }
         // page without header and footer, for whatever reason
-        if ($render_without_header_and_footer == true) {
+        if ($file_only == true) {
             require VIEWS_PATH_OLD . $filename . '.php';
         } else {
             require VIEWS_PATH_OLD . '_templates/header.php';
@@ -55,7 +51,12 @@ class View extends Smarty
         }
     }
 
-    private function renderSmarty($filename, $render_without_header_and_footer = false)
+    /**
+     * 
+     * @param type $filename
+     * @param type $file_only
+     */
+    private function renderSmarty($filename, $file_only = false)
     {
         include_once $this->lang;
         $array = array();
@@ -64,7 +65,7 @@ class View extends Smarty
         //add controller text
         $folder = explode("/", $filename)[0];
         $array += isset($lang[$folder]) ? array_merge($lang[$folder]) : array_merge(array());
-        
+        //var_dump($array);//test to see what is in language array
         $this->smarty->assign("lang", $array);
         $this->loadCommonHeaderFiles();//loads common JS and CSS files
         $this->loadFeedbackMessages();//loads feedback messages if any
@@ -75,7 +76,7 @@ class View extends Smarty
           
         // page without header and footer, for whatever reason
         $array = array();//clear array
-        if ($render_without_header_and_footer == true) {
+        if ($file_only == true) {
             array_push($array, $this->smarty->fetch($filename.".tpl"));
         } else {
             array_push($array, $this->smarty->fetch("_templates/header.tpl"));
@@ -119,6 +120,18 @@ class View extends Smarty
         
         array_unshift($this->js, $jquery);
         array_unshift($this->css, "reset.css");
+    }
+    
+    public function set($key, $value)
+    {
+        if(isset($this->$key))
+        {
+            $this->$key = $value;
+        }
+        else
+        {
+            throw new Exception("Key not found.", E_USER_ERROR);
+        }
     }
     
     /**

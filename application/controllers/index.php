@@ -20,6 +20,7 @@ class Index extends Controller
      */
     function index()
     {
+            $this->view->set("css", array("style.css"));
             $this->view->render('index/index');
     }
 }
