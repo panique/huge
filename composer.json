@@ -18,6 +18,7 @@
     },
     "require":{
         "php": ">=5.3.7",
+        "smarty/smarty": "3.1.*",
         "ircmaxell/password-compat": "1.0.*",
         "phpmailer/phpmailer": "5.2.*",
         "gregwar/captcha": "dev-master",

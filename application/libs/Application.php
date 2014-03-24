@@ -84,7 +84,6 @@ class Application
             $url = rtrim($_GET['url'], '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
-
             // Put URL parts into according properties
             // By the way, the syntax here if just a short form of if/else, called "Ternary Operators"
             // http://davidwalsh.name/php-shorthand-if-else-ternary-operators

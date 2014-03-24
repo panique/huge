@@ -23,12 +23,15 @@ class Login extends Controller
         // create a login model to perform the getFacebookLoginUrl() method
         $login_model = $this->loadModel('Login');
 
+        $parameters["fblogin"] = FACEBOOK_LOGIN;
         // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
-        if (FACEBOOK_LOGIN == true) {
-            $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+        if (FACEBOOK_LOGIN) {
+            $parameters["fbloginurl"] = $login_model->getFacebookLoginUrl();
         }
 
         // show the view
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/index');
     }
 
@@ -109,6 +112,16 @@ class Login extends Controller
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
+
+        $parameters["username"] = Session::get('user_name');
+        $parameters["email"] = Session::get('user_email');
+        $parameters["gravatarImageURL"] = Session::get('user_gravatar_image_url');
+        $parameters["avatarFile"] = Session::get('user_avatar_file');
+        $parameters["accountType"] = Session::get('user_account_type');
+
+        // show the view
+        $this->view->set("parameters", $parameters);        
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/showprofile');
     }
 
@@ -119,6 +132,8 @@ class Login extends Controller
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
+        // show the view
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/editusername');
     }
 
@@ -129,6 +144,7 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserName();
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/editusername');
     }
 
@@ -139,6 +155,7 @@ class Login extends Controller
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/edituseremail');
     }
 
@@ -149,6 +166,7 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->editUserEmail();
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/edituseremail');
     }
 
@@ -161,6 +179,7 @@ class Login extends Controller
         Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $this->view->avatar_file_path = $login_model->getUserAvatarFilePath();
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/uploadavatar');
     }
 
@@ -179,8 +198,11 @@ class Login extends Controller
      */
     function changeAccountType()
     {
+        $parameters["accounttype"] = Session::get('user_account_type');
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/changeaccounttype');
     }
 
@@ -202,11 +224,15 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
 
-        // if we use Facebook: this is necessary as we need the facebook_register_url in the login form (in the view)
-        if (FACEBOOK_LOGIN == true) {
-            $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
+        $parameters["fblogin"] = FACEBOOK_LOGIN;
+        // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
+        if (FACEBOOK_LOGIN) {
+            $parameters["fbloginurl"] = $login_model->getFacebookLoginUrl();
         }
 
+        // show the view
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/register');
     }
 
@@ -253,6 +279,8 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
         $login_model->verifyNewUser($user_id, $user_activation_verification_code);
+        
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/verify');
     }
 
@@ -261,6 +289,7 @@ class Login extends Controller
      */
     function requestPasswordReset()
     {
+        $this->view->set("css", array("style.css"));
         $this->view->render('login/requestpasswordreset');
     }
 
@@ -284,8 +313,10 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         if ($login_model->verifyPasswordReset($user_name, $verification_code)) {
             // get variables for the view
-            $this->view->user_name = $user_name;
-            $this->view->user_password_reset_hash = $verification_code;
+            $parameters["userName"] = $user_name;
+            $parameters["userPasswordResetHash"] = $verification_code;
+            $this->view->set("parameters", $parameters);
+            $this->view->set("css", array("style.css"));
             $this->view->render('login/changepassword');
         } else {
             header('location: ' . URL . 'login/index');
@@ -318,4 +349,13 @@ class Login extends Controller
         $login_model = $this->loadModel('Login');
         $login_model->generateCaptcha();
     }
+    
+    /**
+     * Update the user's language in this session
+     */
+    function updateLanguage()
+    {
+        $login_model = $this->loadModel('Login');
+        $login_model->updateUserLanguage();
+    } 
 }

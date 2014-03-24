@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `user_language` VARCHAR( 10 ) NOT NULL DEFAULT 'en';

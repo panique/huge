@@ -26,7 +26,13 @@ class Note extends Controller
     public function index()
     {
         $note_model = $this->loadModel('Note');
-        $this->view->notes = $note_model->getAllNotes();
+        $parameters["notes"] = $note_model->getAllNotes();
+        foreach($parameters["notes"] as &$value)
+        {
+            $value = htmlentities($value->note_text);
+        }
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('note/index');
     }
 
@@ -56,7 +62,13 @@ class Note extends Controller
     {
         // get the note that you want to edit (to show the current content)
         $note_model = $this->loadModel('Note');
-        $this->view->note = $note_model->getNote($note_id);
+        
+        //gets an array
+        $parameters["note"] = $note_model->getNote($note_id);
+        $parameters["note"]["note_text"] = htmlentities($parameters["note"]["note_text"]);
+        // show the view
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('note/edit');
     }
 

@@ -23,6 +23,7 @@ class Dashboard extends Controller
      */
     function index()
     {
+        $this->view->set("css", array("style.css"));
         $this->view->render('dashboard/index');
     }
 }
