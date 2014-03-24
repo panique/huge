@@ -1,8 +1,8 @@
 <div class="content">
-    <h1>Verification</h1>
+    <h1>{$lang.verify}</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
+    {$feedback}
 
-    <a href="<?php echo URL; ?>login/index">Go to login</a>
+    <a href="{$site_path}login/index">{$lang.back}</a>
 </div>

@@ -33,22 +33,18 @@ class View extends Smarty
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
      * @param boolean $file_only Optional: Set this to true if you don't want to include header and footer
      */
-    public function render($filename, $file_only = false)
+    public function render($filename, $file_only = false, $with_feedback = true)
     {
         
         if(SMARTY_ENABLED)
         {          
             //set language for Smarty right before rendering
             $this->lang = Language::init();
-            return self::renderSmarty($filename, $file_only);
+            return self::renderSmarty($filename, $file_only, $with_feedback);
         }
-        // page without header and footer, for whatever reason
-        if ($file_only == true) {
-            require VIEWS_PATH_OLD . $filename . '.php';
-        } else {
-            require VIEWS_PATH_OLD . '_templates/header.php';
-            require VIEWS_PATH_OLD . $filename . '.php';
-            require VIEWS_PATH_OLD . '_templates/footer.php';
+        else
+        {
+            die("Smarty must be enabled in this version");
         }
     }
 
@@ -57,7 +53,7 @@ class View extends Smarty
      * @param type $filename
      * @param type $file_only
      */
-    private function renderSmarty($filename, $file_only = false)
+    private function renderSmarty($filename, $file_only, $with_feedback)
     {
         include_once $this->lang;
         $array = array();
@@ -69,10 +65,16 @@ class View extends Smarty
         //var_dump($array);//test to see what is in language array
         $this->smarty->assign("lang", $array);
         $this->loadCommonHeaderFiles();//loads common JS and CSS files
-        $this->loadFeedbackMessages();//loads feedback messages if any
-        $this->assignParameters();//loads feedback messages if any
+        //dont reset feedback with calls that wont load it
+        if($with_feedback)
+        {//loads feedback messages if any - $feedback is from the lang file
+            $this->loadFeedbackMessages($feedback);
+        }
+        
+        $this->assignParameters();
         $this->smarty->assign("js", $this->js);
         $this->smarty->assign("css", $this->css);
+        $this->smarty->assign("site_path", URL);
         //always get feedback, even if empty
         $this->smarty->assign("feedback", $this->smarty->fetch("_templates/feedback.tpl"));
           
@@ -88,20 +90,7 @@ class View extends Smarty
         $this->smarty->assign("displayArray", $array);
         $this->smarty->display("./display.tpl");
     }
-    /**
-     * renders the feedback messages into the view
-     
-    public function renderFeedbackMessages()
-    {
-        // echo out the feedback messages (errors and success messages etc.),
-        // they are in $_SESSION["feedback_positive"] and $_SESSION["feedback_negative"]
-        require VIEWS_PATH_OLD . '_templates/feedback.php';
-
-        // delete these messages (as they are not needed anymore and we want to avoid to show them twice
-        Session::set('feedback_positive', null);
-        Session::set('feedback_negative', null);
-    }
-*/
+    
     private function assignParameters()
     {
         foreach ($this->parameters as $key => $value)
@@ -110,14 +99,27 @@ class View extends Smarty
         }
     }
     
-    private function loadFeedbackMessages()
+    /*Loads feedback on all pages that want it*/
+    private function loadFeedbackMessages($feedback)
     {
-        $this->smarty->assign("feedbackNegative", Session::get('feedback_negative'));
-        $this->smarty->assign("feedbackPositive", Session::get('feedback_positive'));        
-
-        // delete these messages (as they are not needed anymore and we want to avoid to show them twice
-        Session::set('feedback_positive', null);
-        Session::set('feedback_negative', null);
+        $feed = array("feedbackNegative" => "feedback_negative", "feedbackPositive" => "feedback_positive");
+        
+        foreach($feed as $key => $type)
+        {
+            $array = array();
+            $messages = Session::get($type);
+            if(!empty($messages) && isset($messages))
+            {
+                foreach($messages as $val)
+                {
+                    array_push($array, $feedback[$val]);
+                }
+            }    
+            $this->smarty->assign($key, $array);  
+            
+            // delete these messages (as they are not needed anymore and we want to avoid to show them twice
+            Session::set($type, null);   
+        }
     }
 
     private function loadCommonHeaderFiles()
@@ -143,54 +145,4 @@ class View extends Smarty
             throw new Exception("Key not found.", E_USER_ERROR);
         }
     }
-    
-    /**
-     * Checks if the passed string is the currently active controller.
-     * Useful for handling the navigation's active/non-active link.
-     * @param string $filename
-     * @param string $navigation_controller
-     * @return bool Shows if the controller is used or not
-     * /
-    private function checkForActiveController($filename, $navigation_controller)
-    {
-        $split_filename = explode("/", $filename);
-        $active_controller = $split_filename[0];
-
-        return $active_controller == $navigation_controller;
-    }*/
-
-    /**
-     * Checks if the passed string is the currently active controller-action (=method).
-     * Useful for handling the navigation's active/non-active link.
-     * @param string $filename
-     * @param string $navigation_action
-     * @return bool Shows if the action/method is used or not
-     * /
-    private function checkForActiveAction($filename, $navigation_action)
-    {
-        $split_filename = explode("/", $filename);
-        $active_action = $split_filename[1];
-
-        return $active_action == $navigation_action;
-    }*/
-
-    /**
-     * Checks if the passed string is the currently active controller and controller-action.
-     * Useful for handling the navigation's active/non-active link.
-     * @param string $filename
-     * @param string $navigation_controller_and_action
-     * @return bool
-     * /
-    private function checkForActiveControllerAndAction($filename, $navigation_controller_and_action)
-    {
-        $split_filename = explode("/", $filename);
-        $active_controller = $split_filename[0];
-        $active_action = $split_filename[1];
-
-        $split_filename = explode("/", $navigation_controller_and_action);
-        $navigation_controller = $split_filename[0];
-        $navigation_action = $split_filename[1];
-
-        return $active_controller == $navigation_controller && $active_action == $navigation_action;
-    }*/
 }

@@ -27,11 +27,11 @@ class LoginModel
     {
         // we do negative-first checks here
         if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_FIELD_EMPTY";
             return false;
         }
         if (!isset($_POST['user_password']) || empty($_POST['user_password'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_FIELD_EMPTY";
             return false;
         }
 
@@ -55,9 +55,9 @@ class LoginModel
         $count =  $sth->rowCount();
         // if there's NOT one result
         if ($count != 1) {
-            // was FEEDBACK_USER_DOES_NOT_EXIST before, but has changed to FEEDBACK_LOGIN_FAILED
+            // was "FEEDBACK_USER_DOES_NOT_EXIST"; before, but has changed to "FEEDBACK_LOGIN_FAILED";
             // to prevent potential attackers showing if the user exists
-            $_SESSION["feedback_negative"][] = FEEDBACK_LOGIN_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_LOGIN_FAILED";
             return false;
         }
 
@@ -66,7 +66,7 @@ class LoginModel
 
         // block login attempt if somebody has already failed 3 times && the last login attempt is less than 30sec ago
         if (($result->user_failed_logins >= 3) && ($result->user_last_failed_login > (time()-30))) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_WRONG_3_TIMES";
             return false;
         }
 
@@ -74,7 +74,7 @@ class LoginModel
         if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
             if ($result->user_active != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET";
                 return false;
             }
 
@@ -139,7 +139,7 @@ class LoginModel
             $sth = $this->db->prepare($sql);
             $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
             // feedback message
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_WRONG";
             return false;
         }
 
@@ -157,20 +157,20 @@ class LoginModel
 
         // do we have a cookie var ?
         if (!$cookie) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_COOKIE_INVALID;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_COOKIE_INVALID";
             return false;
         }
 
         // check cookie's contents, check if cookie contents belong together
         list ($user_id, $token, $hash) = explode(':', $cookie);
         if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_COOKIE_INVALID;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_COOKIE_INVALID";
             return false;
         }
 
         // do not log in when token is empty
         if (empty($token)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_COOKIE_INVALID;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_COOKIE_INVALID";
             return false;
         }
 
@@ -212,10 +212,10 @@ class LoginModel
             // NOTE: we don't set another rememberme-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
             // again from time to time. This is good && safe ! ;)
-            $_SESSION["feedback_positive"][] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_COOKIE_LOGIN_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_COOKIE_INVALID;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_COOKIE_INVALID";
             return false;
         }
     }
@@ -249,7 +249,7 @@ class LoginModel
                 $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
                 $count =  $query->rowCount();
                 if ($count != 1) {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED;
+                    $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED";
                     return false;
                 }
 
@@ -327,19 +327,18 @@ class LoginModel
     {
         // new username provided ?
         if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_FIELD_EMPTY";
             return false;
         }
-
         // new username same as old one ?
         if ($_POST['user_name'] == $_SESSION["user_name"]) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_SAME_AS_OLD_ONE";
             return false;
         }
 
         // username cannot be empty && must be azAZ09 && 2-64 characters
         if (!preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN";
             return false;
         }
 
@@ -351,19 +350,19 @@ class LoginModel
         $query->execute(array(':user_name' => $user_name));
         $count =  $query->rowCount();
         if ($count == 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_ALREADY_TAKEN";
             return false;
         }
-
+        
         $query = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id");
         $query->execute(array(':user_name' => $user_name, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
         if ($count == 1) {
             Session::set('user_name', $user_name);
-            $_SESSION["feedback_positive"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_USERNAME_CHANGE_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_UNKNOWN_ERROR";
             return false;
         }
     }
@@ -376,19 +375,19 @@ class LoginModel
     {
         // email provided ?
         if (!isset($_POST['user_email']) || empty($_POST['user_email'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_FIELD_EMPTY";
             return false;
         }
 
         // check if new email is same like the old one
         if ($_POST['user_email'] == $_SESSION["user_email"]) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_EMAIL_SAME_AS_OLD_ONE";
             return false;
         }
 
         // user's email must be in valid email format
         if (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN";
             return false;
         }
 
@@ -397,7 +396,7 @@ class LoginModel
         $query->execute(array(':user_email' => $_POST['user_email']));
         $count =  $query->rowCount();
         if ($count == 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USER_EMAIL_ALREADY_TAKEN";
             return false;
         }
 
@@ -407,14 +406,14 @@ class LoginModel
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
         if ($count != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_UNKNOWN_ERROR";
             return false;
         }
 
         Session::set('user_email', $user_email);
         // call the setGravatarImageUrl() method which writes gravatar URLs into the session
         $this->setGravatarImageUrl($user_email, AVATAR_SIZE);
-        $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
+        $_SESSION["feedback_positive"][] = "FEEDBACK_EMAIL_CHANGE_SUCCESSFUL";
         return false;
     }
 
@@ -427,25 +426,25 @@ class LoginModel
     {
         // perform all necessary form checks
         if (!$this->checkCaptcha()) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_CAPTCHA_WRONG";
         } elseif (empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_FIELD_EMPTY";
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_FIELD_EMPTY";
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_REPEAT_WRONG";
         } elseif (strlen($_POST['user_password_new']) < 6) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_TOO_SHORT";
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG";
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN";
         } elseif (empty($_POST['user_email'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_EMAIL_FIELD_EMPTY";
         } elseif (strlen($_POST['user_email']) > 64) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_EMAIL_TOO_LONG";
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN";
         } elseif (!empty($_POST['user_name'])
             && strlen($_POST['user_name']) <= 64
             && strlen($_POST['user_name']) >= 2
@@ -473,7 +472,7 @@ class LoginModel
             $query->execute(array(':user_name' => $user_name));
             $count =  $query->rowCount();
             if ($count == 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_ALREADY_TAKEN";
                 return false;
             }
 
@@ -482,7 +481,7 @@ class LoginModel
             $query->execute(array(':user_email' => $user_email));
             $count =  $query->rowCount();
             if ($count == 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_USER_EMAIL_ALREADY_TAKEN";
                 return false;
             }
 
@@ -492,18 +491,19 @@ class LoginModel
             $user_creation_timestamp = time();
 
             // write new users data into database
-            $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
+            $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type, user_active)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type, :user_active)";
             $query = $this->db->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
                                   ':user_password_hash' => $user_password_hash,
                                   ':user_email' => $user_email,
                                   ':user_creation_timestamp' => $user_creation_timestamp,
                                   ':user_activation_hash' => $user_activation_hash,
+                                  ':user_active' => EMAIL_VERIFICATION ? 0 : 1,
                                   ':user_provider_type' => 'DEFAULT'));
             $count =  $query->rowCount();
             if ($count != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_CREATION_FAILED;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_ACCOUNT_CREATION_FAILED";
                 return false;
             }
 
@@ -511,24 +511,32 @@ class LoginModel
             $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
             $query->execute(array(':user_name' => $user_name));
             if ($query->rowCount() != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_UNKNOWN_ERROR";
                 return false;
             }
             $result_user_row = $query->fetch();
             $user_id = $result_user_row->user_id;
 
-            // send verification email, if verification email sending failed: instantly delete the user
-            if ($this->sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
-                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
-                return true;
-            } else {
-                $query = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
-                $query->execute(array(':last_inserted_id' => $user_id));
-                $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
-                return false;
+            
+            if(EMAIL_VERIFICATION)
+            {
+                // send verification email, if verification email sending failed: instantly delete the user
+                if ($this->sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+                    $_SESSION["feedback_positive"][] = "FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED";
+                    return true;
+                } else {
+                    $query = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
+                    $query->execute(array(':last_inserted_id' => $user_id));
+                    $_SESSION["feedback_negative"][] = "FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED";
+                    return false;
+                }
+            }
+            else
+            {
+                $_SESSION["feedback_positive"][] = "FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED";
             }
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_UNKNOWN_ERROR";
         }
         // default return, returns only true of really successful (see above)
         return false;
@@ -576,10 +584,10 @@ class LoginModel
 
         // final sending && check
         if($mail->Send()) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR";
             return false;
         }
     }
@@ -598,10 +606,10 @@ class LoginModel
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
         if ($sth->rowCount() == 1) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_ACCOUNT_ACTIVATION_FAILED";
             return false;
         }
     }
@@ -662,12 +670,12 @@ class LoginModel
     public function createAvatar()
     {
         if (!is_dir(AVATAR_PATH) || !is_writable(AVATAR_PATH)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE";
             return false;
         }
 
         if (!isset($_FILES['avatar_file']) || empty ($_FILES['avatar_file']['tmp_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED";
             return false;
         }
 
@@ -676,12 +684,12 @@ class LoginModel
 
         // if input file too big (>5MB)
         if ($_FILES['avatar_file']['size'] > 5000000 ) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_AVATAR_UPLOAD_TOO_BIG";
             return false;
         }
         // if input file too small
         if ($image_proportions[0] < AVATAR_SIZE || $image_proportions[1] < AVATAR_SIZE) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_AVATAR_UPLOAD_TOO_SMALL";
             return false;
         }
 
@@ -692,10 +700,10 @@ class LoginModel
             $query = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
             Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-            $_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE";
             return false;
         }
     }
@@ -825,7 +833,7 @@ class LoginModel
     public function requestPasswordReset()
     {
         if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_FIELD_EMPTY";
             return false;
         }
 
@@ -842,7 +850,7 @@ class LoginModel
         $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
         $count = $query->rowCount();
         if ($count != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USER_DOES_NOT_EXIST";
             return false;
         }
 
@@ -884,7 +892,7 @@ class LoginModel
         if ($count == 1) {
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_RESET_TOKEN_FAIL";
             return false;
         }
     }
@@ -932,10 +940,10 @@ class LoginModel
 
         // send the mail
         if($mail->Send()) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR";
             return false;
         }
     }
@@ -960,7 +968,7 @@ class LoginModel
 
         // if this user with exactly this verification hash code exists
         if ($query->rowCount() != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST";
             return false;
         }
 
@@ -971,10 +979,10 @@ class LoginModel
         // if password reset request was sent within the last hour (this timeout is for security reasons)
         if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
             // verification was successful
-            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_RESET_LINK_VALID;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_PASSWORD_RESET_LINK_VALID";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_LINK_EXPIRED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_RESET_LINK_EXPIRED";
             return false;
         }
     }
@@ -990,29 +998,29 @@ class LoginModel
     {
         // basic checks
         if (!isset($_POST['user_name']) || empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USERNAME_FIELD_EMPTY";
             return false;
         }
         if (!isset($_POST['user_password_reset_hash']) || empty($_POST['user_password_reset_hash'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_MISSING;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_RESET_TOKEN_MISSING";
             return false;
         }
         if (!isset($_POST['user_password_new']) || empty($_POST['user_password_new'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_FIELD_EMPTY";
             return false;
         }
         if (!isset($_POST['user_password_repeat']) || empty($_POST['user_password_repeat'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_FIELD_EMPTY";
             return false;
         }
         // password does not match password repeat
         if ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_REPEAT_WRONG";
             return false;
         }
         // password too short
         if (strlen($_POST['user_password_new']) < 6) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_TOO_SHORT";
             return false;
         }
 
@@ -1043,19 +1051,19 @@ class LoginModel
         // check if exactly one row was successfully changed:
         if ($query->rowCount() == 1) {
             // successful password change!
-            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL";
             return true;
         }
 
         // default return
-        $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_CHANGE_FAILED;
+        $_SESSION["feedback_negative"][] = "FEEDBACK_PASSWORD_CHANGE_FAILED";
         return false;
     }
 
     public function setDefaultLanguage($lang = "")
     {
         if ( $lang == "" && ( !isset($_POST['user_language']) || empty($_POST['user_language']) ) ) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_SET;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_LANGUAGE_NOT_SET";
             return false;
         } 
         //check if a post form submitted the language when lang is empty
@@ -1076,11 +1084,11 @@ class LoginModel
             }
             else
             {
-                $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_EXIST;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_LANGUAGE_NOT_EXIST";
             }
         } catch (Exception $e)
         {
-            $_SESSION["feedback_negative"][] = FEEDBACK_LANGUAGE_NOT_VALID;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_LANGUAGE_NOT_VALID";
             return false;
         }
         
@@ -1110,9 +1118,9 @@ class LoginModel
             if ($query->rowCount() == 1) {
                 // set account type in session to 2
                 Session::set('user_account_type', 2);
-                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
+                $_SESSION["feedback_positive"][] = "FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL";
             } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_ACCOUNT_UPGRADE_FAILED";
             }
         } elseif (isset($_POST["user_account_downgrade"]) && !empty($_POST["user_account_downgrade"])) {
 
@@ -1127,9 +1135,9 @@ class LoginModel
             if ($query->rowCount() == 1) {
                 // set account type in session to 1
                 Session::set('user_account_type', 1);
-                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
+                $_SESSION["feedback_positive"][] = "FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL";
             } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_ACCOUNT_DOWNGRADE_FAILED";
             }
         }
     }
@@ -1232,26 +1240,26 @@ class LoginModel
                 // when facebook goes offline || armageddon comes || some shit like that
                 error_log($e);
                 $user = null;
-                $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_OFFLINE;
+                $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_OFFLINE";
                 return false;
             }
         }
 
         // if we don't have the facebook-user array variable, leave the method
         if (!$facebook_user_data) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS";
             return false;
         }
 
         // check if user provides mail address (registration will only work when user agrees to provide email address)
         if (!$this->facebookUserHasEmail($facebook_user_data)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_NEEDED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_EMAIL_NEEDED";
             return false;
         }
 
         // check if a user with that facebook user id (UID) has already registered
         if ($this->facebookUserIdExistsAlreadyInDatabase($facebook_user_data)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS";
             return false;
         }
 
@@ -1261,7 +1269,7 @@ class LoginModel
         	$facebook_user_data["username"] = $this->generateUniqueUserNameFromExistingUserName($facebook_user_data["username"]);
          if ($this->facebookUserNameExistsAlreadyInDatabase($facebook_user_data)) {
         	//shouldn't get here if we managed to generate a unique name!
-        	$_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS;
+        	$_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS";
           return false;
          }
         }
@@ -1269,16 +1277,16 @@ class LoginModel
 
         // check if that email address already exists in our database
         if ($this->facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS";
             return false;
         }
 
         // all necessary things have been checked, so let's create that user
         if ($this->registerNewUserWithFacebook($facebook_user_data)) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
+            $_SESSION["feedback_positive"][] = "FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL";
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_UNKNOWN_ERROR";
             return false;
         }
 

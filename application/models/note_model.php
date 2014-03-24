@@ -63,7 +63,7 @@ class NoteModel
         if ($count == 1) {
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_NOTE_CREATION_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_NOTE_CREATION_FAILED";
         }
         // default return
         return false;
@@ -88,7 +88,7 @@ class NoteModel
         if ($count == 1) {
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_NOTE_EDITING_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_NOTE_EDITING_FAILED";
         }
         // default return
         return false;
@@ -110,7 +110,7 @@ class NoteModel
         if ($count == 1) {
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_NOTE_DELETION_FAILED;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_NOTE_DELETION_FAILED";
         }
         // default return
         return false;

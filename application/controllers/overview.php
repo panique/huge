@@ -21,7 +21,9 @@ class Overview extends Controller
     function index()
     {
         $overview_model = $this->loadModel('Overview');
-        $this->view->users = $overview_model->getAllUsersProfiles();
+        $parameters["users"] = $overview_model->getAllUsersProfiles();
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('overview/index');
     }
 
@@ -33,7 +35,10 @@ class Overview extends Controller
     function showUserProfile($user_id)
     {
         $overview_model = $this->loadModel('Overview');
-        $this->view->user = $overview_model->getUserProfile($user_id);
+        $parameters["user"] = $overview_model->getUserProfile($user_id);
+        
+        $this->view->set("parameters", $parameters);
+        $this->view->set("css", array("style.css"));
         $this->view->render('overview/showuserprofile');
     }
 }

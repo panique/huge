@@ -1,22 +1,22 @@
 <div class="content">
-    <h1>Your profile</h1>
+    <h1>{$lang.profile}</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
+    {$feedback}
 
     <div>
-        Your username: <?php echo Session::get('user_name'); ?>
+        {$lang.profileuser} {$username}
     </div>
     <div>
-        Your email: <?php echo Session::get('user_email'); ?>
+        {$lang.profilemail} {$email}
     </div>
     <div>
-        Your gravatar pic (on gravatar.com): <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
+        {$lang.profilegrav} <img src='{$gravatarImageURL}' />
     </div>
     <div>
-        Your avatar pic (saved on local server): <img src='<?php echo Session::get('user_avatar_file'); ?>' />
+        {$lang.profileavatar} <img src='{$avatarFile}' />
     </div>
     <div>
-        Your account type is: <?php echo Session::get('user_account_type'); ?>
+        {$lang.profiletype} {$accountType}
     </div>
 </div>

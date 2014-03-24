@@ -1,12 +1,12 @@
 <div class="content">
-    <h1>Change your email adress</h1>
+    <h1>{$lang.editemail}</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
+    {$feedback}
 
-    <form action="<?php echo URL; ?>login/edituseremail_action" method="post">
-        <label>New email adress:</label>
+    <form action="{$site_path}login/edituseremail_action" method="post">
+        <label>{$lang.editemailnew}</label>
         <input type="text" name="user_email" required />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="{$lang.submit}" />
     </form>
 </div>

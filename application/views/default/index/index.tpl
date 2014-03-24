@@ -19,6 +19,6 @@
     </p> 
     
     <p>
-        {$lang.login1} <a href="./login">{$lang.login2}</a>
+        {$lang.login1} <a href="{$site_path}login">{$lang.login2}</a>
     </p>
 </div>

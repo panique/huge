@@ -70,7 +70,7 @@ class OverviewModel
                 $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
+            $_SESSION["feedback_negative"][] = "FEEDBACK_USER_DOES_NOT_EXIST";
         }
 
         return $user;
