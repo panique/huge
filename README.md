@@ -102,13 +102,23 @@ If you think this script is useful and saves you a lot of work, then think about
 ## Themes / User Interfaces / Styles
 
 Bookmark the highly related partner-project "[php-login-styles](https://github.com/panique/php-login-styles)" which
-will host beautiful themes for all the php-login versions. Currently this is only a placeholder,
-the project starts in early 2014.
+will host beautiful themes for php-login and the eventually also for the smaller version (see above).
+This project has not been started yet.
 
-## Installation
+## Current and further development
 
-You can find a more detailed version of this guideline in this blog post tutorial:
-[How to install php-login.net’s php-login script (MVC version) on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/).
+See active issues and requested features here:
+https://github.com/panique/php-login/issues?state=open
+
+See the milestone tracking of 2.0 and the upcoming 3.0 (early 2015) here:
+https://github.com/panique/php-login/issues/milestones
+
+## External installation guidelines
+
+* [How to install php-login on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/)
+* [How to install php-login on Windows 7 / 8 (for development)](http://www.dev-metal.com/install-php-login-windows-7-8/)
+
+## Installation on Ubuntu 12.04 LTS
 
 This installation guideline uses Ubuntu 12.04 LTS (as it is the standard and by far the most long-term supported
 mainstream server OS (supported until 2017). For more, see the
