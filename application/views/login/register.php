@@ -39,7 +39,7 @@
             <!-- to avoid weird with-slash-without-slash issues: simply always use the URL constant here -->
             <img id="captcha" src="<?php echo URL; ?>login/showCaptcha" />
             <span style="display: block; font-size: 11px; color: #999; margin-bottom: 10px">
-                <a href="#" onclick="document.getElementById('captcha').src = '<?php echo URL; ?>login/showCaptcha'; return false">[ Reload Captcha ]</a>
+                <a href="#" onclick="document.getElementById('captcha').src = '<?php echo URL; ?>login/showCaptcha' + Math.random(); return false">[ Reload Captcha ]</a>
             </span>
             <label>
                 Please enter these characters
