@@ -18,10 +18,10 @@
     },
     "require":{
         "php": ">=5.3.7",
-        "ircmaxell/password-compat": "~1.0",
-        "phpmailer/phpmailer": "~5.2",
-        "gregwar/captcha": "~1.0",
-        "facebook/php-sdk": "~3.2",
+        "ircmaxell/password-compat": "~1.0.3",
+        "phpmailer/phpmailer": "~5.2.7",
+        "gregwar/captcha": "~1.0.11",
+        "facebook/php-sdk": "~3.2.3",
         "raveren/kint": "~1.0@dev"
     }
 }
