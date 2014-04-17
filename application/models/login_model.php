@@ -550,7 +550,7 @@ class LoginModel
             // enable SMTP authentication
             $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+            if (defined('EMAIL_SMTP_ENCRYPTION')) {
                 $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // set SMTP provider's credentials
