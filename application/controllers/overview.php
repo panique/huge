@@ -32,8 +32,12 @@ class Overview extends Controller
      */
     function showUserProfile($user_id)
     {
-        $overview_model = $this->loadModel('Overview');
-        $this->view->user = $overview_model->getUserProfile($user_id);
-        $this->view->render('overview/showuserprofile');
+        if (isset($user_id)) {
+            $overview_model = $this->loadModel('Overview');
+            $this->view->user = $overview_model->getUserProfile($user_id);
+            $this->view->render('overview/showuserprofile');
+        } else {
+            header('location: ' . URL);
+        }
     }
 }
