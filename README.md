@@ -1,9 +1,9 @@
-![php-login introduction & quickstart placeholder picture](_tutorial/placeholder.jpg)
+[![php-login introduction & quickstart placeholder picture](_tutorial/placeholder.png)(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)]
 
 # php-login
 
 *Welcome to the NEW 2.0 version of the php-login! All 4 scripts have their own repos now and "php-login" is the new home
-of the former 4-full-mvc-framework version. Thanks for your support, 900+ stars and 380+ forks, simply WOW!*
+of the former 4-full-mvc-framework version. Thanks for your support, 1.000+ stars and 400+ forks, simply WOW!*
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
@@ -227,7 +227,3 @@ This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm
 ## Hire me
 
 I'm available for freelance work. Remote worldwide or locally around Central Europe. Mail me if you like.
-
-## GitHub stats (by BitDeli)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/panique/php-login/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
