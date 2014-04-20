@@ -3,6 +3,7 @@
 **April 20th 2014**
 - new header pictures, including a new donate-banner
 - better default gravatar avatar (without JPEG artifacts)
+- fix for #380: no broken avatars for facebook anymore when using gravatar
 
 **April 18th 2014**
 - composer.json got better dependency version definition (to avoid too new / incompatible versions being loaded)
