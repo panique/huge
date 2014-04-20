@@ -54,10 +54,14 @@ class Note extends Controller
      */
     public function edit($note_id)
     {
-        // get the note that you want to edit (to show the current content)
-        $note_model = $this->loadModel('Note');
-        $this->view->note = $note_model->getNote($note_id);
-        $this->view->render('note/edit');
+        if (isset($note_id)) {
+            // get the note that you want to edit (to show the current content)
+            $note_model = $this->loadModel('Note');
+            $this->view->note = $note_model->getNote($note_id);
+            $this->view->render('note/edit');
+        } else {
+            header('location: ' . URL . 'note');
+        }
     }
 
     /**
@@ -67,7 +71,7 @@ class Note extends Controller
      */
     public function editSave($note_id)
     {
-        if (isset($_POST['note_text'])) {
+        if (isset($_POST['note_text']) && isset($note_id)) {
             // perform the update: pass note_id from URL and note_text from POST
             $note_model = $this->loadModel('Note');
             $note_model->editSave($note_id, $_POST['note_text']);
@@ -83,8 +87,10 @@ class Note extends Controller
      */
     public function delete($note_id)
     {
-        $note_model = $this->loadModel('Note');
-        $note_model->delete($note_id);
+        if (isset($note_id)) {
+            $note_model = $this->loadModel('Note');
+            $note_model->delete($note_id);
+        }
         header('location: ' . URL . 'note');
     }
 }

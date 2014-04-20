@@ -127,6 +127,11 @@ class Login extends Controller
      */
     function editUsername_action()
     {
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        // Note: This line was missing in early version of the script, but it was never a real security issue as
+        // it was not possible to read or edit anything in the database unless the user is really logged in and
+        // has a valid session.
+        Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $login_model->editUserName();
         $this->view->render('login/editusername');
@@ -147,6 +152,11 @@ class Login extends Controller
      */
     function editUserEmail_action()
     {
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        // Note: This line was missing in early version of the script, but it was never a real security issue as
+        // it was not possible to read or edit anything in the database unless the user is really logged in and
+        // has a valid session.
+        Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $login_model->editUserEmail();
         $this->view->render('login/edituseremail');
@@ -169,6 +179,11 @@ class Login extends Controller
      */
     function uploadAvatar_action()
     {
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        // Note: This line was missing in early version of the script, but it was never a real security issue as
+        // it was not possible to read or edit anything in the database unless the user is really logged in and
+        // has a valid session.
+        Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $login_model->createAvatar();
         $this->view->render('login/uploadavatar');
@@ -189,6 +204,11 @@ class Login extends Controller
      */
     function changeAccountType_action()
     {
+        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+        // Note: This line was missing in early version of the script, but it was never a real security issue as
+        // it was not possible to read or edit anything in the database unless the user is really logged in and
+        // has a valid session.
+        Auth::handleLogin();
         $login_model = $this->loadModel('Login');
         $login_model->changeAccountType();
         $this->view->render('login/changeaccounttype');
@@ -251,9 +271,13 @@ class Login extends Controller
      */
     function verify($user_id, $user_activation_verification_code)
     {
-        $login_model = $this->loadModel('Login');
-        $login_model->verifyNewUser($user_id, $user_activation_verification_code);
-        $this->view->render('login/verify');
+        if (isset($user_id) && isset($user_activation_verification_code)) {
+            $login_model = $this->loadModel('Login');
+            $login_model->verifyNewUser($user_id, $user_activation_verification_code);
+            $this->view->render('login/verify');
+        } else {
+            header('location: ' . URL . 'login/index');
+        }
     }
 
     /**
@@ -294,6 +318,8 @@ class Login extends Controller
 
     /**
      * Set the new password
+     * Please note that this happens while the user is not logged in.
+     * The user identifies via the data provided by the password reset link from the email.
      */
     function setNewPassword()
     {
