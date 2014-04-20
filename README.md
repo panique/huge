@@ -4,8 +4,7 @@
 
 # php-login
 
-*Welcome to the NEW 2.0 version of the php-login! All 4 scripts have their own repos now and "php-login" is the new home
-of the former 4-full-mvc-framework version. Thanks for your support, 1.000+ stars and 400+ forks, simply WOW!*
+*Thanks for 1.000+ stars and 400+ forks. Wow!*
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
