@@ -1,4 +1,4 @@
-[![php-login introduction & quickstart placeholder picture](_tutorial/placeholder.png)(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)]
+[![php-login introduction & quickstart placeholder picture](_tutorial/placeholder.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
 # php-login
 
