@@ -1,5 +1,13 @@
 # CHANGE LOG
 
+**April 20th 2014**
+- new header pictures, including a new donate-banner
+- better default gravatar avatar (without JPEG artifacts)
+
+**April 18th 2014**
+- composer.json got better dependency version definition (to avoid too new / incompatible versions being loaded)
+- the captcha can be reloaded on the fly now
+
 **March 1st 2014**
 - changed link to new support forum
 
