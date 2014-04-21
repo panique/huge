@@ -17,7 +17,7 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
-### MVC Framework Version 2.0-beta (this one here)
+### MVC Framework Version 2.0 (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * users can register and login via Facebook (official Facebook PHP SDK used)
@@ -83,6 +83,9 @@ See a [live demonstration](http://php-login.net/demo4.html) or [see the server's
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the tutorial shows how to do)
 
+Also make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
+used Composer before. This script is not for beginners.
+
 ## License
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). Totally free for private or commercial projects.
@@ -117,6 +120,7 @@ https://github.com/panique/php-login/issues/milestones
 ## External installation guidelines
 
 * [How to install php-login on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/)
+* [How to install php-login on Ubuntu 14.04 LTS](http://www.dev-metal.com/install-php-login-nets-php-login-script-mvc-version-ubuntu-14-04-lts/)
 * [How to install php-login on Windows 7 / 8 (for development)](http://www.dev-metal.com/install-php-login-windows-7-8/)
 
 ## Installation on Ubuntu 12.04 LTS
