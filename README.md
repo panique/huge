@@ -17,7 +17,7 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
-### MVC Framework Version 2.0-beta (this one here)
+### MVC Framework Version 2.0 (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * users can register and login via Facebook (official Facebook PHP SDK used)
@@ -82,6 +82,9 @@ See a [live demonstration](http://php-login.net/demo4.html) or [see the server's
 * installed tools on your server: git, curl, composer (the tutorial shows how to do)
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the tutorial shows how to do)
+
+Also make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
+used Composer before. This script is not for beginners.
 
 ## License
 
