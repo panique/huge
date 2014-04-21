@@ -117,6 +117,7 @@ https://github.com/panique/php-login/issues/milestones
 ## External installation guidelines
 
 * [How to install php-login on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/)
+* [How to install php-login on Ubuntu 14.04 LTS](http://www.dev-metal.com/install-php-login-nets-php-login-script-mvc-version-ubuntu-14-04-lts/)
 * [How to install php-login on Windows 7 / 8 (for development)](http://www.dev-metal.com/install-php-login-windows-7-8/)
 
 ## Installation on Ubuntu 12.04 LTS
