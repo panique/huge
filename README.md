@@ -58,7 +58,7 @@ Register, login, logout, email verification, password reset, edit user data, gra
 remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
 login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
-## What's new ?
+## What's new (in version 2.0) ?
 
 - professional file/folder structure
 - Composer
@@ -76,15 +76,15 @@ See a [live demonstration](http://php-login.net/demo4.html) or [see the server's
 
 ## Requirements
 
+Make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
+used Composer before. This script is not for beginners.
+
 * **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
 * **MySQL 5** database (better use versions 5.5+ as very old versions have a [PDO injection bug](http://stackoverflow.com/q/134099/1114320)
 * installed PHP extensions: pdo, gd, openssl (the tutorial shows how to do)
 * installed tools on your server: git, curl, composer (the tutorial shows how to do)
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the tutorial shows how to do)
-
-Also make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
-used Composer before. This script is not for beginners.
 
 ## License
 
@@ -98,7 +98,7 @@ Please commit only in *develop* branch. The *master* branch will always contain 
 
 If you think this script is useful and saves you a lot of work, then think about supporting the project:
 
-1. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
+1. Rent your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
 2. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
    or [GitTip](https://www.gittip.com/Panique/)
 3. Contribute to this project.
@@ -227,8 +227,10 @@ https://packagist.org/packages/raveren/kint
 
 ## Thanks
 
-This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm/)**. A big "Thank You!" to IntelliJ for giving php-login free licenses of this wonderful IDE.
+This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm/)**.
+A big "Thank You!" to IntelliJ for giving php-login free licenses of this wonderful IDE.
 
 ## Hire me
 
-I'm available for freelance work. Remote worldwide or locally around Central Europe. Mail me if you like.
+I'm available for freelance work, mainly PHP and frontend. Remote worldwide or locally around Central Europe.
+Send a mail if you like, you can find out my email address easily.
