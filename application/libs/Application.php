@@ -28,7 +28,7 @@ class Application
 
         // if url_controller is empty, simply show the main page (index/index)
         if (!$this->url_controller) {
-            require CONTROLLERS_PATH . "index.php";
+            require CONTROLLER_PATH . "index.php";
             $controller = new Index();
             $controller->index();
             exit;
@@ -40,7 +40,7 @@ class Application
         }
 
         // Either the controller doesn't exist, or the method doesn't exist inside the controller; We exit to the error page
-        if (!file_exists(CONTROLLERS_PATH . $this->url_controller . ".php") or !method_exists($this->url_controller, $this->url_action)) {
+        if (!file_exists(CONTROLLER_PATH . $this->url_controller . ".php") or !method_exists($this->url_controller, $this->url_action)) {
             header("location: " . URL . "error/index");
             exit;
         }
@@ -48,7 +48,7 @@ class Application
         // We've reached this far, so the file exists and the method does too
         // Load the controller file and create the controller
         // example: if controller would be "car", then this line would translate into: $this->car = new car();
-        require CONTROLLERS_PATH . $this->url_controller . ".php";
+        require CONTROLLER_PATH . $this->url_controller . ".php";
         $this->url_controller = new $this->url_controller();
 
         // Call the method and pass the arguments to it
