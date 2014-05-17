@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**May 17th 2014**
+- better description and tags in the composer.json
+
 **April 20th 2014**
 - new header pictures, including a new donate-banner
 - better default gravatar avatar (without JPEG artifacts)
