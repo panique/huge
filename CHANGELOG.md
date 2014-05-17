@@ -2,6 +2,7 @@
 
 **May 17th 2014**
 - better description and tags in the composer.json
+- .htaccess movement to application folder to prevent access to anything inside application/
 
 **April 20th 2014**
 - new header pictures, including a new donate-banner
