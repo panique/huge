@@ -233,4 +233,4 @@ A big "Thank You!" to IntelliJ for giving php-login free licenses of this wonder
 ## Hire me
 
 I'm available for freelance work, mainly PHP and frontend. Remote worldwide or locally around Central Europe.
-Send a mail if you like, you can find out my email address easily.
+Please send a mail if you like, you can find out my email address easily.
