@@ -26,13 +26,14 @@ define('URL', 'http://localhost/php-login/');
  * Configuration for: Folders
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
  */
-define('LIBS_PATH', 'application/libs/');
-define('CONTROLLER_PATH', 'application/controllers/');
-define('MODELS_PATH', 'application/models/');
-define('VIEWS_PATH', 'application/views/');
+define('BASE_PATH',         realpath(dirname(__FILE__).'/../../'));
+define('LIBS_PATH',         BASE_PATH . 'application/libs/');
+define('CONTROLLER_PATH',   BASE_PATH . 'application/controllers/');
+define('MODELS_PATH',       BASE_PATH . 'application/models/');
+define('VIEWS_PATH',        BASE_PATH . 'application/views/');
 // don't forget to make this folder writable via chmod 775 or 777 (?)
 // the slash at the end is VERY important!
-define('AVATAR_PATH', 'public/avatars/');
+define('AVATAR_PATH',       BASE_PATH .'public/avatars/');
 
 /**
  * Configuration for: Additional login providers: Facebook
