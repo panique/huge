@@ -4,7 +4,7 @@
  * A simple, clean and secure PHP Login Script embedded into a small framework.
  * Also available in other versions: one-file, minimal, advanced. See php-login.net for more info.
  *
- * MVC FRAMEWORK VERSION
+ * MVC FRAMEWORK VERSION 3.0 (in development)
  *
  * @author Panique
  * @link http://www.php-login.net/

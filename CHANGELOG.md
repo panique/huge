@@ -1,5 +1,10 @@
 # CHANGE LOG
 
+**June 6th 2014**
+
+- started 3.0 version of the project (currently only in the develop branch), 2.0 can be found in the master branch.
+  clean releases and clean tags will come soon.
+
 **May 17th 2014**
 - better description and tags in the composer.json
 - .htaccess movement to application folder to prevent access to anything inside application/

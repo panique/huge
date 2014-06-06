@@ -2,7 +2,10 @@
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
-# php-login
+# php-login 3.0
+
+2.0 can be found in the master branch (and as a 2.0 release tag), 3.0 is in the develop branch. 2.0 will not be touched
+anymore unless there's a serious bug. If so, please create a feature-branch of master branch that contains the fix.
 
 *Thanks for 1.000+ stars and 400+ forks. Wow!*
 
@@ -17,7 +20,7 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
-### MVC Framework Version 2.0 (this one here)
+### MVC Framework Version 3.0 (this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * users can register and login via Facebook (official Facebook PHP SDK used)
@@ -58,7 +61,11 @@ Register, login, logout, email verification, password reset, edit user data, gra
 remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
 login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
 
-## What's new (in version 2.0) ?
+## What's new in version 3.0 ?
+
+TODO
+
+## What's new in version 2.0 ?
 
 - professional file/folder structure
 - Composer
