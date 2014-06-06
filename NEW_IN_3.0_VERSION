@@ -4,3 +4,13 @@ contains the fix.
 
 (panique) smaller stuff in readme, changelogs etc.
 (panique) moved .htaccess from views to application folder to prevent access to anything inside application/
+(devplanete) regex optimizations (better human-readable)
+(devplanete) database field optimizations
+
+
+TO TEST:
+
+(1) This one here https://github.com/devplanete/php-login/commit/39cc4e4f966af371580b02655f3e3c653f466823 removes the
+final testing of everything that has been negative-checked before (hard to explain, but the commit shows quite good).
+This is a quite common practice but I still have a not 100% good feeling with it, as it deletes the final "do we have
+all we need" check and relies on the "block all negative cases" check.
