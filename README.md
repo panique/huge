@@ -21,6 +21,10 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
 ### MVC Framework Version 3.0 (this one here)
+
+TODO
+
+### MVC Framework Version 2.0 (older version of this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * users can register and login via Facebook (official Facebook PHP SDK used)
