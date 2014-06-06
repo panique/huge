@@ -1,7 +1,6 @@
 # CHANGE LOG
 
 **June 6th 2014**
-
 - started 3.0 version of the project (currently only in the develop branch), 2.0 can be found in the master branch.
   clean releases and clean tags will come soon.
 
