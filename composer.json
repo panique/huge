@@ -1,8 +1,8 @@
 {
     "name": "panique/php-login",
     "type": "project",
-    "description": "A PHP login system embedded in a simple MVC framework",
-    "keywords": ["login", "auth", "user", "authentication", "mvc"],
+    "description": "A full-feature user authentication / login system embedded into a simple but powerful MVC framework structure",
+    "keywords": ["login", "auth", "user", "authentication", "mvc", "membership"],
     "homepage": "https://github.com/panique/php-login",
     "license": "MIT",
     "authors": [

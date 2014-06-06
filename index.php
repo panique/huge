@@ -16,7 +16,7 @@
 require 'application/config/config.php';
 
 // The auto-loader to load the php-login related internal stuff automatically
-require 'application/config/autoload.php';
+require 'application/config/autoload/autoload.php';
 
 // The Composer auto-loader (official way to load Composer contents) to load external stuff automatically
 if (file_exists('vendor/autoload.php')) {
