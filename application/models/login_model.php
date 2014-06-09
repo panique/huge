@@ -333,7 +333,7 @@ class LoginModel
         }
 
         // username cannot be empty and must be azAZ09 and 2-64 characters
-        if (!preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $_POST['user_name'])) {
+        if (!preg_match("/^[a-zA-Z0-9]{2,64}$/", $_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
             return false;
         }
@@ -433,7 +433,7 @@ class LoginModel
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
         } elseif (strlen($_POST['user_name']) > 64 OR strlen($_POST['user_name']) < 2) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
-        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
+        } elseif (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
         } elseif (empty($_POST['user_email'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
