@@ -444,7 +444,7 @@ class LoginModel
         } elseif (!empty($_POST['user_name'])
             AND strlen($_POST['user_name']) <= 64
             AND strlen($_POST['user_name']) >= 2
-            AND preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+            AND preg_match('/^[a-zA-Z0-9]{2,64}$/', $_POST['user_name'])
             AND !empty($_POST['user_email'])
             AND strlen($_POST['user_email']) <= 64
             AND filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
