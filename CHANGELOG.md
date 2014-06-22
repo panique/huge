@@ -1,5 +1,11 @@
 # CHANGE LOG
 
+**June 2014**
+- [oakwilliams] Assigned correct values to FEEDBACK_EMAIL_FIELD_EMPTY and FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY
+- [panique] smaller stuff in readme, changelogs etc.
+- [panique] moved .htaccess from views to application folder to prevent access to anything inside application/
+- [devplanete] database field optimizations
+
 **June 6th 2014**
 - started 3.0 version of the project (currently only in the develop branch), 2.0 can be found in the master branch.
   clean releases and clean tags will come soon.
