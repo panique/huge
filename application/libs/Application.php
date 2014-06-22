@@ -26,6 +26,8 @@ class Application
     public function __construct()
     {
         $this->splitUrl();
+        
+        $notFound = false;
 
         // check for controller: is the url_controller NOT empty ?
         if ($this->url_controller) {
@@ -52,8 +54,8 @@ class Application
                             $this->url_controller->{$this->url_action}();
                         }
                     } else {
-                        // redirect user to error page (there's a controller for that)
-                        header('location: ' . URL . 'error/index');
+                        // flag for a 404 Not Found response
+                        $notFound = true;
                     }
                 } else {
                     // default/fallback: call the index() method of a selected controller
@@ -61,14 +63,21 @@ class Application
                 }
             // obviously mistyped controller name, therefore show 404
             } else {
-                // redirect user to error page (there's a controller for that)
-                header('location: ' . URL . 'error/index');
+                // flag for a 404 Not Found response
+                $notFound = true;
             }
         // if url_controller is empty, simply show the main page (index/index)
         } else {
             // invalid URL, so simply show home/index
             require CONTROLLER_PATH . 'index.php';
             $controller = new Index();
+            $controller->index();
+        }
+        
+        // if a matching controller / method could not be found, send a 404 page without redirection
+        if ($notFound) {
+            require CONTROLLER_PATH . 'error.php';
+            $controller = new Error();
             $controller->index();
         }
     }
