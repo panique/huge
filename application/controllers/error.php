@@ -20,6 +20,8 @@ class Error extends Controller
      */
     function index()
     {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        
         $this->view->render('error/index');
     }
 }
