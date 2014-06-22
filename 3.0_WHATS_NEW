@@ -2,6 +2,9 @@ This file just shows the the changes from 2.0 to 3.0! 2.0 can be found in the ma
 3.0 is in the develop branch. For urgent fixes in 2.0 please create a feature-branch of the master branch that
 contains the fix.
 
+This list shows the changes in the 3.0 branch, with the latest on top:
+
+(oakwilliams) Assigned correct values to FEEDBACK_EMAIL_FIELD_EMPTY and FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY
 (panique) smaller stuff in readme, changelogs etc.
 (panique) moved .htaccess from views to application folder to prevent access to anything inside application/
 (devplanete) database field optimizations
