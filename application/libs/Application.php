@@ -54,7 +54,7 @@ class Application
                             $this->url_controller->{$this->url_action}();
                         }
                     } else {
-                        // flog for a 404 Not Found response
+                        // flag for a 404 Not Found response
                         $notFound = true;
                     }
                 } else {
@@ -63,7 +63,7 @@ class Application
                 }
             // obviously mistyped controller name, therefore show 404
             } else {
-                // flog for a 404 Not Found response
+                // flag for a 404 Not Found response
                 $notFound = true;
             }
         // if url_controller is empty, simply show the main page (index/index)
@@ -74,7 +74,7 @@ class Application
             $controller->index();
         }
         
-        // if a controller / method could not be found, send a 404 page without redirection
+        // if a matching controller / method could not be found, send a 404 page without redirection
         if ($notFound) {
             require CONTROLLER_PATH . 'error.php';
             $controller = new Error();
