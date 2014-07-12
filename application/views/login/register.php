@@ -23,7 +23,7 @@
             </label>
             <input id="login_input_email" class="login_input" type="email" name="user_email" required />
             <label for="login_input_password_new">
-                Password (min. 6 characters!
+                Password (min. 6 characters!)
                 <span class="login-form-password-pattern-reminder">
                     Please note: using a long sentence as a password is much much safer then something like "!c00lPa$$w0rd").
                     Have a look on
