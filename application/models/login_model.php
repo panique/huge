@@ -1254,7 +1254,7 @@ class LoginModel
     public function registerNewUserWithFacebook($facebook_user_data)
     {
         // delete dots from facebook-username (it's the common way to do this like that)
-        $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
+        $clean_user_name_from_facebook = $this->generateUniqueUserNameFromExistingUserName($facebook_user_data["first_name"]);
         // generate integer-timestamp for saving of account-creating date
         $user_creation_timestamp = time();
 
@@ -1325,7 +1325,7 @@ class LoginModel
     public function facebookUserNameExistsAlreadyInDatabase($facebook_user_data)
     {
         // delete dots from facebook's username (it's the common way to do this like that)
-        $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
+        $clean_user_name_from_facebook = $this->generateUniqueUserNameFromExistingUserName($facebook_user_data["first_name"]);
 
         $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook");
         $query->execute(array(':clean_user_name_from_facebook' => $clean_user_name_from_facebook));
