@@ -225,6 +225,7 @@ define("FEEDBACK_EMAIL_CHANGE_SUCCESSFUL", "Your email address has been changed 
 define("FEEDBACK_CAPTCHA_WRONG", "The entered captcha security characters were wrong.");
 define("FEEDBACK_PASSWORD_REPEAT_WRONG", "Password and password repeat are not the same.");
 define("FEEDBACK_PASSWORD_TOO_SHORT", "Password has a minimum length of 6 characters.");
+define("FEEDBACK_PASSWORD_TOO_LONG", "Password has a maximum length of 9001 characters.");
 define("FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG", "Username cannot be shorter than 2 or longer than 64 characters.");
 define("FEEDBACK_EMAIL_TOO_LONG", "Email cannot be longer than 64 characters.");
 define("FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED", "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail.");
