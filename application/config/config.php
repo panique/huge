@@ -14,6 +14,17 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+
+/**
+ * Just security, hey motherfucker, fuck you!
+ * 
+ */
+ini_set('session.cookie_httponly',1);
+ini_set('session.use_only_cookies',1);
+header('X-Content-Type-Options:nosniff');
+header('X-Frame-Options:SAMEORIGIN');
+header('X-XSS-Protection:1; mode=block;');
+
 /**
  * Configuration for: Base URL
  * This is the base url of our app. if you go live with your app, put your full domain name here.
