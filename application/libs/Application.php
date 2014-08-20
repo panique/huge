@@ -82,7 +82,7 @@ class Application
 
             // split URL
             $url = rtrim($_GET['url'], '/');
-            $url = filter_var($url, FILTER_SANITIZE_URL);
+            $url = filter_var($url, FILTER_SANITIZE_URL); /* lo, an explanation for fucking idiots(like pan...)(I will f*** your **s ********), this change need for URL phishing, an fuckign motherfucker, can enter an /index/index/çöçöçöçö url, with this change */ if($lo!=$url){header('Location: '.URL.'error/index');}
             $url = explode('/', $url);
 
             // Put URL parts into according properties
