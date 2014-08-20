@@ -358,7 +358,7 @@ class LoginModel
             $_SESSION["feedback_positive"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = L::errors_FEEDBACK_UNKNOWN_ERROR;
             return false;
         }
     }
@@ -402,7 +402,7 @@ class LoginModel
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
         if ($count != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = L::errors_FEEDBACK_UNKNOWN_ERROR;
             return false;
         }
 
@@ -506,7 +506,7 @@ class LoginModel
             $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
             $query->execute(array(':user_name' => $user_name));
             if ($query->rowCount() != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+                $_SESSION["feedback_negative"][] = L::errors_FEEDBACK_UNKNOWN_ERROR;
                 return false;
             }
             $result_user_row = $query->fetch();
@@ -523,7 +523,7 @@ class LoginModel
                 return false;
             }
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = L::errors_FEEDBACK_UNKNOWN_ERROR;
         }
         // default return, returns only true of really successful (see above)
         return false;
@@ -1238,7 +1238,7 @@ class LoginModel
             $_SESSION["feedback_positive"][] = FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL;
             return true;
         } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+            $_SESSION["feedback_negative"][] = L::errors_FEEDBACK_UNKNOWN_ERROR;
             return false;
         }
 
