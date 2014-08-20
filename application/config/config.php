@@ -103,7 +103,7 @@ define('COOKIE_DOMAIN', '.localhost');
  * if (ENVIRONMENT == Environments::PROD) {
  * 	define('DB_TYPE', 'mysql');
  * 	define('DB_HOST', '85.10.10.100');
- * 	define('DB_NAME', 'login');
+ * 	define('DB_NAME', 'login_' . ENVIRONEMTS::PROD);
  * 	define('DB_USER', 'prodUser');
  * 	define('DB_PASS', 'my_secret_prod_password');
  * } 
