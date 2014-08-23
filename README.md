@@ -2,6 +2,8 @@
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
+[![Donate with Flattr banner](_tutorial/donate-with-flattr.png)](https://flattr.com/submit/auto?user_id=panique&url=https%3A%2F%2Fgithub.com%2Fpanique%2Fphp-login)
+
 # php-login 3.0
 
 2.0 can be found in the master branch (and as a 2.0 release tag), 3.0 is in the develop branch. 2.0 will not be touched
