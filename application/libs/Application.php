@@ -10,12 +10,8 @@ class Application
     private $url_controller;
     /** @var null The method part (of the above controller) of the URL */
     private $url_action;
-    /** @var null Parameter one of the URL */
-    private $url_parameter_1;
-    /** @var null Parameter two of the URL */
-    private $url_parameter_2;
-    /** @var null Parameter three of the URL */
-    private $url_parameter_3;
+    /** @var null URL parameters */
+    private $url_parameters;
 
     /**
      * Starts the Application
@@ -39,18 +35,8 @@ class Application
                 // check for method: does such a method exist in the controller ?
                 if ($this->url_action) {
                     if (method_exists($this->url_controller, $this->url_action)) {
-
-                        // call the method and pass the arguments to it
-                        if (isset($this->url_parameter_3)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
-                        } elseif (isset($this->url_parameter_2)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2);
-                        } elseif (isset($this->url_parameter_1)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1);
-                        } else {
-                            // if no parameters given, just call the method without arguments
-                            $this->url_controller->{$this->url_action}();
-                        }
+                        // calls the method with url_parameters as the arguments
+                        call_user_func_array(array($this->url_controller, $this->url_action), $this->url_parameters);
                     } else {
                         // redirect user to error page (there's a controller for that)
                         header('location: ' . URL . 'error/index');
@@ -90,9 +76,9 @@ class Application
             // http://davidwalsh.name/php-shorthand-if-else-ternary-operators
             $this->url_controller = (isset($url[0]) ? $url[0] : null);
             $this->url_action = (isset($url[1]) ? $url[1] : null);
-            $this->url_parameter_1 = (isset($url[2]) ? $url[2] : null);
-            $this->url_parameter_2 = (isset($url[3]) ? $url[3] : null);
-            $this->url_parameter_3 = (isset($url[4]) ? $url[4] : null);
+            // Splits the parameters of the url into a separate array, and if none are set creates an empty array
+            $this->url_parameters = (isset($url[2]) ? array_slice($url, 2) : array());
+
         }
     }
 }
