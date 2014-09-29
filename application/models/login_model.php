@@ -837,8 +837,15 @@ class LoginModel
         $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
         $count = $query->rowCount();
         if ($count != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
-            return false;
+            //didn't find user name. Try email.
+            $query = $this->db->prepare("SELECT user_id, user_email FROM users
+                                     WHERE user_email = :user_email AND user_provider_type = :provider_type");
+            $query->execute(array(':user_email' => $user_name, ':provider_type' => 'DEFAULT'));
+            $count = $query->rowCount();
+            if ($count != 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
+                return false;
+            }
         }
 
         // get result
