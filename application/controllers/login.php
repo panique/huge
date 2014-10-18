@@ -7,12 +7,14 @@
 
 class Login extends Controller
 {
-    /**
+    /** 
      * Construct this object by extending the basic Controller class
      */
     function __construct()
     {
         parent::__construct();
+        //Adding the 'login/index' dictionary here in order to avoid adding it in each method
+        Lang::addDictionary("login/index");
     }
 
     /**
@@ -121,22 +123,54 @@ class Login extends Controller
         Auth::handleLogin();
         $this->view->render('login/editusername');
     }
-
+    
     /**
      * Edit user name (perform the real action after form has been submitted)
      */
     function editUsername_action()
     {
-        // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
-        // Note: This line was missing in early version of the script, but it was never a real security issue as
-        // it was not possible to read or edit anything in the database unless the user is really logged in and
-        // has a valid session.
-        Auth::handleLogin();
-        $login_model = $this->loadModel('Login');
-        $login_model->editUserName();
-        $this->view->render('login/editusername');
+    	// Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+    	// Note: This line was missing in early version of the script, but it was never a real security issue as
+    	// it was not possible to read or edit anything in the database unless the user is really logged in and
+    	// has a valid session.
+    	Auth::handleLogin();
+    	$login_model = $this->loadModel('Login');
+    	$login_model->editUserName();
+    	$this->view->render('login/editusername');
     }
+    
 
+    /**
+     * Edit password (show the view with the form)
+     * This method is added in order to access a form similar to the changepassword one (changepassword is accessed when password is forgotten): 
+     * it is inspired by the verifyPasswordReset method
+     * the difference between the present method and the verifyPasswordReset one is that the user is already logged in
+     * so there is no need to create a reset password token.
+     * @author Tristan Vanrullen
+     */
+    function editPassword()
+    {
+    	// Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
+    	Auth::handleLogin();
+    	$this->view->render('login/editpassword');
+    }
+    
+    /**
+     * Edit password action (perform the real action after the form has been submitted)
+     * This method is added in order to handle an action similar to the changepassword_action (here named setNewPassword) one.
+     * it is inspired by the setNewPassword method
+     * the difference between the present method and the setNewPassword one is that the user is already logged in
+     * so there is no need to deal with a reset password token.
+     * @author Tristan Vanrullen
+     */
+    function editPassword_action() {
+        Auth::handleLogin();
+    	$login_model = $this->loadModel('Login');
+    	$login_model->editUserPassword();
+    	$this->view->render('login/editpassword');
+    }
+    
+  
     /**
      * Edit user email (show the view with the form)
      */

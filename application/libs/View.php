@@ -7,7 +7,7 @@
  */
 class View
 {
-    /**
+    /** 
      * simply includes (=shows) the view. this is done from the controller. In the controller, you usually say
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
      * Usually the Class and the method are the same like the view, but sometimes you need to show different views.
@@ -18,6 +18,7 @@ class View
     {
         // page without header and footer, for whatever reason
         if ($render_without_header_and_footer == true) {
+        	//FIXME : send UTF8 header?
             require VIEWS_PATH . $filename . '.php';
         } else {
             require VIEWS_PATH . '_templates/header.php';

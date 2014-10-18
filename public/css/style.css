@@ -379,6 +379,27 @@ table.overview-table td.avatar {
 }
 
 
+/* language selector (by Tristan V.)*/
+.select-language-box {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    padding: 0px;
+    color: #999;
+    font-weight: bold;
+    text-align:center;
+    font-size:10px;
+}
+
+.select-language-box form select
+{
+    color:#acadb1;
+    background-color: rgb(66, 68, 79); 
+    font-weight: bold;
+    font-size:10px;
+    border:1px solid  rgb(30, 32, 41);
+}
+
 /* basic responsive stuff */
 @media only screen and (max-width:800px) {
 

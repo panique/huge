@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../language_translation.dtd">
+<language_translation target_language="en_UK">
+	<meta>
+	<creation author="Tristan Vanrullen" date="09/12/2013" comment="creating the core dictionary"/>
+	</meta>
+	<translations>
+		<translation key="error" comment="translations for all the application's kernel errors">error</translation>
+		
+		<translation key="EMAIL_PASSWORD_RESET_SUBJECT" arguments="1">Password reset for %s</translation>
+		<translation key="EMAIL_PASSWORD_RESET_CONTENT">Please click on this link to reset your password:</translation>
+		<translation key="EMAIL_VERIFICATION_SUBJECT" arguments="1">Account Activation for %s</translation>
+		<translation key="EMAIL_VERIFICATION_CONTENT">Please click on this link to activate your account:</translation>
+		
+		<translation key="FEEDBACK_PASSWORD_WRONG_3_TIMES" arguments="1">You have typed in a wrong password 3 or more times already. Please wait %s seconds to try again.</translation>
+		<translation key="FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET">Your account is not activated yet. Please click on the confirm link in the mail.</translation>
+		<translation key="FEEDBACK_PASSWORD_WRONG">Password was wrong.</translation>
+		<translation key="FEEDBACK_USER_DOES_NOT_EXIST">This user does not exist.</translation>
+		<translation key="FEEDBACK_LOGIN_FAILED">Login failed.</translation>
+		<translation key="FEEDBACK_USERNAME_FIELD_EMPTY">Username field was empty.</translation>
+		<translation key="FEEDBACK_PASSWORD_FIELD_EMPTY">Password field was empty.</translation>
+		<translation key="FEEDBACK_EMAIL_FIELD_EMPTY">Email field was empty.</translation>
+			<translation key="FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY">Email and passwords fields were empty.</translation>
+		<translation key="FEEDBACK_USERNAME_SAME_AS_OLD_ONE">Sorry, that username is the same as your current one. Please choose another one.</translation>
+		<translation key="FEEDBACK_USERNAME_ALREADY_TAKEN">Sorry, that username is already taken. Please choose another one.</translation>
+		<translation key="FEEDBACK_USER_EMAIL_ALREADY_TAKEN">Sorry, that email is already in use. Please choose another one.</translation>
+		<translation key="FEEDBACK_USERNAME_CHANGE_SUCCESSFUL">Your username has been changed successfully.</translation>
+		<translation key="FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY">Username and password fields were empty.</translation>
+		<translation key="FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN">Username does not fit the name sheme: only a-Z and numbers are allowed, 2 to 64 characters.</translation>
+		<translation key="FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN">Sorry, your chosen email does not fit into the email naming pattern.</translation>
+		<translation key="FEEDBACK_EMAIL_SAME_AS_OLD_ONE">Sorry, that email address is the same as your current one. Please choose another one.</translation>
+		<translation key="FEEDBACK_EMAIL_CHANGE_SUCCESSFUL">Your email address has been changed successfully.</translation>
+		<translation key="FEEDBACK_CAPTCHA_WRONG">The entered captcha security characters were wrong.</translation>
+		<translation key="FEEDBACK_PASSWORD_REPEAT_WRONG">Password and password repeat are not the same.</translation>
+		<translation key="FEEDBACK_PASSWORD_TOO_SHORT">Password has a minimum length of 6 characters.</translation>
+		<translation key="FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG">Username cannot be shorter than 2 or longer than 64 characters.</translation>
+		<translation key="FEEDBACK_EMAIL_TOO_LONG">Email cannot be longer than 64 characters.</translation>
+		<translation key="FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED">Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail.</translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED">Sorry, we could not send you an verification mail. Your account has NOT been created.</translation>
+		<translation key="FEEDBACK_ACCOUNT_CREATION_FAILED">Sorry, your registration failed. Please go back and try again.</translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR">Verification mail could not be sent due to: </translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL">A verification mail has been sent successfully.</translation>
+		<translation key="FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL">Activation was successful! You can now log in.</translation>
+		<translation key="FEEDBACK_ACCOUNT_ACTIVATION_FAILED">Sorry, no such id/verification code combination here...</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL">Avatar upload was successful.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE">Only JPEG and PNG files are supported.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_TOO_SMALL">Avatar source file's width/height is too small. Needs to be 100x100 pixel minimum.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_TOO_BIG">Avatar source file is too big. 5 Megabyte is the maximum.</translation>
+		<translation key="FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE">Avatar folder does not exist or is not writable. Please change this via chmod 775 or 777.</translation>
+			<translation key="FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE">Avatar folder is not writeable. Please change this via chmod 775 or 777.</translation>
+		<translation key="FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED">Something went wrong with the image upload.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_TOKEN_FAIL">Could not write token to database.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_TOKEN_MISSING">No password reset token.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR">Password reset mail could not be sent due to: </translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL">A password reset mail has been sent successfully.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_LINK_EXPIRED">Your reset link has expired. Please use the reset link within one hour.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST">Username/Verification code combination does not exist.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_LINK_VALID">Password reset validation link is valid. Please change the password now.</translation>
+		<translation key="FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL">Password successfully changed.</translation>
+		<translation key="FEEDBACK_PASSWORD_CHANGE_FAILED">Sorry, your password changing failed.</translation>
+		<translation key="FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL">Account upgrade was successful.</translation>
+		<translation key="FEEDBACK_ACCOUNT_UPGRADE_FAILED">Account upgrade failed.</translation>
+		<translation key="FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL">Account downgrade was successful.</translation>
+		<translation key="FEEDBACK_ACCOUNT_DOWNGRADE_FAILED">Account downgrade failed.</translation>
+		<translation key="FEEDBACK_NOTE_CREATION_FAILED">Note creation failed.</translation>
+		<translation key="FEEDBACK_NOTE_EDITING_FAILED">Note editing failed.</translation>
+		<translation key="FEEDBACK_NOTE_DELETION_FAILED">Note deletion failed.</translation>
+		<translation key="FEEDBACK_COOKIE_INVALID">Your remember-me-cookie is invalid.</translation>
+		<translation key="FEEDBACK_COOKIE_LOGIN_SUCCESSFUL">You were successfully logged in via the remember-me-cookie.</translation>
+		
+		<translation key="FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED">Sorry, you don't have an account here. Please register first.</translation>
+		<translation key="FEEDBACK_FACEBOOK_EMAIL_NEEDED">Sorry, but you need to allow us to see your email address to register.</translation>
+		<translation key="FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS">Sorry, but you have already registered here (your Facebook ID exists in our database).</translation>
+		<translation key="FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS">Sorry, but you have already registered here (your Facebook email exists in our database).</translation>
+		<translation key="FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS">Sorry, but you have already registered here (your Facebook username exists in our database).</translation>
+		<translation key="FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL">You have been successfully registered with Facebook.</translation>
+		<translation key="FEEDBACK_FACEBOOK_OFFLINE">We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).</translation>
+		
+		<translation key="FEEDBACK_REQUESTED_PAGE_NOT_FOUND">Requested page not found!</translation>
+		
+		<translation key="FEEDBACK_UNKNOWN_ERROR">Unknown error occured!</translation>
+		
+		<translation key="debug.message">Debug message</translation>
+		
+		<translation key="application.summary.title" arguments="1">Welcome to the %s web application!</translation> 
+		<translation key="application.summary.content">
+		 &lt;p&gt;
+        This box (everything between header and footer) is the content of views/index/index.php,
+        so it's the index/index view.
+        &lt;br/&gt;
+        It's rendered by the index-method within the index-controller (in controllers/index.php).
+	    &lt;/p&gt;
+	    &lt;h3&gt;General information on this little framework&lt;/h3&gt;
+	    &lt;p&gt;
+	        &quot;C'mon! Framework #1000 ? Why do we need this ?&quot; Indeed, there are a lot of good
+	        (and a lot of bad, too) PHP frameworks on the web. But most of them have something in common:
+	        They don't have a proper login system. And even if they have, then it's using outdated
+	        password hashing/salting technologies, it's not future-proof, don't provide email verification,
+	        password reset etc.
+	        &lt;br/&gt;&lt;br/&gt;
+	        This framework tries to
+	        &lt;span style='font-weight: bold;'&gt;focus on a proper, secure and up-to-date login system&lt;/span&gt;,
+	        combined with an easy-to-use, easy-to-understand and highly usable framework structure.
+	        So, if you don't like the framework itself, feel free to merge the login-related actions,
+	        models and views into the framework of your choice.
+	    &lt;/p&gt;
+		</translation>
+		<translation key="menu.help">Help</translation>
+		<translation key="menu.index">Summary</translation>
+		<translation key="menu.admin">Administration</translation>
+		<translation key="menu.login">Connect</translation>
+		<translation key="menu.register">Register</translation>
+		<translation key="menu.requestpasswordreset">Request password reset</translation>
+		
+		<translation key="menu.overview">Overview</translation>
+		<translation key="menu.dashboard">Dashboard</translation>
+		<translation key="menu.notes">Notes</translation>
+		<translation key="menu.account">My account</translation>
+		<translation key="menu.profile">My profile</translation>
+		<translation key="menu.changeaccounttype">My account type</translation>
+		<translation key="menu.editpasword">Change my password</translation> 
+		<translation key="menu.changeavatar">Update my avatar</translation>
+		<translation key="menu.editusername">Edit my username</translation>
+		<translation key="menu.edituseremail">Edit my email address</translation>
+		<translation key="menu.editpassword">Edit my password</translation>
+		<translation key="menu.uploadavatar">Upload an avatar</translation>
+		<translation key="menu.disconnect">Disconnect</translation>
+		<translation key="menu.logout">Logout</translation> 
+		
+		
+		<translation key="header.hello">Hello</translation> 
+		
+		<translation key="choose.another.language">Choose another language</translation>
+		<translation key="please.connect">Please connect</translation>
+		<translation key="you.are.here">you are here</translation>
+		
+		<translation key="all.rights.reserved">All rights reserved</translation>
+		
+		
+	</translations>
+</language_translation>

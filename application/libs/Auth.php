@@ -10,7 +10,7 @@ class Auth
     public static function handleLogin()
     {
         // initialize the session
-        Session::init();
+        Session::init(); 
 
         // if user is still not logged in, then destroy session, handle user as "not logged in" and
         // redirect user to login page

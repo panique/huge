@@ -1,6 +1,6 @@
 <?php
 
-/**
+/** 
  * Class Help
  * The help area
  */
@@ -11,7 +11,8 @@ class Help extends Controller
      */
     function __construct()
     {
-        parent::__construct();
+    	parent::__construct();
+    	Lang::addDictionary("help/index");
     }
 
     /**

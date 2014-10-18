@@ -1,5 +1,5 @@
 <div class="content">
     <h1 style="color: red;">
-        This page does not exist.
+    	<?php echo Lang::__("FEEDBACK_REQUESTED_PAGE_NOT_FOUND");?>
     </h1>
 </div>

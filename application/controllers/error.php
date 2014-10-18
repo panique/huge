@@ -6,7 +6,7 @@
  * Simple 404 handling.
  */
 class Error extends Controller
-{
+{ 
     /**
      * Construct this object by extending the basic Controller class
      */

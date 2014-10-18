@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="09/12/2013" comment="creating the core French dictionary"/>
+	</meta>
+	<translations>
+		<translation key="error" comment="translations for all the application's kernel errors">erreur</translation>
+		
+		<translation key="EMAIL_PASSWORD_RESET_SUBJECT" arguments="1">Réinitialisation de mot de passe pour %s</translation>
+		<translation key="EMAIL_PASSWORD_RESET_CONTENT">Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe: </translation>
+				
+		<translation key="EMAIL_VERIFICATION_SUBJECT" arguments="1">Activation de compte pour %s</translation>
+		<translation key="EMAIL_VERIFICATION_CONTENT">Veuillez cliquer sur le lien suivant pour activer votre compte: </translation>
+		
+		<translation key="FEEDBACK_PASSWORD_WRONG_3_TIMES" arguments="1">Vous avez déjà tenté 3 fois un mot de passe erronné. Veuillez attendre %s secondes avant un nouvel essai.</translation>
+		<translation key="FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET">Votre compte n'est pas encore activé. Veuillez cliquer sur le lien dans le mail d'activation qui vous a été envoyé.</translation>
+		<translation key="FEEDBACK_PASSWORD_WRONG">Mot de passe erronné.</translation>
+		<translation key="FEEDBACK_USER_DOES_NOT_EXIST">Utilisateur inconnu.</translation>
+		<translation key="FEEDBACK_LOGIN_FAILED">Votre connexion a échoué.</translation>
+		<translation key="FEEDBACK_USERNAME_FIELD_EMPTY">Veuillez entrer votre nom d'utilisateur.</translation>
+		<translation key="FEEDBACK_PASSWORD_FIELD_EMPTY">Veuillez saisir votre mot de passe.</translation>
+		<translation key="FEEDBACK_EMAIL_FIELD_EMPTY">Veuillez fournir votre adresse mail.</translation>
+			<translation key="FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY">Veuillez fournir votre adresse mail et un mot de passe.</translation>
+		<translation key="FEEDBACK_USERNAME_SAME_AS_OLD_ONE">Désolés, ce nom d'utilisateur est le même que l'actuel. Veuillez en saisir un autre.</translation>
+		<translation key="FEEDBACK_USERNAME_ALREADY_TAKEN">Désolés, ce nom d'utilisateur est déjà utilisé. Veuillez en saisir un autre.</translation>
+		<translation key="FEEDBACK_USER_EMAIL_ALREADY_TAKEN">Désolés, cette adresse email est déjà utilisée. Veuillez en saisir une autre.</translation>
+		<translation key="FEEDBACK_USERNAME_CHANGE_SUCCESSFUL">Votre nom d'utilisateur a été enregistré.</translation>
+		<translation key="FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY">Veuillez saisir un nom d'utilisateur et un mot de passe.</translation>
+		<translation key="FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN">Le nom d'utilisateur ne satisfait pas les règles de nommage: Seuls les caractères alphabétiques (a-Z) et les nombres sont autorisés, de 2 à 64 caractères.</translation>
+		<translation key="FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN">L'adresse mail indiquée n'a pas un format valide.</translation>
+		<translation key="FEEDBACK_EMAIL_SAME_AS_OLD_ONE">Désolés, l'adresse mail choisie est déjà utilisée. Veuillez en saisir une autre.</translation>
+		<translation key="FEEDBACK_EMAIL_CHANGE_SUCCESSFUL">Votre adresse email a été modifiée.</translation>
+		<translation key="FEEDBACK_CAPTCHA_WRONG">Les caractères du Captcha de sécurité ne correspondent pas à votre saisie.</translation>
+		<translation key="FEEDBACK_PASSWORD_REPEAT_WRONG">Le mot de passe répété n'est pas identique à l'original.</translation>
+		<translation key="FEEDBACK_PASSWORD_TOO_SHORT">Le mot de passe doit avoir une longueur minimale de 6 caractères.</translation>
+		<translation key="FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG">Le nom d'utilisateur doit avoir entre 2 et 64 caractères.</translation>
+		<translation key="FEEDBACK_EMAIL_TOO_LONG">Adresse email trop longue (max 64 caractères).</translation>
+		<translation key="FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED">Votre compte a été créé avec succès, et un email vous a été envoyé. Veuillez cliquer sur le LIEN DE VERIFICATION contenu dans ce mail.</translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED">Impossible d'envoyer le mail de vérification. Compte non créé.</translation>
+		<translation key="FEEDBACK_ACCOUNT_CREATION_FAILED">Echec du processus d'enregistrement. Veuillez contacter votre administrateur.</translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR">Le mail de vérification n'a pas pu être envoyé : </translation>
+		<translation key="FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL">Le mail de vérification a été correctement envoyé.</translation>
+		<translation key="FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL">Activation réussie! Vous pouvez à présent vous connecter.</translation>
+		<translation key="FEEDBACK_ACCOUNT_ACTIVATION_FAILED">Pardon, mais cette combinaison id/code n'est pas valide...</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL">Avatar mis à jour.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE">Seuls les fichiers JPEG et PNG sont acceptés.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_TOO_SMALL">L'image Avatar a une taille trop petite. Minimum 100x100 pixels.</translation>
+		<translation key="FEEDBACK_AVATAR_UPLOAD_TOO_BIG">L'image Avatar est trop grande. Maximum 5 Mo.</translation>
+		<translation key="FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE">Impossible d'enregistrer l'image Avatar : dossier non inscriptible. Veuillez modifier les droits avec chmod 775 or 777.</translation>
+					<translation key="FEEDBACK_AVATAR_FOLDER_NOT_WRITEABLE">Avatar folder is not writeable. Please change this via chmod 775 or 777.</translation>
+		<translation key="FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED">Le chargement de l'image a échoué.</translation>			
+		<translation key="FEEDBACK_PASSWORD_RESET_TOKEN_FAIL">Impossible d'inscrire le code de vérification  dans la base de données.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_TOKEN_MISSING">Pas de code de vérification reçu.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR">Le message de réinitialisation de mot de passe n'a pas pu être envoyé: </translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL">Le message de réinitialisation de mot de passe a été envoyé.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_LINK_EXPIRED">Votre lien de réinitialisation a expiré. La procédure de réinitialisation s'utilise dans l'heure.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST">La combinaison Username/Verification code n'existe pas.</translation>
+		<translation key="FEEDBACK_PASSWORD_RESET_LINK_VALID">Le lien de validation pour la réinitialisation de votre mot de passe est valide. Veuillez à présent changer votre mot de passe.</translation>
+		<translation key="FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL">Mot de passe modifié.</translation>
+		<translation key="FEEDBACK_PASSWORD_CHANGE_FAILED">Désolés, échec du changement de mot de passe.</translation>
+		<translation key="FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL">Mise à jour de votre compte réussie.</translation>
+		<translation key="FEEDBACK_ACCOUNT_UPGRADE_FAILED">Echec de la mise à jour du compte.</translation>
+		<translation key="FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL">Dégradation du compte réussie.</translation>
+		<translation key="FEEDBACK_ACCOUNT_DOWNGRADE_FAILED">Echec de la dégradation du compte.</translation>
+		<translation key="FEEDBACK_NOTE_CREATION_FAILED">Echec de création de note.</translation>
+		<translation key="FEEDBACK_NOTE_EDITING_FAILED">Echec de l'édition de note.</translation>
+		<translation key="FEEDBACK_NOTE_DELETION_FAILED">Echec de suppression de note.</translation>
+		<translation key="FEEDBACK_COOKIE_INVALID">Votre cookie de session est invalide.</translation>
+		<translation key="FEEDBACK_COOKIE_LOGIN_SUCCESSFUL">Session rétablie par cookie.</translation>
+	
+		<translation key="FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED">Désolés, vous n'avez pas de compte ici. Veuillez tout d'abord vous enregistrer</translation>
+		<translation key="FEEDBACK_FACEBOOK_EMAIL_NEEDED">Désolés, il faut nous autoriser à voir votre adresse email pour vous enregistrer.</translation>
+		<translation key="FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS">Désolés, vous êtes déjà enregistré(e) (votre identifiant Facebook existe dans notre base).</translation>
+		<translation key="FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS">Désolés, vous êtes déjà enregistré(e) (votre email Facebook existe dans notre base).</translation>
+		<translation key="FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS">Désolés, vous êtes déjà enregistré(e) (votre nom utilisateur Facebook existe dans notre base).</translation>
+		<translation key="FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL">Vous êtes à présent enregistré avec votre compte Facebook.</translation>
+		<translation key="FEEDBACK_FACEBOOK_OFFLINE">Les serveurs Facebook ne répondent pas. Peut être que Facebook est déconnecté (cela arrive vraiment de temùps en temps).</translation>
+		
+		<translation key="FEEDBACK_REQUESTED_PAGE_NOT_FOUND">La page demandée n'existe pas!</translation>
+		
+		<translation key="FEEDBACK_UNKNOWN_ERROR">Une erreur inconnue est survenue!</translation>	
+		
+		<translation key="debug.message">Message de debug</translation>
+		
+		<translation key="application.summary.title" arguments="1">Bienvenue dans l'application web %s!</translation> 
+		<translation key="application.summary.content">
+		 &lt;p&gt;
+        Cette boîte (tout ce qui se trouve entre le header et le footer) est le contenu de views/index/index.php,
+        c'est donc la vue index/index.
+        &lt;br/&gt;
+        Cette vue est produite par la méthode index dans le contrôleur index (dans controllers/index.php).
+	    &lt;/p&gt;
+	    &lt;h3&gt;Information générale sur ce petit framework&lt;/h3&gt;
+	    &lt;p&gt;
+	        &quot;Allons! Framework #1000 ? Pourquoi aurions nous besoin de cela ?&quot; Certes, il y a un tas de bons 
+	        (et un tas de mauvais aussi) frameworks PHP  sur le web. Mais la plupart ont quelque chose en commun:
+	        Ils n'ont pas de système de login. Et même quand ils en ont, ils utilisent de vieilles
+	        techniques de hashing/salting de mots de passes, ne sont pas prêts au futur, n'ont pas de vérification d'email,
+	        de remise à zéro de mot de passe etc.
+	        &lt;br/&gt;&lt;br/&gt;
+	        Ce framework tente de 
+	        &lt;span style='font-weight: bold;'&gt;focaliser sur un système de login sécurisé et à jour&lt;/span&gt;,
+	        combiné avec une structure de framework facile à l'emploi, facile à comprendre et hautement pratique.
+	        Donc, si vous n'aimez pas le framework lui-même, n'hésitez pas à fusionner les actions de login,
+	        les modèles et les vues dans le framework de votre choix.
+	    &lt;/p&gt;
+		</translation>
+				
+		<translation key="menu.help">Aide</translation>
+		<translation key="menu.index">Sommaire</translation>
+		<translation key="menu.admin">Administration</translation>
+		<translation key="menu.login">Connexion</translation>
+		<translation key="menu.register">S'enregistrer</translation>
+		<translation key="menu.requestpasswordreset">Demander un nouveau mot de passe</translation>
+		
+		<translation key="menu.overview">Vue d'ensemble</translation>
+		<translation key="menu.dashboard">Tableau de bord</translation>
+		<translation key="menu.notes">Notes</translation>
+		<translation key="menu.account">Mon compte</translation>
+		<translation key="menu.profile">Mon profil</translation>
+		<translation key="menu.changeaccounttype">Mon type de compte</translation>
+		<translation key="menu.editpasword">Changer mon mot de passe</translation> 
+		<translation key="menu.changeavatar">Changer mon avatar</translation>
+		<translation key="menu.uploadavatar">Enregistrer une image avatar</translation>
+		<translation key="menu.editusername">Changer mon nom d'utilisateur</translation>
+		<translation key="menu.edituseremail">Changer mon adresse email</translation>
+		<translation key="menu.editpassword">Changer mon mot de passe</translation>
+		<translation key="menu.disconnect">Me déconnecter</translation>
+		<translation key="menu.logout">Quitter</translation> 
+		
+		<translation key="header.hello">Bonjour</translation>
+		
+		<translation key="choose.another.language">Choisissez une autre langue</translation>
+		<translation key="please.connect">Veuillez vous connecter</translation>	
+		<translation key="you.are.here">vous êtes ici</translation>
+		
+		<translation key="all.rights.reserved">tous droits réservés</translation>
+		
+	</translations>
+</language_translation>

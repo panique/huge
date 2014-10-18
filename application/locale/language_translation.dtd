@@ -1,0 +1,21 @@
+<!ELEMENT language_translation (meta,translations)>
+<!ELEMENT meta (creation,update*)> 
+<!ELEMENT translations (translation*)>
+<!ELEMENT translation (#PCDATA)>
+
+<!ATTLIST language_translation target_language ID #REQUIRED>
+
+<!ATTLIST creation author CDATA #IMPLIED>
+<!ATTLIST creation date CDATA #IMPLIED>
+<!ATTLIST creation comment CDATA #IMPLIED>
+
+<!ATTLIST update author CDATA #IMPLIED>
+<!ATTLIST update date CDATA #IMPLIED>
+<!ATTLIST update comment CDATA #IMPLIED>
+
+<!ATTLIST translation key CDATA #REQUIRED>
+<!ATTLIST translation arguments CDATA "0">
+<!ATTLIST translation comment CDATA #IMPLIED>
+
+<!ENTITY nbsp "&#160;">
+ 

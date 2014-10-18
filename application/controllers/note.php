@@ -6,7 +6,7 @@
  */
 class Note extends Controller
 {
-    /**
+    /** 
      * Construct this object by extending the basic Controller class
      */
     public function __construct()
@@ -17,6 +17,8 @@ class Note extends Controller
         // need this line! Otherwise not-logged in users could do actions. If all of your pages should only
         // be usable by logged-in users: Put this line into libs/Controller->__construct
         Auth::handleLogin();
+        //Adding the 'note/index' dictionary here in order to avoid adding it in each method
+        Lang::addDictionary("note/index");
     }
 
     /**

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="overview.index.title">Vue d'ensemble</translation>
+		<translation key="overview.index.introduction">Voici la vue d'ensemble publique de tous les utilisateurs du système. Vous pourriez utiliser le code sous-jacent pour construire des choses qui utilisent les informations d'un ou plusieurs utilisateurs.</translation>
+        <translation key="overview.index.note_email">NOTE: assurez-vous de NE PAS montrer PUBLIQUEMENT les adresses email des utilisateurs dans une vraie application.</translation>
+		<translation key="overview.index.label.userid">id</translation>
+		<translation key="overview.index.label.useravatar">avatar</translation>
+		<translation key="overview.index.label.username">nom</translation>
+		<translation key="overview.index.label.useremail">email</translation>
+		<translation key="overview.index.label.useractive">actif?</translation>
+		<translation key="overview.index.label.userlink">lien</translation>
+		<translation key="overview.index.useractive">oui</translation>
+		<translation key="overview.index.userinactive">non</translation>
+		<translation key="overview.index.userlink">Voir le profil</translation>
+	</translations>
+</language_translation>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Database
+ * Class Database 
  * Creates a PDO database connection. This connection will be passed into the models (so we use
  * the same connection for all models and prevent to open multiple connections at once)
  */
@@ -20,7 +20,7 @@ class Database extends PDO
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
         $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-
+		
         /**
          * Generate a database connection, using the PDO connector
          * @see http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/

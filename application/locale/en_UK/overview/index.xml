@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="en_UK">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="overview.index.title">Overview</translation>
+		<translation key="overview.index.introduction">This controller/action/view shows a list of all users in the system.
+        You could use the underlaying code to build things that use profile information
+        of one or multiple/all users.</translation>
+        <translation key="overview.index.note_email">NOTE: be sure NOT to show email addresses of users in a real app.</translation>
+        
+		<translation key="overview.index.label.userid">user id</translation>
+		<translation key="overview.index.label.useravatar">avatar</translation>
+		<translation key="overview.index.label.username">user name</translation>
+		<translation key="overview.index.label.useremail">user email</translation>
+		<translation key="overview.index.label.useractive">active?</translation>
+		<translation key="overview.index.label.userlink">link</translation>
+		
+		<translation key="overview.index.useractive">yes</translation>
+		<translation key="overview.index.userinactive">no</translation>
+		<translation key="overview.index.userlink">Show user's profile</translation>
+	</translations>
+</language_translation>

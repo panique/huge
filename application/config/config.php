@@ -14,6 +14,23 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+
+
+/**
+ * Define the application name (useful everywhere in the framework)
+ * @author Tristan Vanrullen
+ */
+define('APP_NAME', 'PHP-LOGIN-LANG');
+
+
+/**
+ * configuration for the linguistic interface : use the Lang class to provide translation assistance?
+ * @author Tristan Vanrullen
+*/
+define('LANG_TRANSLATION_ASSISTANCE', true); //set this to false if you don't want translation assistance (in production mode)
+define('LOCALE_PATH', 'application/locale/');
+
+
 /**
  * Configuration for: Base URL
  * This is the base url of our app. if you go live with your app, put your full domain name here.
@@ -188,20 +205,21 @@ define("EMAIL_SMTP_ENCRYPTION", 'ssl');
 define("EMAIL_PASSWORD_RESET_URL", URL . "login/verifypasswordreset");
 define("EMAIL_PASSWORD_RESET_FROM_EMAIL", "no-reply@example.com");
 define("EMAIL_PASSWORD_RESET_FROM_NAME", "My Project");
-define("EMAIL_PASSWORD_RESET_SUBJECT", "Password reset for PROJECT XY");
-define("EMAIL_PASSWORD_RESET_CONTENT", "Please click on this link to reset your password: ");
+//Lang (see the core.xml dictionary) :: define("EMAIL_PASSWORD_RESET_SUBJECT", "Password reset for PROJECT XY");
+//Lang (see the core.xml dictionary) :: define("EMAIL_PASSWORD_RESET_CONTENT", "Please click on this link to reset your password: ");
 
 define("EMAIL_VERIFICATION_URL", URL . "login/verify");
 define("EMAIL_VERIFICATION_FROM_EMAIL", "no-reply@example.com");
 define("EMAIL_VERIFICATION_FROM_NAME", "My Project");
-define("EMAIL_VERIFICATION_SUBJECT", "Account activation for PROJECT XY");
-define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account: ");
+//Lang (see the core.xml dictionary) :: define("EMAIL_VERIFICATION_SUBJECT", "Account activation for PROJECT XY");
+//Lang (see the core.xml dictionary) :: define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account: ");
 
 /**
  * Configuration for: Error messages and notices
  *
  * In this project, the error messages, notices etc are all-together called "feedback".
  */
+/* START Lang :: redefinition of these keys (see the core.xml dictionary) ::
 define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
 define("FEEDBACK_PASSWORD_WRONG_3_TIMES", "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.");
 define("FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET", "Your account is not activated yet. Please click on the confirm link in the mail.");
@@ -265,3 +283,4 @@ define("FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS", "Sorry, but you have already re
 define("FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS", "Sorry, but you have already registered here (your Facebook username exists in our database).");
 define("FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL", "You have been successfully registered with Facebook.");
 define("FEEDBACK_FACEBOOK_OFFLINE", "We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).");
+END Lang :: redefinition of these keys */

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/** 
  * This is the "base controller class". All other "real" controllers extend this class.
  * Whenever a controller is created, we also
  * 1. initialize a session
@@ -13,12 +13,18 @@ class Controller
     function __construct()
     {
         Session::init();
-
+      
         // user has remember-me-cookie ? then try to login with cookie ("remember me" feature)
         if (!isset($_SESSION['user_logged_in']) && isset($_COOKIE['rememberme'])) {
             header('location: ' . URL . 'login/loginWithCookie');
         }
 
+        //Lang init
+        Lang::setLocalePath(LOCALE_PATH);
+        Lang::setReplaceBlankTranslationBy(Lang::REPLACE_BY_BLANK);
+        Lang::setReplaceNonExistingTranslationBy(Lang::REPLACE_BY_KEY_TRANSLATE_ME);
+        Lang::initLanguage();
+        
         // create database connection
         try {
             $this->db = new Database();
@@ -36,6 +42,7 @@ class Controller
      */
     public function loadModel($name)
     {
+    	
         $path = MODELS_PATH . strtolower($name) . '_model.php';
 
         if (file_exists($path)) {
@@ -43,6 +50,7 @@ class Controller
             // The "Model" has a capital letter as this is the second part of the model class name,
             // all models have names like "LoginModel"
             $modelName = $name . 'Model';
+            //echo "<br/>Loading Model ".$modelName;
             // return the new model object while passing the database connection to the model
             return new $modelName($this->db);
         }

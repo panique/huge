@@ -1,0 +1,24 @@
+<!ELEMENT languages_config (meta,accepted_languages)>
+<!ELEMENT meta (creation,update*)>
+<!ELEMENT accepted_languages (language*)> 
+<!ELEMENT language (translation*)>
+<!ELEMENT translation EMPTY>
+
+<!ATTLIST languages_config target_application CDATA #REQUIRED>
+
+<!ATTLIST creation author CDATA #IMPLIED>
+<!ATTLIST creation date CDATA #IMPLIED>
+<!ATTLIST creation comment CDATA #IMPLIED>
+
+<!ATTLIST update author CDATA #IMPLIED>
+<!ATTLIST update date CDATA #IMPLIED>
+<!ATTLIST update comment CDATA #IMPLIED>
+
+<!ATTLIST language id ID #REQUIRED>
+<!ATTLIST language is_default (true|false) #IMPLIED>
+<!ATTLIST language is_alias (true|false) #IMPLIED>
+<!ATTLIST language alias_idref IDREF #IMPLIED>
+<!ATTLIST language comment CDATA #IMPLIED>
+
+<!ATTLIST translation translated_idref IDREF #REQUIRED>
+<!ATTLIST translation translation CDATA #REQUIRED>

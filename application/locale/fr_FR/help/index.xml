@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="help.index.title">Aide</translation>
+		<translation key="help.index.content">
+        Cette boîte (et tout ce qui se trouve entre le header et le foooter) est le contenu de views/help/index.php,
+        c'est donc la vue help/index. Cette vue est produite par la méthode inde dans le controleur help
+        (dans controllers/help.php). Vous pouvez facilement créer une sous-page en ajoutant une méthode dans le controleur 
+        et une vue dans le répertoire view. Donc, si vous voulez ajouter quelque chose comme une section FAQ dans &quot;Aide&quot;, 
+        alors ajoutez 
+        &lt;span style=&quot;font-weight: bold;&quot;&gt;function faq() { $this-&gt;view-&gt;render('help/faq'); }&lt;/span&gt;
+        dans controllers/help.php et créez une vue correspondante dans views/help/, en la nommant &quot;faq.php&quot;.
+        Ensuite vous pouvez simplement naviguer à l'adresse &quot;help/faq&quot; dans votre application: si votre application est sur 
+        http://localhost/myapp/ alors cette section se trouve à l'adresse http://localhost/myapp/help/faq !
+        Essayez ...        
+	</translation> 
+	</translations>
+</language_translation>
