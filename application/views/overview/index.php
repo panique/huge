@@ -1,18 +1,24 @@
 <div class="content">
-    <h1>Overview</h1>
+    <h1><?php echo Lang::__("overview.index.title");?></h1>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
 
     <p>
-        This controller/action/view shows a list of all users in the system.
-        You could use the underlaying code to build things that use profile information
-        of one or multiple/all users.
+       <?php echo Lang::__("overview.index.introduction");?>
     </p>
 
     <p>
-        <span style="color: red;">NOTE: be sure NOT to show email addresses of users in a real app.</span>
+		<span style="color: red;"><?php echo Lang::__("overview.index.note_email");?></span>        
         <table class="overview-table">
+ 		<tr>
+        	<th><?php echo Lang::__("overview.index.label.userid");?></th>
+        	<th><?php echo Lang::__("overview.index.label.useravatar");?></th>
+        	<th><?php echo Lang::__("overview.index.label.username");?></th>
+        	<th><?php echo Lang::__("overview.index.label.useremail");?></th>
+        	<th><?php echo Lang::__("overview.index.label.useractive");?></th>
+        	<th><?php echo Lang::__("overview.index.label.userlink");?></th>
+        </tr>
         <?php
 
         foreach ($this->users as $user) {
@@ -33,8 +39,8 @@
             echo '</td>';
             echo '<td>'.$user->user_name.'</td>';
             echo '<td>'.$user->user_email.'</td>';
-            echo '<td>Active: '.$user->user_active.'</td>';
-            echo '<td><a href="'.URL.'overview/showuserprofile/'.$user->user_id.'">Show user\'s profile</a></td>';
+            echo '<td>Active: '.($user->user_active?Lang::__("overview.index.useractive"):Lang::__("overview.index.userinactive")).'</td>';
+            echo '<td><a href="'.URL.'overview/showuserprofile/'.$user->user_id.'">'.Lang::__("overview.index.userlink").'</a></td>';
             echo "</tr>";
         }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="dashboard.index.title">Tableau de bord</translation>
+		<translation key="dashboard.index.introduction">Voici une zone visible uniquement par les utilisateurs connectés</translation>
+		<translation key="dashboard.index.content">
+		    Essayez de vous déconnecter, et allez à nouveau sur /dashboard/. Vous serez redirigé vers /index/ car vous ne serez plus connecté.
+		    &lt;br/&gt;&lt;br/&gt;
+		    Vous pouvez protéger toute une section de votre application dans le controleur correspondant (ici: controllers/dashboard.php)
+		    en plaçant &lt;span style='font-style: italic;'&gt;Auth::handleLogin();&lt;/span&gt; dans le constructeur.
+		</translation>
+	</translations>
+</language_translation>

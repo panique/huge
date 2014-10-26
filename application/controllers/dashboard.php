@@ -3,7 +3,7 @@
 /**
  * Class Dashboard
  * This is a demo controller that simply shows an area that is only visible for the logged in user
- * because of Auth::handleLogin(); in line 19.
+ * because of Auth::handleLogin(); in line 19. 
  */
 class Dashboard extends Controller
 {
@@ -16,6 +16,8 @@ class Dashboard extends Controller
 
         // this controller should only be visible/usable by logged in users, so we put login-check here
         Auth::handleLogin();
+        //Adding the 'dashboard/index' dictionary here in order to avoid adding it in each method
+        Lang::addDictionary("dashboard/index");
     }
 
     /**

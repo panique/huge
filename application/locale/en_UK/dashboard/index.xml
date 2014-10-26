@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="en_UK">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="dashboard.index.title">Dashboard</translation>
+		<translation key="dashboard.index.introduction">This is an area that's only visible for logged in users</translation>
+		<translation key="dashboard.index.content">
+		    Try to log out, an go to /dashboard/ again. You'll be redirected to /index/ as you are not logged in.
+    &lt;br/&gt;&lt;br/&gt;
+    You can protect a whole section in your app within the according controller (here: controllers/dashboard.php)
+    by placing &lt;span style='font-style: italic;'&gt;Auth::handleLogin();&lt;/span&gt; into the constructor.
+		
+		</translation>
+	</translations>
+</language_translation>

@@ -9,7 +9,7 @@
  */
 class Session
 {
-    /**
+    /** 
      * starts the session
      */
     public static function init()

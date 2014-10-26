@@ -6,7 +6,7 @@
  */
 class Overview extends Controller
 {
-    /**
+    /**  
      * Construct this object by extending the basic Controller class
      */
     function __construct()
@@ -21,6 +21,7 @@ class Overview extends Controller
     function index()
     {
         $overview_model = $this->loadModel('Overview');
+        Lang::addDictionary("overview/index"); //let the Lang library suggest the 'current_language'
         $this->view->users = $overview_model->getAllUsersProfiles();
         $this->view->render('overview/index');
     }
@@ -34,6 +35,7 @@ class Overview extends Controller
     {
         if (isset($user_id)) {
             $overview_model = $this->loadModel('Overview');
+            Lang::addDictionary("overview/showuserprofile"); //let the Lang library suggest the 'current_language'
             $this->view->user = $overview_model->getUserProfile($user_id);
             $this->view->render('overview/showuserprofile');
         } else {

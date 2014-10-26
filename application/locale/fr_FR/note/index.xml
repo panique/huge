@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="note.index.title">Créer une nouvelle note</translation>
+		<translation key="note.index.introduction">Les "notes" sont juste un exemple de la façon de créer, montrer (read), éditer (update) et supprimer (delete) des choses. CRUD, en résumé...</translation>
+		<translation key="note.index.label.notetext">Texte d'une nouvelle note:</translation>
+		<translation key="note.index.submit">Créer cette note</translation>
+		<translation key="note.index.notelist.title">Liste de vos notes</translation>
+		
+		
+		<translation key="note.link.edit">Editer</translation>
+		<translation key="note.link.delete">Supprimer</translation>
+		<translation key="note.nonotesyet">Pas de notes. Créez-en!</translation>
+		 
+		<translation key="note.edit.title">Editer une note</translation>
+		<translation key="note.edit.label.notetext">Changer le texte de la note:</translation>
+		<translation key="note.edit.submit">Changer</translation>
+		<translation key="note.notedoesnotexist">Cette note n'existe pas.</translation>  
+	</translations>
+</language_translation>

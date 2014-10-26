@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="en_UK">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating the overview/showuserprofile dictionary"/>
+	</meta>
+	<translations>
+		<translation key="overview.showuserprofile.title">A public user profile</translation>
+		<translation key="overview.showuserprofile.introduction">This controller/action/view shows all public information about a certain user.</translation>
+		<translation key="overview.showuserprofile.note_email">NOTE: be sure NOT to show email addresses of users in a real app. This is just a demo.</translation>
+        
+		<translation key="overview.showuserprofile.label.userid">id</translation>
+		<translation key="overview.showuserprofile.label.useravatar">avatar</translation>
+		<translation key="overview.showuserprofile.label.username">name</translation>
+		<translation key="overview.showuserprofile.label.useremail">email</translation>
+		<translation key="overview.showuserprofile.label.useractive">active?</translation> 
+		<translation key="overview.showuserprofile.useractive">yes</translation>
+		<translation key="overview.showuserprofile.userinactive">no</translation>
+		
+	</translations>
+</language_translation>

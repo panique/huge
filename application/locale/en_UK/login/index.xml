@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="en_UK">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="login.index.title">User connexion form</translation> 
+		<translation key="login.index.label.username">Username (or email)</translation>
+		<translation key="login.index.label.password">Password</translation>
+		<translation key="login.index.label.rememberme">Keep me logged in (for 2 weeks)</translation>
+		<translation key="login.index.submit">Send</translation>
+		
+		<translation key="link.user.register">Register</translation>
+		<translation key="link.user.forgottenpassword">Forgot my Password</translation> 
+		
+		<translation key="loginwithfacebook">Log in with Facebook</translation>
+				 
+		<translation key="login.requestpasswordreset.title">Request a password reset</translation>
+		<translation key="login.requestpasswordreset.label.username">Enter your username and you'll get a mail with instructions:</translation>
+		<translation key="login.requestpasswordreset.submit">Reset my password</translation> 
+		
+		
+		<translation key="login.register.title">Register</translation>
+		<translation key="login.register.label.username">Username</translation>
+		<translation key="login.register.reminder.username">(only letters and numbers, 2 to 64 characters)</translation>
+		<translation key="login.register.label.useremail">User's email</translation>
+		<translation key="login.register.reminder.useremail">(please provide a &lt;span style=&quot;text-decoration: underline; color: mediumvioletred;&quot;&gt;real email address&lt;/span&gt;, you'll get a verification mail with an activation link)</translation>
+		<translation key="login.register.label.password">Password (min. 6 characters!)</translation>
+		<translation key="login.register.reminder.password">
+		    Please note: using a long sentence as a password is much much safer then something like &quot;!c00lPa$$w0rd&quot;).
+            Have a look on
+            &lt;a href=&quot;http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase&quot;&gt;
+            this interesting security.stackoverflow.com thread
+            &lt;/a&gt;.
+		</translation>
+		<translation key="login.register.label.repeatpassword">Repeat password</translation>
+		<translation key="login.register.label.captcha">Please enter these characters</translation>
+		<translation key="login.register.reminder.captcha">
+			Please note: This captcha will be generated when the img tag requests the captcha-generation
+                    (and a real image) from YOURURL/login/showcaptcha. As this is a client-side triggered request, the
+                    $_SESSION[&quot;captcha&quot;] dump in the footer will not show the captcha characters. The captcha generation
+                    happens AFTER the rendering of the footer.
+        </translation>
+		<translation key="login.register.submit">Register</translation>
+		
+		<translation key="registerwithfacebook">Register with Facebook</translation>
+				
+		<translation key="login.showprofile.title">Your profile</translation>
+		<translation key="login.showprofile.username">Your username:&nbsp; </translation>
+		<translation key="login.showprofile.useremail">Your email:&nbsp;</translation>
+		<translation key="login.showprofile.useravatar">Your avatar image:&nbsp;</translation>
+		<translation key="login.showprofile.gravatarpic">Your gravatar pic (on gravatar.com):&nbsp;</translation>
+		<translation key="login.showprofile.avatarpic">Your avatar pic (saved on local server):&nbsp;</translation> 
+		<translation key="login.showprofile.useraccounttype">Your account type is:&nbsp;</translation> 
+		
+		<translation key="login.changepassword.title">Set new password</translation>
+		<translation key="login.changepassword.label.newpassword">New password (min. 6 characters!)</translation>
+		<translation key="login.changepassword.reminder.password">
+			Please note: using a long sentence as a password is much much safer then something like &quot;!c00lPa$$w0rd&quot;). 
+			Have a look on &lt;a href=&quot;http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase&quot;&gt;
+                    this interesting security.stackoverflow.com thread
+                &lt;/a&gt;.
+        </translation>
+		<translation key="login.changepassword.label.repeatnewpassword">Repeat new password</translation>
+		<translation key="login.changepassword.submit">Submit new password</translation>
+		
+		<translation key="login.changeaccounttype.title">Change account type</translation>
+		<translation key="login.changeaccounttype.content"> &lt;p&gt;
+        This page is a basic implementation of the upgrade-process.
+        User can click on that button to upgrade their accounts from
+        &quot;basic account&quot; to &quot;premium account&quot;. This script simple offers
+        a click-able button that will upgrade/downgrade the account instantly.
+        In a real world application you would implement something like a
+        pay-process.
+	    &lt;/p&gt;
+	    &lt;p&gt;
+	        This view belong to the login-controller / changeaccounttype()-method.
+	        The model used is login-&gt;changeAccountType().
+	    &lt;/p&gt;</translation>
+		<translation key="login.changeaccounttype.youraccounttype">Currently your account type is: </translation>
+		<translation key="login.changeaccounttype.label.downgrademyaccount"></translation>
+		<translation key="login.changeaccounttype.submit.downgrademyaccount">Downgrade my account</translation> 
+		<translation key="login.changeaccounttype.label.upgrademyaccount"></translation>
+		<translation key="login.changeaccounttype.submit.upgrademyaccount">Upgrade my account</translation> 
+		
+		<translation key="login.uploadavatar.title">Upload an avatar</translation>
+		<translation key="login.uploadavatar.label.avatarfile">Select an avatar image from your hard-disk (will be scaled to 44x44 px):</translation>
+		<translation key="login.uploadavatar.submit">Upload image</translation> 		
+				
+		<translation key="login.editusername.title">Change your username</translation>
+		<translation key="login.editusername.label.username">New username</translation> 
+		<translation key="login.editusername.submit">Submit</translation>
+		
+		<translation key="login.edituseremail.title">Change your email adress</translation>
+		<translation key="login.edituseremail.label.useremail">New email adress:</translation> 
+		<translation key="login.edituseremail.submit">Submit</translation>		
+		
+		<translation key="login.backlink">Go to login</translation>
+		
+
+		 
+	</translations>
+</language_translation>

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/** 
  * Class Application
  * The heart of the app
  */
@@ -25,10 +25,12 @@ class Application
      */
     public function __construct()
     {
-        $this->splitUrl();
+    	$this->splitUrl();
 
+    	//echo "<br/>Application start";
         // check for controller: is the url_controller NOT empty ?
         if ($this->url_controller) {
+        	//echo "<br/>Application Controller is ". $this->url_controller;
             // check for controller: does such a controller exist ?
             if (file_exists(CONTROLLER_PATH . $this->url_controller . '.php')) {
                 // if so, then load this file and create this controller
@@ -39,7 +41,7 @@ class Application
                 // check for method: does such a method exist in the controller ?
                 if ($this->url_action) {
                     if (method_exists($this->url_controller, $this->url_action)) {
-
+                    	//echo "<br/>Application handle action ".$this->url_action;
                         // call the method and pass the arguments to it
                         if (isset($this->url_parameter_3)) {
                             $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
@@ -53,19 +55,23 @@ class Application
                         }
                     } else {
                         // redirect user to error page (there's a controller for that)
+                    	//echo "<br/>Application go to error/index";
                         header('location: ' . URL . 'error/index');
                     }
                 } else {
                     // default/fallback: call the index() method of a selected controller
+                	//echo "<br/>Application fallback to ". $this->url_controller."index()";
                     $this->url_controller->index();
                 }
             // obviously mistyped controller name, therefore show 404
             } else {
                 // redirect user to error page (there's a controller for that)
+            	//echo "<br/>Application fallback to error/index";
                 header('location: ' . URL . 'error/index');
             }
         // if url_controller is empty, simply show the main page (index/index)
         } else {
+        	//echo "<br/>Application fallback to home/index";
             // invalid URL, so simply show home/index
             require CONTROLLER_PATH . 'index.php';
             $controller = new Index();

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE languages_config SYSTEM "languages_config.dtd">
+<languages_config target_application="php-login-lang">
+	<meta> 
+	<creation author="Tristan Vanrullen" date="09/12/2013"/>
+	<update author="Tristan Vanrullen" date="09/12/2013" comment="added aliases for browser language names"/>
+	</meta>
+	<accepted_languages>
+		<language id="fr_FR">
+			<translation translated_idref="fr_FR" translation="Français"/>
+			<translation translated_idref="de_DE" translation="Französisch"/>
+			<translation translated_idref="en_UK" translation="French"/>
+		</language>
+		<language id="de_DE">
+			<translation translated_idref="fr_FR" translation="Allemand"/>
+			<translation translated_idref="de_DE" translation="Deutsch"/>
+			<translation translated_idref="en_UK" translation="German"/>
+		</language>
+		<language id="en_UK" is_default="true">
+			<translation translated_idref="fr_FR" translation="Anglais"/>
+			<translation translated_idref="de_DE" translation="Englisch"/>
+			<translation translated_idref="en_UK" translation="English"/>
+		</language>
+		<language id="en_US" alias_idref="en_UK" is_alias="true"/>
+		<language id="en" alias_idref="en_UK" is_alias="true"/>
+		<language id="de" alias_idref="de_DE" is_alias="true"/>
+		<language id="fr" alias_idref="fr_FR" is_alias="true"/>
+	</accepted_languages>
+</languages_config>

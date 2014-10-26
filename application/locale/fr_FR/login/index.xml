@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language_translation SYSTEM "../../language_translation.dtd">
+<language_translation target_language="fr_FR">
+	<meta>
+	<creation author="Tristan Vanrullen" date="11/12/2013" comment="creating this dictionary"/>
+	</meta>
+	<translations>
+		<translation key="login.index.title">Connexion utilisateur</translation> 
+		<translation key="login.index.label.username">Nom utilisateur (ou email)</translation>
+		<translation key="login.index.label.password">Mot de passe</translation>
+		<translation key="login.index.label.rememberme">Se souvenir de moi (2 semaines)</translation>
+		<translation key="login.index.submit">Envoyer</translation>
+		
+		<translation key="link.user.register">S'enregistrer comme nouvel utilisateur</translation>
+		<translation key="link.user.forgottenpassword">J'ai oublié mon mot de passe</translation> 
+		
+		
+		<translation key="loginwithfacebook">Se connecter avec Facebook</translation>
+		
+		<translation key="login.requestpasswordreset.title">Demander la réinitialisation de votre mot de passe</translation>
+		<translation key="login.requestpasswordreset.label.username">Entrez votre nom d'utilisateur et vous recevrez un email avec des instructions:</translation>
+		<translation key="login.requestpasswordreset.submit">Réinitialiser mon mot de passe</translation> 
+		
+		<translation key="login.register.title">S'enregister</translation>
+		<translation key="login.register.label.username">Nom d'utilisateur</translation>
+		<translation key="login.register.reminder.username">(Uniquement des lettres et des chiffres, de 2 à 64 caractères)</translation>
+		<translation key="login.register.label.useremail">Adresse email</translation>
+		<translation key="login.register.reminder.useremail">(veuillez fournir une &lt;span style="text-decoration: underline; color: mediumvioletred;"&gt;véritable adresse email&lt;/span&gt;, vous allez recevoir un email de vérification avec un lien d'activation)</translation>
+		<translation key="login.register.label.password">Mot de passe (min. 6 caractères!)</translation>
+		<translation key="login.register.reminder.password">Note: utiliser une longue phrase comme mot de passe est vraiment plus sur que quelque chose comme "!c00lPa$$w0rd". Lisez
+				&lt;a href="http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase"&gt;
+                    ce fil de discussion intéressant sur security.stackoverflow.com
+                &lt;/a&gt;</translation>
+		<translation key="login.register.label.repeatpassword">Répétez le mot de passe</translation>
+		<translation key="login.register.label.captcha">Veuillez saisir ces caractères</translation>
+		<translation key="login.register.reminder.captcha">
+			Note : Ce captcha sera généré quand le tag img en fera la demande
+                    (avec une VRAIE image) depuis YOURURL/login/showcaptcha. Comme c'est une requête lancée depuis le côté client, la valeur
+                    $_SESSION[&quot;captcha&quot;] copiée dans le pied de page ne montrera pas les caractères du captcha actuel. La génération du captcha
+                    se produit APRES le calcul et l'affichage du footer.
+        </translation>
+		<translation key="login.register.submit">S'enregistrer</translation>
+		
+		<translation key="registerwithfacebook">S'enregistrer avec Facebook</translation>
+				
+		<translation key="login.showprofile.title">Votre profil</translation>
+		<translation key="login.showprofile.username">Votre Nom d'utilisateur:</translation>
+		<translation key="login.showprofile.useremail">Votre email:&nbsp;</translation>
+		<translation key="login.showprofile.useravatar">Votre image avatar :&nbsp;</translation>
+		<translation key="login.showprofile.gravatarpic">Votre image gravatar (sur gravatar.com):&nbsp;</translation>
+		<translation key="login.showprofile.avatarpic">Votre image avatar (sauvée sur le serveur local):</translation> 
+		<translation key="login.showprofile.useraccounttype">Votre type de compte est :</translation> 
+		
+		
+		<translation key="login.changepassword.title">Modifier le mot de passe</translation>
+		<translation key="login.changepassword.label.newpassword">Nouveau mot de passe (min. 6 caractères!)</translation>
+		<translation key="login.changepassword.reminder.password">Note: utiliser une longue phrase comme mot de passe est vraiment plus sur que quelque chose comme "!c00lPa$$w0rd". Lisez
+				&lt;a href="http://security.stackexchange.com/questions/6095/xkcd-936-short-complex-password-or-long-dictionary-passphrase"&gt;
+                    ce fil de discussion intéressant sur security.stackoverflow.com
+                &lt;/a&gt;</translation> 
+		<translation key="login.changepassword.label.repeatnewpassword">Répétez le mot de passe</translation>
+		<translation key="login.changepassword.submit">Soumettre le nouveau mot de passe</translation>		
+		
+		
+		<translation key="login.changeaccounttype.title">Changer le type de compte</translation>
+		<translation key="login.changeaccounttype.content"> &lt;p&gt;
+        Cette page implémente basiquement le processus de changement de niveau de compte utilisateur.
+        L'utilisateur peut cliquer sur ce bouton pour changer son niveau de
+        &quot;basique&quot; à &quot;premium&quot;. Ce script offre simplement
+        un bouton cliquable qui va monter/descendre le niveau de compte instantanément.
+        Dans une application réelle, vous devriez implémenter quelque chose comme un processus de paiement.
+	    &lt;/p&gt;
+	    &lt;p&gt;
+	        Cette vue appartient au controleur login / méthode changeaccounttype().
+	        Le modèle utilisé est login-&gt;changeAccountType().
+	    &lt;/p&gt;</translation>
+		<translation key="login.changeaccounttype.youraccounttype">Actuellement, votre type de compte est : </translation>
+		<translation key="login.changeaccounttype.label.downgrademyaccount"></translation>
+		<translation key="login.changeaccounttype.submit.downgrademyaccount">Descendre le niveau de mon compte</translation> 
+		<translation key="login.changeaccounttype.label.upgrademyaccount"></translation>
+		<translation key="login.changeaccounttype.submit.upgrademyaccount">Monter le niveau de mon compte</translation> 
+		
+		<translation key="login.uploadavatar.title">Charger votre avatar</translation>
+		<translation key="login.uploadavatar.label.avatarfile">Chosissez une image avatar depuis votre disque dur (elle sera redimensionnée à 44x44 px):</translation>
+		<translation key="login.uploadavatar.submit">Envoyer l'image</translation> 		
+				
+		<translation key="login.editusername.title">Changer votre nom d'utilisateur</translation>
+		<translation key="login.editusername.label.username">Votre nom</translation> 
+		<translation key="login.editusername.submit">Envoyer</translation>
+		
+		<translation key="login.edituseremail.title">Changer votre adresse email</translation>
+		<translation key="login.edituseremail.label.useremail">Nouvelle adresse email:</translation> 
+		<translation key="login.edituseremail.submit">Envoyer</translation>		
+		
+		<translation key="login.backlink">Aller à la page de connexion</translation>
+		
+		<translation key="login.verificationfailed.title">La vérification a échoué</translation>
+		
+	</translations>
+</language_translation>
