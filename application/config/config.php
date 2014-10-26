@@ -14,7 +14,13 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-
+/**
+ * Configuration for: Base URL
+ * This is the base url of our app. if you go live with your app, put your full domain name here.
+ * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
+ * Note: The trailing slash is important!
+ */
+define('URL', 'http://localhost/php-login/');
 
 /**
  * Define the application name (useful everywhere in the framework)
@@ -24,20 +30,54 @@ define('APP_NAME', 'PHP-LOGIN-LANG');
 
 
 /**
- * configuration for the linguistic interface : use the Lang class to provide translation assistance?
+ * configuration for the linguistic interface : 
+ * For debug purposes and contextual help about missing translations, 
+ * tell whether you want to use the Lang class to provide translation assistance or not?
+ * this constant definition is mandatory
  * @author Tristan Vanrullen
 */
 define('LANG_TRANSLATION_ASSISTANCE', true); //set this to false if you don't want translation assistance (in production mode)
-define('LOCALE_PATH', 'application/locale/');
-
 
 /**
- * Configuration for: Base URL
- * This is the base url of our app. if you go live with your app, put your full domain name here.
- * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
- * Note: The trailing slash is important!
+ * configuration for the linguistic interface :
+ * give the path to the locale folder containing the linguistic data and dictionaries for the application
+ * this constant is not mandatory, by default the Lang class will search for a 'locale' folder within the 'application' folder
+ * @author Tristan Vanrullen
  */
-define('URL', 'http://localhost/php-login/');
+//define this constant if you need: 
+//define('LANG_LOCALE_PATH', 'application/locale/');
+
+/**
+ * configuration for the linguistic interface :
+ * say what to do when a blank translation is found for a given key
+ * options are : REPLACE_BY_KEY, REPLACE_BY_KEY_TRANSLATE_ME, REPLACE_BY_BLANK
+ * if you don't define the constant, a default behaviour REPLACE_BY_BLANK will be chosen by the application 
+ * @author Tristan Vanrullen
+ */
+//redefine the behaviour if you want (for instance if you want to see what you have left blank in your XML translation files) : 
+//define('LANG_REPLACE_BLANK_TRANSLATIONS_BY','REPLACE_BY_KEY_TRANSLATE_ME');
+
+/**
+ * configuration for the linguistic interface :
+ * say what to do when a blank translation is found for a given key
+ * options are : REPLACE_BY_KEY, REPLACE_BY_KEY_TRANSLATE_ME, REPLACE_BY_BLANK
+ * if you don't define the constant, a default behaviour REPLACE_BY_KEY_TRANSLATE_ME will be chosen by the application
+ * @author Tristan Vanrullen
+ */
+//redefine the behaviour if you want to see or hide the translation keys left missing in your XML translation files: 
+define('LANG_REPLACE_NON_EXISTING_TRANSLATION_BY', 'REPLACE_BY_KEY');
+
+/**
+ * configuration for the linguistic interface :
+ * say what kind of translation for the language names in the 'choose language' selector
+ * options are : LANGUAGE_SELECTOR_IDIOMATIC and LANGUAGE_SELECTOR_ALLOIDIOMATIC
+ * if you don't define the constant, a default behaviour LANGUAGE_SELECTOR_IDIOMATIC will be chosen by the application
+ * (the language names will be translated into their own language, aka Français for French, Deutsch for German ...)
+ * @author Tristan Vanrullen
+ */
+//redefine the behaviour if you want the user to see language names translated into the selected language: 
+define('LANG_LANGUAGE_SELECTOR_IDIOM', 'LANGUAGE_SELECTOR_ALLOIDIOMATIC');
+
 
 /**
  * Configuration for: Folders
@@ -192,8 +232,8 @@ define("EMAIL_SMTP_ENCRYPTION", 'ssl');
  * define("EMAIL_PASSWORD_RESET_URL", "http://127.0.0.1/php-login/4-full-mvc-framework/login/passwordReset");
  * define("EMAIL_PASSWORD_RESET_FROM_EMAIL", "noreply@example.com");
  * define("EMAIL_PASSWORD_RESET_FROM_NAME", "My Project");
- * define("EMAIL_PASSWORD_RESET_SUBJECT", "Password reset for PROJECT XY");
- * define("EMAIL_PASSWORD_RESET_CONTENT", "Please click on this link to reset your password:");
+ * //Lang (see the core.xml dictionary) ::  define("EMAIL_PASSWORD_RESET_SUBJECT", "Password reset for PROJECT XY");
+ * //Lang (see the core.xml dictionary) :: define("EMAIL_PASSWORD_RESET_CONTENT", "Please click on this link to reset your password:");
  *
  * absolute URL to verification action, necessary for email verification links
  * define("EMAIL_VERIFICATION_URL", "http://127.0.0.1/php-login/4-full-mvc-framework/login/verify/");
@@ -219,6 +259,12 @@ define("EMAIL_VERIFICATION_FROM_NAME", "My Project");
  *
  * In this project, the error messages, notices etc are all-together called "feedback".
  */
+
+/**
+ * Configuration for: Error messages and notices
+ *
+ * In this project, the error messages, notices etc are all-together called "feedback".
+ */
 /* START Lang :: redefinition of these keys (see the core.xml dictionary) ::
 define("FEEDBACK_UNKNOWN_ERROR", "Unknown error occurred!");
 define("FEEDBACK_PASSWORD_WRONG_3_TIMES", "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.");
@@ -230,12 +276,12 @@ define("FEEDBACK_LOGIN_FAILED", "Login failed.");
 define("FEEDBACK_USERNAME_FIELD_EMPTY", "Username field was empty.");
 define("FEEDBACK_PASSWORD_FIELD_EMPTY", "Password field was empty.");
 define("FEEDBACK_EMAIL_FIELD_EMPTY", "Email field was empty.");
-define("FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY", "Email and password fields were empty.");
+define("FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY", "Email and password fields were empty."); //NOT USED ANYMORE !
 define("FEEDBACK_USERNAME_SAME_AS_OLD_ONE", "Sorry, that username is the same as your current one. Please choose another one.");
 define("FEEDBACK_USERNAME_ALREADY_TAKEN", "Sorry, that username is already taken. Please choose another one.");
 define("FEEDBACK_USER_EMAIL_ALREADY_TAKEN", "Sorry, that email is already in use. Please choose another one.");
 define("FEEDBACK_USERNAME_CHANGE_SUCCESSFUL", "Your username has been changed successfully.");
-define("FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY", "Username and password fields were empty.");
+define("FEEDBACK_USERNAME_AND_PASSWORD_FIELD_EMPTY", "Username and password fields were empty."); //NOT USED ANYMORE !
 define("FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN", "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters.");
 define("FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN", "Sorry, your chosen email does not fit into the email naming pattern.");
 define("FEEDBACK_EMAIL_SAME_AS_OLD_ONE", "Sorry, that email address is the same as your current one. Please choose another one.");

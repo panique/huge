@@ -381,7 +381,7 @@ table.overview-table td.avatar {
 
 /* language selector (by Tristan V.)*/
 .select-language-box {
-    position: fixed;
+	position: fixed;
     top: 5px;
     right: 5px;
     padding: 0px;
