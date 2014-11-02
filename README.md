@@ -175,7 +175,9 @@ If your app is in the root of your web folder, then delete this line or comment 
 
 #### To use the (optional) Facebook login
 
-WARNING: Facebook has changed their API behaviour and introduced versioning, disallowing NEW applications to make use of their 1.0 API. If you registered your "Facebook developer application" later than April 30th 2014, you cannot use the "normal" 1.0 API anymore. The 2.x API versions removed the "username" property and will therefore break php-login. EXISTING applications (=API key) will not break, as they are still allowed to use API 1.0. Sorry, but it will take some time to provide a proper fix.
+**WARNING:** Facebook has removed the API SDK's version that is used in php-login. So the Facebook feature will be broken by default when you use php-login out of the box. There's no plan to fix this (sorry, no time!) but there will be a completely new version of php-login in early 2015, coming with up-to-date Facebook-login feature for sure.
+
+**WARNING:** Facebook has changed their API behaviour and introduced versioning, disallowing NEW applications to make use of their 1.0 API. If you registered your "Facebook developer application" later than April 30th 2014, you cannot use the "normal" 1.0 API anymore. The 2.x API versions removed the "username" property and will therefore break php-login. EXISTING applications (=API key) will not break, as they are still allowed to use API 1.0. Sorry, but it will take some time to provide a proper fix.
 
 Note: Facebook changes the look, the UI and the way the Facebook App pages work permanently. But you'll find out what's
 meant. Go to https://developers.facebook.com/apps/ and create a new app.
