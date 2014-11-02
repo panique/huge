@@ -90,7 +90,7 @@ used Composer before. This script is not for beginners.
 
 ## Future of the project in 2015
 
-[![announcement for 2015's restructuring](_tutorial/announcement-mini-massive-2015.png)]
+![announcement for 2015's restructuring](_tutorial/announcement-mini-massive-2015.png)
 
 ## License
 
