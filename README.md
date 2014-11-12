@@ -6,7 +6,7 @@
 
 # php-login
 
-*Thanks for 1.000+ stars and 400+ forks. Wow!*
+*Thanks for 1.300+ stars and 600+ forks. Wow!*
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
@@ -62,10 +62,9 @@ login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or
 
 ## What's new ?
 
-- professional file/folder structure
+- nice file/folder structure
 - Composer
 - Facebook login/registration
-- mostly implemented the "always return something" rule, with default return
 - if/else nesting as flat as possible
 - implemented dependency injected database connection (we open just one connection, use it for all models)
 - multiple models allowed per controller
