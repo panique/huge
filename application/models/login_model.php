@@ -371,7 +371,7 @@ class LoginModel
     {
         // email provided ?
         if (!isset($_POST['user_email']) OR empty($_POST['user_email'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
             return false;
         }
 
