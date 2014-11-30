@@ -23,13 +23,17 @@ class Login extends Controller
         // create a login model to perform the getFacebookLoginUrl() method
         $login_model = $this->loadModel('Login');
 
-        // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
-        if (FACEBOOK_LOGIN == true) {
-            $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+        if ($login_model->isUserLoggedIn()) {
+            header("Location: ".URL);
+        } else {
+            // if we use Facebook: this is necessary as we need the facebook_login_url in the login form (in the view)
+            if (FACEBOOK_LOGIN == true) {
+                $this->view->facebook_login_url = $login_model->getFacebookLoginUrl();
+            }
+    
+            // show the view
+            $this->view->render('login/index');
         }
-
-        // show the view
-        $this->view->render('login/index');
     }
 
     /**
@@ -222,12 +226,16 @@ class Login extends Controller
     {
         $login_model = $this->loadModel('Login');
 
-        // if we use Facebook: this is necessary as we need the facebook_register_url in the login form (in the view)
-        if (FACEBOOK_LOGIN == true) {
-            $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
+        if ($login_model->isUserLoggedIn()) {
+            header("Location: ".URL);
+        } else {
+            // if we use Facebook: this is necessary as we need the facebook_register_url in the login form (in the view)
+            if (FACEBOOK_LOGIN == true) {
+                $this->view->facebook_register_url = $login_model->getFacebookRegisterUrl();
+            }
+    
+            $this->view->render('login/register');
         }
-
-        $this->view->render('login/register');
     }
 
     /**
