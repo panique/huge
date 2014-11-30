@@ -78,17 +78,7 @@ class LoginModel
             }
 
             // login process, write the user data into session
-            Session::init();
-            Session::set('user_logged_in', true);
-            Session::set('user_id', $result->user_id);
-            Session::set('user_name', $result->user_name);
-            Session::set('user_email', $result->user_email);
-            Session::set('user_account_type', $result->user_account_type);
-            Session::set('user_provider_type', 'DEFAULT');
-            // put native avatar path into session
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-            // put Gravatar URL into session
-            $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
+            $this->setSessionVariables($result, "DEFAULT");
 
             // reset the failed login counter for that user (if necessary)
             if ($result->user_last_failed_login > 0) {
@@ -185,18 +175,9 @@ class LoginModel
         if ($count == 1) {
             // fetch one row (we only have one result)
             $result = $query->fetch();
-            // TODO: this block is same/similar to the one from login(), maybe we should put this in a method
+
             // write data into session
-            Session::init();
-            Session::set('user_logged_in', true);
-            Session::set('user_id', $result->user_id);
-            Session::set('user_name', $result->user_name);
-            Session::set('user_email', $result->user_email);
-            Session::set('user_account_type', $result->user_account_type);
-            Session::set('user_provider_type', 'DEFAULT');
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
-            // call the setGravatarImageUrl() method which writes gravatar urls into the session
-            $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
+            $this->setSessionVariables($result, "DEFAULT");
 
             // generate integer-timestamp for saving of last-login date
             $user_last_login_timestamp = time();
@@ -251,14 +232,7 @@ class LoginModel
 
                 $result = $query->fetch();
                 // put user data into session
-                Session::init();
-                Session::set('user_logged_in', true);
-                Session::set('user_id', $result->user_id);
-                Session::set('user_name', $result->user_name);
-                Session::set('user_email', $result->user_email);
-                Session::set('user_account_type', $result->user_account_type);
-                Session::set('user_provider_type', 'FACEBOOK');
-                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                $this->setSessionVariables($result, "FACEBOOK");
 
                 // generate integer-timestamp for saving of last-login date
                 $user_last_login_timestamp = time();
@@ -278,6 +252,26 @@ class LoginModel
         }
         // default return
         return false;
+    }
+
+    /**
+     * Writes the user's data into the session
+     * @param array $user_data user's data
+     * @param string $provider_type DEFAULT or FACEBOOK can be used at the moment
+     */
+    private function setSessionVariables($user_data, $provider_type)
+    {
+        Session::init();
+        Session::set('user_logged_in', true);
+        Session::set('user_id', $user_data->user_id);
+        Session::set('user_name', $user_data->user_name);
+        Session::set('user_email', $user_data->user_email);
+        Session::set('user_account_type', $user_data->user_account_type);
+        Session::set('user_provider_type', $provider_type);
+        // put native avatar path into session
+        Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+        // put Gravatar URL into session
+        $this->setGravatarImageUrl($user_data->user_email, AVATAR_SIZE);
     }
 
     /**
