@@ -8,11 +8,20 @@
  */
 
 /**
- * Configuration for: Error reporting
+ * Configuration for: Environment / Error reporting
  * Useful to show every little problem during development, but only show hard errors in production
+ * Constant ENV = (DEV/PROD), to show error messages / log them instead 
  */
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+define('ENV', 'PROD');
+
+ini_set("display_errors", ((ENV === 'DEV') ? 1 : 0));
+if (ENV === 'PROD')
+{
+    ini_set("log_errors", 1);
+    ini_set("error_log", "syslog"); # Define where you want logs to go
+}
+else 
+{   error_reporting(E_ALL); }
 
 /**
  * Configuration for: Base URL
