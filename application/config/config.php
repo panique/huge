@@ -22,6 +22,15 @@ ini_set("display_errors", 1);
  */
 define('URL', 'http://localhost/php-login/');
 
+
+/**
+ * Configuration for: Staging
+ * You can use these settings to define your database connectors, load certain scripts (bug-tracker, heatmap.js, ...) according to 
+ * your environment.
+ */
+define("ENVIRONMENT", Environments::DEV);
+define("STAGE", Stages::LOCAL);
+
 /**
  * Configuration for: Folders
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
@@ -89,12 +98,22 @@ define('COOKIE_DOMAIN', '.localhost');
  * define('DB_USER', 'root');
  * The password of the above user
  * define('DB_PASS', 'xxx');
+ *
+ * You can and should specify the adapter for all your different environments if the variables differ.
+ * if (ENVIRONMENT == Environments::PROD) {
+ * 	define('DB_TYPE', 'mysql');
+ * 	define('DB_HOST', '85.10.10.100');
+ * 	define('DB_NAME', 'login_' . ENVIRONEMTS::PROD);
+ * 	define('DB_USER', 'prodUser');
+ * 	define('DB_PASS', 'my_secret_prod_password');
+ * } 
  */
 define('DB_TYPE', 'mysql');
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'login');
 define('DB_USER', 'root');
 define('DB_PASS', 'mysql');
+
 
 /**
  * Configuration for: Hashing strength
