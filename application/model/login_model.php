@@ -86,7 +86,7 @@ class LoginModel
             Session::set('user_account_type', $result->user_account_type);
             Session::set('user_provider_type', 'DEFAULT');
             // put native avatar path into session
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
             // put Gravatar URL into session
             $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
 
@@ -194,7 +194,7 @@ class LoginModel
             Session::set('user_email', $result->user_email);
             Session::set('user_account_type', $result->user_account_type);
             Session::set('user_provider_type', 'DEFAULT');
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
             // call the setGravatarImageUrl() method which writes gravatar urls into the session
             $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
 
@@ -258,7 +258,7 @@ class LoginModel
                 Session::set('user_email', $result->user_email);
                 Session::set('user_account_type', $result->user_account_type);
                 Session::set('user_provider_type', 'FACEBOOK');
-                Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+                Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
 
                 // generate integer-timestamp for saving of last-login date
                 $user_last_login_timestamp = time();
@@ -638,15 +638,15 @@ class LoginModel
      * Gets the user's avatar file path
      * @return string avatar picture path
      */
-    public function getUserAvatarFilePath()
+    public function getPublicUserAvatarFilePath()
     {
         $query = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id");
         $query->execute(array(':user_id' => $_SESSION['user_id']));
 
         if ($query->fetch()->user_has_avatar) {
-            return URL . AVATAR_PATH . $_SESSION['user_id'] . '.jpg';
+            return URL . PATH_AVATARS_PUBLIC . $_SESSION['user_id'] . '.jpg';
         } else {
-            return URL . AVATAR_PATH . AVATAR_DEFAULT_IMAGE;
+            return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
         }
     }
 
@@ -656,7 +656,7 @@ class LoginModel
      */
     public function createAvatar()
     {
-        if (!is_dir(AVATAR_PATH) OR !is_writable(AVATAR_PATH)) {
+        if (!is_dir(PATH_AVATARS) OR !is_writable(PATH_AVATARS)) {
             $_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE;
             return false;
         }
@@ -682,11 +682,11 @@ class LoginModel
 
         if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
             // create a jpg file in the avatar folder
-            $target_file_path = AVATAR_PATH . $_SESSION['user_id'] . ".jpg";
+            $target_file_path = PATH_AVATARS . $_SESSION['user_id'] . ".jpg";
             $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY, true);
             $query = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
-            Session::set('user_avatar_file', $this->getUserAvatarFilePath());
+            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
             $_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
             return true;
         } else {

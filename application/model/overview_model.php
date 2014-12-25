@@ -40,7 +40,7 @@ class OverviewModel
                     $this->getGravatarLinkFromEmail($user->user_email);
             } else {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
-                    $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+                    $this->getPublicUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
 
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
@@ -67,7 +67,7 @@ class OverviewModel
             if (USE_GRAVATAR) {
                 $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
             } else {
-                $user->user_avatar_link = $this->getUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+                $user->user_avatar_link = $this->getPublicUserAvatarFilePath($user->user_has_avatar, $user->user_id);
             }
         } else {
             $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
@@ -111,12 +111,12 @@ class OverviewModel
      * @param int $user_id User's id
      * @return string/null Avatar file path
      */
-    public function getUserAvatarFilePath($user_has_avatar, $user_id)
+    public function getPublicUserAvatarFilePath($user_has_avatar, $user_id)
     {
         if ($user_has_avatar) {
-            return URL . AVATAR_PATH . $user_id . '.jpg';
+            return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
         } else {
-            return URL . AVATAR_PATH . AVATAR_DEFAULT_IMAGE;
+            return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
         }
         // default return
         return null;

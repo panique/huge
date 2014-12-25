@@ -23,7 +23,7 @@ class Controller
         try {
             $this->db = new Database();
         } catch (PDOException $e) {
-            die('Database connection could not be established.');
+            exit('Database connection could not be established.');
         }
 
         // create a view object (that does nothing, but provides the view render() method)
@@ -36,10 +36,10 @@ class Controller
      */
     public function loadModel($name)
     {
-        $path = MODELS_PATH . strtolower($name) . '_model.php';
+        $path = PATH_MODEL . strtolower($name) . '_model.php';
 
         if (file_exists($path)) {
-            require MODELS_PATH . strtolower($name) . '_model.php';
+            require PATH_MODEL . strtolower($name) . '_model.php';
             // The "Model" has a capital letter as this is the second part of the model class name,
             // all models have names like "LoginModel"
             $modelName = $name . 'Model';

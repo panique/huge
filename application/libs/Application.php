@@ -43,11 +43,11 @@ class Application
         $this->controller_name = ucwords($this->controller_name) . 'Controller';
 
         // does such a controller exist ?
-        if (file_exists(CONTROLLER_PATH . $this->controller_name . '.php')) {
+        if (file_exists(PATH_CONTROLLER . $this->controller_name . '.php')) {
 
             // load this file and create this controller
             // example: if controller would be "car", then this line would translate into: $this->car = new car();
-            require CONTROLLER_PATH . $this->controller_name . '.php';
+            require PATH_CONTROLLER . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
 
             // check for method: does such a method exist in the controller ?

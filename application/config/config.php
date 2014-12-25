@@ -24,18 +24,25 @@ define('URL', 'http://192.168.33.44/');
 
 /**
  * Configuration for: Folders
- * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
- * These paths are relative to the /public/index.php
+ * Usually there's no reason to change this.
  */
-define('LIBS_PATH', '../application/libs/');
-define('CONTROLLER_PATH', '../application/controllers/');
-define('MODELS_PATH', '../application/models/');
-define('VIEWS_PATH', '../application/views/');
-// don't forget to make this folder writable via chmod 775 or 777 (?)
-// the slash at the end is VERY important!
-define('AVATAR_PATH', 'avatars/');
+define('PATH_BASE',        realpath(dirname(__FILE__).'/../../'));
+define('PATH_APPLICATION', PATH_BASE . '/application/');
+define('PATH_LIBS',        PATH_APPLICATION . '/libs/');
+define('PATH_CONTROLLER',  PATH_APPLICATION . '/controller/');
+define('PATH_MODEL',       PATH_APPLICATION . '/model/');
+define('PATH_VIEW',        PATH_APPLICATION . '/view/');
 
-// default controller (to be loaded when no controller given). make sure this is like "index", NOT "IndexController"
+// internal path to save avatars. make sure this folder is writable. the slash at the end is VERY important!
+define('PATH_AVATARS',     PATH_BASE . '/public/avatars/');
+// public path to avatars
+define('PATH_AVATARS_PUBLIC', 'avatars/');
+
+/**
+ * Configuration for: Default actions
+ * This defines what should be called (controller and/or action) when URL does not provide a controller / action.
+ * Make sure the controller is like "index", NOT like "IndexController"
+ */
 define('DEFAULT_CONTROLLER', 'index');
 define('DEFAULT_ACTION', 'index');
 
