@@ -2,79 +2,73 @@
 
 /**
  * Class Application
- * The heart of the app
+ * The heart of the application
  */
 class Application
 {
-    /** @var null The controller part of the URL */
-    private $url_controller;
-    /** @var null The method part (of the above controller) of the URL */
-    private $url_action;
-    /** @var null Parameter one of the URL */
-    private $url_parameter_1;
-    /** @var null Parameter two of the URL */
-    private $url_parameter_2;
-    /** @var null Parameter three of the URL */
-    private $url_parameter_3;
+    /** @var null The controller */
+    private $controller = null;
+
+    /** @var null The method (of the above controller), often also named "action" */
+    private $action = null;
+
+    /** @var array URL parameters */
+    private $parameters = array();
+
+    /** @var null The name of the controller, useful for checks inside the view ("where am I ?") */
+    private $controller_name = null;
+
+    /** @var null The name of the controller's method, useful for checks inside the view ("where am I ?") */
+    private $action_name = null;
 
     /**
-     * Starts the Application
-     * Takes the parts of the URL and loads the according controller & method and passes the parameter arguments to it
-     * TODO: get rid of deep if/else nesting
-     * TODO: make the hardcoded locations ("error/index", "index.php", new Index()) dynamic, maybe via config.php
+     * Start the application, analyze URL elements, call according controller/method or relocate to fallback location
      */
     public function __construct()
     {
+        // create array with URL parts in $url
         $this->splitUrl();
 
-        // check for controller: is the url_controller NOT empty ?
-        if ($this->url_controller) {
-            // check for controller: does such a controller exist ?
-            if (file_exists(CONTROLLER_PATH . $this->url_controller . '.php')) {
-                // if so, then load this file and create this controller
-                // example: if controller would be "car", then this line would translate into: $this->car = new car();
-                require CONTROLLER_PATH . $this->url_controller . '.php';
-                $this->url_controller = new $this->url_controller();
+        // check for controller: no controller given ? then make controller = default controller (from config)
+        if (!$this->controller_name) {
+            $this->controller_name = DEFAULT_CONTROLLER;
+        }
 
-                // check for method: does such a method exist in the controller ?
-                if ($this->url_action) {
-                    if (method_exists($this->url_controller, $this->url_action)) {
+        // check for action: no action given ? then make action = default action (from config)
+        if (!$this->action_name OR (strlen($this->action_name) == 0)) {
+            $this->action_name = DEFAULT_ACTION;
+        }
 
-                        // call the method and pass the arguments to it
-                        if (isset($this->url_parameter_3)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
-                        } elseif (isset($this->url_parameter_2)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2);
-                        } elseif (isset($this->url_parameter_1)) {
-                            $this->url_controller->{$this->url_action}($this->url_parameter_1);
-                        } else {
-                            // if no parameters given, just call the method without arguments
-                            $this->url_controller->{$this->url_action}();
-                        }
-                    } else {
-                        // redirect user to error page (there's a controller for that)
-                        header('location: ' . URL . 'error/index');
-                    }
+        // rename controller name to real controller class/file name ("index" to "IndexController")
+        $this->controller_name = ucwords($this->controller_name) . 'Controller';
+
+        // does such a controller exist ?
+        if (file_exists(CONTROLLER_PATH . $this->controller_name . '.php')) {
+
+            // load this file and create this controller
+            // example: if controller would be "car", then this line would translate into: $this->car = new car();
+            require CONTROLLER_PATH . $this->controller_name . '.php';
+            $this->controller = new $this->controller_name();
+
+            // check for method: does such a method exist in the controller ?
+            if (method_exists($this->controller, $this->action_name)) {
+                if (!empty($this->parameters)) {
+                    // call the method and pass arguments to it
+                    call_user_func_array(array($this->controller, $this->action_name), $this->parameters);
                 } else {
-                    // default/fallback: call the index() method of a selected controller
-                    $this->url_controller->index();
+                    // if no parameters are given, just call the method without parameters, like $this->index->index();
+                    $this->controller->{$this->action_name}();
                 }
-            // obviously mistyped controller name, therefore show 404
             } else {
-                // redirect user to error page (there's a controller for that)
-                header('location: ' . URL . 'error/index');
+                header('location: ' . URL . 'error');
             }
-        // if url_controller is empty, simply show the main page (index/index)
         } else {
-            // invalid URL, so simply show home/index
-            require CONTROLLER_PATH . 'index.php';
-            $controller = new Index();
-            $controller->index();
+            header('location: ' . URL . 'error');
         }
     }
 
     /**
-     * Gets and splits the URL
+     * Get and split the URL
      */
     private function splitUrl()
     {
@@ -85,14 +79,15 @@ class Application
             $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
 
-            // Put URL parts into according properties
-            // By the way, the syntax here if just a short form of if/else, called "Ternary Operators"
-            // http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-            $this->url_controller = (isset($url[0]) ? $url[0] : null);
-            $this->url_action = (isset($url[1]) ? $url[1] : null);
-            $this->url_parameter_1 = (isset($url[2]) ? $url[2] : null);
-            $this->url_parameter_2 = (isset($url[3]) ? $url[3] : null);
-            $this->url_parameter_3 = (isset($url[4]) ? $url[4] : null);
+            // put URL parts into according properties
+            $this->controller_name = isset($url[0]) ? $url[0] : null;
+            $this->action_name = isset($url[1]) ? $url[1] : null;
+
+            // remove controller name and action name from the split URL
+            unset($url[0], $url[1]);
+
+            // rebase array keys and store the URL parameters
+            $this->parameters = array_values($url);
         }
     }
 }

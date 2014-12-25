@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Login Controller
- * Controls the login processes
+ * LoginController
+ * Controls all the login process-related things
  */
-
-class Login extends Controller
+class LoginController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class

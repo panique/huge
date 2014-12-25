@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Class Overview
- * This controller shows the (public) account data of one or all user(s)
- */
-class Overview extends Controller
+class OverviewController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class

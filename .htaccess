@@ -1,20 +1,4 @@
-# Necessary to prevent people to access git files or directories
-# http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible
-RedirectMatch 404 /\.git
-
-# Necessary to prevent problems when using a controller named "index" and having a root index.php
-# more here: http://stackoverflow.com/q/20918746/1114320
-Options -MultiViews
-
-# turn rewriting on
-RewriteEngine On
-
-# When using the script within a sub-folder, put this path here, like /mysubfolder/
-# If your app is in the root of your web folder, then please delete this line or comment it out
-RewriteBase /php-login/
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-l
-
-RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+# This file is - if you set up MINI correctly - not needed.
+# But, for fallback reasons (if you don't route your vhost to /public), it will stay here.
+RewriteEngine on
+RewriteRule ^(.*) public/$1 [L]

@@ -1,11 +1,9 @@
 <?php
 
 /**
- * Class Dashboard
- * This is a demo controller that simply shows an area that is only visible for the logged in user
- * because of Auth::handleLogin(); in line 19.
+ * This controller shows an area that's only visible for logged in users (because of Auth::handleLogin(); in line 16)
  */
-class Dashboard extends Controller
+class DashboardController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class
@@ -14,7 +12,7 @@ class Dashboard extends Controller
     {
         parent::__construct();
 
-        // this controller should only be visible/usable by logged in users, so we put login-check here
+        // this entire controller should only be visible/usable by logged in users, so we put authentication-check here
         Auth::handleLogin();
     }
 

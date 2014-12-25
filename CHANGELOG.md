@@ -1,5 +1,15 @@
 # CHANGE LOG
 
+## 2.1
+
+**December 2014**
+
+- [panique] removed legacy PHP stuff: 5.5.x is now the minimum
+- [PR](https://github.com/panique/php-login/pull/503) [Malkleth] allow users to request password reset by inputting email as well as user names
+- [PR](https://github.com/panique/php-login/pull/516) [pein0119] cookie runtime calculation fix 
+
+## 2.0
+
 **June 2014**
 - [oakwilliams] Assigned correct values to FEEDBACK_EMAIL_FIELD_EMPTY and FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY
 - [panique] smaller stuff in readme, changelogs etc.

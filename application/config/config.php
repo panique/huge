@@ -20,19 +20,24 @@ ini_set("display_errors", 1);
  * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
  * Note: The trailing slash is important!
  */
-define('URL', 'http://localhost/php-login/');
+define('URL', 'http://192.168.33.44/');
 
 /**
  * Configuration for: Folders
  * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
+ * These paths are relative to the /public/index.php
  */
-define('LIBS_PATH', 'application/libs/');
-define('CONTROLLER_PATH', 'application/controllers/');
-define('MODELS_PATH', 'application/models/');
-define('VIEWS_PATH', 'application/views/');
+define('LIBS_PATH', '../application/libs/');
+define('CONTROLLER_PATH', '../application/controllers/');
+define('MODELS_PATH', '../application/models/');
+define('VIEWS_PATH', '../application/views/');
 // don't forget to make this folder writable via chmod 775 or 777 (?)
 // the slash at the end is VERY important!
-define('AVATAR_PATH', 'public/avatars/');
+define('AVATAR_PATH', 'avatars/');
+
+// default controller (to be loaded when no controller given). make sure this is like "index", NOT "IndexController"
+define('DEFAULT_CONTROLLER', 'index');
+define('DEFAULT_ACTION', 'index');
 
 /**
  * Configuration for: Additional login providers: Facebook
@@ -72,7 +77,7 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 define('COOKIE_RUNTIME', 1209600);
 // the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
 // IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
-define('COOKIE_DOMAIN', '.localhost');
+define('COOKIE_DOMAIN', '.192.168.33.44');
 
 /**
  * Configuration for: Database
@@ -94,7 +99,7 @@ define('DB_TYPE', 'mysql');
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'login');
 define('DB_USER', 'root');
-define('DB_PASS', 'mysql');
+define('DB_PASS', '12345678');
 
 /**
  * Configuration for: Hashing strength

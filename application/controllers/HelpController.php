@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Class Help
- * The help area
- */
-class Help extends Controller
+class HelpController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class

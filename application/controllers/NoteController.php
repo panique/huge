@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Class Note
- * The note controller. Here we create, read, update and delete (CRUD) example data.
+ * The note controller: Just an example of simple create, read, update and delete (CRUD) actions.
  */
-class Note extends Controller
+class NoteController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class

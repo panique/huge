@@ -16,12 +16,10 @@
         "issues": "https://github.com/panique/php-login/issues",
         "source": "https://github.com/panique/php-login"
     },
-    "require":{
-        "php": ">=5.3.7",
-        "ircmaxell/password-compat": "~1.0.3",
-        "phpmailer/phpmailer": "~5.2.7",
+    "require-dev": {
+        "php": ">=5.5.0",
+        "phpmailer/phpmailer": "~5.2",
         "gregwar/captcha": "~1.0.11",
-        "facebook/php-sdk": "~3.2.3",
-        "raveren/kint": "~1.0@dev"
+        "raveren/kint": "~0.9"
     }
 }
