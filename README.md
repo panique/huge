@@ -22,9 +22,11 @@ Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
 **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
-### MVC Framework Version 3.0 (this one here)
+### MVC Framework Version 2.1
 
-TODO
+* Change the VirtualHost file from DocumentRoot /var/www/html to DocumentRoot /var/www/html/public and from 
+<Directory "/var/www/html"> to <Directory "/var/www/html/public">. Don't forget to restart.
+http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
 
 ### MVC Framework Version 2.0 (older version of this one here)
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
