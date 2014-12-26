@@ -6,20 +6,17 @@
  */
 class Application
 {
-    /** @var null The controller */
-    private $controller = null;
+    /** @var mixed Instance of the controller */
+    private $controller;
 
-    /** @var null The method (of the above controller), often also named "action" */
-    private $action = null;
-
-    /** @var array URL parameters */
+    /** @var array URL parameters, will be passed to used controller-method */
     private $parameters = array();
 
-    /** @var null The name of the controller, useful for checks inside the view ("where am I ?") */
-    private $controller_name = null;
+    /** @var string Just the name of the controller, useful for checks inside the view ("where am I ?") */
+    private $controller_name;
 
-    /** @var null The name of the controller's method, useful for checks inside the view ("where am I ?") */
-    private $action_name = null;
+    /** @var string Just the name of the controller's method, useful for checks inside the view ("where am I ?") */
+    private $action_name;
 
     /**
      * Start the application, analyze URL elements, call according controller/method or relocate to fallback location
