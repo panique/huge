@@ -12,8 +12,9 @@ class Auth
         // initialize the session (if not initialized yet)
         Session::init();
 
-        // if user is not logged in, then destroy session, treat user as "not logged in" and redirect to login page
+        // if user is not logged in...
         if (!Session::userIsLoggedIn()) {
+            // ... then treat user as "not logged in", destroy session, redirect to login page
             Session::destroy();
             header('location: ' . URL . 'login');
             // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
