@@ -5,8 +5,6 @@
  *
  * Handles the user's login / logout / registration stuff
  */
-use Gregwar\Captcha\CaptchaBuilder;
-
 class LoginModel
 {
     /**
@@ -1109,8 +1107,8 @@ class LoginModel
      */
     public function generateCaptcha()
     {
-        // create a captcha with the CaptchaBuilder lib
-        $builder = new CaptchaBuilder;
+        // create a captcha with the CaptchaBuilder lib (loaded via Composer)
+        $builder = new Gregwar\Captcha\CaptchaBuilder;
         $builder->build();
 
         // write the captcha character into session
