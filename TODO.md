@@ -20,6 +20,13 @@
   
 - demo users for easy testing out of the box  
  
+- nice demo logo / fonts http://hellohappy.org/beautiful-web-type/
+ 
+ - Affiliate-Link IN die demo / script um hoch zu converten
+ 
+ - TODO: check if this works inside a sub-folder
+ 
  ### Documentation
  
  - clickable index
+ 

@@ -4,12 +4,11 @@
 
 **December 2014**
 
-
 - [panique] simpler and improved core
 - [panique] improved architecture, controllers are now named like "IndexController"
 - [panique] moved index.php to /public folder, new .htaccess, new installation guideline
 - [panique] MVC naming fixes
-- [panique] automatic path recognition
+- [nerdalertdk] betters paths, automatic paths
 - [panique] removed legacy PHP stuff: 5.5.x is now the minimum
 - [PR](https://github.com/panique/php-login/pull/503) [Malkleth] allow users to request password reset by inputting email as well as user names
 - [PR](https://github.com/panique/php-login/pull/516) [pein0119] cookie runtime calculation fix 

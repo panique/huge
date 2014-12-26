@@ -1,26 +1,32 @@
 <?php
 
 /**
- * Configuration
- *
- * For more info about constants please @see http://php.net/manual/en/function.define.php
- * If you want to know why we use "define" instead of "const" @see http://stackoverflow.com/q/2447791/1114320
- */
-
-/**
  * Configuration for: Error reporting
- * Useful to show every little problem during development, but only show hard errors in production
+ * Useful to show every little problem during development, but only show hard errors in production.
  */
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 /**
  * Configuration for: Base URL
- * This is the base url of our app. if you go live with your app, put your full domain name here.
- * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
- * Note: The trailing slash is important!
+ * This detects your URL/IP incl. sub-folder automatically. You can also deactivate auto-detection and provide the URL
+ * manually. Note: The trailing slash is important!
  */
-define('URL', 'http://192.168.33.44/');
+define('AUTODETECT_URL', true);
+define('URL_PUBLIC_FOLDER', 'public');
+define('URL_PROTOCOL', 'http://');
+
+// TODO trailing slash handling is not perfect yet
+if (AUTODETECT_URL) {
+	define('URL_DOMAIN', $_SERVER['HTTP_HOST']);
+	define('URL_SUB_FOLDER', str_replace(URL_PUBLIC_FOLDER, '', dirname($_SERVER['SCRIPT_NAME'])));
+	define('URL', URL_PROTOCOL . URL_DOMAIN . URL_SUB_FOLDER);
+} else {
+	// manually set domain, without protocol, without trailing slash
+	define('URL_DOMAIN', '192.168.33.44');
+	define('URL_SUB_FOLDER', '/');
+	define('URL', URL_PROTOCOL . URL_DOMAIN . URL_SUB_FOLDER);
+}
 
 /**
  * Configuration for: Folders
@@ -41,7 +47,7 @@ define('PATH_AVATARS_PUBLIC', 'avatars/');
 /**
  * Configuration for: Default actions
  * This defines what should be called (controller and/or action) when URL does not provide a controller / action.
- * Make sure the controller is like "index", NOT like "IndexController"
+ * Make sure the controller is like "index", NOT like "IndexController".
  */
 define('DEFAULT_CONTROLLER', 'index');
 define('DEFAULT_ACTION', 'index');
@@ -84,7 +90,7 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 define('COOKIE_RUNTIME', 1209600);
 // the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
 // IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
-define('COOKIE_DOMAIN', '.192.168.33.44');
+define('COOKIE_DOMAIN', '.' . URL_DOMAIN);
 
 /**
  * Configuration for: Database
@@ -107,6 +113,8 @@ define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'login');
 define('DB_USER', 'root');
 define('DB_PASS', '12345678');
+// TODO
+define('DB_CHARSET', 'utf8');
 
 /**
  * Configuration for: Hashing strength

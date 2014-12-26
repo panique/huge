@@ -2,11 +2,15 @@
 
 /**
  * Class View
- *
- * Provides the methods all views will have
+ * The part that handles all the output
  */
 class View
 {
+    /**
+     * @var null the path of the to-be-used file inside application/view, something like "login/register"(.php)
+     */
+    public $filename = null;
+
     /**
      * simply includes (=shows) the view. this is done from the controller. In the controller, you usually say
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
@@ -16,6 +20,8 @@ class View
      */
     public function render($filename, $render_without_header_and_footer = false)
     {
+        $this->filename = $filename;
+
         // page without header and footer, for whatever reason
         if ($render_without_header_and_footer == true) {
             require PATH_VIEW . $filename . '.php';

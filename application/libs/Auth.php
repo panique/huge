@@ -2,19 +2,18 @@
 
 /**
  * Class Auth
- * Simply checks if user is logged in. In the app, several controllers use Auth::handleLogin() to
+ * Simply checks if user is logged in. In the app, several controllers use Auth::checkAuthentication() to
  * check if user if user is logged in, useful to show controllers/methods only to logged-in users.
  */
 class Auth
 {
-    public static function handleLogin()
+    public static function checkAuthentication()
     {
-        // initialize the session
+        // initialize the session (if not initialized yet)
         Session::init();
 
-        // if user is still not logged in, then destroy session, handle user as "not logged in" and
-        // redirect user to login page
-        if (!isset($_SESSION['user_logged_in'])) {
+        // if user is not logged in, then destroy session, treat user as "not logged in" and redirect to login page
+        if (!Session::userIsLoggedIn()) {
             Session::destroy();
             header('location: ' . URL . 'login');
             // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
