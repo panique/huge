@@ -395,7 +395,8 @@ class LoginModel
         }
 
         // cleaning and write new email to database
-        $user_email = substr(strip_tags($_POST['user_email']), 0, 64);
+        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+        $user_email = substr(strip_tags($_POST['user_email']), 0, 254);
         $query = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id");
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
@@ -435,7 +436,8 @@ class LoginModel
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
         } elseif (empty($_POST['user_email'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
-        } elseif (strlen($_POST['user_email']) > 64) {
+        } elseif (strlen($_POST['user_email']) > 254) {
+            // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
@@ -444,7 +446,7 @@ class LoginModel
             AND strlen($_POST['user_name']) >= 2
             AND preg_match('/^[a-zA-Z0-9]{2,64}$/', $_POST['user_name'])
             AND !empty($_POST['user_email'])
-            AND strlen($_POST['user_email']) <= 64
+            AND strlen($_POST['user_email']) <= 254
             AND filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
             AND !empty($_POST['user_password_new'])
             AND !empty($_POST['user_password_repeat'])
