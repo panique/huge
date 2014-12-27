@@ -36,12 +36,11 @@ class Controller
      */
     public function loadModel($name)
     {
-        $path = PATH_MODEL . strtolower($name) . '_model.php';
+        $path = PATH_MODEL . ucfirst($name) . 'Model.php';
 
         if (file_exists($path)) {
-            require PATH_MODEL . strtolower($name) . '_model.php';
-            // The "Model" has a capital letter as this is the second part of the model class name,
-            // all models have names like "LoginModel"
+            require PATH_MODEL . ucfirst($name) . 'Model.php';
+            // "Model" has capital letter as this is the second part of the class name, like "LoginModel"
             $modelName = $name . 'Model';
             // return the new model object while passing the database connection to the model
             return new $modelName($this->db);
