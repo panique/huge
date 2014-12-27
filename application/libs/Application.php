@@ -18,11 +18,21 @@ class Application
     /** @var string Just the name of the controller's method, useful for checks inside the view ("where am I ?") */
     private $action_name;
 
+    /** @var string Environment name, "development" by default  */
+    private $environment_name;
+
     /**
      * Start the application, analyze URL elements, call according controller/method or relocate to fallback location
      */
     public function __construct()
     {
+        // get environment name (sets $this->environment_name to "development" unless something else has been
+        // configured in Apache/nginx/etc settings)
+        $this->getEnvironment();
+
+        // load the config file according to environment, by default application/config.development.php will be loaded
+        $this->loadConfig();
+
         // create array with URL parts in $url
         $this->splitUrl();
 
@@ -86,5 +96,23 @@ class Application
             // rebase array keys and store the URL parameters
             $this->parameters = array_values($url);
         }
+    }
+
+    /**
+     * Gets the environment setting. If APPLICATION_ENV is defined in Apache's / nginx's / whatever's settings
+     * then return this, otherwise return "development".
+     */
+    private function getEnvironment()
+    {
+        $this->environment_name = (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : "development");
+    }
+
+    /**
+     * Loads the config file according to the environment name.
+     * The path is relative to /public/index.php !
+     */
+    private function loadConfig()
+    {
+        require('../application/config/config.' . $this->environment_name . '.php');
     }
 }
