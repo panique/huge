@@ -30,3 +30,11 @@
  
  - clickable index
  
+ 
+ 
+ 
+ 
+ ## 2.1
+ 
+ - uses `<?=` instead of `<?php echo` to make things simpler
+  

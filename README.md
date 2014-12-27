@@ -94,7 +94,7 @@ See a [live demonstration](http://php-login.net/demo4.html) or [see the server's
 Make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
 used Composer before. This script is not for beginners.
 
-* **PHP 5.3.7+**, PHP 5.4+ or PHP 5.5+
+* **PHP 5.5+**
 * **MySQL 5** database (better use versions 5.5+ as very old versions have a [PDO injection bug](http://stackoverflow.com/q/134099/1114320)
 * installed PHP extensions: pdo, gd, openssl (the tutorial shows how to do)
 * installed tools on your server: git, curl, composer (the tutorial shows how to do)
