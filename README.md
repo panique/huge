@@ -1,15 +1,16 @@
+# Develop-branch of 2.1
+
+This is the development branch of php-login, currently under heavy action for the upcoming 2.1 version.
+2.1 will be much improved version of 2.0 with lots of architecture changes, refactorings, etc.
+
+THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
+For a stable version use the 2.0 version.
+
 [![php-login introduction & quickstart placeholder picture](_tutorial/placeholder-info.png)](http://www.php-login.net)
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
 [![Donate by server affiliate sale](_tutorial/support-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
-
-# php-login 3.0
-
-2.0 can be found in the master branch (and as a 2.0 release tag), 3.0 is in the develop branch. 2.0 will not be touched
-anymore unless there's a serious bug. If so, please create a feature-branch of master branch that contains the fix.
-
-*Thanks for 1.000+ stars and 400+ forks. Wow!*
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
@@ -17,9 +18,8 @@ This script is part of the **PHP Login Project**, a collection of four similar l
 This script here is the MVC framework version.
 Find the official portal page of the project here: **[php-login.net](http://www.php-login.net)**.
 Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
-**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** or
-**[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
-**[Dev Metal](http://www.dev-metal.com)**.
+**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** 
+have a look on the official support blog **[Dev Metal](http://www.dev-metal.com)**.
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
 ### MVC Framework Version 2.1
