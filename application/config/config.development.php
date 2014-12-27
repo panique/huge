@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * Configuration for DEVELOPMENT environment
+ * To create another configuration set just copy this file to config.test.php, config.production.php etc.
+ * You get the idea :)
+ */
+
+/**
  * Configuration for: Error reporting
  * Useful to show every little problem during development, but only show hard errors in production.
  */
