@@ -4,6 +4,9 @@
 
 **December 2014**
 
+- [panique] DB construction needs now port by default 
+- [panique] removed (semi-optional) hashing cost factor (as it's redundant usually)
+- [panique] email max limit increased to 254/255 (official number)
 - [panique] simpler and improved core
 - [panique] improved architecture, controllers are now named like "IndexController"
 - [panique] moved index.php to /public folder, new .htaccess, new installation guideline

@@ -77,12 +77,9 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 
 /**
  * Configuration for: Cookies
- * Please note: The COOKIE_DOMAIN needs the domain where your app is,
- * in a format like this: .mydomain.com
- * Note the . in front of the domain. No www, no http, no slash here!
- * For local development .127.0.0.1 is fine, but when deploying you should
- * change this to your real domain, like '.mydomain.com' ! The leading dot makes the cookie available for
- * sub-domains too.
+ * Please note: The COOKIE_DOMAIN needs the domain where your app is, in a format like this: ".mydomain.com"
+ * Note the . in front of the domain. No www, no http, no slash here! For local development ".127.0.0.1" is fine.
+ * The leading dot makes the cookie available for sub-domains too.
  * @see http://stackoverflow.com/q/9618217/1114320
  * @see php.net/manual/en/function.setcookie.php
  */
@@ -94,26 +91,20 @@ define('COOKIE_DOMAIN', '.' . URL_DOMAIN);
 
 /**
  * Configuration for: Database
- * This is the place where you define your database credentials, type etc.
- *
- * database type
- * define('DB_TYPE', 'mysql');
- * database host, usually it's "127.0.0.1" or "localhost", some servers also need port info, like "127.0.0.1:8080"
- * define('DB_HOST', '127.0.0.1');
- * name of the database. please note: database and database table are not the same thing!
- * define('DB_NAME', 'login');
- * user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT
- * By the way, it's bad style to use "root", but for development it will work
- * define('DB_USER', 'root');
- * The password of the above user
- * define('DB_PASS', 'xxx');
+ * DB_TYPE The used database type. Note that other types than "mysql" might break the construction in Database.php
+ * DB_HOST The mysql hostname, usually localhost or 127.0.0.1
+ * DB_NAME The database name
+ * DB_USER The username
+ * DB_PASS The password
+ * DB_PORT The mysql port, 3306 by default (?), find out via phpinfo() and look for mysqli.default_port.
+ * DB_CHARSET The charset, necessary for security reasons. Check Database.php class for more info.
  */
 define('DB_TYPE', 'mysql');
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'login');
 define('DB_USER', 'root');
 define('DB_PASS', '12345678');
-// TODO
+define('DB_PORT', '3306');
 define('DB_CHARSET', 'utf8');
 
 /**
