@@ -454,12 +454,9 @@ class LoginModel
             $user_name = strip_tags($_POST['user_name']);
             $user_email = strip_tags($_POST['user_email']);
 
-            // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character
-            // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4,
-            // by the password hashing compatibility library. the third parameter looks a little bit shitty, but that's
-            // how those PHP 5.5 functions want the parameter: as an array with, currently only used with 'cost' => XX
-            $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-            $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+            // crypt the password with the PHP 5.5's password_hash() function, results in a 60 character hash string.
+            // @see php.net/manual/en/function.password-hash.php for more, especially for potential options
+            $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
             // check if username already exists
             $query = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name");
@@ -1016,15 +1013,8 @@ class LoginModel
             return false;
         }
 
-        // check if we have a constant HASH_COST_FACTOR defined
-        // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-        $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
         // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-        // want the parameter: as an array with, currently only used with 'cost' => XX.
-        $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+        $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
         // write users new password hash into database, reset user_password_reset_hash
         $query = $this->db->prepare("UPDATE users

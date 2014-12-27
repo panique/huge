@@ -137,10 +137,8 @@ define('DB_CHARSET', 'utf8');
  * To get more information about the best cost factor please have a look here
  * @see http://stackoverflow.com/q/4443476/1114320
  */
-
-// the hash cost factor, PHP's internal default is 10. You can leave this line
-// commented out until you need another factor then 10.
-define("HASH_COST_FACTOR", "10");
+// the hash cost factor, PHP's default is 10. This is commented out as php-login currently don't use this feture.
+// define("HASH_COST_FACTOR", "10");
 
 /**
  * Configuration for: Email server credentials
