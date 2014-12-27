@@ -37,7 +37,7 @@ class NoteModel
      */
     public function getNote($note_id)
     {
-        $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id";
+        $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id LIMIT 1";
         $query = $this->db->prepare($sql);
         $query->execute(array(':user_id' => $_SESSION['user_id'], ':note_id' => $note_id));
 
@@ -80,7 +80,7 @@ class NoteModel
         // clean the input to prevent for example javascript within the notes.
         $note_text = strip_tags($note_text);
 
-        $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id";
+        $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => $_SESSION['user_id']));
 
@@ -101,7 +101,7 @@ class NoteModel
      */
     public function delete($note_id)
     {
-        $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id";
+        $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
         $query = $this->db->prepare($sql);
         $query->execute(array(':note_id' => $note_id, ':user_id' => $_SESSION['user_id']));
 

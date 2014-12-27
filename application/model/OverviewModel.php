@@ -56,7 +56,7 @@ class OverviewModel
     public function getUserProfile($user_id)
     {
         $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar
-                FROM users WHERE user_id = :user_id";
+                FROM users WHERE user_id = :user_id LIMIT 1";
         $sth = $this->db->prepare($sql);
         $sth->execute(array(':user_id' => $user_id));
 
