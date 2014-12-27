@@ -4,6 +4,7 @@
 
 **December 2014**
 
+- [panique] using Composer's PSR-4 autoloader (in a very basic way currently)
 - [panique] DB construction needs now port by default 
 - [panique] removed (semi-optional) hashing cost factor (as it's redundant usually)
 - [panique] email max limit increased to 254/255 (official number)

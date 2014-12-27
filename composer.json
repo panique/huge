@@ -5,21 +5,13 @@
     "keywords": ["login", "auth", "user", "authentication", "mvc", "membership"],
     "homepage": "https://github.com/panique/php-login",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Panique",
-            "homepage": "http://careers.stackoverflow.com/panique",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/panique/php-login/issues",
-        "source": "https://github.com/panique/php-login"
-    },
     "require-dev": {
         "php": ">=5.5.0",
         "phpmailer/phpmailer": "~5.2",
         "gregwar/captcha": "~1.0.11",
         "raveren/kint": "~0.9"
+    },
+    "autoload": {
+        "psr-4": { "": "application/libs/" }
     }
 }
