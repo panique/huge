@@ -18,18 +18,18 @@
         <li <?php if ($this->checkForActiveController($filename, "overview")) { echo ' class="active" '; } ?> >
             <a href="<?php echo URL; ?>overview/index">Overview</a>
         </li>
-        <?php if (Session::get('user_logged_in') == true):?>
+        <?php if (Session::userIsLoggedIn()) : ?>
         <li <?php if ($this->checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
             <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>
         </li>
         <?php endif; ?>
-        <?php if (Session::get('user_logged_in') == true):?>
+        <?php if (Session::userIsLoggedIn()) : ?>
         <li <?php if ($this->checkForActiveController($filename, "note")) { echo ' class="active" '; } ?> >
             <a href="<?php echo URL; ?>note/index">My Notes</a>
         </li>
         <?php endif; ?>
 
-        <?php if (Session::get('user_logged_in') == true):?>
+        <?php if (Session::userIsLoggedIn()) : ?>
             <li <?php if ($this->checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo URL; ?>login/showprofile">My Account</a>
                 <ul class="navigation-submenu">
@@ -53,7 +53,7 @@
         <?php endif; ?>
 
         <!-- for not logged in users -->
-        <?php if (Session::get('user_logged_in') == false):?>
+        <?php if (!Session::userIsLoggedIn()) : ?>
             <li <?php if ($this->checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo URL; ?>login/index">Login</a>
             </li>
@@ -63,19 +63,19 @@
         <?php endif; ?>
     </ul>
 
-        <?php if (Session::get('user_logged_in') == true): ?>
-            <div class="header_right_box">
-                <div class="namebox">
-                    Hello <?php echo Session::get('user_name'); ?> !
-                </div>
-                <div class="avatar">
-                    <?php if (USE_GRAVATAR) { ?>
-                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>'
-                             style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
-                    <?php } else { ?>
-                        <img src='<?php echo Session::get('user_avatar_file'); ?>'
-                             style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
-                    <?php } ?>
-                </div>
+    <?php if (Session::userIsLoggedIn()) : ?>
+        <div class="header_right_box">
+            <div class="namebox">
+                Hello <?php echo Session::get('user_name'); ?> !
             </div>
-        <?php endif; ?>
+            <div class="avatar">
+                <?php if (USE_GRAVATAR) { ?>
+                    <img src='<?php echo Session::get('user_gravatar_image_url'); ?>'
+                         style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
+                <?php } else { ?>
+                    <img src='<?php echo Session::get('user_avatar_file'); ?>'
+                         style='width:<?php echo AVATAR_SIZE; ?>px; height:<?php echo AVATAR_SIZE; ?>px;' />
+                <?php } ?>
+            </div>
+        </div>
+    <?php endif; ?>
