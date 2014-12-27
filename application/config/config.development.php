@@ -1,5 +1,8 @@
 <?php
 
+// TODO un-pollute global namespace by putting this into a class or into an array
+// TODO maybe return = array('this' => 1, 'that' => 333) is the way to go here
+
 /**
  * Configuration for DEVELOPMENT environment
  * To create another configuration set just copy this file to config.test.php, config.production.php etc.
