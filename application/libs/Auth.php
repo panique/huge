@@ -2,7 +2,8 @@
 
 /**
  * Class Auth
- * Checks if user is logged in. Auth::checkAuthentication() can be used in the constructor of a controller (to make the
+ * Checks if user is logged in, is not then sends the user to "yourdomain.com/login". 
+ * Auth::checkAuthentication() can be used in the constructor of a controller (to make the
  * entire controller only visible for logged-in users) or inside a controller-method to make only this part of the
  * application available for logged-in users.
  */
