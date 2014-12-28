@@ -10,6 +10,9 @@
  */
 class Controller
 {
+    /** @var object Database The database connection */
+    private $db;
+
     function __construct()
     {
         Session::init();
