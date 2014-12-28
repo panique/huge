@@ -11,10 +11,16 @@ class View
      * $this->view->render('help/index'); to show (in this example) the view index.php in the folder help.
      * Usually the Class and the method are the same like the view, but sometimes you need to show different views.
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
-     * @param boolean $render_without_header_and_footer Optional: Set this to true if you don't want to include header and footer
+     * @param array $data Data to be used in the view
      */
-    public function render($filename)
+    public function render($filename, $data = null)
     {
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->{$key} = $value;
+            }
+        }
+
         require PATH_VIEW . '_templates/header.php';
         require PATH_VIEW . $filename . '.php';
         require PATH_VIEW . '_templates/footer.php';
@@ -23,9 +29,16 @@ class View
     /**
      * Same like render(), but does not include header and footer
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
+     * @param mixed $data Data to be used in the view
      */
-    public function renderWithoutHeaderAndFooter($filename)
+    public function renderWithoutHeaderAndFooter($filename, $data = null)
     {
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->{$key} = $value;
+            }
+        }
+
         require PATH_VIEW . $filename . '.php';
     }
 

@@ -17,8 +17,7 @@ class OverviewController extends Controller
     function index()
     {
         $overview_model = $this->loadModel('Overview');
-        $this->view->users = $overview_model->getAllUsersProfiles();
-        $this->view->render('overview/index');
+        $this->view->render('overview/index', array('users' => $overview_model->getAllUsersProfiles()));
     }
 
     /**
@@ -30,8 +29,7 @@ class OverviewController extends Controller
     {
         if (isset($user_id)) {
             $overview_model = $this->loadModel('Overview');
-            $this->view->user = $overview_model->getUserProfile($user_id);
-            $this->view->render('overview/showuserprofile');
+            $this->view->render('overview/showUserProfile', array('user' => $overview_model->getUserProfile($user_id)));
         } else {
             header('location: ' . URL);
         }
