@@ -26,6 +26,8 @@
  
  - TODO: check if this works inside a sub-folder
  
+ - TODO: split model stuff into real login code and "public" stuff, like getting all profiles, getting an avatar etc.
+ 
  ### Documentation
  
  - clickable index
