@@ -70,7 +70,7 @@ class NoteModel
      * @param string $note_text new text of the specific note
      * @return bool feedback (was the update successful ?)
      */
-    public function update($note_id, $note_text)
+    public function updateNote($note_id, $note_text)
     {
         $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
         $query = $this->database->prepare($sql);
@@ -92,7 +92,7 @@ class NoteModel
      * @param int $note_id id of the note
      * @return bool feedback (was the note deleted properly ?)
      */
-    public function delete($note_id)
+    public function deleteNote($note_id)
     {
         $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
         $query = $this->database->prepare($sql);

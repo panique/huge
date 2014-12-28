@@ -16,8 +16,9 @@ class OverviewController extends Controller
      */
     function index()
     {
-        $overview_model = $this->loadModel('Overview');
-        $this->view->render('overview/index', array('users' => $overview_model->getAllUsersProfiles()));
+        $this->View->render('overview/index', array(
+            'users' => $this->OverviewModel->getAllUsersPublicProfiles())
+        );
     }
 
     /**
@@ -28,9 +29,11 @@ class OverviewController extends Controller
     function showUserProfile($user_id)
     {
         if (isset($user_id)) {
-            $overview_model = $this->loadModel('Overview');
-            $this->view->render('overview/showUserProfile', array('user' => $overview_model->getUserProfile($user_id)));
+            $this->View->render('overview/showUserProfile', array(
+                'user' => $this->OverviewModel->getUserPublicProfile($user_id))
+            );
         } else {
+            // TODO maybe a custom method like $this->redirect('/')
             header('location: ' . URL);
         }
     }

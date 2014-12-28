@@ -2,8 +2,7 @@
 
 /**
  * Class Error
- * This controller simply shows a page that will be displayed when a controller/method is not found.
- * Simple 404 handling.
+ * This controller simply shows a page that will be displayed when a controller/method is not found. Simple 404.
  */
 class ErrorController extends Controller
 {
@@ -21,6 +20,6 @@ class ErrorController extends Controller
     function index()
     {
         header('HTTP/1.0 404 Not Found');
-        $this->view->render('error/index');
+        $this->View->render('error/index');
     }
 }

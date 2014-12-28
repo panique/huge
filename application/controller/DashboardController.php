@@ -21,6 +21,6 @@ class DashboardController extends Controller
      */
     function index()
     {
-        $this->view->render('dashboard/index');
+        $this->View->render('dashboard/index');
     }
 }

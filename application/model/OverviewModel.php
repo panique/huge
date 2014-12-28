@@ -20,7 +20,7 @@ class OverviewModel
      * Each array element is an object, containing a specific user's data.
      * @return array The profiles of all users
      */
-    public function getAllUsersProfiles()
+    public function getAllUsersPublicProfiles()
     {
         $sth = $this->db->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
         $sth->execute();
@@ -53,7 +53,7 @@ class OverviewModel
      * @param int $user_id The user's id
      * @return object/null The selected user's profile
      */
-    public function getUserProfile($user_id)
+    public function getUserPublicProfile($user_id)
     {
         $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar
                 FROM users WHERE user_id = :user_id LIMIT 1";

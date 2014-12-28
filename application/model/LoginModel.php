@@ -1099,18 +1099,18 @@ class LoginModel
      * Note: This is a very special method, as this is echoes out binary data.
      * Eventually this is something to refactor
      */
-    public function generateCaptcha()
+    public function generateAndShowCaptcha()
     {
         // create a captcha with the CaptchaBuilder lib (loaded via Composer)
-        $builder = new Gregwar\Captcha\CaptchaBuilder;
-        $builder->build();
+        $captcha = new Gregwar\Captcha\CaptchaBuilder;
+        $captcha->build();
 
         // write the captcha character into session
-        $_SESSION['captcha'] = $builder->getPhrase();
+        $_SESSION['captcha'] = $captcha->getPhrase();
 
         // render an image showing the characters (=the captcha)
         header('Content-type: image/jpeg');
-        $builder->output();
+        $captcha->output();
     }
 
     /**

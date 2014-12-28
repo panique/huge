@@ -24,24 +24,20 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $note_model = $this->loadModel('Note');
-        $this->view->notes = $note_model->getAllNotes();
-        $this->view->render('note/index');
+        $this->View->render('note/index', array(
+            'notes' => $this->NoteModel->getAllNotes()
+        ));
     }
 
     /**
      * This method controls what happens when you move to /dashboard/create in your app.
      * Creates a new note. This is usually the target of form submit actions.
+     * POST request.
      */
     public function create()
     {
-        // optimal MVC structure handles POST data in the controller, not in the model.
-        // personally, I like POST-handling in the model much better (skinny controllers, fat models), so the login
-        // stuff handles POST in the model. in this note-controller/model, the POST data is intentionally handled
-        // in the controller, to show people how to do it "correctly". But I still think this is ugly.
-        if (isset($_POST['note_text']) AND !empty($_POST['note_text'])) {
-            $note_model = $this->loadModel('Note');
-            $note_model->createNote($_POST['note_text']);
+        if (isset($_POST['note_text']) AND strlen($_POST['note_text']) > 0) {
+            $this->NoteModel->createNote($_POST['note_text']);
         }
         header('location: ' . URL . 'note');
     }
@@ -54,10 +50,9 @@ class NoteController extends Controller
     public function edit($note_id)
     {
         if (isset($note_id)) {
-            // get the note that you want to edit (to show the current content)
-            $note_model = $this->loadModel('Note');
-            $this->view->note = $note_model->getNote($note_id);
-            $this->view->render('note/edit');
+            $this->View->render('note/edit', array(
+                'note' => $this->NoteModel->getNote($note_id)
+            ));
         } else {
             header('location: ' . URL . 'note');
         }
@@ -67,13 +62,14 @@ class NoteController extends Controller
      * This method controls what happens when you move to /note/editsave(/XX) in your app.
      * Edits a note (performs the editing after form submit).
      * @param int $note_id id of the note
+     * POST request.
      */
+    // TODO make this purer POST
     public function editSave($note_id)
     {
-        if (isset($_POST['note_text']) && isset($note_id)) {
+        if (isset($_POST['note_text']) AND isset($note_id)) {
             // perform the update: pass note_id from URL and note_text from POST
-            $note_model = $this->loadModel('Note');
-            $note_model->update($note_id, $_POST['note_text']);
+            $this->NoteModel->updateNote($note_id, $_POST['note_text']);
         }
         header('location: ' . URL . 'note');
     }
@@ -87,8 +83,7 @@ class NoteController extends Controller
     public function delete($note_id)
     {
         if (isset($note_id)) {
-            $note_model = $this->loadModel('Note');
-            $note_model->delete($note_id);
+            $this->NoteModel->deleteNote($note_id);
         }
         header('location: ' . URL . 'note');
     }

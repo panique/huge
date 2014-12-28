@@ -12,6 +12,9 @@
         "raveren/kint": "~0.9"
     },
     "autoload": {
-        "psr-4": { "": "application/libs/" }
+        "psr-4": { "": ["application/libs/", "application/model/"] }
+    },
+    "require": {
+        "oodle/krumo": "0.5.*"
     }
 }

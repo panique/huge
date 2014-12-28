@@ -18,7 +18,7 @@ class Controller
         Session::init();
 
         // user has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-        if (!isset($_SESSION['user_logged_in']) && isset($_COOKIE['rememberme'])) {
+        if (!isset($_SESSION['user_logged_in']) AND isset($_COOKIE['rememberme'])) {
             header('location: ' . URL . 'login/loginWithCookie');
         }
 
@@ -29,12 +29,13 @@ class Controller
             exit('Database connection could not be established.');
         }
 
-        // TODO a base model ?
-        // $this->model = new Model();
+        // TODO it's not a good idea to load ALL models by default, or ?
+        $this->OverviewModel = new OverviewModel($this->db);
+        $this->NoteModel = new NoteModel($this->db);
+        $this->LoginModel = new LoginModel($this->db);
 
-        // TODO maybe making this static ? View::render("xxx");
         // create a view object (that does nothing, but provides the view render() method)
-        $this->view = new View();
+        $this->View = new View();
     }
 
     /**
