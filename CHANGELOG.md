@@ -4,6 +4,7 @@
 
 **December 2014**
 
+- [panique] View can now render(), renderWithoutHeaderFooter() and renderJSON
 - [panique] using Composer's PSR-4 autoloader (in a very basic way currently)
 - [panique] DB construction needs now port by default 
 - [panique] removed (semi-optional) hashing cost factor (as it's redundant usually)
