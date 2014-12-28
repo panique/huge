@@ -58,4 +58,15 @@ class Session
     {
         return isset($_SESSION['user_logged_in']);
     }
+
+    /**
+     * adds a value as a new array element to the key.
+     * useful for collecting error messages etc
+     * @param $key
+     * @param $value
+     */
+    public static function add($key, $value)
+    {
+        $_SESSION[$key][] = $value;
+    }
 }

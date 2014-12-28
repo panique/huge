@@ -41,7 +41,7 @@ class NoteController extends Controller
         // in the controller, to show people how to do it "correctly". But I still think this is ugly.
         if (isset($_POST['note_text']) AND !empty($_POST['note_text'])) {
             $note_model = $this->loadModel('Note');
-            $note_model->create($_POST['note_text']);
+            $note_model->createNote($_POST['note_text']);
         }
         header('location: ' . URL . 'note');
     }
@@ -73,7 +73,7 @@ class NoteController extends Controller
         if (isset($_POST['note_text']) && isset($note_id)) {
             // perform the update: pass note_id from URL and note_text from POST
             $note_model = $this->loadModel('Note');
-            $note_model->editSave($note_id, $_POST['note_text']);
+            $note_model->update($note_id, $_POST['note_text']);
         }
         header('location: ' . URL . 'note');
     }
