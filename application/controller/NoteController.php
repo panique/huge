@@ -59,9 +59,8 @@ class NoteController extends Controller
     }
 
     /**
-     * This method controls what happens when you move to /note/editsave(/XX) in your app.
+     * This method controls what happens when you move to /note/editSave in your app.
      * Edits a note (performs the editing after form submit).
-     * @param int $note_id id of the note
      * POST request.
      */
     public function editSave()
