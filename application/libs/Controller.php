@@ -26,6 +26,10 @@ class Controller
             exit('Database connection could not be established.');
         }
 
+        // TODO a base model ?
+        // $this->model = new Model();
+
+        // TODO maybe making this static ? View::render("xxx");
         // create a view object (that does nothing, but provides the view render() method)
         $this->view = new View();
     }
