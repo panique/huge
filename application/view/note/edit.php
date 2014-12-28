@@ -5,9 +5,10 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <?php if ($this->note) { ?>
-        <form method="post" action="<?php echo URL; ?>note/editSave/<?php echo $this->note->note_id; ?>">
+        <form method="post" action="<?php echo URL; ?>note/editSave">
             <label>Change text of note: </label>
             <!-- we use htmlentities() here to prevent user input with " etc. break the HTML -->
+            <input type="hidden" name="note_id" value="<?php echo htmlentities($this->note->note_id); ?>" />
             <input type="text" name="note_text" value="<?php echo htmlentities($this->note->note_text); ?>" />
             <input type="submit" value='Change' />
         </form>

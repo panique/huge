@@ -64,12 +64,10 @@ class NoteController extends Controller
      * @param int $note_id id of the note
      * POST request.
      */
-    // TODO make this purer POST
-    public function editSave($note_id)
+    public function editSave()
     {
-        if (isset($_POST['note_text']) AND isset($note_id)) {
-            // perform the update: pass note_id from URL and note_text from POST
-            $this->NoteModel->updateNote($note_id, $_POST['note_text']);
+        if (isset($_POST['note_id']) AND isset($_POST['note_text'])) {
+            $this->NoteModel->updateNote($_POST['note_id'], $_POST['note_text']);
         }
         header('location: ' . URL . 'note');
     }
