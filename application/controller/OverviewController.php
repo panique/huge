@@ -33,7 +33,6 @@ class OverviewController extends Controller
                 'user' => $this->OverviewModel->getUserPublicProfile($user_id))
             );
         } else {
-            // TODO maybe a custom method like $this->redirect('/')
             header('location: ' . URL);
         }
     }
