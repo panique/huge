@@ -572,10 +572,10 @@ class LoginModel
     public function getPublicUserAvatarFilePath()
     {
         $query = $this->database->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_id' => $_SESSION['user_id']));
+        $query->execute(array(':user_id' => Session::get('user_id')));
 
         if ($query->fetch()->user_has_avatar) {
-            return URL . PATH_AVATARS_PUBLIC . $_SESSION['user_id'] . '.jpg';
+            return URL . PATH_AVATARS_PUBLIC . Session::get('user_id') . '.jpg';
         } else {
             return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
         }
@@ -803,23 +803,24 @@ class LoginModel
      */
     public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
     {
-        $query_two = $this->database->prepare("UPDATE users
-                                            SET user_password_reset_hash = :user_password_reset_hash,
-                                                user_password_reset_timestamp = :user_password_reset_timestamp
-                                          WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
-        $query_two->execute(array(':user_password_reset_hash' => $user_password_reset_hash,
-                                  ':user_password_reset_timestamp' => $temporary_timestamp,
-                                  ':user_name' => $user_name,
-                                  ':provider_type' => 'DEFAULT'));
+        $query = $this->database->prepare("
+            UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
+                             user_password_reset_timestamp = :user_password_reset_timestamp
+            WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1
+        ");
+        $query->execute(array(
+            ':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
+            ':user_password_reset_timestamp' => $temporary_timestamp, ':provider_type' => 'DEFAULT')
+        );
 
         // check if exactly one row was successfully changed
-        $count =  $query_two->rowCount();
-        if ($count == 1) {
+        if ($query->rowCount() == 1) {
             return true;
-        } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_FAIL;
-            return false;
         }
+
+        // fallback
+        Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_FAIL);
+        return false;
     }
 
     /**
