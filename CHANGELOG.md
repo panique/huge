@@ -4,6 +4,17 @@
 
 **December 2014**
 
+- [panique] moving nearly all hardcoded values to config
+- [panique] new View handling: you'll have to pass vars to the view renderer now
+- [panique] completely removed Facebook login process from controller (incomplete) [will be replaced by new solution]
+- [panique] less config, URL/IP is autodetected now
+- [panique] added loadConfig() to load a specific config according to environment setting (fallback: development)
+- [panique] added getEnvironment() to fetch (potential) environment setting
+- [panique] replaced native superglobals access by wrapper access (Session:get instead of $_SESSION)
+- [panique] complete frontend rebuilding (incomplete yet)
+- [panique] massive cleaning of all controllers 
+- [panique] added Session::add() to allow stacking of elements (useful for collecting feedback, errors etc)
+- [panique] complete rebuild of model handling
 - [panique] View can now render(), renderWithoutHeaderFooter() and renderJSON
 - [panique] using Composer's PSR-4 autoloader (in a very basic way currently)
 - [panique] DB construction needs now port by default 
