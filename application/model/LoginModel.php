@@ -27,11 +27,11 @@ class LoginModel
     {
         // we do negative-first checks here
         if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+            Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
             return false;
         }
         if (!isset($_POST['user_password']) OR empty($_POST['user_password'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
             return false;
         }
 
@@ -57,7 +57,7 @@ class LoginModel
         if ($count != 1) {
             // was FEEDBACK_USER_DOES_NOT_EXIST before, but has changed to FEEDBACK_LOGIN_FAILED
             // to prevent potential attackers showing if the user exists
-            $_SESSION["feedback_negative"][] = FEEDBACK_LOGIN_FAILED;
+            Session::add('feedback_negative', FEEDBACK_LOGIN_FAILED);
             return false;
         }
 
@@ -66,7 +66,7 @@ class LoginModel
 
         // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
         if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time()-30))) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG_3_TIMES;
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG_3_TIMES);
             return false;
         }
 
@@ -74,7 +74,7 @@ class LoginModel
         if (password_verify($_POST['user_password'], $result->user_password_hash)) {
 
             if ($result->user_active != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET;
+                Session::add('feedback_negative', FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET);
                 return false;
             }
 
@@ -138,7 +138,7 @@ class LoginModel
             $sth = $this->database->prepare($sql);
             $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
             // feedback message
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG;
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG);
             return false;
         }
 
@@ -219,90 +219,22 @@ class LoginModel
     }
 
     /**
-     * Tries to log the user in via Facebook-authentication
-     * @return bool
-     */
-    public function loginWithFacebook()
-    {
-        // instantiate the facebook object
-        $facebook = new Facebook(array('appId' => FACEBOOK_LOGIN_APP_ID, 'secret' => FACEBOOK_LOGIN_APP_SECRET));
+     * Log out process: deletes cookie, deletes session
 
-        // get "user", if the user object (array?) exists, the user has identified as a real facebook user
-        $user = $facebook->getUser();
-        if ($user) {
-            try {
-                // proceed knowing you have a logged in user who's authenticated.
-                $facebook_user_data = $facebook->api('/me');
-
-                // check database for data from exactly that user (identified via Facebook ID)
-                $query = $this->database->prepare("SELECT user_id,
-                                              user_name,
-                                              user_email,
-                                              user_account_type,
-                                              user_provider_type
-                                           FROM users
-                                           WHERE user_facebook_uid = :user_facebook_uid
-                                             AND user_provider_type = :provider_type LIMIT 1");
-                $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"], ':provider_type' => 'FACEBOOK'));
-                $count =  $query->rowCount();
-                if ($count != 1) {
-                    $_SESSION["feedback_negative"][] = FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED;
-                    return false;
-                }
-
-                $result = $query->fetch();
-                // put user data into session
-                Session::init();
-                Session::set('user_logged_in', true);
-                Session::set('user_id', $result->user_id);
-                Session::set('user_name', $result->user_name);
-                Session::set('user_email', $result->user_email);
-                Session::set('user_account_type', $result->user_account_type);
-                Session::set('user_provider_type', 'FACEBOOK');
-                Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
-
-                // generate integer-timestamp for saving of last-login date
-                $user_last_login_timestamp = time();
-                // write timestamp of this login into database (we only write "real" logins via login form into the
-                // database, not the session-login on every page request
-                $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id LIMIT 1";
-                $sth = $this->database->prepare($sql);
-                $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
-
-                return true;
-
-            } catch (FacebookApiException $e) {
-                // when facebook goes offline
-                error_log($e);
-                $user = null;
-            }
-        }
-        // default return
-        return false;
-    }
-
-    /**
-     * Log out process, deletes cookie, deletes session
      */
     public function logout()
     {
-        // set the remember-me-cookie to ten years ago (3600sec * 24 hours * 365 days * 10).
-        // that's obviously the best practice to kill a cookie via php
-        // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 24 * 3650), '/', COOKIE_DOMAIN);
-
-        // delete the session
         Session::destroy();
     }
 
     /**
-     * Deletes the (invalid) remember-cookie to prevent infinitive login loops
+     * Deletes the cookie
+     * Sets the remember-me-cookie to ten years ago (3600sec * 24 hours * 365 days * 10).
+     * that's obviously the best practice to kill a cookie @see http://stackoverflow.com/a/686166/1114320
      */
     public function deleteCookie()
     {
-        // set the rememberme-cookie to ten years ago (3600sec * 24 hours * 365 days * 10).
-        // that's obviously the best practice to kill a cookie via php
-        // @see http://stackoverflow.com/a/686166/1114320
         setcookie('rememberme', false, time() - (3600 * 24 * 3650), '/', COOKIE_DOMAIN);
     }
 
@@ -312,7 +244,7 @@ class LoginModel
      */
     public function isUserLoggedIn()
     {
-        return Session::get('user_logged_in');
+        return Session::userIsLoggedIn();
     }
 
     /**
