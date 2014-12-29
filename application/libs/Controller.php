@@ -17,8 +17,10 @@ class Controller
     {
         Session::init();
 
-        // user has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-        if (!isset($_SESSION['user_logged_in']) AND isset($_COOKIE['rememberme'])) {
+        // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
+        // TODO encapsulate COOKIE super-global
+        // TODO rename to remember_me to fit any IDE's spell check
+        if (!Session::userIsLoggedIn() AND isset($_COOKIE['rememberme'])) {
             header('location: ' . URL . 'login/loginWithCookie');
         }
 
@@ -29,7 +31,10 @@ class Controller
             exit('Database connection could not be established.');
         }
 
-        // TODO it's not a good idea to load ALL models by default, or ?
+        // TODO it's not a good idea to load ALL models by default, or ? let's discuss this.
+        // TODO check performance vs. usability when pre-loading ALL models
+        // TODO replace this with some kind of "model"-autoloader
+        // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
         $this->OverviewModel = new OverviewModel($this->db);
         $this->NoteModel = new NoteModel($this->db);
         $this->LoginModel = new LoginModel($this->db);
