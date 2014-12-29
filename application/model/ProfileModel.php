@@ -1,10 +1,11 @@
 <?php
 
 /**
- * OverviewModel
- * Handles data for overviews (pages that show user profiles / lists)
+ * ProfileModel
+ * Handles all the PUBLIC profile stuff. This is not for getting data of the logged in user, it's more for handling
+ * data of all the other users. Useful for display profile information, creating user lists etc.
  */
-class OverviewModel
+class ProfileModel
 {
     /** @var Database $database The database (surprise!) */
     private $database;
@@ -23,9 +24,10 @@ class OverviewModel
      * Each array element is an object, containing a specific user's data.
      * @return array The profiles of all users
      */
-    public function getAllUsersPublicProfiles()
+    public function getPublicProfilesOfAllUsers()
     {
-        $query = $this->database->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
+        $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users";
+        $query = $this->database->prepare($sql);
         $query->execute();
 
         $all_users_profiles = array();
@@ -40,10 +42,10 @@ class OverviewModel
 
             if (USE_GRAVATAR) {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
-                    $this->getGravatarLinkFromEmail($user->user_email);
+                    $this->getGravatarLinkByEmail($user->user_email);
             } else {
                 $all_users_profiles[$user->user_id]->user_avatar_link =
-                    $this->getPublicUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+                    $this->getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
             }
 
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
@@ -57,7 +59,7 @@ class OverviewModel
      * @param int $user_id The user's id
      * @return object/null The selected user's profile
      */
-    public function getUserPublicProfile($user_id)
+    public function getPublicProfileOfUser($user_id)
     {
         $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar
                 FROM users WHERE user_id = :user_id LIMIT 1";
@@ -68,9 +70,9 @@ class OverviewModel
 
         if ($query->rowCount() == 1) {
             if (USE_GRAVATAR) {
-                $user->user_avatar_link = $this->getGravatarLinkFromEmail($user->user_email);
+                $user->user_avatar_link = $this->getGravatarLinkByEmail($user->user_email);
             } else {
-                $user->user_avatar_link = $this->getPublicUserAvatarFilePath($user->user_has_avatar, $user->user_id);
+                $user->user_avatar_link = $this->getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
             }
         } else {
             Session::add('feedback_negative', FEEDBACK_USER_DOES_NOT_EXIST);
@@ -95,7 +97,7 @@ class OverviewModel
      * @param string $email The email address
      * @return string
      */
-    public function getGravatarLinkFromEmail($email)
+    public function getGravatarLinkByEmail($email)
     {
         return 'http://www.gravatar.com/avatar/' .
                md5( strtolower( trim( $email ) ) ) .
@@ -108,7 +110,7 @@ class OverviewModel
      * @param int $user_id User's id
      * @return string/null Avatar file path
      */
-    public function getPublicUserAvatarFilePath($user_has_avatar, $user_id)
+    public function getPublicAvatarFilePathOfUser($user_has_avatar, $user_id)
     {
         if ($user_has_avatar) {
             return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';

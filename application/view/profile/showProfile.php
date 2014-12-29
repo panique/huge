@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>OverviewController/showuserprofile/:id</h1>
+    <h1>ProfileController/showProfile/:id</h1>
     <div class="box">
 
         <!-- echo out the system feedback (error and success messages) -->
@@ -32,9 +32,6 @@
                         <td><?= $this->user->user_name; ?></td>
                         <td><?= $this->user->user_email; ?></td>
                         <td><?= ($this->user->user_active == 0 ? 'No' : 'Yes'); ?></td>
-                        <td>
-                            <a href="<?= URL . 'overview/showuserprofile/' . $this->user->user_id; ?>">Profile</a>
-                        </td>
                     </tr>
                 <?php } ?>
             </table>

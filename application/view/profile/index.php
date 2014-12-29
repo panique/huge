@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>OverviewController/index</h1>
+    <h1>ProfileController/index</h1>
     <div class="box">
 
         <!-- echo out the system feedback (error and success messages) -->
@@ -7,7 +7,7 @@
 
         <h3>What happens here ?</h3>
         <p>
-            This controller/action/view shows a list of all users in the system. You could use the underlaying code to
+            This controller/action/view shows a list of all users in the system. You could use the underlying code to
             build things that use profile information of one or multiple/all users.
         </p>
         <p>
@@ -34,7 +34,7 @@
                         <td><?= $user->user_email; ?></td>
                         <td><?= ($user->user_active == 0 ? 'No' : 'Yes'); ?></td>
                         <td>
-                            <a href="<?= URL . 'overview/showuserprofile/' . $user->user_id; ?>">Profile</a>
+                            <a href="<?= URL . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
                         </td>
                     </tr>
                 <?php } ?>

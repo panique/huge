@@ -35,9 +35,9 @@ class Controller
         // TODO check performance vs. usability when pre-loading ALL models
         // TODO replace this with some kind of "model"-autoloader
         // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
-        $this->OverviewModel = new OverviewModel($this->db);
         $this->NoteModel = new NoteModel($this->db);
         $this->LoginModel = new LoginModel($this->db);
+        $this->ProfileModel = new ProfileModel($this->db);
 
         // create a view object (that does nothing, but provides the view render() method)
         $this->View = new View();

@@ -16,7 +16,7 @@
             <a href="<?php echo URL; ?>index/index">Index</a>
         </li>
         <li <?php if ($this->checkForActiveController($filename, "overview")) { echo ' class="active" '; } ?> >
-            <a href="<?php echo URL; ?>overview/index">Overview</a>
+            <a href="<?php echo URL; ?>profile/index">Profiles</a>
         </li>
         <?php if (Session::userIsLoggedIn()) : ?>
         <li <?php if ($this->checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >

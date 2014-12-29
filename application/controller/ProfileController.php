@@ -1,6 +1,6 @@
 <?php
 
-class OverviewController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class
@@ -16,21 +16,21 @@ class OverviewController extends Controller
      */
     function index()
     {
-        $this->View->render('overview/index', array(
-            'users' => $this->OverviewModel->getAllUsersPublicProfiles())
+        $this->View->render('profile/index', array(
+            'users' => $this->ProfileModel->getPublicProfilesOfAllUsers())
         );
     }
 
     /**
-     * This method controls what happens when you move to /overview/showuserprofile in your app.
+     * This method controls what happens when you move to /overview/showProfile in your app.
      * Shows the (public) details of the selected user.
      * @param $user_id int id the the user
      */
-    function showUserProfile($user_id)
+    function showProfile($user_id)
     {
         if (isset($user_id)) {
-            $this->View->render('overview/showUserProfile', array(
-                'user' => $this->OverviewModel->getUserPublicProfile($user_id))
+            $this->View->render('profile/showProfile', array(
+                'user' => $this->ProfileModel->getPublicProfileOfUser($user_id))
             );
         } else {
             header('location: ' . URL);
