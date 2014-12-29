@@ -23,7 +23,6 @@ class LoginController extends Controller
     {
         // if user is logged in redirect to main-page
         if ($this->LoginModel->isUserLoggedIn()) {
-            // TODO why exactly to mainpage ?
             header("location: " . URL);
         } else {
             // show the view
@@ -41,7 +40,7 @@ class LoginController extends Controller
 
         // check login status: if true, then redirect user to dashboard/index, if false, then to login form again
         if ($login_successful) {
-            header('location: ' . URL . 'dashboard/index');
+            header('location: ' . URL . 'login/showProfile');
         } else {
             header('location: ' . URL . 'login/index');
         }
@@ -77,109 +76,109 @@ class LoginController extends Controller
 
     /**
      * Show user's profile
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    // TODO make this the private profile, not the public one
-    // TODO dont work with direct session access in the view here, better perform a model->action and pass data to view
     function showProfile()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
+        // TODO make this the private profile, not the public one
+        // TODO dont work with direct session access in the view here, better perform a model->action and pass data to view
+
         Auth::checkAuthentication();
-        $this->View->render('login/showprofile');
+        $this->View->render('login/showProfile');
     }
 
     /**
-     * Edit user name (show the view with the form)
+     * Show edit-my-username page
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     function editUsername()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
-        $this->View->render('login/editusername');
+        $this->View->render('login/editUsername');
     }
 
     /**
      * Edit user name (perform the real action after form has been submitted)
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action
      */
     function editUsername_action()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
-        // Note: This line was missing in early version of the script, but it was never a real security issue as
-        // it was not possible to read or edit anything in the database unless the user is really logged in and
-        // has a valid session.
         Auth::checkAuthentication();
         $this->LoginModel->editUserName();
-        $this->View->render('login/editusername');
+        header('location: ' . URL . 'login/index');
     }
 
     /**
-     * Edit user email (show the view with the form)
+     * Show edit-my-user-email page
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     function editUserEmail()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
-        $this->View->render('login/edituseremail');
+        $this->View->render('login/editUserEmail');
     }
 
     /**
      * Edit user email (perform the real action after form has been submitted)
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     // make this POST
     function editUserEmail_action()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
         $this->LoginModel->editUserEmail();
-        $this->View->render('login/edituseremail');
+        $this->View->render('login/editUserEmail');
     }
 
     /**
      * Upload avatar
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     function uploadAvatar()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
-        $this->View->render('login/uploadavatar', array(
+        $this->View->render('login/uploadAvatar', array(
             'avatar_file_path' => $this->LoginModel->getPublicUserAvatarFilePath()
         ));
     }
 
     /**
-     *
+     * Perform the upload of the avatar
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
+     * POST-request
      */
     function uploadAvatar_action()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
         $this->LoginModel->createAvatar();
-        $this->View->render('login/uploadavatar');
+        $this->View->render('login/uploadAvatar');
     }
 
     /**
-     *
+     * Show the change-account-type page
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     function changeAccountType()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
-        $this->View->render('login/changeaccounttype');
+        $this->View->render('login/changeAccountType');
     }
 
     /**
-     *
+     * Perform the account-type changing
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action
+     * POST-request
      */
     function changeAccountType_action()
     {
-        // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
         Auth::checkAuthentication();
         $this->LoginModel->changeAccountType();
-        $this->View->render('login/changeaccounttype');
+        $this->View->render('login/changeAccountType');
     }
 
     /**
      * Register page
-     * Show the register form, but redirect to main-page is user is already logged-in
+     * Show the register form, but redirect to main-page if user is already logged-in
      */
     function register()
     {
@@ -191,7 +190,8 @@ class LoginController extends Controller
     }
 
     /**
-     * Register page action (POST-request after form submit)
+     * Register page action
+     * POST-request after form submit
      */
     function register_action()
     {
@@ -224,16 +224,18 @@ class LoginController extends Controller
      */
     function requestPasswordReset()
     {
-        $this->View->render('login/requestpasswordreset');
+        $this->View->render('login/requestPasswordReset');
     }
 
     /**
-     * The request-password-reset action (POST-request after form submit)
+     * The request-password-reset action
+     * POST-request after form submit
      */
+    // TODO maybe do this RESTful(ler) :)
     function requestPasswordReset_action()
     {
         $this->LoginModel->requestPasswordReset();
-        $this->View->render('login/requestpasswordreset');
+        $this->View->render('login/requestPasswordReset');
     }
 
     /**
@@ -243,9 +245,10 @@ class LoginController extends Controller
      */
     function verifyPasswordReset($user_name, $verification_code)
     {
+        // check if this the provided verification code fits the user's verification code
         if ($this->LoginModel->verifyPasswordReset($user_name, $verification_code)) {
             // pass URL-provided variable to view to display them
-            $this->View->render('login/changepassword', array(
+            $this->View->render('login/changePassword', array(
                 'user_name' => $user_name,
                 'user_password_reset_hash' => $verification_code
             ));

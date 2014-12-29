@@ -21,14 +21,8 @@
             <div>
                 <a href="<?php echo URL; ?>login/register">Register</a>
                 |
-                <a href="<?php echo URL; ?>login/requestpasswordreset">Forgot my Password</a>
+                <a href="<?php echo URL; ?>login/requestPasswordReset">Forgot my Password</a>
             </div>
         </div>
-
-        <?php if (FACEBOOK_LOGIN) { ?>
-            <div class="login-facebook-box">
-                <a href="<?= $this->facebook_login_url; ?>" class="login-facebook-button">Log in with Facebook</a>
-            </div>
-        <?php } ?>
     </div>
 </div>
