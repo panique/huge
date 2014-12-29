@@ -13,7 +13,6 @@ class LoginController extends Controller
      */
     function __construct()
     {
-        // TODO maybe put model fetching inside controller-constructor ?
         parent::__construct();
     }
 
@@ -50,11 +49,11 @@ class LoginController extends Controller
 
     /**
      * The logout action
+     * Perform logout, redirect user to main-page
      */
     function logout()
     {
         $this->LoginModel->logout();
-        // redirect user to main-page
         header('location: ' . URL);
     }
 
@@ -80,7 +79,7 @@ class LoginController extends Controller
      * Show user's profile
      */
     // TODO make this the private profile, not the public one
-    // TODO don't work with direct session access here ?
+    // TODO dont work with direct session access in the view here, better perform a model->action and pass data to view
     function showProfile()
     {
         // Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
@@ -257,17 +256,14 @@ class LoginController extends Controller
 
     /**
      * Set the new password
-     * Please note that this happens while the user is not logged in.
-     * The user identifies via the data provided by the password reset link from the email.
+     * Please note that this happens while the user is not logged in. The user identifies via the data provided by the
+     * password reset link from the email, automatically filled into the <form> fields. See verifyPasswordReset()
+     * for more. Then (regardless of result) route user to index page (user will get success/error via feedback message)
+     * POST request !
      */
-    // TODO this action might be irritating, rename it
     function setNewPassword()
     {
-        // try the password reset (user identified via hidden form inputs ($user_name, $verification_code)), see
-        // verifyPasswordReset() for more
         $this->LoginModel->setNewPassword();
-
-        // regardless of result: go to index page (user will get success/error result via feedback message)
         header('location: ' . URL . 'login/index');
     }
 
