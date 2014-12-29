@@ -11,7 +11,7 @@
 class Controller
 {
     /** @var object Database The database connection */
-    private $db;
+    private $database;
 
     function __construct()
     {
@@ -26,7 +26,7 @@ class Controller
 
         // create database connection
         try {
-            $this->db = new Database();
+            $this->database = new Database();
         } catch (PDOException $e) {
             exit('Database connection could not be established.');
         }
@@ -35,9 +35,9 @@ class Controller
         // TODO check performance vs. usability when pre-loading ALL models
         // TODO replace this with some kind of "model"-autoloader
         // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
-        $this->NoteModel = new NoteModel($this->db);
-        $this->LoginModel = new LoginModel($this->db);
-        $this->ProfileModel = new ProfileModel($this->db);
+        $this->NoteModel = new NoteModel($this->database);
+        $this->LoginModel = new LoginModel($this->database);
+        $this->ProfileModel = new ProfileModel($this->database);
 
         // create a view object (that does nothing, but provides the view render() method)
         $this->View = new View();
@@ -56,7 +56,7 @@ class Controller
             // "Model" has capital letter as this is the second part of the class name, like "LoginModel"
             $modelName = $name . 'Model';
             // return the new model object while passing the database connection to the model
-            return new $modelName($this->db);
+            return new $modelName($this->database);
         }
     }
 }
