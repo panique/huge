@@ -4,6 +4,8 @@
 
 **December 2014**
 
+- [panique] entirely removed all the Facebook stuff [will be replaced by new proper Oauth2 solution soon]
+- [panique] lots of code refactorings and cleaning, deletions of duplicate code
 - [panique] moving nearly all hardcoded values to config
 - [panique] new View handling: you'll have to pass vars to the view renderer now
 - [panique] completely removed Facebook login process from controller (incomplete) [will be replaced by new solution]
