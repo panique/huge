@@ -56,7 +56,7 @@ class Session
      */
     public static function userIsLoggedIn()
     {
-        return isset($_SESSION['user_logged_in']);
+        return (Session::get('user_logged_in') ? true : false);
     }
 
     /**
