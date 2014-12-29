@@ -2,18 +2,20 @@
 
 /**
  * LoginModel
- *
- * Handles the user's login / logout / registration stuff
+ * Handles the login / logout / registration stuff
  */
 class LoginModel
 {
+    /** @var Database $database The database connection */
+    private $database;
+
     /**
      * Constructor, expects a Database connection
-     * @param Database $db The Database object
+     * @param Database $database The Database object
      */
-    public function __construct(Database $db)
+    public function __construct(Database $database)
     {
-        $this->db = $db;
+        $this->database = $database;
     }
 
     /**
@@ -35,7 +37,7 @@ class LoginModel
 
         // get user's data
         // (we check if the password fits the password_hash via password_verify() some lines below)
-        $sth = $this->db->prepare("SELECT user_id,
+        $sth = $this->database->prepare("SELECT user_id,
                                           user_name,
                                           user_email,
                                           user_password_hash,
@@ -93,7 +95,7 @@ class LoginModel
             if ($result->user_last_failed_login > 0) {
                 $sql = "UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL
                         WHERE user_id = :user_id AND user_failed_logins != 0 LIMIT 1";
-                $sth = $this->db->prepare($sql);
+                $sth = $this->database->prepare($sql);
                 $sth->execute(array(':user_id' => $result->user_id));
             }
 
@@ -102,7 +104,7 @@ class LoginModel
             // write timestamp of this login into database (we only write "real" logins via login form into the
             // database, not the session-login on every page request
             $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id LIMIT 1";
-            $sth = $this->db->prepare($sql);
+            $sth = $this->database->prepare($sql);
             $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
             // if user has checked the "remember me" checkbox, then write cookie
@@ -113,7 +115,7 @@ class LoginModel
 
                 // write that token into database
                 $sql = "UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id LIMIT 1";
-                $sth = $this->db->prepare($sql);
+                $sth = $this->database->prepare($sql);
                 $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $result->user_id));
 
                 // generate cookie string that consists of user id, random string and combined hash of both
@@ -133,7 +135,7 @@ class LoginModel
             $sql = "UPDATE users
                     SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
                     WHERE user_name = :user_name OR user_email = :user_name LIMIT 1";
-            $sth = $this->db->prepare($sql);
+            $sth = $this->database->prepare($sql);
             $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
             // feedback message
             $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_WRONG;
@@ -172,7 +174,7 @@ class LoginModel
         }
 
         // get real token from database (and all other data)
-        $query = $this->db->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
+        $query = $this->database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
                                           user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
                                      FROM users
                                      WHERE user_id = :user_id
@@ -202,7 +204,7 @@ class LoginModel
             // write timestamp of this login into database (we only write "real" logins via login form into the
             // database, not the session-login on every page request
             $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id LIMIT 1";
-            $sth = $this->db->prepare($sql);
+            $sth = $this->database->prepare($sql);
             $sth->execute(array(':user_id' => $user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
             // NOTE: we don't set another rememberme-cookie here as the current cookie should always
@@ -233,7 +235,7 @@ class LoginModel
                 $facebook_user_data = $facebook->api('/me');
 
                 // check database for data from exactly that user (identified via Facebook ID)
-                $query = $this->db->prepare("SELECT user_id,
+                $query = $this->database->prepare("SELECT user_id,
                                               user_name,
                                               user_email,
                                               user_account_type,
@@ -264,7 +266,7 @@ class LoginModel
                 // write timestamp of this login into database (we only write "real" logins via login form into the
                 // database, not the session-login on every page request
                 $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id LIMIT 1";
-                $sth = $this->db->prepare($sql);
+                $sth = $this->database->prepare($sql);
                 $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
                 return true;
@@ -341,7 +343,7 @@ class LoginModel
         $user_name = substr(strip_tags($_POST['user_name']), 0, 64);
 
         // check if new username already exists
-        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
         $query->execute(array(':user_name' => $user_name));
         $count =  $query->rowCount();
         if ($count == 1) {
@@ -349,7 +351,7 @@ class LoginModel
             return false;
         }
 
-        $query = $this->db->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
+        $query = $this->database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
         $query->execute(array(':user_name' => $user_name, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
         if ($count == 1) {
@@ -387,7 +389,7 @@ class LoginModel
         }
 
         // check if user's email already exists
-        $query = $this->db->prepare("SELECT * FROM users WHERE user_email = :user_email LIMIT 1");
+        $query = $this->database->prepare("SELECT * FROM users WHERE user_email = :user_email LIMIT 1");
         $query->execute(array(':user_email' => $_POST['user_email']));
         $count =  $query->rowCount();
         if ($count == 1) {
@@ -398,7 +400,7 @@ class LoginModel
         // cleaning and write new email to database
         // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         $user_email = substr(strip_tags($_POST['user_email']), 0, 254);
-        $query = $this->db->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
+        $query = $this->database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
         $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
         $count =  $query->rowCount();
         if ($count != 1) {
@@ -462,7 +464,7 @@ class LoginModel
             $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
             // check if username already exists
-            $query = $this->db->prepare("SELECT * FROM users WHERE user_name = :user_name LIMIT 1");
+            $query = $this->database->prepare("SELECT * FROM users WHERE user_name = :user_name LIMIT 1");
             $query->execute(array(':user_name' => $user_name));
             $count =  $query->rowCount();
             if ($count == 1) {
@@ -471,7 +473,7 @@ class LoginModel
             }
 
             // check if email already exists
-            $query = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
+            $query = $this->database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
             $query->execute(array(':user_email' => $user_email));
             $count =  $query->rowCount();
             if ($count == 1) {
@@ -487,7 +489,7 @@ class LoginModel
             // write new users data into database
             $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
                     VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
-            $query = $this->db->prepare($sql);
+            $query = $this->database->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
                                   ':user_password_hash' => $user_password_hash,
                                   ':user_email' => $user_email,
@@ -501,7 +503,7 @@ class LoginModel
             }
 
             // get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
-            $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
+            $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
             $query->execute(array(':user_name' => $user_name));
             if ($query->rowCount() != 1) {
                 $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
@@ -515,7 +517,7 @@ class LoginModel
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
                 return true;
             } else {
-                $query = $this->db->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
+                $query = $this->database->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
                 $query->execute(array(':last_inserted_id' => $user_id));
                 $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
                 return false;
@@ -585,7 +587,7 @@ class LoginModel
      */
     public function verifyNewUser($user_id, $user_activation_verification_code)
     {
-        $sth = $this->db->prepare("UPDATE users
+        $sth = $this->database->prepare("UPDATE users
                                    SET user_active = 1, user_activation_hash = NULL
                                    WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1");
         $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
@@ -638,7 +640,7 @@ class LoginModel
      */
     public function getPublicUserAvatarFilePath()
     {
-        $query = $this->db->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
+        $query = $this->database->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
         $query->execute(array(':user_id' => $_SESSION['user_id']));
 
         if ($query->fetch()->user_has_avatar) {
@@ -682,7 +684,7 @@ class LoginModel
             // create a jpg file in the avatar folder
             $target_file_path = PATH_AVATARS . $_SESSION['user_id'] . ".jpg";
             $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY, true);
-            $query = $this->db->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
+            $query = $this->database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
             Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
             $_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
@@ -830,13 +832,13 @@ class LoginModel
         $user_name = strip_tags($_POST['user_name']);
 
         // check if that username exists
-        $query = $this->db->prepare("SELECT user_id, user_email FROM users
+        $query = $this->database->prepare("SELECT user_id, user_email FROM users
                                      WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
         $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
         $count = $query->rowCount();
         if ($count != 1) {
             //didn't find user name. Try email.
-            $query = $this->db->prepare("SELECT user_id, user_email FROM users
+            $query = $this->database->prepare("SELECT user_id, user_email FROM users
                                      WHERE user_email = :user_email AND user_provider_type = :provider_type LIMIT 1");
             $query->execute(array(':user_email' => $user_name, ':provider_type' => 'DEFAULT'));
             $count = $query->rowCount();
@@ -870,7 +872,7 @@ class LoginModel
      */
     public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
     {
-        $query_two = $this->db->prepare("UPDATE users
+        $query_two = $this->database->prepare("UPDATE users
                                             SET user_password_reset_hash = :user_password_reset_hash,
                                                 user_password_reset_timestamp = :user_password_reset_timestamp
                                           WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
@@ -949,7 +951,7 @@ class LoginModel
     public function verifyPasswordReset($user_name, $verification_code)
     {
         // check if user-provided username + verification code combination exists
-        $query = $this->db->prepare("SELECT user_id, user_password_reset_timestamp
+        $query = $this->database->prepare("SELECT user_id, user_password_reset_timestamp
                                        FROM users
                                       WHERE user_name = :user_name
                                         AND user_password_reset_hash = :user_password_reset_hash
@@ -1020,7 +1022,7 @@ class LoginModel
         $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
         // write users new password hash into database, reset user_password_reset_hash
-        $query = $this->db->prepare("UPDATE users
+        $query = $this->database->prepare("UPDATE users
                                         SET user_password_hash = :user_password_hash,
                                             user_password_reset_hash = NULL,
                                             user_password_reset_timestamp = NULL
@@ -1063,7 +1065,7 @@ class LoginModel
             // ...
 
             // upgrade account type
-            $query = $this->db->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id LIMIT 1");
+            $query = $this->database->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION["user_id"]));
 
             if ($query->rowCount() == 1) {
@@ -1080,7 +1082,7 @@ class LoginModel
             // ... myWhateverProcess();
             // ...
 
-            $query = $this->db->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id LIMIT 1");
+            $query = $this->database->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION["user_id"]));
 
             if ($query->rowCount() == 1) {
@@ -1259,7 +1261,7 @@ class LoginModel
 
         $sql = "INSERT INTO users (user_name, user_email, user_creation_timestamp, user_active, user_provider_type, user_facebook_uid)
                 VALUES (:user_name, :user_email, :user_creation_timestamp, :user_active, :user_provider_type, :user_facebook_uid)";
-        $query = $this->db->prepare($sql);
+        $query = $this->database->prepare($sql);
         $query->execute(array(':user_name' => $clean_user_name_from_facebook,
                               ':user_email' => $facebook_user_data["email"],
                               ':user_creation_timestamp' => $user_creation_timestamp,
@@ -1269,7 +1271,7 @@ class LoginModel
 
         $count = $query->rowCount();
         if ($count == 1) {
-            $query = $this->db->prepare("SELECT user_id, user_name, user_email, user_account_type, user_provider_type
+            $query = $this->database->prepare("SELECT user_id, user_name, user_email, user_account_type, user_provider_type
                                            FROM users
                                           WHERE user_name = :user_name AND user_provider_type = :provider_type
                                           LIMIT 1");
@@ -1306,7 +1308,7 @@ class LoginModel
      */
     public function facebookUserIdExistsAlreadyInDatabase($facebook_user_data)
     {
-        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_facebook_uid = :user_facebook_uid LIMIT 1");
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_facebook_uid = :user_facebook_uid LIMIT 1");
         $query->execute(array(':user_facebook_uid' => $facebook_user_data["id"]));
 
         if ($query->rowCount() == 1) {
@@ -1327,7 +1329,7 @@ class LoginModel
         // delete dots from facebook's username (it's the common way to do this like that)
         $clean_user_name_from_facebook = str_replace(".", "", $facebook_user_data["username"]);
 
-        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook LIMIT 1");
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :clean_user_name_from_facebook LIMIT 1");
         $query->execute(array(':clean_user_name_from_facebook' => $clean_user_name_from_facebook));
 
         if ($query->rowCount() == 1) {
@@ -1344,7 +1346,7 @@ class LoginModel
      */
     public function facebookUserEmailExistsAlreadyInDatabase($facebook_user_data)
     {
-        $query = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :facebook_email LIMIT 1");
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_email = :facebook_email LIMIT 1");
         $query->execute(array(':facebook_email' => $facebook_user_data["email"]));
 
         if ($query->rowCount() == 1) {
@@ -1370,7 +1372,7 @@ class LoginModel
     	do {
             $n = $n+1;
             $new_username = $existing_name . $n;
-            $query = $this->db->prepare("SELECT user_id FROM users WHERE user_name = :name_with_number LIMIT 1");
+            $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :name_with_number LIMIT 1");
             $query->execute(array(':name_with_number' => $new_username));
     	 	 
     	 } while ($query->rowCount() == 1);
