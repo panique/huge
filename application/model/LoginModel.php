@@ -1040,7 +1040,7 @@ class LoginModel
         $captcha->build();
 
         // write the captcha character into session
-        $_SESSION['captcha'] = $captcha->getPhrase();
+        Session::set('captcha', $captcha->getPhrase());
 
         // render an image showing the characters (=the captcha)
         header('Content-type: image/jpeg');
