@@ -113,6 +113,7 @@ class Application
      */
     private function loadConfig()
     {
+        // note that we cannot PATH_APPLICATION here as this constant is not know yet (is defined in config) :)
         require('../application/config/config.' . $this->environment_name . '.php');
     }
 }
