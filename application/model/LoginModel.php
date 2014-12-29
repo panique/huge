@@ -219,12 +219,11 @@ class LoginModel
     }
 
     /**
-     * Log out process: deletes cookie, deletes session
-
+     * Log out process: delete cookie, delete session
      */
     public function logout()
     {
-        setcookie('rememberme', false, time() - (3600 * 24 * 3650), '/', COOKIE_DOMAIN);
+        $this->deleteCookie();
         Session::destroy();
     }
 
