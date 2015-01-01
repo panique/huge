@@ -354,6 +354,16 @@ class LoginModel
         return true;
     }
 
+    public function doesEmailAlreadyExist($user_email)
+    {
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
+        $query->execute(array(':user_email' => $user_email));
+        if ($query->rowCount() == 0) {
+            return false;
+        }
+        return true;
+    }
+
     public function saveNewUserName($user_id, $new_user_name)
     {
         $query = $this->database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
@@ -364,56 +374,63 @@ class LoginModel
         return false;
     }
 
+    public function saveNewEmailAddress($user_id, $new_user_email)
+    {
+        $query = $this->database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
+        $query->execute(array(':user_email' => $new_user_email, ':user_id' => $user_id));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+        return false;
+    }
+
     /**
-     * Edit the user's email, provided in the editing form
+     * Edit the user's email
+     * @param $new_user_email
      * @return bool success status
      */
-    public function editUserEmail()
+    public function editUserEmail($new_user_email)
     {
         // email provided ?
-        if (!isset($_POST['user_email']) OR empty($_POST['user_email'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
+        if (empty($new_user_email)) {
+            Session::add('feedback_negative', FEEDBACK_EMAIL_FIELD_EMPTY);
             return false;
         }
 
         // check if new email is same like the old one
-        if ($_POST['user_email'] == $_SESSION["user_email"]) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_SAME_AS_OLD_ONE;
+        if ($new_user_email == Session::get('user_email')) {
+            Session::add('feedback_negative', FEEDBACK_EMAIL_SAME_AS_OLD_ONE);
             return false;
         }
 
         // user's email must be in valid email format
-        if (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+        if (!filter_var($new_user_email, FILTER_VALIDATE_EMAIL)) {
+            Session::add('feedback_negative', FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN);
             return false;
         }
+
+        // cut email length (everything else is spam and should later be deleted)
+        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+        // TODO is this even necessary anymore as we use FILTER_VALIDATE_EMAIL above ?
+        $new_user_email = substr(strip_tags($new_user_email), 0, 254);
 
         // check if user's email already exists
-        $query = $this->database->prepare("SELECT * FROM users WHERE user_email = :user_email LIMIT 1");
-        $query->execute(array(':user_email' => $_POST['user_email']));
-        $count =  $query->rowCount();
-        if ($count == 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+        if ($this->doesEmailAlreadyExist($new_user_email)) {
+            Session::add('feedback_negative', FEEDBACK_USER_EMAIL_ALREADY_TAKEN);
             return false;
         }
 
-        // cleaning and write new email to database
-        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-        $user_email = substr(strip_tags($_POST['user_email']), 0, 254);
-        $query = $this->database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_email' => $user_email, ':user_id' => $_SESSION['user_id']));
-        $count =  $query->rowCount();
-        if ($count != 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
-            return false;
+        // write to database, if successful ...
+        // ... then write new email to session, Gravatar too (as this relies to the user's email address)
+        if ($this->saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
+            Session::set('user_email', $new_user_email);
+            Session::set('user_gravatar_image_url', $this->getGravatarLinkByEmail($new_user_email));
+            Session::add('feedback_positive', FEEDBACK_EMAIL_CHANGE_SUCCESSFUL);
+            return true;
         }
 
-        Session::set('user_email', $user_email);
-        // call the setGravatarImageUrl() method which writes gravatar URLs into the session
-        // TODO total refactor
-        $this->setGravatarImageUrl($user_email, AVATAR_SIZE);
-        $_SESSION["feedback_positive"][] = FEEDBACK_EMAIL_CHANGE_SUCCESSFUL;
-        // TODO ???
+        Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
         return false;
     }
 

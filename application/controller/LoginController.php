@@ -130,7 +130,7 @@ class LoginController extends Controller
     function editUserEmail_action()
     {
         Auth::checkAuthentication();
-        $this->LoginModel->editUserEmail();
+        $this->LoginModel->editUserEmail(Request::post('user_email'));
         $this->View->render('login/editUserEmail');
     }
 
@@ -141,6 +141,7 @@ class LoginController extends Controller
     function uploadAvatar()
     {
         Auth::checkAuthentication();
+        // TODO fix
         $this->View->render('login/uploadAvatar', array(
             'avatar_file_path' => $this->LoginModel->getPublicUserAvatarFilePath()
         ));
