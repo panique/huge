@@ -21,11 +21,10 @@ class LoginController extends Controller
      */
     function index()
     {
-        // if user is logged in redirect to main-page
+        // if user is logged in redirect to main-page, if not show the view
         if ($this->LoginModel->isUserLoggedIn()) {
             header("location: " . URL);
         } else {
-            // show the view
             $this->View->render('login/index');
         }
     }
