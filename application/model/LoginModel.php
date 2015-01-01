@@ -107,10 +107,8 @@ class LoginModel
         // There are other types of accounts that don't have passwords etc. (FACEBOOK)
         $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
 
-        // fetch one row (we only have one result)
-        $result = $query->fetch();
-
-        return $result;
+        // return one row (we only have one result)
+        return $query->fetch();
     }
 
     /**
