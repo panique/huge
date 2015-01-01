@@ -5,8 +5,10 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <form action="<?php echo URL; ?>login/editUserName_action" method="post">
-        <label>New username</label>
-        <input type="text" name="user_name" required />
+        <!-- btw http://stackoverflow.com/questions/774054/should-i-put-input-tag-inside-label-tag -->
+        <label>
+            New username: <input type="text" name="user_name" required />
+        </label>
         <input type="submit" value="Submit" />
     </form>
 </div>
