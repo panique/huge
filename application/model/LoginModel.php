@@ -195,9 +195,6 @@ class LoginModel
 
         // set cookie
         setcookie('remember_me', $cookie_string, time() + COOKIE_RUNTIME, COOKIE_PATH);
-
-        // DEV feedback
-        Session::add('feedback_positive', "DEV NOTE: Cookie written");
     }
 
     /**
