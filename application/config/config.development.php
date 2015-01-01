@@ -63,14 +63,10 @@ define('DEFAULT_ACTION', 'index');
 
 /**
  * Configuration for: Additional login providers: Facebook
- * Self-explaining. The FACEBOOK_LOGIN_PATH is the controller-action where the user is redirected to after getting
- * authenticated via Facebook. Leave it like that unless you know exactly what you do.
+ * CURRENTLY REMOVED (as Facebook has removed support for the used API version).
+ * Another, better and up-to-date implementation might come soon.
  */
 define('FACEBOOK_LOGIN', false);
-define('FACEBOOK_LOGIN_APP_ID', 'XXX');
-define('FACEBOOK_LOGIN_APP_SECRET', 'XXX');
-define('FACEBOOK_LOGIN_PATH', 'login/loginWithFacebook');
-define('FACEBOOK_REGISTER_PATH', 'login/registerWithFacebook');
 
 /**
  * Configuration for: Avatars/Gravatar support
@@ -88,17 +84,13 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 
 /**
  * Configuration for: Cookies
- * Please note: The COOKIE_DOMAIN needs the domain where your app is, in a format like this: ".mydomain.com"
- * Note the . in front of the domain. No www, no http, no slash here! For local development ".127.0.0.1" is fine.
- * The leading dot makes the cookie available for sub-domains too.
  * @see http://stackoverflow.com/q/9618217/1114320
  * @see php.net/manual/en/function.setcookie.php
  */
 // 1209600 seconds = 2 weeks
 define('COOKIE_RUNTIME', 1209600);
-// the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
-// IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
-define('COOKIE_DOMAIN', '.' . URL_DOMAIN);
+// default path the cookie is valid on. Usually "/" to make it valid on the whole domain.
+define('COOKIE_PATH', '/');
 
 /**
  * Configuration for: Database
@@ -231,6 +223,7 @@ define("FEEDBACK_USER_DOES_NOT_EXIST", "This user does not exist.");
 define("FEEDBACK_LOGIN_FAILED", "Login failed.");
 define("FEEDBACK_USERNAME_FIELD_EMPTY", "Username field was empty.");
 define("FEEDBACK_PASSWORD_FIELD_EMPTY", "Password field was empty.");
+define("FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY", "Username or password field was empty.");
 define("FEEDBACK_EMAIL_FIELD_EMPTY", "Email field was empty.");
 define("FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY", "Email and password fields were empty.");
 define("FEEDBACK_USERNAME_SAME_AS_OLD_ONE", "Sorry, that username is the same as your current one. Please choose another one.");

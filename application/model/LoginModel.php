@@ -2,7 +2,7 @@
 
 /**
  * LoginModel
- * Handles the login / logout / registration stuff
+ * The login part of the model: Handles the login / logout / registration stuff
  */
 class LoginModel
 {
@@ -20,129 +20,187 @@ class LoginModel
 
     /**
      * Login process (for DEFAULT user accounts).
+     * @param $user_name string The user's name
+     * @param $user_password string The user's password
+     * @param $set_remember_me_cookie mixed Marker for usage of remember-me cookie feature
      * @return bool success state
      */
-    public function login()
+    public function login($user_name, $user_password, $set_remember_me_cookie = null)
     {
-        // we do negative-first checks here
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
-            return false;
-        }
-        if (!isset($_POST['user_password']) OR empty($_POST['user_password'])) {
-            Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
+        // we do negative-first checks here, for simplicity empty username and empty password in one line
+        if (empty($user_name) OR empty($user_password)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY);
             return false;
         }
 
-        // get user's data
-        // (we check if the password fits the password_hash via password_verify() some lines below)
-        $sth = $this->database->prepare("SELECT user_id,
-                                          user_name,
-                                          user_email,
-                                          user_password_hash,
-                                          user_active,
-                                          user_account_type,
-                                          user_failed_logins,
-                                          user_last_failed_login
-                                   FROM   users
-                                   WHERE  (user_name = :user_name OR user_email = :user_name)
-                                          AND user_provider_type = :provider_type
-                                   LIMIT 1");
-        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
-        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
-        $sth->execute(array(':user_name' => $_POST['user_name'], ':provider_type' => 'DEFAULT'));
-        $count =  $sth->rowCount();
-        // if there's NOT one result
-        if ($count != 1) {
-            // was FEEDBACK_USER_DOES_NOT_EXIST before, but has changed to FEEDBACK_LOGIN_FAILED
-            // to prevent potential attackers showing if the user exists
+        // get all data of that user (to later check if password and password_hash fit)
+        $result = $this->getUserDataByUsername($user_name);
+
+        // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
+        if (!$result) {
             Session::add('feedback_negative', FEEDBACK_LOGIN_FAILED);
             return false;
         }
 
-        // fetch one row (we only have one result)
-        $result = $sth->fetch();
-
         // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-        if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time()-30))) {
+        if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
             Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG_3_TIMES);
             return false;
         }
 
-        // check if hash of provided password matches the hash in the database
-        if (password_verify($_POST['user_password'], $result->user_password_hash)) {
-
-            if ($result->user_active != 1) {
-                Session::add('feedback_negative', FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET);
-                return false;
-            }
-
-            // login process, write the user data into session
-            Session::init();
-            Session::set('user_logged_in', true);
-            Session::set('user_id', $result->user_id);
-            Session::set('user_name', $result->user_name);
-            Session::set('user_email', $result->user_email);
-            Session::set('user_account_type', $result->user_account_type);
-            Session::set('user_provider_type', 'DEFAULT');
-            // put native avatar path into session
-            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
-            // put Gravatar URL into session
-            $this->setGravatarImageUrl($result->user_email, AVATAR_SIZE);
-
-            // reset the failed login counter for that user (if necessary)
-            if ($result->user_last_failed_login > 0) {
-                $sql = "UPDATE users SET user_failed_logins = 0, user_last_failed_login = NULL
-                        WHERE user_id = :user_id AND user_failed_logins != 0 LIMIT 1";
-                $sth = $this->database->prepare($sql);
-                $sth->execute(array(':user_id' => $result->user_id));
-            }
-
-            // generate integer-timestamp for saving of last-login date
-            $user_last_login_timestamp = time();
-            // write timestamp of this login into database (we only write "real" logins via login form into the
-            // database, not the session-login on every page request
-            $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp WHERE user_id = :user_id LIMIT 1";
-            $sth = $this->database->prepare($sql);
-            $sth->execute(array(':user_id' => $result->user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
-
-            // if user has checked the "remember me" checkbox, then write cookie
-            if (isset($_POST['user_rememberme'])) {
-
-                // generate 64 char random string
-                $random_token_string = hash('sha256', mt_rand());
-
-                // write that token into database
-                $sql = "UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id LIMIT 1";
-                $sth = $this->database->prepare($sql);
-                $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $result->user_id));
-
-                // generate cookie string that consists of user id, random string and combined hash of both
-                $cookie_string_first_part = $result->user_id . ':' . $random_token_string;
-                $cookie_string_hash = hash('sha256', $cookie_string_first_part);
-                $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
-
-                // set cookie
-                setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
-            }
-
-            // return true to make clear the login was successful
-            return true;
-
-        } else {
-            // increment the failed login counter for that user
-            $sql = "UPDATE users
-                    SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
-                    WHERE user_name = :user_name OR user_email = :user_name LIMIT 1";
-            $sth = $this->database->prepare($sql);
-            $sth->execute(array(':user_name' => $_POST['user_name'], ':user_last_failed_login' => time() ));
-            // feedback message
+        // if hash of provided password does NOT match the hash in the database: +1 failed-login counter
+        if (!password_verify($user_password, $result->user_password_hash)) {
+            $this->incrementFailedLoginCounterOfUser($user_name);
+            // we say "password wrong" here, but less details like "login failed" would be better (= less information)
             Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG);
             return false;
         }
 
-        // default return
-        return false;
+        // from here we assume that the password hash fits the database password hash, as password_verify() was true
+
+        // if user is not active (= has not verified account by verification mail)
+        if ($result->user_active != 1) {
+            Session::add('feedback_negative', FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET);
+            return false;
+        }
+
+        // reset the failed login counter for that user (if necessary)
+        if ($result->user_last_failed_login > 0) {
+            $this->resetFailedLoginCounterOfUser($user_name);
+        }
+
+        // save timestamp of this login in the database line of that user
+        $this->saveTimestampOfLoginOfUser($user_name);
+
+        // if user has checked the "remember me" checkbox, then write token into database and into cookie
+        if ($set_remember_me_cookie) {
+            $this->setRememberMeInDatabaseAndCookie($result->user_id);
+        }
+
+        // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
+        $this->setSuccessfulLoginIntoSession(
+            $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
+        );
+
+        // return true to make clear the login was successful
+        // maybe do this in dependence of setSuccessfulLoginIntoSession ?
+        return true;
+    }
+
+    /**
+     * Gets the user's data
+     * @param $user_name string User's name
+     * @return mixed Returns false if user does not exist, returns object with user's data when user exists
+     */
+    public function getUserDataByUsername($user_name)
+    {
+        $sql = "
+            SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
+                   user_failed_logins, user_last_failed_login
+              FROM users
+             WHERE (user_name = :user_name OR user_email = :user_name)
+                   AND user_provider_type = :provider_type
+             LIMIT 1";
+        $query = $this->database->prepare($sql);
+
+        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
+
+        // fetch one row (we only have one result)
+        $result = $query->fetch();
+
+        return $result;
+    }
+
+    /**
+     * The real login process: The user's data is written into the session
+     * Cheesy name, maybe rename
+     * Also maybe refactoring this, using an array
+     */
+    public function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type)
+    {
+        Session::init();
+        Session::set('user_id', $user_id);
+        Session::set('user_name', $user_name);
+        Session::set('user_email', $user_email);
+        Session::set('user_account_type', $user_account_type);
+        Session::set('user_provider_type', 'DEFAULT');
+
+        // get and set avatars
+        Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($user_id));
+        Session::set('user_gravatar_image_url', $this->getGravatarLinkByEmail($user_email));
+
+        // finally, set user as logged-in
+        Session::set('user_logged_in', true);
+    }
+
+    /**
+     * Increments the failed-login counter of a user
+     * @param $user_name
+     */
+    public function incrementFailedLoginCounterOfUser($user_name)
+    {
+        $sql = "UPDATE users
+                   SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
+                 WHERE user_name = :user_name OR user_email = :user_name
+                 LIMIT 1";
+        $sth = $this->database->prepare($sql);
+        $sth->execute(array(':user_name' => $user_name, ':user_last_failed_login' => time() ));
+    }
+
+    /**
+     * Resets the failed-login counter of a user back to 0
+     * @param $user_name
+     */
+    public function resetFailedLoginCounterOfUser($user_name)
+    {
+        $sql = "UPDATE users
+                   SET user_failed_logins = 0, user_last_failed_login = NULL
+                 WHERE user_name = :user_name AND user_failed_logins != 0
+                 LIMIT 1";
+        $sth = $this->database->prepare($sql);
+        $sth->execute(array(':user_name' => $user_name));
+    }
+
+    /**
+     * Write timestamp of this login into database (we only write a "real" login via login form into the database,
+     * not the session-login on every page request
+     * @param $user_name
+     */
+    public function saveTimestampOfLoginOfUser($user_name)
+    {
+        $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp
+                WHERE user_name = :user_name LIMIT 1";
+        $sth = $this->database->prepare($sql);
+        $sth->execute(array(':user_name' => $user_name, ':user_last_login_timestamp' => time()));
+    }
+
+    /**
+     * Write remember-me token into database and into cookie
+     * Maybe splitting this into database and cookie part ?
+     * @param $user_id
+     */
+    public function setRememberMeInDatabaseAndCookie($user_id)
+    {
+        // generate 64 char random string
+        $random_token_string = hash('sha256', mt_rand());
+
+        // write that token into database
+        $sql = "UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1";
+        $sth = $this->database->prepare($sql);
+        $sth->execute(array(':user_remember_me_token' => $random_token_string, ':user_id' => $user_id));
+
+        // generate cookie string that consists of user id, random string and combined hash of both
+        $cookie_string_first_part = $user_id . ':' . $random_token_string;
+        $cookie_string_hash = hash('sha256', $cookie_string_first_part);
+        $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
+
+        // set cookie
+        setcookie('remember_me', $cookie_string, time() + COOKIE_RUNTIME, COOKIE_PATH);
+
+        // DEV feedback
+        Session::add('feedback_positive', "DEV NOTE: Cookie written");
     }
 
     /**
@@ -151,7 +209,7 @@ class LoginModel
      */
     public function loginWithCookie()
     {
-        $cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
+        $cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : '';
 
         // do we have a cookie var ?
         if (!$cookie) {
@@ -177,10 +235,10 @@ class LoginModel
                                           user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
                                      FROM users
                                      WHERE user_id = :user_id
-                                       AND user_rememberme_token = :user_rememberme_token
-                                       AND user_rememberme_token IS NOT NULL
+                                       AND user_remember_me_token = :user_remember_me_token
+                                       AND user_remember_me_token IS NOT NULL
                                        AND user_provider_type = :provider_type LIMIT 1");
-        $query->execute(array(':user_id' => $user_id, ':user_rememberme_token' => $token, ':provider_type' => 'DEFAULT'));
+        $query->execute(array(':user_id' => $user_id, ':user_remember_me_token' => $token, ':provider_type' => 'DEFAULT'));
         $count =  $query->rowCount();
         if ($count == 1) {
             // fetch one row (we only have one result)
@@ -206,7 +264,7 @@ class LoginModel
             $sth = $this->database->prepare($sql);
             $sth->execute(array(':user_id' => $user_id, ':user_last_login_timestamp' => $user_last_login_timestamp));
 
-            // NOTE: we don't set another rememberme-cookie here as the current cookie should always
+            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
             // again from time to time. This is good and safe ! ;)
             $_SESSION["feedback_positive"][] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
@@ -233,7 +291,7 @@ class LoginModel
      */
     public function deleteCookie()
     {
-        setcookie('rememberme', false, time() - (3600 * 24 * 3650), '/', COOKIE_DOMAIN);
+        setcookie('remember_me', false, time() - (3600 * 24 * 3650), COOKIE_PATH);
     }
 
     /**
@@ -547,6 +605,7 @@ class LoginModel
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
      * @param array $attributes Optional, additional key/value attributes to include in the IMG tag
      */
+    // TODO REMOVE ?
     public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $attributes = array())
     {
         // create image URL, write it into session
@@ -565,19 +624,42 @@ class LoginModel
     }
 
     /**
+     * Gets a gravatar image link from given email address
+     *
+     * Gravatar is the #1 (free) provider for email address based global avatar hosting.
+     * The URL (or image) returns always a .jpg file ! For deeper info on the different parameter possibilities:
+     * @see http://gravatar.com/site/implement/images/
+     * @source http://gravatar.com/site/implement/images/php/
+     *
+     * This method will return something like http://www.gravatar.com/avatar/79e2e5b48aec07710c08d50?s=80&d=mm&r=g
+     * Note: the url does NOT have something like ".jpg" ! It works without.
+     *
+     * Set the configs inside the application/config/ files.
+     *
+     * @param string $email The email address
+     * @return string
+     */
+    public function getGravatarLinkByEmail($email)
+    {
+        return 'http://www.gravatar.com/avatar/' .
+               md5( strtolower( trim( $email ) ) ) .
+               '?s=' . AVATAR_SIZE . '&d=' . GRAVATAR_DEFAULT_IMAGESET . '&r=' . GRAVATAR_RATING;
+    }
+
+    /**
      * Gets the user's avatar file path
      * @return string avatar picture path
      */
-    public function getPublicUserAvatarFilePath()
+    public function getPublicUserAvatarFilePathByUserId($user_id)
     {
         $query = $this->database->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_id' => Session::get('user_id')));
+        $query->execute(array(':user_id' => $user_id));
 
         if ($query->fetch()->user_has_avatar) {
-            return URL . PATH_AVATARS_PUBLIC . Session::get('user_id') . '.jpg';
-        } else {
-            return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
+            return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
         }
+
+        return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
     }
 
     /**

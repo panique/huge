@@ -6,7 +6,7 @@
  * 1. initialize a session
  * 2. check if the user is not logged in anymore (session timeout) but has a cookie
  * 3. create a database connection (that will be passed to all models that need a database connection)
- * 4. create all the model objects (maybe TODO, definitely TODO for auto-loading)
+ * 4. create all the model objects (TODO auto-loading !?)
  * 5. create a view object
  */
 class Controller
@@ -25,8 +25,7 @@ class Controller
 
         // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
         // TODO encapsulate COOKIE super-global
-        // TODO rename to remember_me to fit any IDE's spell check
-        if (!Session::userIsLoggedIn() AND isset($_COOKIE['rememberme'])) {
+        if (!Session::userIsLoggedIn() AND isset($_COOKIE['remember_me'])) {
             header('location: ' . URL . 'login/loginWithCookie');
         }
 

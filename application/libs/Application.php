@@ -79,10 +79,10 @@ class Application
      */
     private function splitUrl()
     {
-        if (isset($_GET['url'])) {
+        if (Request::get('url')) {
 
             // split URL
-            $url = trim($_GET['url'], '/');
+            $url = trim(Request::get('url'), '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
 

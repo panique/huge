@@ -36,7 +36,9 @@ class LoginController extends Controller
     function login()
     {
         // perform the login method, put result (true or false) into $login_successful
-        $login_successful = $this->LoginModel->login();
+        $login_successful = $this->LoginModel->login(
+            Request::post('user_name'), Request::post('user_password'), Request::post('set_remember_me_cookie')
+        );
 
         // check login status: if true, then redirect user to dashboard/index, if false, then to login form again
         if ($login_successful) {

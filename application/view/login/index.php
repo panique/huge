@@ -14,8 +14,8 @@
             <form action="<?php echo URL; ?>login/login" method="post">
                 <input type="text" name="user_name" placeholder="Username (or email)" required />
                 <input type="password" name="user_password" placeholder="Password" required />
-                <label for="user_rememberme" class="remember-me-label">
-                    <input type="checkbox" name="user_rememberme" class="remember-me-checkbox" />
+                <label for="set_remember_me_cookie" class="remember-me-label">
+                    <input type="checkbox" name="set_remember_me_cookie" class="remember-me-checkbox" />
                     Remember me for 2 weeks
                 </label>
                 <input type="submit" class="login-submit-button" value="Log in"/>

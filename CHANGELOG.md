@@ -4,15 +4,18 @@
 
 **December 2014**
 
+- [panique] refactored LoginModel'S login() method / LoginController's login() method 
+- [panique] removed COOKIE_DOMAIN (cookie is now valid on the domain/IP it has been created on)
+- [panique] Abstracting super-globals like $_POST['x'] into Request::post('x')
 - [panique] entirely removed all the Facebook stuff [will be replaced by new proper Oauth2 solution soon]
 - [panique] lots of code refactorings and cleaning, deletions of duplicate code
 - [panique] moving nearly all hardcoded values to config
 - [panique] new View handling: you'll have to pass vars to the view renderer now
 - [panique] completely removed Facebook login process from controller (incomplete) [will be replaced by new solution]
-- [panique] less config, URL/IP is autodetected now
+- [panique] less config, URL/IP is auto-detected now
 - [panique] added loadConfig() to load a specific config according to environment setting (fallback: development)
 - [panique] added getEnvironment() to fetch (potential) environment setting
-- [panique] replaced native superglobals access by wrapper access (Session:get instead of $_SESSION)
+- [panique] replaced native super-globals access by wrapper access (Session:get instead of $_SESSION)
 - [panique] complete frontend rebuilding (incomplete yet)
 - [panique] massive cleaning of all controllers 
 - [panique] added Session::add() to allow stacking of elements (useful for collecting feedback, errors etc)
