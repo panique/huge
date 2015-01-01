@@ -5,8 +5,9 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <form action="<?php echo URL; ?>login/editUserEmail_action" method="post">
-        <label>New email address:</label>
-        <input type="text" name="user_email" required />
+        <label>
+            New email address: <input type="text" name="user_email" required />
+        </label>
         <input type="submit" value="Submit" />
     </form>
 </div>
