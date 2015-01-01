@@ -108,7 +108,7 @@ class LoginController extends Controller
     function editUsername_action()
     {
         Auth::checkAuthentication();
-        $this->LoginModel->editUserName();
+        $this->LoginModel->editUserName(Request::post('user_name'));
         header('location: ' . URL . 'login/index');
     }
 

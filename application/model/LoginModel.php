@@ -300,51 +300,68 @@ class LoginModel
 
     /**
      * Edit the user's name, provided in the editing form
+     * @param $new_user_name string The new username
      * @return bool success status
      */
-    public function editUserName()
+    public function editUserName($new_user_name)
     {
         // new username provided ?
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+        if (empty($new_user_name)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
             return false;
         }
 
         // new username same as old one ?
-        if ($_POST['user_name'] == $_SESSION["user_name"]) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_SAME_AS_OLD_ONE;
+        if ($new_user_name == Session::get('user_name')) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_SAME_AS_OLD_ONE);
             return false;
         }
 
         // username cannot be empty and must be azAZ09 and 2-64 characters
-        if (!preg_match("/^[a-zA-Z0-9]{2,64}$/", $_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+        if (!preg_match("/^[a-zA-Z0-9]{2,64}$/", $new_user_name)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN);
             return false;
         }
 
-        // clean the input
-        $user_name = substr(strip_tags($_POST['user_name']), 0, 64);
+        // clean the input, strip usernames longer than 64 chars (maybe fix this ?)
+        $new_user_name = substr(strip_tags($new_user_name), 0, 64);
 
         // check if new username already exists
-        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name");
-        $query->execute(array(':user_name' => $user_name));
-        $count =  $query->rowCount();
-        if ($count == 1) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+        if ($this->doesUsernameAlreadyExist($new_user_name)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_ALREADY_TAKEN);
             return false;
         }
 
-        $query = $this->database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_name' => $user_name, ':user_id' => $_SESSION['user_id']));
-        $count =  $query->rowCount();
-        if ($count == 1) {
-            Session::set('user_name', $user_name);
-            $_SESSION["feedback_positive"][] = FEEDBACK_USERNAME_CHANGE_SUCCESSFUL;
+        $status_of_action = $this->saveNewUserName(Session::get('user_id'), $new_user_name);
+        if ($status_of_action) {
+            Session::set('user_name', $new_user_name);
+            Session::add('feedback_positive', FEEDBACK_USERNAME_CHANGE_SUCCESSFUL);
             return true;
-        } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+        }
+
+        // default fallback
+        Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
+        return false;
+    }
+
+    public function doesUsernameAlreadyExist($user_name)
+    {
+        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
+        $query->execute(array(':user_name' => $user_name));
+        if ($query->rowCount() == 0) {
             return false;
         }
+        return true;
+    }
+
+    public function saveNewUserName($user_id, $new_user_name)
+    {
+        $query = $this->database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
+        $query->execute(array(':user_name' => $new_user_name, ':user_id' => $user_id));
+        if ($query->rowCount() == 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
