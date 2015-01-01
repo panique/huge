@@ -606,18 +606,18 @@ class LoginModel
      */
     public function verifyNewUser($user_id, $user_activation_verification_code)
     {
-        $sth = $this->database->prepare("UPDATE users
-                                   SET user_active = 1, user_activation_hash = NULL
-                                   WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1");
-        $sth->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
+        $sql = "UPDATE users SET user_active = 1, user_activation_hash = NULL
+                WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1";
+        $query = $this->database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
-        if ($sth->rowCount() == 1) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL;
+        if ($query->rowCount() == 1) {
+            Session::add('feedback_positive', FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL);
             return true;
-        } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_ACTIVATION_FAILED;
-            return false;
         }
+
+        Session::add('feedback_negative', FEEDBACK_ACCOUNT_ACTIVATION_FAILED);
+        return false;
     }
 
     /**
