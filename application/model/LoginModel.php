@@ -621,40 +621,6 @@ class LoginModel
     }
 
     /**
-     * Get either a Gravatar URL or complete image tag for a specified email address.
-     * Gravatar is the #1 (free) provider for email address based global avatar hosting.
-     * The image url (on gravatar servers), will return in something like (note that there's no .jpg)
-     * http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
-     *
-     * For deeper info on the different parameter possibilities:
-     * @see http://gravatar.com/site/implement/images/
-     * @source http://gravatar.com/site/implement/images/php/
-     *
-     * @param string $email The email address
-     * @param int $s Size in pixels [ 1 - 2048 ]
-     * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
-     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-     * @param array $attributes Optional, additional key/value attributes to include in the IMG tag
-     */
-    // TODO REMOVE ?
-    public function setGravatarImageUrl($email, $s = 44, $d = 'mm', $r = 'pg', $attributes = array())
-    {
-        // create image URL, write it into session
-        $image_url = 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) .  "?s=$s&d=$d&r=$r";
-        Session::set('user_gravatar_image_url', $image_url);
-
-        // build <img /> tag around the URL
-        $image_url_with_tag = '<img src="' . $image_url . '"';
-        foreach ($attributes as $key => $val) {
-            $image_url_with_tag .= ' ' . $key . '="' . $val . '"';
-        }
-        $image_url_with_tag .= ' />';
-
-        // the image url like above but with an additional <img src .. /> around, write to session
-        Session::set('user_gravatar_image_tag', $image_url_with_tag);
-    }
-
-    /**
      * Gets a gravatar image link from given email address
      *
      * Gravatar is the #1 (free) provider for email address based global avatar hosting.
@@ -679,6 +645,7 @@ class LoginModel
 
     /**
      * Gets the user's avatar file path
+     * @param $user_id integer The user's id
      * @return string avatar picture path
      */
     public function getPublicUserAvatarFilePathByUserId($user_id)
