@@ -6,21 +6,21 @@
         <?php $this->renderFeedbackMessages(); ?>
 
         <h3>What happens here ?</h3>
-        <p>
+        <div>
             This controller/action/view shows a list of all users in the system. You could use the underlying code to
             build things that use profile information of one or multiple/all users.
-        </p>
-        <p>
+        </div>
+        <div>
             <table class="overview-table">
                 <thead>
-                    <tr>
-                        <td>Id</td>
-                        <td>Avatar</td>
-                        <td>Username</td>
-                        <td>User's email</td>
-                        <td>Activated ?</td>
-                        <td>Link to user's profile</td>
-                    </tr>
+                <tr>
+                    <td>Id</td>
+                    <td>Avatar</td>
+                    <td>Username</td>
+                    <td>User's email</td>
+                    <td>Activated ?</td>
+                    <td>Link to user's profile</td>
+                </tr>
                 </thead>
                 <?php foreach ($this->users as $user) { ?>
                     <tr class="<?= ($user->user_active == 0 ? 'inactive' : 'active'); ?>">
@@ -39,6 +39,6 @@
                     </tr>
                 <?php } ?>
             </table>
-        </p>
+        </div>
     </div>
 </div>
