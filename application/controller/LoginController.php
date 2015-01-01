@@ -177,8 +177,15 @@ class LoginController extends Controller
     function changeAccountType_action()
     {
         Auth::checkAuthentication();
-        $this->LoginModel->changeAccountType();
-        $this->View->render('login/changeAccountType');
+
+        if (Request::post('user_account_upgrade')) {
+            $this->LoginModel->changeAccountTypeUpgrade();
+        }
+        if (Request::post('user_account_downgrade')) {
+            $this->LoginModel->changeAccountTypeDowngrade();
+        }
+
+        header('location: ' . URL . 'login/changeAccountType');
     }
 
     /**

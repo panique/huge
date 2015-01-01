@@ -1062,50 +1062,53 @@ class LoginModel
     }
 
     /**
-     * Upgrades/downgrades the user's account (for DEFAULT and FACEBOOK users)
+     * Upgrades the user's account (for DEFAULT and FACEBOOK users)
      * Currently it's just the field user_account_type in the database that
      * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
-     * simply increase or decrease this value to emulate an account upgrade/downgrade.
+     * simply increase this value to emulate an account upgrade.
      * Put some more complex stuff in here, maybe a pay-process or whatever you like.
      */
-    public function changeAccountType()
+    public function changeAccountTypeUpgrade()
     {
-        if (isset($_POST["user_account_upgrade"]) AND !empty($_POST["user_account_upgrade"])) {
+        // in a real-world application you'll have a payment-process here or so
 
-            // do whatever you want to upgrade the account here (pay-process etc)
-            // ...
-            // ... myPayProcess();
-            // ...
+        $query = $this->database->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id LIMIT 1");
+        $query->execute(array(':user_id' => Session::get('user_id')));
 
-            // upgrade account type
-            $query = $this->database->prepare("UPDATE users SET user_account_type = 2 WHERE user_id = :user_id LIMIT 1");
-            $query->execute(array(':user_id' => $_SESSION["user_id"]));
-
-            if ($query->rowCount() == 1) {
-                // set account type in session to 2
-                Session::set('user_account_type', 2);
-                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL;
-            } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_UPGRADE_FAILED;
-            }
-        } elseif (isset($_POST["user_account_downgrade"]) AND !empty($_POST["user_account_downgrade"])) {
-
-            // do whatever you want to downgrade the account here (pay-process etc)
-            // ...
-            // ... myWhateverProcess();
-            // ...
-
-            $query = $this->database->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id LIMIT 1");
-            $query->execute(array(':user_id' => $_SESSION["user_id"]));
-
-            if ($query->rowCount() == 1) {
-                // set account type in session to 1
-                Session::set('user_account_type', 1);
-                $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL;
-            } else {
-                $_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_DOWNGRADE_FAILED;
-            }
+        if ($query->rowCount() == 1) {
+            // set account type in session to 2
+            Session::set('user_account_type', 2);
+            Session::add('feedback_positive', FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL);
+            return true;
         }
+
+        // default return
+        Session::add('feedback_negative', FEEDBACK_ACCOUNT_UPGRADE_FAILED);
+        return false;
+    }
+
+    /**
+     * Downgrades the user's account (for DEFAULT and FACEBOOK users)
+     * Currently it's just the field user_account_type in the database that
+     * can be 1 or 2 (maybe "basic" or "premium"). In this basic method we
+     * simply decrease this value to emulate an account downgrade.
+     * Put some more complex stuff in here, maybe a pay-process or whatever you like.
+     */
+    public function changeAccountTypeDowngrade()
+    {
+        $query = $this->database->prepare("UPDATE users SET user_account_type = 1 WHERE user_id = :user_id LIMIT 1");
+        $query->execute(array(':user_id' => Session::get('user_id')));
+
+        if ($query->rowCount() == 1) {
+            // set account type in session to 1
+            Session::set('user_account_type', 1);
+            Session::add('feedback_positive', FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL);
+            return true;
+        }
+
+        // default return
+        Session::add('feedback_negative', FEEDBACK_ACCOUNT_DOWNGRADE_FAILED);
+        return false;
     }
 
     /**
