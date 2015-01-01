@@ -442,7 +442,7 @@ class LoginModel
     public function registerNewUser()
     {
         // perform all necessary form checks
-        if (!$this->checkCaptcha()) {
+        if (!$this->checkCaptcha(Request::post('captcha'))) {
             $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
@@ -883,9 +883,11 @@ class LoginModel
     public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
     {
         $query = $this->database->prepare("
-            UPDATE users SET user_password_reset_hash = :user_password_reset_hash,
-                             user_password_reset_timestamp = :user_password_reset_timestamp
-            WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1
+            UPDATE users
+               SET user_password_reset_hash = :user_password_reset_hash,
+                   user_password_reset_timestamp = :user_password_reset_timestamp
+             WHERE user_name = :user_name AND user_provider_type = :provider_type
+             LIMIT 1
         ");
         $query->execute(array(
             ':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
@@ -1128,14 +1130,15 @@ class LoginModel
 
     /**
      * Checks if the entered captcha is the same like the one from the rendered image which has been saved in session
+     * @param $captcha string The captcha characters
      * @return bool success of captcha check
      */
-    private function checkCaptcha()
+    private function checkCaptcha($captcha)
     {
-        if (isset($_POST["captcha"]) AND ($_POST["captcha"] == $_SESSION['captcha'])) {
+        if ($captcha == Session::get('captcha')) {
             return true;
         }
-        // default return
+
         return false;
     }
 }
