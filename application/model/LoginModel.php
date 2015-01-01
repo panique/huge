@@ -94,13 +94,12 @@ class LoginModel
      */
     public function getUserDataByUsername($user_name)
     {
-        $sql = "
-            SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
-                   user_failed_logins, user_last_failed_login
-              FROM users
-             WHERE (user_name = :user_name OR user_email = :user_name)
-                   AND user_provider_type = :provider_type
-             LIMIT 1";
+        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
+                       user_failed_logins, user_last_failed_login
+                  FROM users
+                 WHERE (user_name = :user_name OR user_email = :user_name)
+                       AND user_provider_type = :provider_type
+                 LIMIT 1";
         $query = $this->database->prepare($sql);
 
         // DEFAULT is the marker for "normal" accounts (that have a password etc.)
