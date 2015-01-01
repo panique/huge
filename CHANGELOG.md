@@ -4,6 +4,7 @@
 
 **December 2014**
 
+- [panique] lots of refactorings
 - [panique] refactored LoginModel'S login() method / LoginController's login() method 
 - [panique] removed COOKIE_DOMAIN (cookie is now valid on the domain/IP it has been created on)
 - [panique] Abstracting super-globals like $_POST['x'] into Request::post('x')
