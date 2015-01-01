@@ -63,9 +63,9 @@ class LoginController extends Controller
     function loginWithCookie()
     {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
-         $login_successful = $this->LoginModel->loginWithCookie();
+         $login_successful = $this->LoginModel->loginWithCookie(Request::cookie('remember_me'));
 
-        // if login successful redirect to dashboard/index ...
+        // if login successful, redirect to dashboard/index ...
         if ($login_successful) {
             header('location: ' . URL . 'dashboard/index');
         } else {
