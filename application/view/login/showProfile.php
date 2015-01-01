@@ -4,18 +4,14 @@
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
 
-    <div>Your username: <?php echo Session::get('user_name'); ?></div>
-    <div>Your email: <?php echo Session::get('user_email'); ?></div>
-    <div>
-        Your avatar image:
-        <?php // if usage of gravatar is activated show gravatar image, else show local avatar ?>
+    <div>Your username: <?= $this->user_name; ?></div>
+    <div>Your email: <?= $this->user_email; ?></div>
+    <div>Your avatar image:
         <?php if (USE_GRAVATAR) { ?>
-            Your gravatar pic (on gravatar.com): <img src='<?php echo Session::get('user_gravatar_image_url'); ?>' />
+            Your gravatar pic (on gravatar.com): <img src='<?= $this->user_gravatar_image_url; ?>' />
         <?php } else { ?>
-            Your avatar pic (saved locally): <img src='<?php echo Session::get('user_avatar_file'); ?>' />
+            Your avatar pic (saved locally): <img src='<?= $this->user_avatar_file; ?>' />
         <?php } ?>
     </div>
-    <div>
-        Your account type is: <?php echo Session::get('user_account_type'); ?>
-    </div>
+    <div>Your account type is: <?= $this->user_account_type; ?></div>
 </div>

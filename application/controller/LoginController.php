@@ -76,16 +76,19 @@ class LoginController extends Controller
     }
 
     /**
-     * Show user's profile
+     * Show user's PRIVATE profile
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     function showProfile()
     {
-        // TODO make this the private profile, not the public one
-        // TODO dont work with direct session access in the view here, better perform a model->action and pass data to view
-
         Auth::checkAuthentication();
-        $this->View->render('login/showProfile');
+        $this->View->render('login/showProfile', array(
+            'user_name' => Session::get('user_name'),
+            'user_email' => Session::get('user_email'),
+            'user_gravatar_image_url' => Session::get('user_gravatar_image_url'),
+            'user_avatar_file' => Session::get('user_avatar_file'),
+            'user_account_type' => Session::get('user_account_type')
+        ));
     }
 
     /**
