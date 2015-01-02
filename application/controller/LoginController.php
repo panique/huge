@@ -278,7 +278,10 @@ class LoginController extends Controller
      */
     function setNewPassword()
     {
-        $this->LoginModel->setNewPassword();
+        $this->LoginModel->setNewPassword(
+            Request::post('user_name'), Request::post('user_password_reset_hash'),
+            Request::post('user_password_new'), Request::post('user_password_repeat')
+        );
         header('location: ' . URL . 'login/index');
     }
 

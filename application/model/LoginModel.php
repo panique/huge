@@ -999,65 +999,81 @@ class LoginModel
      * Please note: At this point the user has already pre-verified via verifyPasswordReset() (within one hour),
      * so we don't need to check again for the 60min-limit here. In this method we authenticate
      * via username & password-reset-hash from (hidden) form fields.
+     * @param $user_name
+     * @param $user_password_reset_hash
+     * @param $user_password_new
+     * @param $user_password_repeat
+     *
      * @return bool success state of the password reset
      */
-    public function setNewPassword()
+    public function setNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)
     {
-        // basic checks
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+        if (empty($user_name)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
             return false;
         }
-        if (!isset($_POST['user_password_reset_hash']) OR empty($_POST['user_password_reset_hash'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_TOKEN_MISSING;
+        if (empty($user_password_reset_hash)) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_MISSING);
             return false;
         }
-        if (!isset($_POST['user_password_new']) OR empty($_POST['user_password_new'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+        if (empty($user_password_new)) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
             return false;
         }
-        if (!isset($_POST['user_password_repeat']) OR empty($_POST['user_password_repeat'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+        if (empty($user_password_repeat)) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
             return false;
         }
-        // password does not match password repeat
-        if ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+        if ($user_password_new !== $user_password_repeat) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_REPEAT_WRONG);
             return false;
         }
-        // password too short
-        if (strlen($_POST['user_password_new']) < 6) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+        if (strlen($user_password_new) < 6) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_TOO_SHORT);
             return false;
         }
 
-        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-        $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
+        // crypt the user's password with the PHP 5.5+'s password_hash() function, result is a 60 character hash string
+        $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
 
-        // write users new password hash into database, reset user_password_reset_hash
-        $query = $this->database->prepare("UPDATE users
-                                        SET user_password_hash = :user_password_hash,
-                                            user_password_reset_hash = NULL,
-                                            user_password_reset_timestamp = NULL
-                                      WHERE user_name = :user_name
-                                        AND user_password_reset_hash = :user_password_reset_hash
-                                        AND user_provider_type = :user_provider_type
-                                      LIMIT 1");
-
-        $query->execute(array(':user_password_hash' => $user_password_hash,
-                              ':user_name' => $_POST['user_name'],
-                              ':user_password_reset_hash' => $_POST['user_password_reset_hash'],
-                              ':user_provider_type' => 'DEFAULT'));
-
-        // check if exactly one row was successfully changed:
-        if ($query->rowCount() == 1) {
-            // successful password change!
-            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL;
+        // write user's new password hash into database, reset user_password_reset_hash
+        if ($this->saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
+            Session::add('feedback_positive', FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL);
             return true;
         }
 
         // default return
-        $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_CHANGE_FAILED;
+        Session::add('feedback_negative', FEEDBACK_PASSWORD_CHANGE_FAILED);
+        return false;
+    }
+
+    /**
+     * @param $user_name
+     * @param $user_password_hash
+     * @param $user_password_reset_hash
+     *
+     * @return bool
+     */
+    public function saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)
+    {
+        $sql = "UPDATE users
+                   SET user_password_hash = :user_password_hash,
+                       user_password_reset_hash = NULL,
+                       user_password_reset_timestamp = NULL
+                 WHERE user_name = :user_name
+                       AND user_password_reset_hash = :user_password_reset_hash
+                       AND user_provider_type = :user_provider_type
+                 LIMIT 1";
+        $query = $this->database->prepare($sql);
+        $query->execute(array(
+            ':user_password_hash' => $user_password_hash, ':user_name' => $user_name,
+            ':user_password_reset_hash' => $user_password_reset_hash, ':user_provider_type' => 'DEFAULT'
+        ));
+
+        // if successful
+        if ($query->rowCount() == 1) {
+            return true;
+        }
         return false;
     }
 
