@@ -113,16 +113,18 @@ body {
 }
 
 /* feedback boxes */
-.feedback.success {
-    color: green;
+.feedback {
     border: 1px solid;
     padding: 10px;
+    margin-bottom: 10px;
+}
+.feedback.success {
+    color: green;
 }
 .feedback.error {
     color: red;
-    border: 1px solid;
-    padding: 10px;
 }
+
 .header_right_box {
     float: right;
 }
