@@ -28,6 +28,8 @@
  
  - TODO: split model stuff into real login code and "public" stuff, like getting all profiles, getting an avatar etc.
  
+ - TODO: make everything RESTful(ler)
+ 
  ### Documentation
  
  - clickable index
