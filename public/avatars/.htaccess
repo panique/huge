@@ -1,3 +1,4 @@
+# TODO is this really safe ?
 # this disallows direct access to the folder listing
 # and disallows access to any executables files (that users may upload)
 # the script allows only .jpg/.png uploads, but we never know...
