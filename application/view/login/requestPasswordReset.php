@@ -5,11 +5,11 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <!-- request password reset form box -->
-    <form method="post" action="<?php echo URL; ?>login/requestPasswordReset_action" name="password_reset_form">
-        <label for="password_reset_input_username">
+    <form method="post" action="<?php echo URL; ?>login/requestPasswordReset_action">
+        <label>
             Enter your username or email and you'll get a mail with instructions:
+            <input type="text" name="user_name_or_email" required />
         </label>
-        <input id="password_reset_input_username" class="password_reset_input" type="text" name="user_name" required />
-        <input type="submit"  name="request_password_reset" value="Reset my password" />
+        <input type="submit" value="Send me a password-reset mail" />
     </form>
 </div>

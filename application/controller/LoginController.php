@@ -243,11 +243,10 @@ class LoginController extends Controller
      * The request-password-reset action
      * POST-request after form submit
      */
-    // TODO maybe do this RESTful(ler) :)
     function requestPasswordReset_action()
     {
-        $this->LoginModel->requestPasswordReset();
-        $this->View->render('login/requestPasswordReset');
+        $this->LoginModel->requestPasswordReset(Request::post('user_name_or_email'));
+        header('location: ' . URL . 'login/index');
     }
 
     /**

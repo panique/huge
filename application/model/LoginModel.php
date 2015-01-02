@@ -825,52 +825,53 @@ class LoginModel
 
     /**
      * Perform the necessary actions to send a password reset mail
+     * @param $user_name_or_email string Username or user's email
      * @return bool success status
      */
-    public function requestPasswordReset()
+    public function requestPasswordReset($user_name_or_email)
     {
-        if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+        if (empty($user_name_or_email)) {
+            Session::add('feedback_negative', FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY);
+            return false;
+        }
+
+        // check if that username exists
+        $result = $this->getUserDataByUserNameOrEmail($user_name_or_email);
+        if (!$result) {
+            Session::add('feedback_negative', FEEDBACK_USER_DOES_NOT_EXIST);
             return false;
         }
 
         // generate integer-timestamp (to see when exactly the user (or an attacker) requested the password reset mail)
-        $temporary_timestamp = time();
         // generate random hash for email password reset verification (40 char string)
+        $temporary_timestamp = time();
         $user_password_reset_hash = sha1(uniqid(mt_rand(), true));
-        // clean user input
-        $user_name = strip_tags($_POST['user_name']);
 
-        // check if that username exists
-        $query = $this->database->prepare("SELECT user_id, user_email FROM users
-                                     WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
-        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
-        $count = $query->rowCount();
-        if ($count != 1) {
-            //didn't find user name. Try email.
-            $query = $this->database->prepare("SELECT user_id, user_email FROM users
-                                     WHERE user_email = :user_email AND user_provider_type = :provider_type LIMIT 1");
-            $query->execute(array(':user_email' => $user_name, ':provider_type' => 'DEFAULT'));
-            $count = $query->rowCount();
-            if ($count != 1) {
-                $_SESSION["feedback_negative"][] = FEEDBACK_USER_DOES_NOT_EXIST;
-                return false;
-            }
+        // set token (= a random hash string and a timestamp) into database ...
+        $token_set = $this->setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);
+        if (!$token_set) {
+            return false;
         }
 
-        // get result
-        $result_user_row = $result = $query->fetch();
-        $user_email = $result_user_row->user_email;
-
-        // set token (= a random hash string and a timestamp) into database
-        if ($this->setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp) == true) {
-            // send a mail to the user, containing a link with username and token hash string
-            if ($this->sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)) {
-                return true;
-            }
+        // ... and send a mail to the user, containing a link with username and token hash string
+        $mail_sent = $this->sendPasswordResetMail($result->user_name, $user_password_reset_hash, $result->user_email);
+        if ($mail_sent) {
+            return true;
         }
+
         // default return
         return false;
+    }
+
+    // hmmmm...
+    public function getUserDataByUserNameOrEmail($user_name_or_email)
+    {
+        $query = $this->database->prepare("SELECT user_id, user_name, user_email FROM users
+                                           WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
+                                           AND user_provider_type = :provider_type LIMIT 1");
+        $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
+
+        return $query->fetch();
     }
 
     /**
@@ -882,17 +883,17 @@ class LoginModel
      */
     public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
     {
-        $query = $this->database->prepare("
-            UPDATE users
-               SET user_password_reset_hash = :user_password_reset_hash,
-                   user_password_reset_timestamp = :user_password_reset_timestamp
-             WHERE user_name = :user_name AND user_provider_type = :provider_type
-             LIMIT 1
-        ");
+        // this could be formatted better
+        $sql = "UPDATE users
+                SET user_password_reset_hash = :user_password_reset_hash,
+                    user_password_reset_timestamp = :user_password_reset_timestamp
+                WHERE user_name = :user_name AND user_provider_type = :provider_type
+                LIMIT 1";
+        $query = $this->database->prepare($sql);
         $query->execute(array(
             ':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
-            ':user_password_reset_timestamp' => $temporary_timestamp, ':provider_type' => 'DEFAULT')
-        );
+            ':user_password_reset_timestamp' => $temporary_timestamp, ':provider_type' => 'DEFAULT'
+        ));
 
         // check if exactly one row was successfully changed
         if ($query->rowCount() == 1) {

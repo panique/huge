@@ -224,6 +224,7 @@ define("FEEDBACK_LOGIN_FAILED", "Login failed.");
 define("FEEDBACK_USERNAME_FIELD_EMPTY", "Username field was empty.");
 define("FEEDBACK_PASSWORD_FIELD_EMPTY", "Password field was empty.");
 define("FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY", "Username or password field was empty.");
+define("FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY", "Username / email field was empty.");
 define("FEEDBACK_EMAIL_FIELD_EMPTY", "Email field was empty.");
 define("FEEDBACK_EMAIL_AND_PASSWORD_FIELDS_EMPTY", "Email and password fields were empty.");
 define("FEEDBACK_USERNAME_SAME_AS_OLD_ONE", "Sorry, that username is the same as your current one. Please choose another one.");
