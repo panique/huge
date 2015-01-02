@@ -4,6 +4,7 @@
 
 **December 2014**
 
+- [panique] massive refactoring of mail sending, (chose between PHPMailer, SwiftMailer, native / SMTP or no SMTP)
 - [panique] lots of refactorings
 - [panique] refactored LoginModel'S login() method / LoginController's login() method 
 - [panique] removed COOKIE_DOMAIN (cookie is now valid on the domain/IP it has been created on)
