@@ -11,7 +11,7 @@ class LoginController extends Controller
      * put checkAuthentication in here to make an entire controller only usable for logged-in users (for sure not
      * needed in the LoginController).
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
@@ -19,7 +19,7 @@ class LoginController extends Controller
     /**
      * Index, default action (shows the login form), when you do login/index
      */
-    function index()
+    public function index()
     {
         // if user is logged in redirect to main-page, if not show the view
         if ($this->LoginModel->isUserLoggedIn()) {
@@ -32,7 +32,7 @@ class LoginController extends Controller
     /**
      * The login action, when you do login/login
      */
-    function login()
+    public function login()
     {
         // perform the login method, put result (true or false) into $login_successful
         $login_successful = $this->LoginModel->login(
@@ -51,7 +51,7 @@ class LoginController extends Controller
      * The logout action
      * Perform logout, redirect user to main-page
      */
-    function logout()
+    public function logout()
     {
         $this->LoginModel->logout();
         header('location: ' . URL);
@@ -60,7 +60,7 @@ class LoginController extends Controller
     /**
      * Login with cookie
      */
-    function loginWithCookie()
+    public function loginWithCookie()
     {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
          $login_successful = $this->LoginModel->loginWithCookie(Request::cookie('remember_me'));
@@ -79,7 +79,7 @@ class LoginController extends Controller
      * Show user's PRIVATE profile
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    function showProfile()
+    public function showProfile()
     {
         Auth::checkAuthentication();
         $this->View->render('login/showProfile', array(
@@ -95,7 +95,7 @@ class LoginController extends Controller
      * Show edit-my-username page
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    function editUsername()
+    public function editUsername()
     {
         Auth::checkAuthentication();
         $this->View->render('login/editUsername');
@@ -105,7 +105,7 @@ class LoginController extends Controller
      * Edit user name (perform the real action after form has been submitted)
      * Auth::checkAuthentication() makes sure that only logged in users can use this action
      */
-    function editUsername_action()
+    public function editUsername_action()
     {
         Auth::checkAuthentication();
         $this->LoginModel->editUserName(Request::post('user_name'));
@@ -116,7 +116,7 @@ class LoginController extends Controller
      * Show edit-my-user-email page
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    function editUserEmail()
+    public function editUserEmail()
     {
         Auth::checkAuthentication();
         $this->View->render('login/editUserEmail');
@@ -127,7 +127,7 @@ class LoginController extends Controller
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
     // make this POST
-    function editUserEmail_action()
+    public function editUserEmail_action()
     {
         Auth::checkAuthentication();
         $this->LoginModel->editUserEmail(Request::post('user_email'));
@@ -138,7 +138,7 @@ class LoginController extends Controller
      * Upload avatar
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    function uploadAvatar()
+    public function uploadAvatar()
     {
         Auth::checkAuthentication();
         // TODO fix
@@ -152,7 +152,7 @@ class LoginController extends Controller
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      * POST-request
      */
-    function uploadAvatar_action()
+    public function uploadAvatar_action()
     {
         Auth::checkAuthentication();
         $this->LoginModel->createAvatar();
@@ -163,7 +163,7 @@ class LoginController extends Controller
      * Show the change-account-type page
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    function changeAccountType()
+    public function changeAccountType()
     {
         Auth::checkAuthentication();
         $this->View->render('login/changeAccountType');
@@ -174,7 +174,7 @@ class LoginController extends Controller
      * Auth::checkAuthentication() makes sure that only logged in users can use this action
      * POST-request
      */
-    function changeAccountType_action()
+    public function changeAccountType_action()
     {
         Auth::checkAuthentication();
 
@@ -192,7 +192,7 @@ class LoginController extends Controller
      * Register page
      * Show the register form, but redirect to main-page if user is already logged-in
      */
-    function register()
+    public function register()
     {
         if ($this->LoginModel->isUserLoggedIn()) {
             header("location: " . URL);
@@ -205,7 +205,7 @@ class LoginController extends Controller
      * Register page action
      * POST-request after form submit
      */
-    function register_action()
+    public function register_action()
     {
         $registration_successful = $this->LoginModel->registerNewUser();
 
@@ -221,7 +221,7 @@ class LoginController extends Controller
      * @param int $user_id user's id
      * @param string $user_activation_verification_code user's verification token
      */
-    function verify($user_id, $user_activation_verification_code)
+    public function verify($user_id, $user_activation_verification_code)
     {
         if (isset($user_id) && isset($user_activation_verification_code)) {
             $this->LoginModel->verifyNewUser($user_id, $user_activation_verification_code);
@@ -234,7 +234,7 @@ class LoginController extends Controller
     /**
      * Show the request-password-reset page
      */
-    function requestPasswordReset()
+    public function requestPasswordReset()
     {
         $this->View->render('login/requestPasswordReset');
     }
@@ -243,7 +243,7 @@ class LoginController extends Controller
      * The request-password-reset action
      * POST-request after form submit
      */
-    function requestPasswordReset_action()
+    public function requestPasswordReset_action()
     {
         $this->LoginModel->requestPasswordReset(Request::post('user_name_or_email'));
         header('location: ' . URL . 'login/index');
@@ -254,7 +254,7 @@ class LoginController extends Controller
      * @param string $user_name username
      * @param string $verification_code password reset verification token
      */
-    function verifyPasswordReset($user_name, $verification_code)
+    public function verifyPasswordReset($user_name, $verification_code)
     {
         // check if this the provided verification code fits the user's verification code
         if ($this->LoginModel->verifyPasswordReset($user_name, $verification_code)) {
@@ -275,7 +275,7 @@ class LoginController extends Controller
      * for more. Then (regardless of result) route user to index page (user will get success/error via feedback message)
      * POST request !
      */
-    function setNewPassword()
+    public function setNewPassword()
     {
         $this->LoginModel->setNewPassword(
             Request::post('user_name'), Request::post('user_password_reset_hash'),
@@ -292,7 +292,7 @@ class LoginController extends Controller
      * moment the end-user requests the <img .. >
      * Maybe refactor this sometime.
      */
-    function showCaptcha()
+    public function showCaptcha()
     {
         $this->LoginModel->generateAndShowCaptcha();
     }

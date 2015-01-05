@@ -9,7 +9,7 @@ class ErrorController extends Controller
     /**
      * Construct this object by extending the basic Controller class
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
@@ -17,7 +17,7 @@ class ErrorController extends Controller
     /**
      * This method controls what happens / what the user sees when a page does not exist (404)
      */
-    function index()
+    public function index()
     {
         header('HTTP/1.0 404 Not Found');
         $this->View->render('error/index');

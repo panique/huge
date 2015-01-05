@@ -8,7 +8,7 @@ class DashboardController extends Controller
     /**
      * Construct this object by extending the basic Controller class
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -19,7 +19,7 @@ class DashboardController extends Controller
     /**
      * This method controls what happens when you move to /dashboard/index in your app.
      */
-    function index()
+    public function index()
     {
         $this->View->render('dashboard/index');
     }
