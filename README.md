@@ -98,7 +98,7 @@ Please commit only in *develop* branch. The *master* branch will always contain 
 
 If you think this script is useful and saves you a lot of work, then think about supporting the project:
 
-1. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
+1. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html), [Virpus](http://my.virpus.com/aff.php?aff=1836) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
 2. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
    or [GitTip](https://www.gittip.com/Panique/)
 3. Contribute to this project.
