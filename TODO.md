@@ -30,6 +30,8 @@
  
  - TODO: make everything RESTful(ler)
  
+ - TODO: affiliate-links direkt ins frontend. prominent platzieren, klar kommunizieren. kein gebullshitte.
+ 
  ### Documentation
  
  - clickable index
