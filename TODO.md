@@ -43,4 +43,11 @@
  ## 2.1
  
  - uses `<?=` instead of `<?php echo` to make things simpler
-  
+ 
+ ## Interesting links
+ 
+ Future of user auth on the web
+ http://www.lukew.com/ff/entry.asp?1906
+ https://medium.com/@ninjudd/passwords-are-obsolete-9ed56d483eb
+ 
+ 
