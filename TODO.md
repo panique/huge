@@ -36,9 +36,23 @@
  
  - clickable index
  
+ ## Possible text-elements for clear "mission statement":
  
+ - clearly define that php-login is just a simple tool, useful for smaller applications
+ - clearly define that this is the unpaid free-time work of some people. Don't complain, don't bash, don't do 
+   "why is there no feature X ?". Be respectful.
+ - If this script is useful for you, then try to give something back: Testing, bug reports, take part in discussions,
+   give ideas for improvements, write a tutorial or record a video-guideline, consider donating or commit useful code.
+   Everything is welcome!
+ - Respect the time and the nerves of open-source developers. Please don't write "script not working plz help" messages
+   here or anywhere. 
+ - Respect the work behind this project.
+ - This is totally free software, written by people like you. Don't treat this project like you have paid 1000s of
+   dollars for it. It's free. Don't complain. If you don't like it, don't use it. 
+ - Respect that this software might save you hundreds of hours of development costs.  
  
- 
+  final disclaimer !   
+  legal disclaimer / scam warning
  
  ## 2.1
  
