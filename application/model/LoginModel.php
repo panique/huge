@@ -674,7 +674,7 @@ class LoginModel
             $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY, true);
             $query = $this->database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
-            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePath());
+            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($_SESSION['user_id']));
             $_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
             return true;
         } else {
@@ -709,16 +709,14 @@ class LoginModel
         switch ($image_data['mime']) {
             case 'image/gif':
                 $get_func = 'imagecreatefromgif';
-                $suffix = ".gif";
             break;
             case 'image/jpeg';
                 $get_func = 'imagecreatefromjpeg';
-                $suffix = ".jpg";
             break;
             case 'image/png':
                 $get_func = 'imagecreatefrompng';
-                $suffix = ".png";
             break;
+            default: return false;
         }
 
         $img_original = call_user_func($get_func, $source_image );
