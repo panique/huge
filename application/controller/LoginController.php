@@ -141,7 +141,6 @@ class LoginController extends Controller
     public function uploadAvatar()
     {
         Auth::checkAuthentication();
-        // TODO fix
         $this->View->render('login/uploadAvatar', array(
             'avatar_file_path' => $this->LoginModel->getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
         ));
