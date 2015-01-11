@@ -4,6 +4,7 @@
 
 **December 2014**
 
+- [panique] EXPERIMENTAL: added static database call / DatabaseFactory, rebuild NoteModel with static methods 
 - [panique] massive refactoring of mail sending, (chose between PHPMailer, SwiftMailer, native / SMTP or no SMTP)
 - [panique] lots of refactorings
 - [panique] refactored LoginModel'S login() method / LoginController's login() method 

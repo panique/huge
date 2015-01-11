@@ -25,7 +25,7 @@ class NoteController extends Controller
     public function index()
     {
         $this->View->render('note/index', array(
-            'notes' => $this->NoteModel->getAllNotes()
+            'notes' => NoteModel::getAllNotes()
         ));
     }
 
@@ -36,9 +36,7 @@ class NoteController extends Controller
      */
     public function create()
     {
-        if (isset($_POST['note_text']) AND strlen($_POST['note_text']) > 0) {
-            $this->NoteModel->createNote($_POST['note_text']);
-        }
+        NoteModel::createNote(Request::post('note_text'));
         header('location: ' . URL . 'note');
     }
 
@@ -49,13 +47,9 @@ class NoteController extends Controller
      */
     public function edit($note_id)
     {
-        if (isset($note_id)) {
-            $this->View->render('note/edit', array(
-                'note' => $this->NoteModel->getNote($note_id)
-            ));
-        } else {
-            header('location: ' . URL . 'note');
-        }
+        $this->View->render('note/edit', array(
+            'note' => NoteModel::getNote($note_id)
+        ));
     }
 
     /**
@@ -65,9 +59,7 @@ class NoteController extends Controller
      */
     public function editSave()
     {
-        if (isset($_POST['note_id']) AND isset($_POST['note_text'])) {
-            $this->NoteModel->updateNote($_POST['note_id'], $_POST['note_text']);
-        }
+        NoteModel::updateNote(Request::post('note_id'), Request::post('note_text'));
         header('location: ' . URL . 'note');
     }
 
@@ -79,9 +71,7 @@ class NoteController extends Controller
      */
     public function delete($note_id)
     {
-        if (isset($note_id)) {
-            $this->NoteModel->deleteNote($note_id);
-        }
+        NoteModel::deleteNote($note_id);
         header('location: ' . URL . 'note');
     }
 }

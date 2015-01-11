@@ -41,7 +41,8 @@ class Controller
         // TODO check performance vs. usability when pre-loading ALL models
         // TODO replace this with some kind of "model"-autoloader
         // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
-        $this->NoteModel = new NoteModel($this->database);
+        // NoteModel construction & db injection has been removed as this is not done by static method calls
+        //$this->NoteModel = new NoteModel($this->database);
         $this->LoginModel = new LoginModel($this->database);
         $this->ProfileModel = new ProfileModel($this->database);
 
