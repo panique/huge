@@ -57,6 +57,9 @@
  ## 2.1
  
  - uses `<?=` instead of `<?php echo` to make things simpler
+ - DatabaseFactory [maybe rebuild this a litte bit]
+ - Static methods in model: You can use every model method everywhere, like NoteModel::getNoteById(17);
+ - No injection of database needed anymore (model methods will get DB connection themselves) -> refactoring ?
  
  ## Interesting links
  
