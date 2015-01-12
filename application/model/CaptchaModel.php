@@ -3,10 +3,8 @@
 class CaptchaModel
 {
 	/**
-	 * Generates the captcha, "returns" a real image,
-	 * this is why there is header('Content-type: image/jpeg')
+	 * Generates the captcha, "returns" a real image, this is why there is header('Content-type: image/jpeg')
 	 * Note: This is a very special method, as this is echoes out binary data.
-	 * Eventually this is something to refactor
 	 */
 	public static function generateAndShowCaptcha()
 	{
