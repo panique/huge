@@ -671,7 +671,7 @@ class LoginModel
         if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
             // create a jpg file in the avatar folder
             $target_file_path = PATH_AVATARS . $_SESSION['user_id'] . ".jpg";
-            $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY, true);
+            $this->resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
             $query = $this->database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
             Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($_SESSION['user_id']));
@@ -685,114 +685,50 @@ class LoginModel
 
     /**
      * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
-     * Originally written by:
-     * @author Jay Zawrotny <jayzawrotny@gmail.com>
-     * @license Do whatever you want with it.
      *
      * @param string $source_image The location to the original raw image.
-     * @param string $destination_filename The location to save the new image.
-     * @param int $width The desired width of the new image
-     * @param int $height The desired height of the new image.
+     * @param string $destination The location to save the new image.
+     * @param int $final_width The desired width of the new image
+     * @param int $final_height The desired height of the new image.
      * @param int $quality The quality of the JPG to produce 1 - 100
-     * @param bool $crop Whether to crop the image or not. It always crops from the center.
+     *
+     * TODO currently we just allow .jpg
+     *
      * @return bool success state
      */
-    public function resizeAvatarImage(
-        $source_image, $destination_filename, $width = 44, $height = 44, $quality = 85, $crop = true)
+    public function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44, $quality = 85)
     {
-        $image_data = getimagesize($source_image);
-        if (!$image_data) {
+        list($width, $height) = getimagesize($source_image);
+
+        if (!$width || !$height) {
             return false;
         }
 
-        // set to-be-used function according to filetype
-        switch ($image_data['mime']) {
-            case 'image/gif':
-                $get_func = 'imagecreatefromgif';
-            break;
-            case 'image/jpeg';
-                $get_func = 'imagecreatefromjpeg';
-            break;
-            case 'image/png':
-                $get_func = 'imagecreatefrompng';
-            break;
-            default: return false;
+        //saving the image into memory (for manipulation with GD Library)
+        $myImage = imagecreatefromjpeg($source_image);
+
+        // calculating the part of the image to use for thumbnail
+        if ($width > $height) {
+            $y = 0;
+            $x = ($width - $height) / 2;
+            $smallestSide = $height;
+        } else {
+            $x = 0;
+            $y = ($height - $width) / 2;
+            $smallestSide = $width;
         }
 
-        $img_original = call_user_func($get_func, $source_image );
-        $old_width = $image_data[0];
-        $old_height = $image_data[1];
-        $new_width = $width;
-        $new_height = $height;
-        $src_x = 0;
-        $src_y = 0;
-        $current_ratio = round($old_width / $old_height, 2);
-        $desired_ratio_after = round($width / $height, 2);
-        $desired_ratio_before = round($height / $width, 2);
-
-        if ($old_width < $width OR $old_height < $height) {
-             // the desired image size is bigger than the original image. Best not to do anything at all really.
-            return false;
-        }
-
-        // if crop is on: it will take an image and best fit it so it will always come out the exact specified size.
-        if ($crop) {
-            // create empty image of the specified size
-            $new_image = imagecreatetruecolor($width, $height);
-
-            // landscape image
-            if ($current_ratio > $desired_ratio_after) {
-                $new_width = $old_width * $height / $old_height;
-            }
-
-            // nearly square ratio image
-            if ($current_ratio > $desired_ratio_before AND $current_ratio < $desired_ratio_after) {
-
-                if ($old_width > $old_height) {
-                    $new_height = max($width, $height);
-                    $new_width = $old_width * $new_height / $old_height;
-                } else {
-                    $new_height = $old_height * $width / $old_width;
-                }
-            }
-
-            // portrait sized image
-            if ($current_ratio < $desired_ratio_before) {
-                $new_height = $old_height * $width / $old_width;
-            }
-
-            // find ratio of original image to find where to crop
-            $width_ratio = $old_width / $new_width;
-            $height_ratio = $old_height / $new_height;
-
-            // calculate where to crop based on the center of the image
-            $src_x = floor((($new_width - $width) / 2) * $width_ratio);
-            $src_y = round((($new_height - $height) / 2) * $height_ratio);
-        }
-        // don't crop the image, just resize it proportionally
-        else {
-            if ($old_width > $old_height) {
-                $ratio = max($old_width, $old_height) / max($width, $height);
-            } else {
-                $ratio = max($old_width, $old_height) / min($width, $height);
-            }
-
-            $new_width = $old_width / $ratio;
-            $new_height = $old_height / $ratio;
-            $new_image = imagecreatetruecolor($new_width, $new_height);
-        }
-
-        // create avatar thumbnail
-        imagecopyresampled($new_image, $img_original, 0, 0, $src_x, $src_y, $new_width, $new_height, $old_width, $old_height);
+        // copying the part into thumbnail, maybe edit this for square avatars
+        $thumb = imagecreatetruecolor($final_width, $final_height);
+        imagecopyresampled($thumb, $myImage, 0, 0, $x, $y, $final_width, $final_height, $smallestSide, $smallestSide);
 
         // save it as a .jpg file with our $destination_filename parameter
-        imagejpeg($new_image, $destination_filename, $quality);
+        imagejpeg($thumb, $destination, $quality);
 
-        // delete "working copy" and original file, keep the thumbnail
-        imagedestroy($new_image);
-        imagedestroy($img_original);
+        // delete "working copy"
+        imagedestroy($thumb);
 
-        if (file_exists($destination_filename)) {
+        if (file_exists($destination)) {
             return true;
         }
         // default return
