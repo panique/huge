@@ -13,7 +13,7 @@ class Mail
 	 * @see http://stackoverflow.com/a/24644450/1114320
 	 * @see http://www.php.net/manual/en/function.mail.php
 	 */
-	public function sendMailWithNativeMailFunction($user_email, $from_email, $from_name, $subject, $body)
+	public function sendMailWithNativeMailFunction()
 	{
 		// no code yet, so we just return something to make IDEs and code analyzer tools happy
 		return false;
@@ -23,15 +23,9 @@ class Mail
 	 * Try to send a mail by using SwiftMailer.
 	 * Make sure you have loaded SwiftMailer via Composer.
 	 *
-	 * @param $user_email
-	 * @param $from_email
-	 * @param $from_name
-	 * @param $subject
-	 * @param $body
-	 *
 	 * @return bool
 	 */
-	public function sendMailWithSwiftMailer($user_email, $from_email, $from_name, $subject, $body)
+	public function sendMailWithSwiftMailer()
 	{
 		// no code yet, so we just return something to make IDEs and code analyzer tools happy
 		return false;
@@ -88,7 +82,7 @@ class Mail
 		$mail->Body = $body;
 
 		// send mail
-		$mail_sent = $mail->Send();
+		$mail->Send();
 		if ($mail) {
 			return true;
 		}
@@ -108,15 +102,11 @@ class Mail
 		}
 
 		if (EMAIL_USED_MAILER == "swiftmailer") {
-			return $this->sendMailWithSwiftMailer(
-				$user_email, $from_email, $from_name, $subject, $body
-			);
+			return $this->sendMailWithSwiftMailer();
 		}
 
 		if (EMAIL_USED_MAILER == "native") {
-			return $this->sendMailWithNativeMailFunction(
-				$user_email, $from_email, $from_name, $subject, $body
-			);
+			return $this->sendMailWithNativeMailFunction();
 		}
 	}
 
