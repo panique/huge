@@ -442,7 +442,7 @@ class LoginModel
     public function registerNewUser()
     {
         // perform all necessary form checks
-        if (CaptchaModel::checkCaptcha(Request::post('captcha'))) {
+        if (!CaptchaModel::checkCaptcha(Request::post('captcha'))) {
             $_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
         } elseif (empty($_POST['user_name'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
