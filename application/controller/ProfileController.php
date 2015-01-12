@@ -17,7 +17,7 @@ class ProfileController extends Controller
     public function index()
     {
         $this->View->render('profile/index', array(
-            'users' => $this->ProfileModel->getPublicProfilesOfAllUsers())
+            'users' => UserModel::getPublicProfilesOfAllUsers())
         );
     }
 
@@ -30,7 +30,7 @@ class ProfileController extends Controller
     {
         if (isset($user_id)) {
             $this->View->render('profile/showProfile', array(
-                'user' => $this->ProfileModel->getPublicProfileOfUser($user_id))
+                'user' => UserModel::getPublicProfileOfUser($user_id))
             );
         } else {
             header('location: ' . URL);

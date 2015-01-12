@@ -42,9 +42,7 @@ class Controller
         // TODO replace this with some kind of "model"-autoloader
         // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
         // NoteModel construction & db injection has been removed as this is not done by static method calls
-        //$this->NoteModel = new NoteModel($this->database);
         $this->LoginModel = new LoginModel($this->database);
-        $this->ProfileModel = new ProfileModel($this->database);
 
         // create a view object to be able to use it inside a controller, like $this->View->render();
         $this->View = new View();
