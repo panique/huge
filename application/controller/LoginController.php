@@ -293,6 +293,6 @@ class LoginController extends Controller
      */
     public function showCaptcha()
     {
-        $this->LoginModel->generateAndShowCaptcha();
+        CaptchaModel::generateAndShowCaptcha();
     }
 }
