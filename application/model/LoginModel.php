@@ -148,7 +148,7 @@ class LoginModel
 
         // get and set avatars
         Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($user_id));
-        Session::set('user_gravatar_image_url', $this->getGravatarLinkByEmail($user_email));
+        Session::set('user_gravatar_image_url', UserModel::getGravatarLinkByEmail($user_email));
 
         // finally, set user as logged-in
         Session::set('user_logged_in', true);
@@ -425,7 +425,7 @@ class LoginModel
         // ... then write new email to session, Gravatar too (as this relies to the user's email address)
         if ($this->saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
             Session::set('user_email', $new_user_email);
-            Session::set('user_gravatar_image_url', $this->getGravatarLinkByEmail($new_user_email));
+            Session::set('user_gravatar_image_url', UserModel::getGravatarLinkByEmail($new_user_email));
             Session::add('feedback_positive', FEEDBACK_EMAIL_CHANGE_SUCCESSFUL);
             return true;
         }
@@ -596,29 +596,6 @@ class LoginModel
 
         Session::add('feedback_negative', FEEDBACK_ACCOUNT_ACTIVATION_FAILED);
         return false;
-    }
-
-    /**
-     * Gets a gravatar image link from given email address
-     *
-     * Gravatar is the #1 (free) provider for email address based global avatar hosting.
-     * The URL (or image) returns always a .jpg file ! For deeper info on the different parameter possibilities:
-     * @see http://gravatar.com/site/implement/images/
-     * @source http://gravatar.com/site/implement/images/php/
-     *
-     * This method will return something like http://www.gravatar.com/avatar/79e2e5b48aec07710c08d50?s=80&d=mm&r=g
-     * Note: the url does NOT have something like ".jpg" ! It works without.
-     *
-     * Set the configs inside the application/config/ files.
-     *
-     * @param string $email The email address
-     * @return string
-     */
-    public function getGravatarLinkByEmail($email)
-    {
-        return 'http://www.gravatar.com/avatar/' .
-               md5( strtolower( trim( $email ) ) ) .
-               '?s=' . AVATAR_SIZE . '&d=' . GRAVATAR_DEFAULT_IMAGESET . '&r=' . GRAVATAR_RATING;
     }
 
     /**
