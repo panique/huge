@@ -178,10 +178,10 @@ class LoginController extends Controller
         Auth::checkAuthentication();
 
         if (Request::post('user_account_upgrade')) {
-            $this->LoginModel->changeAccountTypeUpgrade();
+            UserModel::changeAccountTypeUpgrade();
         }
         if (Request::post('user_account_downgrade')) {
-            $this->LoginModel->changeAccountTypeDowngrade();
+            UserModel::changeAccountTypeDowngrade();
         }
 
         header('location: ' . URL . 'login/changeAccountType');
