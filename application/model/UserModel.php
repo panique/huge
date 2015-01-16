@@ -260,4 +260,21 @@ class UserModel
         Session::add('feedback_negative', FEEDBACK_PASSWORD_CHANGE_FAILED);
         return false;
     }
+
+    /**
+     * @param $user_name_or_email
+     *
+     * @return mixed
+     */
+    public static function getUserDataByUserNameOrEmail($user_name_or_email)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("SELECT user_id, user_name, user_email FROM users
+                                     WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
+                                           AND user_provider_type = :provider_type LIMIT 1");
+        $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
+
+        return $query->fetch();
+    }
 }

@@ -748,7 +748,7 @@ class LoginModel
         }
 
         // check if that username exists
-        $result = $this->getUserDataByUserNameOrEmail($user_name_or_email);
+        $result = UserModel::getUserDataByUserNameOrEmail($user_name_or_email);
         if (!$result) {
             Session::add('feedback_negative', FEEDBACK_USER_DOES_NOT_EXIST);
             return false;
@@ -773,17 +773,6 @@ class LoginModel
 
         // default return
         return false;
-    }
-
-    // hmmmm...
-    public function getUserDataByUserNameOrEmail($user_name_or_email)
-    {
-        $query = $this->database->prepare("SELECT user_id, user_name, user_email FROM users
-                                           WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
-                                           AND user_provider_type = :provider_type LIMIT 1");
-        $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
-
-        return $query->fetch();
     }
 
     /**
