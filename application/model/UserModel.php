@@ -273,6 +273,13 @@ class UserModel
         }
     }
 
+    /**
+     * Checks if a username is already taken
+     *
+     * @param $user_name string username
+     *
+     * @return bool
+     */
     public static function doesUsernameAlreadyExist($user_name)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -285,6 +292,13 @@ class UserModel
         return true;
     }
 
+    /**
+     * Checks if a email is already used
+     *
+     * @param $user_email string email
+     *
+     * @return bool
+     */
     public static function doesEmailAlreadyExist($user_email)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -297,6 +311,14 @@ class UserModel
         return true;
     }
 
+    /**
+     * Writes new username to database
+     *
+     * @param $user_id int user id
+     * @param $new_user_name string new username
+     *
+     * @return bool
+     */
     public static function saveNewUserName($user_id, $new_user_name)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -309,6 +331,14 @@ class UserModel
         return false;
     }
 
+    /**
+     * Writes new email address to database
+     *
+     * @param $user_id int user id
+     * @param $new_user_email string new email address
+     *
+     * @return bool
+     */
     public static function saveNewEmailAddress($user_id, $new_user_email)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
