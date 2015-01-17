@@ -20,12 +20,14 @@ class LoginModel
 
     /**
      * Login process (for DEFAULT user accounts).
+     *
      * @param $user_name string The user's name
      * @param $user_password string The user's password
      * @param $set_remember_me_cookie mixed Marker for usage of remember-me cookie feature
+     *
      * @return bool success state
      */
-    public function login($user_name, $user_password, $set_remember_me_cookie = null)
+    public static function login($user_name, $user_password, $set_remember_me_cookie = null)
     {
         // we do negative-first checks here, for simplicity empty username and empty password in one line
         if (empty($user_name) OR empty($user_password)) {
@@ -34,7 +36,7 @@ class LoginModel
         }
 
         // get all data of that user (to later check if password and password_hash fit)
-        $result = $this->getUserDataByUsername($user_name);
+        $result = LoginModel::getUserDataByUsername($user_name);
 
         // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
         if (!$result) {
@@ -50,7 +52,7 @@ class LoginModel
 
         // if hash of provided password does NOT match the hash in the database: +1 failed-login counter
         if (!password_verify($user_password, $result->user_password_hash)) {
-            $this->incrementFailedLoginCounterOfUser($user_name);
+            LoginModel::incrementFailedLoginCounterOfUser($user_name);
             // we say "password wrong" here, but less details like "login failed" would be better (= less information)
             Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG);
             return false;
@@ -66,19 +68,19 @@ class LoginModel
 
         // reset the failed login counter for that user (if necessary)
         if ($result->user_last_failed_login > 0) {
-            $this->resetFailedLoginCounterOfUser($user_name);
+            LoginModel::resetFailedLoginCounterOfUser($user_name);
         }
 
         // save timestamp of this login in the database line of that user
-        $this->saveTimestampOfLoginOfUser($user_name);
+        LoginModel::saveTimestampOfLoginOfUser($user_name);
 
         // if user has checked the "remember me" checkbox, then write token into database and into cookie
         if ($set_remember_me_cookie) {
-            $this->setRememberMeInDatabaseAndCookie($result->user_id);
+            LoginModel::setRememberMeInDatabaseAndCookie($result->user_id);
         }
 
         // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-        $this->setSuccessfulLoginIntoSession(
+        LoginModel::setSuccessfulLoginIntoSession(
             $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
         );
 
@@ -92,15 +94,17 @@ class LoginModel
      * @param $user_name string User's name
      * @return mixed Returns false if user does not exist, returns object with user's data when user exists
      */
-    public function getUserDataByUsername($user_name)
+    public static function getUserDataByUsername($user_name)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
                        user_failed_logins, user_last_failed_login
                   FROM users
                  WHERE (user_name = :user_name OR user_email = :user_name)
                        AND user_provider_type = :provider_type
                  LIMIT 1";
-        $query = $this->database->prepare($sql);
+        $query = $database->prepare($sql);
 
         // DEFAULT is the marker for "normal" accounts (that have a password etc.)
         // There are other types of accounts that don't have passwords etc. (FACEBOOK)
@@ -112,14 +116,18 @@ class LoginModel
 
     /**
      * Gets the user's data by user's id and a token (used by login-via-cookie process)
+     *
      * @param $user_id
      * @param $token
+     *
      * @return mixed Returns false if user does not exist, returns object with user's data when user exists
      */
-    public function getUserDataByUserIdAndToken($user_id, $token)
+    public static function getUserDataByUserIdAndToken($user_id, $token)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         // get real token from database (and all other data)
-        $query = $this->database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
+        $query = $database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
                                           user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
                                      FROM users
                                      WHERE user_id = :user_id
@@ -133,11 +141,15 @@ class LoginModel
     }
 
     /**
-     * The real login process: The user's data is written into the session
-     * Cheesy name, maybe rename
-     * Also maybe refactoring this, using an array
+     * The real login process: The user's data is written into the session.
+     * Cheesy name, maybe rename. Also maybe refactoring this, using an array.
+     *
+     * @param $user_id
+     * @param $user_name
+     * @param $user_email
+     * @param $user_account_type
      */
-    public function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type)
+    public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type)
     {
         Session::init();
         Session::set('user_id', $user_id);
@@ -156,58 +168,70 @@ class LoginModel
 
     /**
      * Increments the failed-login counter of a user
+     *
      * @param $user_name
      */
-    public function incrementFailedLoginCounterOfUser($user_name)
+    public static function incrementFailedLoginCounterOfUser($user_name)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         $sql = "UPDATE users
                    SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
                  WHERE user_name = :user_name OR user_email = :user_name
                  LIMIT 1";
-        $sth = $this->database->prepare($sql);
+        $sth = $database->prepare($sql);
         $sth->execute(array(':user_name' => $user_name, ':user_last_failed_login' => time() ));
     }
 
     /**
      * Resets the failed-login counter of a user back to 0
+     *
      * @param $user_name
      */
-    public function resetFailedLoginCounterOfUser($user_name)
+    public static function resetFailedLoginCounterOfUser($user_name)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         $sql = "UPDATE users
                    SET user_failed_logins = 0, user_last_failed_login = NULL
                  WHERE user_name = :user_name AND user_failed_logins != 0
                  LIMIT 1";
-        $sth = $this->database->prepare($sql);
+        $sth = $database->prepare($sql);
         $sth->execute(array(':user_name' => $user_name));
     }
 
     /**
      * Write timestamp of this login into database (we only write a "real" login via login form into the database,
      * not the session-login on every page request
+     *
      * @param $user_name
      */
-    public function saveTimestampOfLoginOfUser($user_name)
+    public static function saveTimestampOfLoginOfUser($user_name)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp
                 WHERE user_name = :user_name LIMIT 1";
-        $sth = $this->database->prepare($sql);
+        $sth = $database->prepare($sql);
         $sth->execute(array(':user_name' => $user_name, ':user_last_login_timestamp' => time()));
     }
 
     /**
      * Write remember-me token into database and into cookie
      * Maybe splitting this into database and cookie part ?
+     *
      * @param $user_id
      */
-    public function setRememberMeInDatabaseAndCookie($user_id)
+    public static function setRememberMeInDatabaseAndCookie($user_id)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         // generate 64 char random string
         $random_token_string = hash('sha256', mt_rand());
 
         // write that token into database
         $sql = "UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1";
-        $sth = $this->database->prepare($sql);
+        $sth = $database->prepare($sql);
         $sth->execute(array(':user_remember_me_token' => $random_token_string, ':user_id' => $user_id));
 
         // generate cookie string that consists of user id, random string and combined hash of both
@@ -222,10 +246,12 @@ class LoginModel
     /**
      * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
      * TODO add throttling here ?
+     *
      * @param $cookie string The cookie "remember_me"
+     *
      * @return bool success state
      */
-    public function loginWithCookie($cookie)
+    public static function loginWithCookie($cookie)
     {
         // do we have a cookie ?
         if (!$cookie) {
@@ -247,16 +273,16 @@ class LoginModel
         }
 
         // get data of user that has this id and this token
-        $result = $this->getUserDataByUserIdAndToken($user_id, $token);
+        $result = LoginModel::getUserDataByUserIdAndToken($user_id, $token);
 
         // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-            $this->setSuccessfulLoginIntoSession(
+            LoginModel::setSuccessfulLoginIntoSession(
                 $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
             );
             // save timestamp of this login in the database line of that user
-            $this->saveTimestampOfLoginOfUser($result->user_name);
+            LoginModel::saveTimestampOfLoginOfUser($result->user_name);
 
             // NOTE: we don't set another remember_me-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
@@ -273,34 +299,38 @@ class LoginModel
     /**
      * Log out process: delete cookie, delete session
      */
-    public function logout()
+    public static function logout()
     {
-        $this->deleteCookie();
+        LoginModel::deleteCookie();
         Session::destroy();
     }
 
     /**
      * Deletes the cookie
+     * It's necessary to split deleteCookie() and logout() as cookies are deleted without logging out too!
      * Sets the remember-me-cookie to ten years ago (3600sec * 24 hours * 365 days * 10).
      * that's obviously the best practice to kill a cookie @see http://stackoverflow.com/a/686166/1114320
      */
-    public function deleteCookie()
+    public static function deleteCookie()
     {
         setcookie('remember_me', false, time() - (3600 * 24 * 3650), COOKIE_PATH);
     }
 
     /**
      * Returns the current state of the user's login
+     *
      * @return bool user's login status
      */
-    public function isUserLoggedIn()
+    public static function isUserLoggedIn()
     {
         return Session::userIsLoggedIn();
     }
 
     /**
      * Edit the user's name, provided in the editing form
+     *
      * @param $new_user_name string The new username
+     *
      * @return bool success status
      */
     public function editUserName($new_user_name)
@@ -387,7 +417,9 @@ class LoginModel
 
     /**
      * Edit the user's email
+     *
      * @param $new_user_email
+     *
      * @return bool success status
      */
     public function editUserEmail($new_user_email)
@@ -437,6 +469,7 @@ class LoginModel
     /**
      * handles the entire registration process for DEFAULT users (not for people who register with
      * 3rd party services, like facebook) and creates a new user in the database if everything is fine
+     *
      * @return boolean Gives back the success status of the registration
      */
     public function registerNewUser()
@@ -550,9 +583,11 @@ class LoginModel
 
     /**
      * Sends the verification email (to confirm the account)
+     *
      * @param int $user_id user's id
      * @param string $user_email user's email
      * @param string $user_activation_hash user's mail verification hash string
+     *
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
     private function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
@@ -578,8 +613,10 @@ class LoginModel
 
     /**
      * checks the email/verification code combination and set the user's activation status to true in the database
+     *
      * @param int $user_id user id
      * @param string $user_activation_verification_code verification token
+     *
      * @return bool success status
      */
     public function verifyNewUser($user_id, $user_activation_verification_code)
@@ -600,7 +637,9 @@ class LoginModel
 
     /**
      * Perform the necessary actions to send a password reset mail
+     *
      * @param $user_name_or_email string Username or user's email
+     *
      * @return bool success status
      */
     public function requestPasswordReset($user_name_or_email)
@@ -640,9 +679,11 @@ class LoginModel
 
     /**
      * Set password reset token in database (for DEFAULT user accounts)
+     *
      * @param string $user_name username
      * @param string $user_password_reset_hash password reset hash
      * @param int $temporary_timestamp timestamp
+     *
      * @return bool success status
      */
     public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
@@ -670,10 +711,12 @@ class LoginModel
     }
 
     /**
-     * send the password reset mail
+     * Send the password reset mail
+     *
      * @param string $user_name username
      * @param string $user_password_reset_hash password reset hash
      * @param string $user_email user email
+     *
      * @return bool success status
      */
     public function sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)

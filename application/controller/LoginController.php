@@ -22,7 +22,7 @@ class LoginController extends Controller
     public function index()
     {
         // if user is logged in redirect to main-page, if not show the view
-        if ($this->LoginModel->isUserLoggedIn()) {
+        if (LoginModel::isUserLoggedIn()) {
             header("location: " . URL);
         } else {
             $this->View->render('login/index');
@@ -35,7 +35,7 @@ class LoginController extends Controller
     public function login()
     {
         // perform the login method, put result (true or false) into $login_successful
-        $login_successful = $this->LoginModel->login(
+        $login_successful = LoginModel::login(
             Request::post('user_name'), Request::post('user_password'), Request::post('set_remember_me_cookie')
         );
 
@@ -53,7 +53,7 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        $this->LoginModel->logout();
+        LoginModel::logout();
         header('location: ' . URL);
     }
 
@@ -63,14 +63,14 @@ class LoginController extends Controller
     public function loginWithCookie()
     {
         // run the loginWithCookie() method in the login-model, put the result in $login_successful (true or false)
-         $login_successful = $this->LoginModel->loginWithCookie(Request::cookie('remember_me'));
+         $login_successful = LoginModel::loginWithCookie(Request::cookie('remember_me'));
 
         // if login successful, redirect to dashboard/index ...
         if ($login_successful) {
             header('location: ' . URL . 'dashboard/index');
         } else {
             // if not, delete cookie (outdated? attack?) and route user to login form to prevent infinite login loops
-            $this->LoginModel->deleteCookie();
+            LoginModel::deleteCookie();
             header('location: ' . URL . 'login/index');
         }
     }
@@ -193,7 +193,7 @@ class LoginController extends Controller
      */
     public function register()
     {
-        if ($this->LoginModel->isUserLoggedIn()) {
+        if (LoginModel::isUserLoggedIn()) {
             header("location: " . URL);
         } else {
             $this->View->render('login/register');
