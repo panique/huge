@@ -148,7 +148,7 @@ class LoginModel
 
         // get and set avatars
         Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($user_id));
-        Session::set('user_gravatar_image_url', UserModel::getGravatarLinkByEmail($user_email));
+        Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($user_email));
 
         // finally, set user as logged-in
         Session::set('user_logged_in', true);
@@ -425,7 +425,7 @@ class LoginModel
         // ... then write new email to session, Gravatar too (as this relies to the user's email address)
         if ($this->saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
             Session::set('user_email', $new_user_email);
-            Session::set('user_gravatar_image_url', UserModel::getGravatarLinkByEmail($new_user_email));
+            Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($new_user_email));
             Session::add('feedback_positive', FEEDBACK_EMAIL_CHANGE_SUCCESSFUL);
             return true;
         }
