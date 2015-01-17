@@ -61,6 +61,54 @@ class AvatarModel
 	}
 
 	/**
+	 * Create an avatar picture (and checks all necessary things too)
+	 * @return bool success status
+	 */
+	public static function createAvatar()
+	{
+		if (!is_dir(PATH_AVATARS) OR !is_writable(PATH_AVATARS)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE;
+			return false;
+		}
+
+		if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED;
+			return false;
+		}
+
+		// get the image width, height and mime type
+		$image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
+
+		// if input file too big (>5MB)
+		if ($_FILES['avatar_file']['size'] > 5000000 ) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_BIG;
+			return false;
+		}
+		// if input file too small
+		if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_TOO_SMALL;
+			return false;
+		}
+
+		if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
+			// create a jpg file in the avatar folder
+			$target_file_path = PATH_AVATARS . $_SESSION['user_id'] . ".jpg";
+			AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
+
+			$database = DatabaseFactory::getFactory()->getConnection();
+
+			$query = $database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
+			$query->execute(array(':user_id' => $_SESSION['user_id']));
+			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($_SESSION['user_id']));
+			$_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
+			return true;
+		} else {
+			$_SESSION["feedback_negative"][] = FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE;
+			return false;
+		}
+	}
+
+	/**
 	 * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
 	 *
 	 * TROUBLESHOOTING: You don't see the new image ? Press F5 or CTRL-F5 to refresh browser cache.
