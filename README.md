@@ -1,3 +1,5 @@
+[![HUGE, formerly "php-login" logo](_tutorial/huge-logo.png)](http://www.php-login.net)
+
 # HUGE
 
 This is the development branch of php-login, currently under heavy action for the upcoming 2.1 version.
@@ -6,8 +8,6 @@ be renamed to HUGE (in combination to TINY, MINI and MINI2).
 
 THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
 For a stable version use the 2.0 version.
-
-[![HUGE, formerly "php-login" logo](_tutorial/huge-logo.png)](http://www.php-login.net)
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
