@@ -61,6 +61,9 @@ class AvatarModel
 
 	/**
 	 * Create an avatar picture (and checks all necessary things too)
+	 * TODO decoupling
+	 * TODO total rebuild
+	 *
 	 * @return bool success status
 	 */
 	public static function createAvatar()
@@ -84,6 +87,7 @@ class AvatarModel
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_BIG);
 			return false;
 		}
+
 		// if input file too small
 		if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_SMALL);
@@ -100,10 +104,10 @@ class AvatarModel
 			$query = $database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
 			$query->execute(array(':user_id' => Session::get('user_id')));
 			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-			Session::get('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
+			Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
 			return true;
 		} else {
-			Session::get('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
+			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
 			return false;
 		}
 	}
