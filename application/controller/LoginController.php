@@ -244,7 +244,7 @@ class LoginController extends Controller
      */
     public function requestPasswordReset_action()
     {
-        LoginModel::requestPasswordReset(Request::post('user_name_or_email'));
+        UserModel::requestPasswordReset(Request::post('user_name_or_email'));
         header('location: ' . URL . 'login/index');
     }
 
