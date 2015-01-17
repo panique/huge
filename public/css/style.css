@@ -125,15 +125,16 @@ body {
 
 /* feedback boxes */
 .feedback {
-    border: 1px solid;
     padding: 10px;
     margin-bottom: 10px;
 }
 .feedback.success {
-    color: green;
+    color: #558f2d;
+    background-color: #ddf2c0;
 }
 .feedback.error {
-    color: red;
+    color: #ff7272;
+    background-color: #ffe5e5;
 }
 
 .header_right_box {
