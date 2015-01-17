@@ -206,7 +206,7 @@ class LoginController extends Controller
      */
     public function register_action()
     {
-        $registration_successful = LoginModel::registerNewUser();
+        $registration_successful = RegistrationModel::registerNewUser();
 
         if ($registration_successful) {
             header('location: ' . URL . 'login/index');
@@ -223,7 +223,7 @@ class LoginController extends Controller
     public function verify($user_id, $user_activation_verification_code)
     {
         if (isset($user_id) && isset($user_activation_verification_code)) {
-            LoginModel::verifyNewUser($user_id, $user_activation_verification_code);
+            RegistrationModel::verifyNewUser($user_id, $user_activation_verification_code);
             $this->View->render('login/verify');
         } else {
             header('location: ' . URL . 'login/index');
