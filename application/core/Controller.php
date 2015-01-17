@@ -5,9 +5,6 @@
  * Whenever a controller is created, we also
  * 1. initialize a session
  * 2. check if the user is not logged in anymore (session timeout) but has a cookie
- * 3. create a database connection (that will be passed to all models that need a database connection)
- * 4. create all the model objects (TODO auto-loading !?)
- * 5. create a view object
  */
 class Controller
 {
