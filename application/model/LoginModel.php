@@ -2,22 +2,10 @@
 
 /**
  * LoginModel
- * The login part of the model: Handles the login / logout / registration stuff
+ * The login part of the model: Handles the login / logout stuff
  */
 class LoginModel
 {
-    /** @var Database $database The database connection */
-    private $database;
-
-    /**
-     * Constructor, expects a Database connection
-     * @param Database $database The Database object
-     */
-    public function __construct(Database $database)
-    {
-        $this->database = $database;
-    }
-
     /**
      * Login process (for DEFAULT user accounts).
      *
@@ -326,145 +314,49 @@ class LoginModel
         return Session::userIsLoggedIn();
     }
 
-    /**
-     * Edit the user's name, provided in the editing form
-     *
-     * @param $new_user_name string The new username
-     *
-     * @return bool success status
-     */
-    public function editUserName($new_user_name)
-    {
-        // new username provided ?
-        if (empty($new_user_name)) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
-            return false;
-        }
 
-        // new username same as old one ?
-        if ($new_user_name == Session::get('user_name')) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_SAME_AS_OLD_ONE);
-            return false;
-        }
 
-        // username cannot be empty and must be azAZ09 and 2-64 characters
-        if (!preg_match("/^[a-zA-Z0-9]{2,64}$/", $new_user_name)) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN);
-            return false;
-        }
 
-        // clean the input, strip usernames longer than 64 chars (maybe fix this ?)
-        $new_user_name = substr(strip_tags($new_user_name), 0, 64);
 
-        // check if new username already exists
-        if ($this->doesUsernameAlreadyExist($new_user_name)) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_ALREADY_TAKEN);
-            return false;
-        }
 
-        $status_of_action = $this->saveNewUserName(Session::get('user_id'), $new_user_name);
-        if ($status_of_action) {
-            Session::set('user_name', $new_user_name);
-            Session::add('feedback_positive', FEEDBACK_USERNAME_CHANGE_SUCCESSFUL);
-            return true;
-        }
 
-        // default fallback
-        Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
-        return false;
-    }
 
-    public function doesUsernameAlreadyExist($user_name)
-    {
-        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
-        $query->execute(array(':user_name' => $user_name));
-        if ($query->rowCount() == 0) {
-            return false;
-        }
-        return true;
-    }
 
-    public function doesEmailAlreadyExist($user_email)
-    {
-        $query = $this->database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
-        $query->execute(array(':user_email' => $user_email));
-        if ($query->rowCount() == 0) {
-            return false;
-        }
-        return true;
-    }
 
-    public function saveNewUserName($user_id, $new_user_name)
-    {
-        $query = $this->database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_name' => $new_user_name, ':user_id' => $user_id));
-        if ($query->rowCount() == 1) {
-            return true;
-        }
-        return false;
-    }
 
-    public function saveNewEmailAddress($user_id, $new_user_email)
-    {
-        $query = $this->database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_email' => $new_user_email, ':user_id' => $user_id));
-        $count =  $query->rowCount();
-        if ($count == 1) {
-            return true;
-        }
-        return false;
-    }
 
-    /**
-     * Edit the user's email
-     *
-     * @param $new_user_email
-     *
-     * @return bool success status
-     */
-    public function editUserEmail($new_user_email)
-    {
-        // email provided ?
-        if (empty($new_user_email)) {
-            Session::add('feedback_negative', FEEDBACK_EMAIL_FIELD_EMPTY);
-            return false;
-        }
 
-        // check if new email is same like the old one
-        if ($new_user_email == Session::get('user_email')) {
-            Session::add('feedback_negative', FEEDBACK_EMAIL_SAME_AS_OLD_ONE);
-            return false;
-        }
 
-        // user's email must be in valid email format
-        if (!filter_var($new_user_email, FILTER_VALIDATE_EMAIL)) {
-            Session::add('feedback_negative', FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN);
-            return false;
-        }
 
-        // cut email length (everything else is spam and should later be deleted)
-        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-        // TODO is this even necessary anymore as we use FILTER_VALIDATE_EMAIL above ?
-        $new_user_email = substr(strip_tags($new_user_email), 0, 254);
 
-        // check if user's email already exists
-        if ($this->doesEmailAlreadyExist($new_user_email)) {
-            Session::add('feedback_negative', FEEDBACK_USER_EMAIL_ALREADY_TAKEN);
-            return false;
-        }
 
-        // write to database, if successful ...
-        // ... then write new email to session, Gravatar too (as this relies to the user's email address)
-        if ($this->saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
-            Session::set('user_email', $new_user_email);
-            Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($new_user_email));
-            Session::add('feedback_positive', FEEDBACK_EMAIL_CHANGE_SUCCESSFUL);
-            return true;
-        }
 
-        Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
-        return false;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * handles the entire registration process for DEFAULT users (not for people who register with
@@ -472,7 +364,7 @@ class LoginModel
      *
      * @return boolean Gives back the success status of the registration
      */
-    public function registerNewUser()
+    public static function registerNewUser()
     {
         // perform all necessary form checks
         if (!CaptchaModel::checkCaptcha(Request::post('captcha'))) {
@@ -515,8 +407,10 @@ class LoginModel
             // @see php.net/manual/en/function.password-hash.php for more, especially for potential options
             $user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
+            $database = DatabaseFactory::getFactory()->getConnection();
+
             // check if username already exists
-            $query = $this->database->prepare("SELECT * FROM users WHERE user_name = :user_name LIMIT 1");
+            $query = $database->prepare("SELECT * FROM users WHERE user_name = :user_name LIMIT 1");
             $query->execute(array(':user_name' => $user_name));
             $count =  $query->rowCount();
             if ($count == 1) {
@@ -525,7 +419,7 @@ class LoginModel
             }
 
             // check if email already exists
-            $query = $this->database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
+            $query = $database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
             $query->execute(array(':user_email' => $user_email));
             $count =  $query->rowCount();
             if ($count == 1) {
@@ -541,7 +435,7 @@ class LoginModel
             // write new users data into database
             $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
                     VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
-            $query = $this->database->prepare($sql);
+            $query = $database->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
                                   ':user_password_hash' => $user_password_hash,
                                   ':user_email' => $user_email,
@@ -555,7 +449,7 @@ class LoginModel
             }
 
             // get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
-            $query = $this->database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
+            $query = $database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
             $query->execute(array(':user_name' => $user_name));
             if ($query->rowCount() != 1) {
                 $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
@@ -565,11 +459,11 @@ class LoginModel
             $user_id = $result_user_row->user_id;
 
             // send verification email, if verification email sending failed: instantly delete the user
-            if ($this->sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+            if (LoginModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
                 $_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
                 return true;
             } else {
-                $query = $this->database->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
+                $query = $database->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
                 $query->execute(array(':last_inserted_id' => $user_id));
                 $_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
                 return false;
@@ -590,7 +484,7 @@ class LoginModel
      *
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
-    private function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
+    private static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
         // create email body
         $body = EMAIL_VERIFICATION_CONTENT . EMAIL_VERIFICATION_URL . '/' . urlencode($user_id) . '/'
@@ -619,11 +513,13 @@ class LoginModel
      *
      * @return bool success status
      */
-    public function verifyNewUser($user_id, $user_activation_verification_code)
+    public static function verifyNewUser($user_id, $user_activation_verification_code)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         $sql = "UPDATE users SET user_active = 1, user_activation_hash = NULL
                 WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1";
-        $query = $this->database->prepare($sql);
+        $query = $database->prepare($sql);
         $query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
         if ($query->rowCount() == 1) {
@@ -642,7 +538,7 @@ class LoginModel
      *
      * @return bool success status
      */
-    public function requestPasswordReset($user_name_or_email)
+    public static function requestPasswordReset($user_name_or_email)
     {
         if (empty($user_name_or_email)) {
             Session::add('feedback_negative', FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY);
@@ -662,13 +558,13 @@ class LoginModel
         $user_password_reset_hash = sha1(uniqid(mt_rand(), true));
 
         // set token (= a random hash string and a timestamp) into database ...
-        $token_set = $this->setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);
+        $token_set = LoginModel::setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);
         if (!$token_set) {
             return false;
         }
 
         // ... and send a mail to the user, containing a link with username and token hash string
-        $mail_sent = $this->sendPasswordResetMail($result->user_name, $user_password_reset_hash, $result->user_email);
+        $mail_sent = LoginModel::sendPasswordResetMail($result->user_name, $user_password_reset_hash, $result->user_email);
         if ($mail_sent) {
             return true;
         }
@@ -686,15 +582,17 @@ class LoginModel
      *
      * @return bool success status
      */
-    public function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
+    public static function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
     {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
         // this could be formatted better
         $sql = "UPDATE users
                 SET user_password_reset_hash = :user_password_reset_hash,
                     user_password_reset_timestamp = :user_password_reset_timestamp
                 WHERE user_name = :user_name AND user_provider_type = :provider_type
                 LIMIT 1";
-        $query = $this->database->prepare($sql);
+        $query = $database->prepare($sql);
         $query->execute(array(
             ':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
             ':user_password_reset_timestamp' => $temporary_timestamp, ':provider_type' => 'DEFAULT'
@@ -719,7 +617,7 @@ class LoginModel
      *
      * @return bool success status
      */
-    public function sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)
+    public static function sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)
     {
         // create PHPMailer object here. This is easily possible as we auto-load the according class(es) via composer
         $mail = new PHPMailer;
@@ -728,8 +626,6 @@ class LoginModel
         if (EMAIL_USE_SMTP) {
             // Set mailer to use SMTP
             $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors, config this in config/config.php
-            $mail->SMTPDebug = PHPMAILER_DEBUG_MODE;
             // Enable SMTP authentication
             $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS

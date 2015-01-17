@@ -108,7 +108,7 @@ class LoginController extends Controller
     public function editUsername_action()
     {
         Auth::checkAuthentication();
-        $this->LoginModel->editUserName(Request::post('user_name'));
+        UserModel::editUserName(Request::post('user_name'));
         header('location: ' . URL . 'login/index');
     }
 
@@ -130,7 +130,7 @@ class LoginController extends Controller
     public function editUserEmail_action()
     {
         Auth::checkAuthentication();
-        $this->LoginModel->editUserEmail(Request::post('user_email'));
+        UserModel::editUserEmail(Request::post('user_email'));
         $this->View->render('login/editUserEmail');
     }
 
@@ -206,7 +206,7 @@ class LoginController extends Controller
      */
     public function register_action()
     {
-        $registration_successful = $this->LoginModel->registerNewUser();
+        $registration_successful = LoginModel::registerNewUser();
 
         if ($registration_successful) {
             header('location: ' . URL . 'login/index');
@@ -223,7 +223,7 @@ class LoginController extends Controller
     public function verify($user_id, $user_activation_verification_code)
     {
         if (isset($user_id) && isset($user_activation_verification_code)) {
-            $this->LoginModel->verifyNewUser($user_id, $user_activation_verification_code);
+            LoginModel::verifyNewUser($user_id, $user_activation_verification_code);
             $this->View->render('login/verify');
         } else {
             header('location: ' . URL . 'login/index');
@@ -244,7 +244,7 @@ class LoginController extends Controller
      */
     public function requestPasswordReset_action()
     {
-        $this->LoginModel->requestPasswordReset(Request::post('user_name_or_email'));
+        LoginModel::requestPasswordReset(Request::post('user_name_or_email'));
         header('location: ' . URL . 'login/index');
     }
 

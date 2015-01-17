@@ -37,13 +37,6 @@ class Controller
             exit('Database connection could not be established.');
         }
 
-        // TODO it's not a good idea to load ALL models by default, or ? let's discuss this.
-        // TODO check performance vs. usability when pre-loading ALL models
-        // TODO replace this with some kind of "model"-autoloader
-        // TODO as "model" is just a layer in the application there cannot be multiple "models", so maybe rename this ?
-        // NoteModel construction & db injection has been removed as this is not done by static method calls
-        $this->LoginModel = new LoginModel($this->database);
-
         // create a view object to be able to use it inside a controller, like $this->View->render();
         $this->View = new View();
     }
