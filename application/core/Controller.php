@@ -21,8 +21,7 @@ class Controller
         Session::init();
 
         // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-        // TODO encapsulate COOKIE super-global
-        if (!Session::userIsLoggedIn() AND isset($_COOKIE['remember_me'])) {
+        if (!Session::userIsLoggedIn() AND Request::cookie('remember_me')) {
             header('location: ' . URL . 'login/loginWithCookie');
         }
 
