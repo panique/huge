@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class PasswordResetModel
+ *
+ * Handles all the stuff that is related to the password-reset process
+ */
 class PasswordResetModel
 {
 	/**
@@ -57,7 +62,6 @@ class PasswordResetModel
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
 
-		// this could be formatted better
 		$sql = "UPDATE users
                 SET user_password_reset_hash = :user_password_reset_hash,
                     user_password_reset_timestamp = :user_password_reset_timestamp
@@ -158,9 +162,9 @@ class PasswordResetModel
 	/**
 	 * Writes the new password to the database
 	 *
-	 * @param $user_name string username
-	 * @param $user_password_hash string
-	 * @param $user_password_reset_hash string
+	 * @param string $user_name username
+	 * @param string $user_password_hash
+	 * @param string $user_password_reset_hash
 	 *
 	 * @return bool
 	 */
@@ -195,10 +199,10 @@ class PasswordResetModel
 	 * so we don't need to check again for the 60min-limit here. In this method we authenticate
 	 * via username & password-reset-hash from (hidden) form fields.
 	 *
-	 * @param $user_name
-	 * @param $user_password_reset_hash
-	 * @param $user_password_new
-	 * @param $user_password_repeat
+	 * @param string $user_name
+	 * @param string $user_password_reset_hash
+	 * @param string $user_password_new
+	 * @param string $user_password_repeat
 	 *
 	 * @return bool success state of the password reset
 	 */
