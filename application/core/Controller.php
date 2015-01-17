@@ -11,9 +11,6 @@
  */
 class Controller
 {
-    /** @var object Database The database connection */
-    private $database;
-
     /** @var View View The view object */
     public $View;
 
@@ -30,14 +27,6 @@ class Controller
         // TODO encapsulate COOKIE super-global
         if (!Session::userIsLoggedIn() AND isset($_COOKIE['remember_me'])) {
             header('location: ' . URL . 'login/loginWithCookie');
-        }
-
-        // create database connection
-        // TODO put the try/catch part inside the Database class ?
-        try {
-            $this->database = new Database();
-        } catch (PDOException $e) {
-            exit('Database connection could not be established.');
         }
 
         // create a view object to be able to use it inside a controller, like $this->View->render();
