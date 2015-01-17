@@ -1,12 +1,15 @@
-# Develop-branch of 2.1
+# HUGE
 
 This is the development branch of php-login, currently under heavy action for the upcoming 2.1 version.
 2.1 will be much improved version of 2.0 with lots of architecture changes, refactorings, etc.
+"php-login" will also be renamed to HUGE (in combination to TINY, MINI and MINI2).
+
+TODO links to mini, tiny etc.
 
 THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
 For a stable version use the 2.0 version.
 
-[![php-login introduction & quickstart placeholder picture](_tutorial/placeholder-info.png)](http://www.php-login.net)
+[![HUGE, formerly "php-login" logo](_tutorial/huge-logo.jpg)](http://www.php-login.net)
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
