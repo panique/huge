@@ -256,7 +256,7 @@ class LoginController extends Controller
     public function verifyPasswordReset($user_name, $verification_code)
     {
         // check if this the provided verification code fits the user's verification code
-        if ($this->LoginModel->verifyPasswordReset($user_name, $verification_code)) {
+        if (UserModel::verifyPasswordReset($user_name, $verification_code)) {
             // pass URL-provided variable to view to display them
             $this->View->render('login/changePassword', array(
                 'user_name' => $user_name,

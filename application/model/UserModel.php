@@ -226,4 +226,50 @@ class UserModel
 
         return $query->fetch();
     }
+
+    /**
+     * Verifies the password reset request via the verification hash token (that's only valid for one hour)
+     * @param string $user_name Username
+     * @param string $verification_code Hash token
+     * @return bool Success status
+     */
+    public static function verifyPasswordReset($user_name, $verification_code)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        // check if user-provided username + verification code combination exists
+        $sql = "SELECT user_id, user_password_reset_timestamp
+                  FROM users
+                 WHERE user_name = :user_name
+                       AND user_password_reset_hash = :user_password_reset_hash
+                       AND user_provider_type = :user_provider_type
+                 LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(
+            ':user_password_reset_hash' => $verification_code, ':user_name' => $user_name,
+            ':user_provider_type' => 'DEFAULT'
+        ));
+
+        // if this user with exactly this verification hash code does NOT exist
+        if ($query->rowCount() != 1) {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST);
+            return false;
+        }
+
+        // get result row (as an object)
+        $result_user_row = $query->fetch();
+
+        // 3600 seconds are 1 hour
+        $timestamp_one_hour_ago = time() - 3600;
+
+        // if password reset request was sent within the last hour (this timeout is for security reasons)
+        if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
+            // verification was successful
+            Session::add('feedback_positive', FEEDBACK_PASSWORD_RESET_LINK_VALID);
+            return true;
+        } else {
+            Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_LINK_EXPIRED);
+            return false;
+        }
+    }
 }
