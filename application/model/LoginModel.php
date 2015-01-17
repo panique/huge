@@ -452,43 +452,22 @@ class LoginModel
      */
     public static function sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)
     {
-        // create PHPMailer object here. This is easily possible as we auto-load the according class(es) via composer
-        $mail = new PHPMailer;
+        // create email body
+        $body = EMAIL_PASSWORD_RESET_CONTENT . ' ' . EMAIL_PASSWORD_RESET_URL . '/' . urlencode($user_name) . '/'
+                . urlencode($user_password_reset_hash);
 
-        // please look into the config/config.php for much more info on how to use this!
-        if (EMAIL_USE_SMTP) {
-            // Set mailer to use SMTP
-            $mail->IsSMTP();
-            // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
-            // Enable encryption, usually SSL/TLS
-            if (defined('EMAIL_SMTP_ENCRYPTION')) {
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
-            }
-            // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;
-            $mail->Username = EMAIL_SMTP_USERNAME;
-            $mail->Password = EMAIL_SMTP_PASSWORD;
-            $mail->Port = EMAIL_SMTP_PORT;
-        } else {
-            $mail->IsMail();
-        }
+        // create instance of Mail class, try sending and check
+        $mail = new Mail;
+        $mail_sent = $mail->sendMail(
+            $user_email, EMAIL_PASSWORD_RESET_FROM_EMAIL, EMAIL_PASSWORD_RESET_FROM_NAME, EMAIL_PASSWORD_RESET_SUBJECT, $body
+        );
 
-        // build the email
-        $mail->From = EMAIL_PASSWORD_RESET_FROM_EMAIL;
-        $mail->FromName = EMAIL_PASSWORD_RESET_FROM_NAME;
-        $mail->AddAddress($user_email);
-        $mail->Subject = EMAIL_PASSWORD_RESET_SUBJECT;
-        $link = EMAIL_PASSWORD_RESET_URL . '/' . urlencode($user_name) . '/' . urlencode($user_password_reset_hash);
-        $mail->Body = EMAIL_PASSWORD_RESET_CONTENT . ' ' . $link;
-
-        // send the mail
-        if($mail->Send()) {
-            $_SESSION["feedback_positive"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL;
+        if ($mail_sent) {
+            Session::add('feedback_positive', FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL);
             return true;
-        } else {
-            $_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->ErrorInfo;
-            return false;
         }
+
+        Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->getError() );
+        return false;
     }
 }
