@@ -106,6 +106,15 @@ body {
     color: #222;
 }
 
+.navigation > li.active a {
+    background: #fff;
+    color: #222;
+}
+.navigation > li.active li a {
+    background: #222;
+    color: #fff;
+}
+
 /* overview */
 .overview-table img {
     width: 40px;
