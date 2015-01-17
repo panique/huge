@@ -2,6 +2,7 @@
 
 /**
  * LoginModel
+ *
  * The login part of the model: Handles the login / logout stuff
  */
 class LoginModel
@@ -24,7 +25,7 @@ class LoginModel
         }
 
         // get all data of that user (to later check if password and password_hash fit)
-        $result = LoginModel::getUserDataByUsername($user_name);
+        $result = UserModel::getUserDataByUsername($user_name);
 
         // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
         if (!$result) {
@@ -78,29 +79,68 @@ class LoginModel
     }
 
     /**
-     * Gets the user's data
-     * @param $user_name string User's name
-     * @return mixed Returns false if user does not exist, returns object with user's data when user exists
+     * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
+     * TODO add throttling here ?
+     *
+     * @param $cookie string The cookie "remember_me"
+     *
+     * @return bool success state
      */
-    public static function getUserDataByUsername($user_name)
+    public static function loginWithCookie($cookie)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
+        // do we have a cookie ?
+        if (!$cookie) {
+            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            return false;
+        }
 
-        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
-                       user_failed_logins, user_last_failed_login
-                  FROM users
-                 WHERE (user_name = :user_name OR user_email = :user_name)
-                       AND user_provider_type = :provider_type
-                 LIMIT 1";
-        $query = $database->prepare($sql);
+        // check cookie's contents, check if cookie contents belong together
+        list ($user_id, $token, $hash) = explode(':', $cookie);
+        if ($hash !== hash('sha256', $user_id . ':' . $token)) {
+            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            return false;
+        }
 
-        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
-        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
-        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
+        // do not log in when token is empty
+        if (empty($token)) {
+            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            return false;
+        }
 
-        // return one row (we only have one result or nothing)
-        return $query->fetch();
+        // get data of user that has this id and this token
+        $result = LoginModel::getUserDataByUserIdAndToken($user_id, $token);
+
+        // if user with that id and exactly that cookie token exists in database
+        if ($result) {
+            // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
+            LoginModel::setSuccessfulLoginIntoSession(
+                $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
+            );
+            // save timestamp of this login in the database line of that user
+            LoginModel::saveTimestampOfLoginOfUser($result->user_name);
+
+            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
+            // be invalid after a certain amount of time, so the user has to login with username/password
+            // again from time to time. This is good and safe ! ;)
+
+            Session::add('feedback_positive', FEEDBACK_COOKIE_LOGIN_SUCCESSFUL);
+            return true;
+        } else {
+            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            return false;
+        }
     }
+
+    /**
+     * Log out process: delete cookie, delete session
+     */
+    public static function logout()
+    {
+        LoginModel::deleteCookie();
+        Session::destroy();
+    }
+
+
 
     /**
      * Gets the user's data by user's id and a token (used by login-via-cookie process)
@@ -229,68 +269,6 @@ class LoginModel
 
         // set cookie
         setcookie('remember_me', $cookie_string, time() + COOKIE_RUNTIME, COOKIE_PATH);
-    }
-
-    /**
-     * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
-     * TODO add throttling here ?
-     *
-     * @param $cookie string The cookie "remember_me"
-     *
-     * @return bool success state
-     */
-    public static function loginWithCookie($cookie)
-    {
-        // do we have a cookie ?
-        if (!$cookie) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
-            return false;
-        }
-
-        // check cookie's contents, check if cookie contents belong together
-        list ($user_id, $token, $hash) = explode(':', $cookie);
-        if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
-            return false;
-        }
-
-        // do not log in when token is empty
-        if (empty($token)) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
-            return false;
-        }
-
-        // get data of user that has this id and this token
-        $result = LoginModel::getUserDataByUserIdAndToken($user_id, $token);
-
-        // if user with that id and exactly that cookie token exists in database
-        if ($result) {
-            // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-            LoginModel::setSuccessfulLoginIntoSession(
-                $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
-            );
-            // save timestamp of this login in the database line of that user
-            LoginModel::saveTimestampOfLoginOfUser($result->user_name);
-
-            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
-            // be invalid after a certain amount of time, so the user has to login with username/password
-            // again from time to time. This is good and safe ! ;)
-
-            Session::add('feedback_positive', FEEDBACK_COOKIE_LOGIN_SUCCESSFUL);
-            return true;
-        } else {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
-            return false;
-        }
-    }
-
-    /**
-     * Log out process: delete cookie, delete session
-     */
-    public static function logout()
-    {
-        LoginModel::deleteCookie();
-        Session::destroy();
     }
 
     /**

@@ -527,4 +527,31 @@ class UserModel
         Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->getError() );
         return false;
     }
+
+    /**
+     * Gets the user's data
+     *
+     * @param $user_name string User's name
+     *
+     * @return mixed Returns false if user does not exist, returns object with user's data when user exists
+     */
+    public static function getUserDataByUsername($user_name)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
+                       user_failed_logins, user_last_failed_login
+                  FROM users
+                 WHERE (user_name = :user_name OR user_email = :user_name)
+                       AND user_provider_type = :provider_type
+                 LIMIT 1";
+        $query = $database->prepare($sql);
+
+        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
+
+        // return one row (we only have one result or nothing)
+        return $query->fetch();
+    }
 }
