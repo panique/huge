@@ -47,7 +47,7 @@ class UserModel
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
-     * @return object/null The selected user's profile
+     * @return mixed The selected user's profile
      */
     public static function getPublicProfileOfUser($user_id)
     {
