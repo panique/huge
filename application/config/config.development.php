@@ -43,7 +43,7 @@ if (AUTODETECT_URL) {
  */
 define('PATH_BASE',        realpath(dirname(__FILE__).'/../../'));
 define('PATH_APPLICATION', PATH_BASE . '/application/');
-define('PATH_LIBS',        PATH_APPLICATION . '/libs/');
+define('PATH_CORE',        PATH_APPLICATION . '/core/');
 define('PATH_CONTROLLER',  PATH_APPLICATION . '/controller/');
 define('PATH_MODEL',       PATH_APPLICATION . '/model/');
 define('PATH_VIEW',        PATH_APPLICATION . '/view/');
