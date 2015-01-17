@@ -29,7 +29,7 @@ class AvatarModel
 	 * Gets the user's avatar file path
 	 * @param int $user_has_avatar Marker from database
 	 * @param int $user_id User's id
-	 * @return string/null Avatar file path
+	 * @return string Avatar file path
 	 */
 	public static function getPublicAvatarFilePathOfUser($user_has_avatar, $user_id)
 	{
