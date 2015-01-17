@@ -142,7 +142,7 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         $this->View->render('login/uploadAvatar', array(
-            'avatar_file_path' => $this->LoginModel->getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
+            'avatar_file_path' => AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
         ));
     }
 
