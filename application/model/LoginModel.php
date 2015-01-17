@@ -147,7 +147,7 @@ class LoginModel
         Session::set('user_provider_type', 'DEFAULT');
 
         // get and set avatars
-        Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($user_id));
+        Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($user_id));
         Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($user_email));
 
         // finally, set user as logged-in
@@ -599,23 +599,6 @@ class LoginModel
     }
 
     /**
-     * Gets the user's avatar file path
-     * @param $user_id integer The user's id
-     * @return string avatar picture path
-     */
-    public function getPublicUserAvatarFilePathByUserId($user_id)
-    {
-        $query = $this->database->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_id' => $user_id));
-
-        if ($query->fetch()->user_has_avatar) {
-            return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
-        }
-
-        return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
-    }
-
-    /**
      * Create an avatar picture (and checks all necessary things too)
      * @return bool success status
      */
@@ -651,7 +634,7 @@ class LoginModel
             AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
             $query = $this->database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
             $query->execute(array(':user_id' => $_SESSION['user_id']));
-            Session::set('user_avatar_file', $this->getPublicUserAvatarFilePathByUserId($_SESSION['user_id']));
+            Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($_SESSION['user_id']));
             $_SESSION["feedback_positive"][] = FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL;
             return true;
         } else {
