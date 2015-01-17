@@ -155,7 +155,7 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         $this->LoginModel->createAvatar();
-        $this->View->render('login/uploadAvatar');
+        header('location: ' . URL . 'login/uploadAvatar');
     }
 
     /**
