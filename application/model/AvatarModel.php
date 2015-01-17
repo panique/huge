@@ -37,7 +37,6 @@ class AvatarModel
 			return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
 		}
 
-		// default
 		return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
 	}
 
