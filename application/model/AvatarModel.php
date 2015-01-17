@@ -40,4 +40,58 @@ class AvatarModel
 		// default
 		return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
 	}
+
+	/**
+	 * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
+	 *
+	 * TROUBLESHOOTING: You don't see the new image ? Press F5 or CTRL-F5 to refresh browser cache.
+	 *
+	 * @param string $source_image The location to the original raw image.
+	 * @param string $destination The location to save the new image.
+	 * @param int $final_width The desired width of the new image
+	 * @param int $final_height The desired height of the new image.
+	 * @param int $quality The quality of the JPG to produce 1 - 100
+	 *
+	 * TODO currently we just allow .jpg
+	 *
+	 * @return bool success state
+	 */
+	public static function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44, $quality = 85)
+	{
+		list($width, $height) = getimagesize($source_image);
+
+		if (!$width || !$height) {
+			return false;
+		}
+
+		//saving the image into memory (for manipulation with GD Library)
+		$myImage = imagecreatefromjpeg($source_image);
+
+		// calculating the part of the image to use for thumbnail
+		if ($width > $height) {
+			$y = 0;
+			$x = ($width - $height) / 2;
+			$smallestSide = $height;
+		} else {
+			$x = 0;
+			$y = ($height - $width) / 2;
+			$smallestSide = $width;
+		}
+
+		// copying the part into thumbnail, maybe edit this for square avatars
+		$thumb = imagecreatetruecolor($final_width, $final_height);
+		imagecopyresampled($thumb, $myImage, 0, 0, $x, $y, $final_width, $final_height, $smallestSide, $smallestSide);
+
+		// save it as a .jpg file with our $destination_filename parameter
+		imagejpeg($thumb, $destination, $quality);
+
+		// delete "working copy"
+		imagedestroy($thumb);
+
+		if (file_exists($destination)) {
+			return true;
+		}
+		// default return
+		return false;
+	}
 }
