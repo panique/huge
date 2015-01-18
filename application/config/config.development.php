@@ -83,6 +83,14 @@ define('AVATAR_JPEG_QUALITY', 85);
 define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 
 /**
+ * Configuration for: Captcha size
+ * The currently used Captcha generator (https://github.com/Gregwar/Captcha) also runs without giving a size,
+ * so feel free to use ->build(); inside CaptchaModel.
+ */
+define('CAPTCHA_WIDTH', 359);
+define('CAPTCHA_HEIGHT', 100);
+
+/**
  * Configuration for: Cookies
  * @see http://stackoverflow.com/q/9618217/1114320
  * @see php.net/manual/en/function.setcookie.php

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Class CaptchaModel
+ *
+ * This model class handles all the captcha stuff.
+ * Currently this uses the excellent Captcha generator lib from https://github.com/Gregwar/Captcha
+ * Have a look there for more options etc.
+ */
 class CaptchaModel
 {
 	/**
@@ -10,7 +17,7 @@ class CaptchaModel
 	{
 		// create a captcha with the CaptchaBuilder lib (loaded via Composer)
 		$captcha = new Gregwar\Captcha\CaptchaBuilder;
-		$captcha->build();
+		$captcha->build(CAPTCHA_WIDTH, CAPTCHA_HEIGHT);
 
 		// write the captcha character into session
 		Session::set('captcha', $captcha->getPhrase());
