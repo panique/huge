@@ -32,29 +32,6 @@
             </li>
             <?php endif; ?>
 
-            <?php if (Session::userIsLoggedIn()) : ?>
-                <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                    <a href="<?php echo URL; ?>login/showprofile">My Account</a>
-                    <ul class="navigation-submenu">
-                        <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/changeaccounttype">Change account type</a>
-                        </li>
-                        <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
-                        </li>
-                        <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
-                        </li>
-                        <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/edituseremail">Edit my email</a>
-                        </li>
-                        <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                            <a href="<?php echo URL; ?>login/logout">Logout</a>
-                        </li>
-                    </ul>
-                </li>
-            <?php endif; ?>
-
             <!-- for not logged in users -->
             <?php if (!Session::userIsLoggedIn()) : ?>
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
@@ -66,6 +43,7 @@
             <?php endif; ?>
         </ul>
 
+        <!--
         <?php if (Session::userIsLoggedIn()) : ?>
             <div class="header_right_box">
                 <div class="namebox">
@@ -82,3 +60,30 @@
                 </div>
             </div>
         <?php endif; ?>
+        -->
+
+        <!-- my account -->
+        <ul class="navigation right">
+        <?php if (Session::userIsLoggedIn()) : ?>
+            <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                <a href="<?php echo URL; ?>login/showprofile">My Account</a>
+                <ul class="navigation-submenu">
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo URL; ?>login/changeaccounttype">Change account type</a>
+                    </li>
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo URL; ?>login/uploadavatar">Upload an avatar</a>
+                    </li>
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo URL; ?>login/editusername">Edit my username</a>
+                    </li>
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo URL; ?>login/edituseremail">Edit my email</a>
+                    </li>
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo URL; ?>login/logout">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+        </ul>
