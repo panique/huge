@@ -8,13 +8,9 @@
     "require-dev": {
         "php": ">=5.5.0",
         "phpmailer/phpmailer": "~5.2",
-        "gregwar/captcha": "~1.0.11",
-        "raveren/kint": "~0.9"
+        "gregwar/captcha": "~1.0.11"
     },
     "autoload": {
         "psr-4": { "": ["application/core/", "application/model/"] }
-    },
-    "require": {
-        "oodle/krumo": "0.5.*"
     }
 }
