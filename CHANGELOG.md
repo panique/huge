@@ -2,10 +2,16 @@
 
 ## 2.1
 
-**December 2014**
+**January 2015**
 
+- [panique] new styling of the entire project: login/index has new look now 
+- [panique] massive refactoring of all model classes: lots of methods have been organized into other model classes
+- [panique] massive refactoring of all model classes: all methods are static now
 - [panique] EXPERIMENTAL: added static database call / DatabaseFactory, rebuild NoteModel with static methods 
 - [panique] massive refactoring of mail sending, (chose between PHPMailer, SwiftMailer, native / SMTP or no SMTP)
+
+**December 2014**
+
 - [panique] lots of refactorings
 - [panique] refactored LoginModel'S login() method / LoginController's login() method 
 - [panique] removed COOKIE_DOMAIN (cookie is now valid on the domain/IP it has been created on)
