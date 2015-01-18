@@ -125,7 +125,7 @@ body {
 
 /* feedback boxes */
 .feedback {
-    padding: 10px;
+    padding: 30px;
     margin-bottom: 10px;
 }
 .feedback.success {
@@ -135,6 +135,10 @@ body {
 .feedback.error {
     color: #ff7272;
     background-color: #ffe5e5;
+}
+.feedback.info {
+    color: #00529B;
+    background-color: #BDE5F8;
 }
 
 .header_right_box {
