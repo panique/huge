@@ -18,7 +18,7 @@ body {
     max-width: 960px;
     border: 1px solid #454545;
     padding: 20px;
-    margin: 33px;
+    margin: 30px 0 30px 0;
 }
 .container a {
     color: #454545;
