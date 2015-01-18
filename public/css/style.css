@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    font-weight: 400;
     font-size: 14px;
 }
 .wrapper {
@@ -16,7 +17,7 @@ body {
 }
 .container {
     max-width: 960px;
-    border: 1px solid #454545;
+    border: 1px solid #ccc;
     padding: 20px;
     margin: 30px 0 30px 0;
 }
@@ -146,3 +147,106 @@ body {
 .header_right_box {
     float: right;
 }
+
+/* login screen */
+.login-page-box {
+    display: table;
+    width: 100%;
+}
+.login-page-box .table-wrapper {
+    display: table-row;
+}
+
+.login-box {
+    display: table-cell;
+    margin: 0;
+    color: #777;
+    background-color: #f4f3f1;
+    padding: 20px 50px 45px 50px;
+    width: 49%;
+    box-sizing: border-box;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.login-box h2 {
+    color: #252525;
+}
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    font-family: Arial, sans-serif;
+    color: #252525;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box; /* modern way to say width:100% without padding */
+    text-transform: uppercase;
+}
+.login-box input[type="submit"] {
+    color: #777;
+    background-color: transparent;
+    border: 2px solid #777;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box; /* modern way to say width:100% without padding */
+    text-transform: uppercase;
+}
+.login-box input[type="submit"]:hover {
+    color: #fff;
+    border-color: #252525;
+    background-color: #252525;
+}
+.login-box .remember-me-label {
+    display: block;
+    margin-bottom: 10px;
+}
+.login-box .link-forgot-my-password {
+    display: block;
+    text-align: right;
+}
+.login-box .link-forgot-my-password a {
+    color: #777;
+    text-decoration: none;
+}
+.login-box .link-forgot-my-password a:hover {
+    text-decoration: underline;
+}
+.login-box ::-webkit-input-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
+.login-box ::-moz-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
+.login-box :-ms-input-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
+.login-box input:-moz-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
+
+.register-box {
+    display: table-cell;
+    color: #fff;
+    background-color: #252525;
+    padding: 20px 50px 45px 50px;
+    width: 49%;
+    box-sizing: border-box;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+}
+.register-box h2 {
+    color: #fff;
+}
+.register-box a {
+    width: 100%;
+    display: block;
+    box-sizing: border-box; /* modern way to say width:100% without padding */
+    background-color: transparent;
+    border: 2px solid #fff;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: #fff;
+}
+.register-box a:hover {
+    background-color: #ffffff;
+    color: #252525;
+}
+
