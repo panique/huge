@@ -95,17 +95,12 @@ class RegistrationModel
 
 
 			// get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
-			$query = $database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
-			$query->execute(array(':user_name' => $user_name));
-			if ($query->rowCount() != 1) {
-				$_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+			$user_id = UserModel::getUserIdByUsername($user_name);
+
+			if (!$user_id) {
+				Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
 				return false;
 			}
-			$result_user_row = $query->fetch();
-			$user_id = $result_user_row->user_id;
-
-
-
 
 			// send verification email
 			if (RegistrationModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
@@ -126,7 +121,7 @@ class RegistrationModel
 
 	/**
 	 * Deletes the user from users table. Currently used to rollback a registration when verification mail sending
-	 * was not successful. 
+	 * was not successful.
 	 *
 	 * @param $user_id
 	 */
