@@ -22,14 +22,12 @@
                 <a href="<?php echo URL; ?>profile/index">Profiles</a>
             </li>
             <?php if (Session::userIsLoggedIn()) : ?>
-            <li <?php if (View::checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
-                <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>
-            </li>
-            <?php endif; ?>
-            <?php if (Session::userIsLoggedIn()) : ?>
-            <li <?php if (View::checkForActiveController($filename, "note")) { echo ' class="active" '; } ?> >
-                <a href="<?php echo URL; ?>note/index">My Notes</a>
-            </li>
+                <li <?php if (View::checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>
+                </li>
+                <li <?php if (View::checkForActiveController($filename, "note")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo URL; ?>note/index">My Notes</a>
+                </li>
             <?php endif; ?>
 
             <!-- for not logged in users -->
