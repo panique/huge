@@ -70,29 +70,10 @@ class RegistrationModel
 			// generate integer-timestamp for saving of account-creating date
 			$user_creation_timestamp = time();
 
-
-
-
-			$database = DatabaseFactory::getFactory()->getConnection();
-
-			// write new users data into database
-			$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
-			$query = $database->prepare($sql);
-			$query->execute(array(':user_name' => $user_name,
-			                      ':user_password_hash' => $user_password_hash,
-			                      ':user_email' => $user_email,
-			                      ':user_creation_timestamp' => $user_creation_timestamp,
-			                      ':user_activation_hash' => $user_activation_hash,
-			                      ':user_provider_type' => 'DEFAULT'));
-			$count =  $query->rowCount();
-			if ($count != 1) {
-				$_SESSION["feedback_negative"][] = FEEDBACK_ACCOUNT_CREATION_FAILED;
-				return false;
+			// write user data to database
+			if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)) {
+				Session::add('feedback_negative', FEEDBACK_ACCOUNT_CREATION_FAILED);
 			}
-
-
-
 
 			// get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
 			$user_id = UserModel::getUserIdByUsername($user_name);
@@ -116,6 +97,39 @@ class RegistrationModel
 
 		// default fallback
 		Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
+		return false;
+	}
+
+	/**
+	 * Writes the new user's data to the database
+	 *
+	 * @param $user_name
+	 * @param $user_password_hash
+	 * @param $user_email
+	 * @param $user_creation_timestamp
+	 * @param $user_activation_hash
+	 *
+	 * @return bool
+	 */
+	public static function writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)
+	{
+		$database = DatabaseFactory::getFactory()->getConnection();
+
+		// write new users data into database
+		$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
+		$query = $database->prepare($sql);
+		$query->execute(array(':user_name' => $user_name,
+		                      ':user_password_hash' => $user_password_hash,
+		                      ':user_email' => $user_email,
+		                      ':user_creation_timestamp' => $user_creation_timestamp,
+		                      ':user_activation_hash' => $user_activation_hash,
+		                      ':user_provider_type' => 'DEFAULT'));
+		$count =  $query->rowCount();
+		if ($count == 1) {
+			return true;
+		}
+
 		return false;
 	}
 
