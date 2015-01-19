@@ -1,102 +1,130 @@
 <?php
 
+/**
+ * Class RegistrationModel
+ *
+ * Everything registration-related happens here.
+ */
 class RegistrationModel
 {
 	/**
-	 * handles the entire registration process for DEFAULT users (not for people who register with
+	 * Handles the entire registration process for DEFAULT users (not for people who register with
 	 * 3rd party services, like facebook) and creates a new user in the database if everything is fine
-	 *
-	 * TODO rewrite / modernize
 	 *
 	 * @return boolean Gives back the success status of the registration
 	 */
 	public static function registerNewUser()
 	{
-		// perform all necessary form checks
-		if (!CaptchaModel::checkCaptcha(Request::post('captcha'))) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
-		} elseif (empty($_POST['user_name'])) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
-		} elseif (empty($_POST['user_password_new']) OR empty($_POST['user_password_repeat'])) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
-		} elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
-		} elseif (strlen($_POST['user_password_new']) < 6) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
-		} elseif (strlen($_POST['user_name']) > 64 OR strlen($_POST['user_name']) < 2) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
-		} elseif (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $_POST['user_name'])) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
-		} elseif (empty($_POST['user_email'])) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
-		} elseif (strlen($_POST['user_email']) > 254) {
-			// @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
-		} elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
-		} elseif (!empty($_POST['user_name'])
-		          AND strlen($_POST['user_name']) <= 64
-		              AND strlen($_POST['user_name']) >= 2
-		                  AND preg_match('/^[a-zA-Z0-9]{2,64}$/', $_POST['user_name'])
-		                      AND !empty($_POST['user_email'])
-		                          AND strlen($_POST['user_email']) <= 254
-		                              AND filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
-		                                  AND !empty($_POST['user_password_new'])
-		                                      AND !empty($_POST['user_password_repeat'])
-		                                          AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
+		// TODO this could be written simpler and cleaner
 
-			// clean the input
-			$user_name = strip_tags(Request::post('user_name'));
-			$user_email = strip_tags(Request::post('user_email'));
+		// clean the input
+		$user_name = strip_tags(Request::post('user_name'));
+		$user_email = strip_tags(Request::post('user_email'));
 
-			// crypt the password with the PHP 5.5's password_hash() function, results in a 60 character hash string.
-			// @see php.net/manual/en/function.password-hash.php for more, especially for potential options
-			$user_password_hash = password_hash(Request::post('user_password_new'), PASSWORD_DEFAULT);
+		$captcha = Request::post('captcha');
+		$user_password_new = Request::post('user_password_new');
+		$user_password_repeat = Request::post('user_password_repeat');
 
-			// check if username already exists
-			if (UserModel::doesUsernameAlreadyExist($user_name)) {
-				Session::add('feedback_negative', FEEDBACK_USERNAME_ALREADY_TAKEN);
-				return false;
-			}
-
-			// check if email already exists
-			if (UserModel::doesEmailAlreadyExist($user_email)) {
-				Session::add('feedback_negative', FEEDBACK_USER_EMAIL_ALREADY_TAKEN);
-				return false;
-			}
-
-			// generate random hash for email verification (40 char string)
-			$user_activation_hash = sha1(uniqid(mt_rand(), true));
-			// generate integer-timestamp for saving of account-creating date
-			$user_creation_timestamp = time();
-
-			// write user data to database
-			if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)) {
-				Session::add('feedback_negative', FEEDBACK_ACCOUNT_CREATION_FAILED);
-			}
-
-			// get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
-			$user_id = UserModel::getUserIdByUsername($user_name);
-
-			if (!$user_id) {
-				Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
-				return false;
-			}
-
-			// send verification email
-			if (RegistrationModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
-				Session::add('feedback_positive', FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED);
-				return true;
-			} else {
-				// if verification email sending failed: instantly delete the user
-				RegistrationModel::rollbackRegistrationByUserId($user_id);
-				Session::add('feedback_negative', FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED);
-				return false;
-			}
+		// stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
+		$validation_result = RegistrationModel::registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email);
+		if (!$validation_result) {
+			return false;
 		}
 
-		// default fallback
-		Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
+		// crypt the password with the PHP 5.5's password_hash() function, results in a 60 character hash string.
+		// @see php.net/manual/en/function.password-hash.php for more, especially for potential options
+		$user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
+
+		// check if username already exists
+		if (UserModel::doesUsernameAlreadyExist($user_name)) {
+			Session::add('feedback_negative', FEEDBACK_USERNAME_ALREADY_TAKEN);
+			return false;
+		}
+
+		// check if email already exists
+		if (UserModel::doesEmailAlreadyExist($user_email)) {
+			Session::add('feedback_negative', FEEDBACK_USER_EMAIL_ALREADY_TAKEN);
+			return false;
+		}
+
+		// generate random hash for email verification (40 char string)
+		$user_activation_hash = sha1(uniqid(mt_rand(), true));
+		// generate integer-timestamp for saving of account-creating date
+		$user_creation_timestamp = time();
+
+		// write user data to database
+		if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)) {
+			Session::add('feedback_negative', FEEDBACK_ACCOUNT_CREATION_FAILED);
+		}
+
+		// get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
+		$user_id = UserModel::getUserIdByUsername($user_name);
+
+		if (!$user_id) {
+			Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
+			return false;
+		}
+
+		// send verification email
+		if (RegistrationModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+			Session::add('feedback_positive', FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED);
+			return true;
+		}
+
+		// if verification email sending failed: instantly delete the user
+		RegistrationModel::rollbackRegistrationByUserId($user_id);
+		Session::add('feedback_negative', FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED);
+		return false;
+	}
+
+	/**
+	 * Validates the registration input
+	 * TODO this looks creepy for sure, can somebody make it look and work better ?
+	 *
+	 * @param $captcha
+	 * @param $user_name
+	 * @param $user_password_new
+	 * @param $user_password_repeat
+	 * @param $user_email
+	 *
+	 * @return bool
+	 */
+	public static function registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email)
+	{
+		// perform all necessary checks
+		if (!CaptchaModel::checkCaptcha($captcha)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
+		} else if (empty($user_name)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+		} else if (empty($user_password_new) OR empty($user_password_repeat)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+		} else if ($user_password_new !== $user_password_repeat) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+		} else if (strlen($user_password_new) < 6) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+		} else if (strlen($user_name) > 64 OR strlen($user_name) < 2) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
+		} else if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+		} else if (empty($user_email)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
+		} else if (strlen($user_email) > 254) {
+			// @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
+		} else if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+		} elseif (!empty($user_name)
+					AND strlen($user_name) <= 64 AND strlen($user_name) >= 2
+                        AND preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)
+                            AND !empty($user_email)
+                                AND strlen($user_email) <= 254
+		                            AND filter_var($user_email, FILTER_VALIDATE_EMAIL)
+		                                AND !empty($user_password_new)
+		                                    AND !empty($user_password_repeat)
+		                                        AND ($user_password_new === $user_password_repeat)) {
+													return true;
+		}
+
 		return false;
 	}
 
