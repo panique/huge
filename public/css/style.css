@@ -184,7 +184,7 @@ body {
     display: block;
     width: 100%;
     box-sizing: border-box; /* modern way to say width:100% without padding */
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 .login-box input[type="submit"] {
     color: #777;
@@ -217,10 +217,10 @@ body {
 .login-box .link-forgot-my-password a:hover {
     text-decoration: underline;
 }
-.login-box ::-webkit-input-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
-.login-box ::-moz-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
-.login-box :-ms-input-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
-.login-box input:-moz-placeholder { color: #777; opacity: 0.5; text-transform: uppercase; }
+.login-box ::-webkit-input-placeholder { color: #777; opacity: 0.5; }
+.login-box ::-moz-placeholder { color: #777; opacity: 0.5; }
+.login-box :-ms-input-placeholder { color: #777; opacity: 0.5; }
+.login-box input:-moz-placeholder { color: #777; opacity: 0.5; }
 
 .register-box {
     display: table-cell;
