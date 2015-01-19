@@ -53,16 +53,13 @@ class RegistrationModel
 			// @see php.net/manual/en/function.password-hash.php for more, especially for potential options
 			$user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
 
-			$database = DatabaseFactory::getFactory()->getConnection();
-
 			// check if username already exists
-			$query = $database->prepare("SELECT * FROM users WHERE user_name = :user_name LIMIT 1");
-			$query->execute(array(':user_name' => $user_name));
-			$count =  $query->rowCount();
-			if ($count == 1) {
-				$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+			if (UserModel::doesUsernameAlreadyExist($user_name)) {
+				Session::add('feedback_negative', FEEDBACK_USERNAME_ALREADY_TAKEN);
 				return false;
 			}
+
+			$database = DatabaseFactory::getFactory()->getConnection();
 
 			// check if email already exists
 			$query = $database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
