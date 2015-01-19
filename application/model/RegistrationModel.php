@@ -79,7 +79,6 @@ class RegistrationModel
 
 	/**
 	 * Validates the registration input
-	 * TODO this looks creepy for sure, can somebody make it look and work better ?
 	 *
 	 * @param $captcha
 	 * @param $user_name
@@ -93,38 +92,33 @@ class RegistrationModel
 	{
 		// perform all necessary checks
 		if (!CaptchaModel::checkCaptcha($captcha)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_CAPTCHA_WRONG;
+			Session::add('feedback_negative', FEEDBACK_CAPTCHA_WRONG);
 		} else if (empty($user_name)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+			Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
 		} else if (empty($user_password_new) OR empty($user_password_repeat)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+			Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
 		} else if ($user_password_new !== $user_password_repeat) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+			Session::add('feedback_negative', FEEDBACK_PASSWORD_REPEAT_WRONG);
 		} else if (strlen($user_password_new) < 6) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+			Session::add('feedback_negative', FEEDBACK_PASSWORD_TOO_SHORT);
 		} else if (strlen($user_name) > 64 OR strlen($user_name) < 2) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
+			Session::add('feedback_negative', FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG);
 		} else if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+			Session::add('feedback_negative', FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN);
 		} else if (empty($user_email)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
+			Session::add('feedback_negative', FEEDBACK_EMAIL_FIELD_EMPTY);
 		} else if (strlen($user_email) > 254) {
 			// @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
+			Session::add('feedback_negative', FEEDBACK_EMAIL_TOO_LONG);
 		} else if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
-		} elseif (!empty($user_name)
-					AND strlen($user_name) <= 64 AND strlen($user_name) >= 2
-                        AND preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)
-                            AND !empty($user_email)
-                                AND strlen($user_email) <= 254
-		                            AND filter_var($user_email, FILTER_VALIDATE_EMAIL)
-		                                AND !empty($user_password_new)
-		                                    AND !empty($user_password_repeat)
-		                                        AND ($user_password_new === $user_password_repeat)) {
-													return true;
+			Session::add('feedback_negative', FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN);
+		} else {
+			// if no validation failed, return true
+			// hmmm... maybe this could be written in a better way
+			return true;
 		}
 
+		// otherwise, return false
 		return false;
 	}
 
