@@ -46,12 +46,12 @@ class RegistrationModel
 		                                          AND ($_POST['user_password_new'] === $_POST['user_password_repeat'])) {
 
 			// clean the input
-			$user_name = strip_tags($_POST['user_name']);
-			$user_email = strip_tags($_POST['user_email']);
+			$user_name = strip_tags(Request::post('user_name'));
+			$user_email = strip_tags(Request::post('user_email'));
 
 			// crypt the password with the PHP 5.5's password_hash() function, results in a 60 character hash string.
 			// @see php.net/manual/en/function.password-hash.php for more, especially for potential options
-			$user_password_hash = password_hash($_POST['user_password_new'], PASSWORD_DEFAULT);
+			$user_password_hash = password_hash(Request::post('user_password_new'), PASSWORD_DEFAULT);
 
 			// check if username already exists
 			if (UserModel::doesUsernameAlreadyExist($user_name)) {
