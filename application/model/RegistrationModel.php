@@ -59,14 +59,9 @@ class RegistrationModel
 				return false;
 			}
 
-			$database = DatabaseFactory::getFactory()->getConnection();
-
 			// check if email already exists
-			$query = $database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
-			$query->execute(array(':user_email' => $user_email));
-			$count =  $query->rowCount();
-			if ($count == 1) {
-				$_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+			if (UserModel::doesEmailAlreadyExist($user_email)) {
+				Session::add('feedback_negative', FEEDBACK_USER_EMAIL_ALREADY_TAKEN);
 				return false;
 			}
 
@@ -74,6 +69,8 @@ class RegistrationModel
 			$user_activation_hash = sha1(uniqid(mt_rand(), true));
 			// generate integer-timestamp for saving of account-creating date
 			$user_creation_timestamp = time();
+
+			$database = DatabaseFactory::getFactory()->getConnection();
 
 			// write new users data into database
 			$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
