@@ -70,6 +70,9 @@ class RegistrationModel
 			// generate integer-timestamp for saving of account-creating date
 			$user_creation_timestamp = time();
 
+
+
+
 			$database = DatabaseFactory::getFactory()->getConnection();
 
 			// write new users data into database
@@ -88,6 +91,9 @@ class RegistrationModel
 				return false;
 			}
 
+
+
+
 			// get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
 			$query = $database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
 			$query->execute(array(':user_name' => $user_name));
@@ -98,21 +104,38 @@ class RegistrationModel
 			$result_user_row = $query->fetch();
 			$user_id = $result_user_row->user_id;
 
-			// send verification email, if verification email sending failed: instantly delete the user
+
+
+
+			// send verification email
 			if (RegistrationModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
-				$_SESSION["feedback_positive"][] = FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED;
+				Session::add('feedback_positive', FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED);
 				return true;
 			} else {
-				$query = $database->prepare("DELETE FROM users WHERE user_id = :last_inserted_id");
-				$query->execute(array(':last_inserted_id' => $user_id));
-				$_SESSION["feedback_negative"][] = FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED;
+				// if verification email sending failed: instantly delete the user
+				RegistrationModel::rollbackRegistrationByUserId($user_id);
+				Session::add('feedback_negative', FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED);
 				return false;
 			}
-		} else {
-			$_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
 		}
-		// default return, returns only true of really successful (see above)
+
+		// default fallback
+		Session::add('feedback_negative', FEEDBACK_UNKNOWN_ERROR);
 		return false;
+	}
+
+	/**
+	 * Deletes the user from users table. Currently used to rollback a registration when verification mail sending
+	 * was not successful. 
+	 *
+	 * @param $user_id
+	 */
+	public static function rollbackRegistrationByUserId($user_id)
+	{
+		$database = DatabaseFactory::getFactory()->getConnection();
+
+		$query = $database->prepare("DELETE FROM users WHERE user_id = :user_id");
+		$query->execute(array(':user_id' => $user_id));
 	}
 
 	/**
