@@ -83,7 +83,7 @@ class View
         if ($active_controller == $navigation_controller) {
             return true;
         }
-        // default return
+
         return false;
     }
 
@@ -104,7 +104,7 @@ class View
         if ($active_action == $navigation_action) {
             return true;
         }
-        // default return of not true
+
         return false;
     }
 
@@ -130,7 +130,7 @@ class View
         if ($active_controller == $navigation_controller AND $active_action == $navigation_action) {
             return true;
         }
-        // default return of not true
+
         return false;
     }
 }
