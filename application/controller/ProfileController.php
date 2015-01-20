@@ -33,7 +33,7 @@ class ProfileController extends Controller
                 'user' => UserModel::getPublicProfileOfUser($user_id))
             );
         } else {
-            header('location: ' . URL);
+            Redirect::home();
         }
     }
 }

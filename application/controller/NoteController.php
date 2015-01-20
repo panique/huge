@@ -37,7 +37,7 @@ class NoteController extends Controller
     public function create()
     {
         NoteModel::createNote(Request::post('note_text'));
-        header('location: ' . URL . 'note');
+        Redirect::to('note');
     }
 
     /**
@@ -60,7 +60,7 @@ class NoteController extends Controller
     public function editSave()
     {
         NoteModel::updateNote(Request::post('note_id'), Request::post('note_text'));
-        header('location: ' . URL . 'note');
+        Redirect::to('note');
     }
 
     /**
@@ -72,6 +72,6 @@ class NoteController extends Controller
     public function delete($note_id)
     {
         NoteModel::deleteNote($note_id);
-        header('location: ' . URL . 'note');
+        Redirect::to('note');
     }
 }
