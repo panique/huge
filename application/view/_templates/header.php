@@ -21,24 +21,22 @@
             <li <?php if (View::checkForActiveController($filename, "overview")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo URL; ?>profile/index">Profiles</a>
             </li>
-            <?php if (Session::userIsLoggedIn()) : ?>
+            <?php if (Session::userIsLoggedIn()) { ?>
                 <li <?php if (View::checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo URL; ?>dashboard/index">Dashboard</a>
                 </li>
                 <li <?php if (View::checkForActiveController($filename, "note")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo URL; ?>note/index">My Notes</a>
                 </li>
-            <?php endif; ?>
-
-            <!-- for not logged in users -->
-            <?php if (!Session::userIsLoggedIn()) : ?>
+            <?php } else { ?>
+                <!-- for not logged in users -->
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo URL; ?>login/index">Login</a>
                 </li>
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "login/register")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo URL; ?>login/register">Register</a>
                 </li>
-            <?php endif; ?>
+            <?php } ?>
         </ul>
 
         <!--
