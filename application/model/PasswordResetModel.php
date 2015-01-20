@@ -211,20 +211,16 @@ class PasswordResetModel
 		if (empty($user_name)) {
 			Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
 			return false;
-		}
-		if (empty($user_password_reset_hash)) {
+		} else if (empty($user_password_reset_hash)) {
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_MISSING);
 			return false;
-		}
-		if (empty($user_password_new) || empty($user_password_repeat)) {
+		} else if (empty($user_password_new) || empty($user_password_repeat)) {
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
 			return false;
-		}
-		if ($user_password_new !== $user_password_repeat) {
+		} else if ($user_password_new !== $user_password_repeat) {
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_REPEAT_WRONG);
 			return false;
-		}
-		if (strlen($user_password_new) < 6) {
+		} else if (strlen($user_password_new) < 6) {
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_TOO_SHORT);
 			return false;
 		}
