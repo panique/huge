@@ -91,30 +91,23 @@ class AvatarModel
 		if (!is_dir(PATH_AVATARS) OR !is_writable(PATH_AVATARS)) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE);
 			return false;
-		}
-
-		// TODO maybe use abstraction here, like Files::get('avatar_file', 'tmp_name')
-		if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
+		} else if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED);
+			return false;
+		} else if ($_FILES['avatar_file']['size'] > 5000000) {
+			// if input file too big (>5MB)
+			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_BIG);
 			return false;
 		}
 
 		// get the image width, height and mime type
 		$image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
-		// if input file too big (>5MB)
-		if ($_FILES['avatar_file']['size'] > 5000000) {
-			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_BIG);
-			return false;
-		}
-
 		// if input file too small
 		if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_SMALL);
 			return false;
-		}
-
-		if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
+		} else if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
 			return false;
 		}
