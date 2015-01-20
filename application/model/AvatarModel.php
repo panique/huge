@@ -62,11 +62,31 @@ class AvatarModel
 	/**
 	 * Create an avatar picture (and checks all necessary things too)
 	 * TODO decoupling
-	 * TODO total rebuild
+	 * TODO total rebuild, this is too quick & dirty
 	 *
 	 * @return bool success status
 	 */
 	public static function createAvatar()
+	{
+		// check if upload fits all rules
+		AvatarModel::validateImageFile();
+
+		// create a jpg file in the avatar folder, write marker to database
+		$target_file_path = PATH_AVATARS . Session::get('user_id');
+		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
+		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
+		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
+		Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
+		return true;
+	}
+
+	/**
+	 * Validates the image
+	 * TODO totally decouple
+	 *
+	 * @return bool
+	 */
+	public static function validateImageFile()
 	{
 		if (!is_dir(PATH_AVATARS) OR !is_writable(PATH_AVATARS)) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE);
@@ -83,7 +103,7 @@ class AvatarModel
 		$image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
 		// if input file too big (>5MB)
-		if ($_FILES['avatar_file']['size'] > 5000000 ) {
+		if ($_FILES['avatar_file']['size'] > 5000000) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_BIG);
 			return false;
 		}
@@ -98,16 +118,13 @@ class AvatarModel
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
 			return false;
 		}
-
-		// create a jpg file in the avatar folder, write marker to database
-		$target_file_path = PATH_AVATARS . Session::get('user_id');
-		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
-		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
-		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-		Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
-		return true;
 	}
 
+	/**
+	 * Writes marker to database, saying user has an avatar now
+	 *
+	 * @param $user_id
+	 */
 	public static function writeAvatarToDatabase($user_id)
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
