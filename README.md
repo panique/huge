@@ -119,11 +119,11 @@ If you think this script is useful and saves you a lot of work, then think about
    or [GitTip](https://www.gittip.com/Panique/)
 3. Contribute to this project.
 
-## Themes / User Interfaces / Styles
+## Found a bug ?
 
-Bookmark the highly related partner-project "[php-login-styles](https://github.com/panique/php-login-styles)" which
-will host beautiful themes for php-login and the eventually also for the smaller version (see above).
-This project has not been started yet.
+Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
+big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
+an normal GitHub issue.
 
 ## Current and further development
 
