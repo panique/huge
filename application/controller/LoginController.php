@@ -67,11 +67,11 @@ class LoginController extends Controller
 
         // if login successful, redirect to dashboard/index ...
         if ($login_successful) {
-            header('location: ' . URL . 'dashboard/index');
+            Redirect::to('dashboard/index');
         } else {
             // if not, delete cookie (outdated? attack?) and route user to login form to prevent infinite login loops
             LoginModel::deleteCookie();
-            header('location: ' . URL . 'login/index');
+            Redirect::to('login/index');
         }
     }
 
@@ -109,7 +109,7 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         UserModel::editUserName(Request::post('user_name'));
-        header('location: ' . URL . 'login/index');
+        Redirect::to('login/index');
     }
 
     /**
@@ -131,7 +131,7 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         UserModel::editUserEmail(Request::post('user_email'));
-        $this->View->render('login/editUserEmail');
+        Redirect::to('login/editUserEmail');
     }
 
     /**
@@ -155,7 +155,7 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         AvatarModel::createAvatar();
-        header('location: ' . URL . 'login/uploadAvatar');
+        Redirect::to('login/uploadAvatar');
     }
 
     /**
@@ -184,7 +184,7 @@ class LoginController extends Controller
             AccountTypeModel::changeAccountTypeDowngrade();
         }
 
-        header('location: ' . URL . 'login/changeAccountType');
+        Redirect::to('login/changeAccountType');
     }
 
     /**
@@ -194,7 +194,7 @@ class LoginController extends Controller
     public function register()
     {
         if (LoginModel::isUserLoggedIn()) {
-            header("location: " . URL);
+            Redirect::home();
         } else {
             $this->View->render('login/register');
         }
@@ -209,9 +209,9 @@ class LoginController extends Controller
         $registration_successful = RegistrationModel::registerNewUser();
 
         if ($registration_successful) {
-            header('location: ' . URL . 'login/index');
+            Redirect::to('login/index');
         } else {
-            header('location: ' . URL . 'login/register');
+            Redirect::to('login/register');
         }
     }
 
@@ -226,7 +226,7 @@ class LoginController extends Controller
             RegistrationModel::verifyNewUser($user_id, $user_activation_verification_code);
             $this->View->render('login/verify');
         } else {
-            header('location: ' . URL . 'login/index');
+            Redirect::to('login/index');
         }
     }
 
@@ -245,7 +245,7 @@ class LoginController extends Controller
     public function requestPasswordReset_action()
     {
         PasswordResetModel::requestPasswordReset(Request::post('user_name_or_email'));
-        header('location: ' . URL . 'login/index');
+        Redirect::to('login/index');
     }
 
     /**
@@ -263,7 +263,7 @@ class LoginController extends Controller
                 'user_password_reset_hash' => $verification_code
             ));
         } else {
-            header('location: ' . URL . 'login/index');
+            Redirect::to('login/index');
         }
     }
 
@@ -273,6 +273,7 @@ class LoginController extends Controller
      * password reset link from the email, automatically filled into the <form> fields. See verifyPasswordReset()
      * for more. Then (regardless of result) route user to index page (user will get success/error via feedback message)
      * POST request !
+     * TODO this is an _action
      */
     public function setNewPassword()
     {
@@ -280,7 +281,7 @@ class LoginController extends Controller
             Request::post('user_name'), Request::post('user_password_reset_hash'),
             Request::post('user_password_new'), Request::post('user_password_repeat')
         );
-        header('location: ' . URL . 'login/index');
+        Redirect::to('login/index');
     }
 
     /**
