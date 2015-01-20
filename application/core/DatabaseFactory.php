@@ -4,7 +4,7 @@
  * Class DatabaseFactory
  *
  * Use it like this:
- * $db = DatabaseFactory::getFactory()->getConnection();
+ * $database = DatabaseFactory::getFactory()->getConnection();
  *
  * That's my personal favourite when creating a database connection.
  * It's a slightly modified version of Jon Raphaelson's excellent answer on StackOverflow:
@@ -22,7 +22,7 @@
 class DatabaseFactory
 {
 	private static $factory;
-	private $db;
+	private $database;
 
 	public static function getFactory()
 	{
@@ -32,13 +32,13 @@ class DatabaseFactory
 	}
 
 	public function getConnection() {
-		if (!$this->db) {
+		if (!$this->database) {
 			$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-			$this->db = new PDO(
+			$this->database = new PDO(
 				DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME . ';port=' . DB_PORT . ';charset=' . DB_CHARSET,
 				DB_USER, DB_PASS, $options
 			);
 		}
-		return $this->db;
+		return $this->database;
 	}
 }
