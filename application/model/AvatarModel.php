@@ -94,22 +94,26 @@ class AvatarModel
 			return false;
 		}
 
-		if ($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png') {
-			// create a jpg file in the avatar folder
-			$target_file_path = PATH_AVATARS . Session::get('user_id') . ".jpg";
-			AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
-
-			$database = DatabaseFactory::getFactory()->getConnection();
-
-			$query = $database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
-			$query->execute(array(':user_id' => Session::get('user_id')));
-			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-			Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
-			return true;
-		} else {
+		if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
 			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
 			return false;
 		}
+
+		// create a jpg file in the avatar folder, write marker to database
+		$target_file_path = PATH_AVATARS . Session::get('user_id');
+		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
+		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
+		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
+		Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
+		return true;
+	}
+
+	public static function writeAvatarToDatabase($user_id)
+	{
+		$database = DatabaseFactory::getFactory()->getConnection();
+
+		$query = $database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
+		$query->execute(array(':user_id' => $user_id));
 	}
 
 	/**
@@ -123,7 +127,7 @@ class AvatarModel
 	 * @param int $final_height The desired height of the new image.
 	 * @param int $quality The quality of the JPG to produce 1 - 100
 	 *
-	 * TODO currently we just allow .jpg
+	 * TODO currently we just allow .jpg / .png
 	 *
 	 * @return bool success state
 	 */
@@ -153,7 +157,8 @@ class AvatarModel
 		$thumb = imagecreatetruecolor($final_width, $final_height);
 		imagecopyresampled($thumb, $myImage, 0, 0, $x, $y, $final_width, $final_height, $smallestSide, $smallestSide);
 
-		// save it as a .jpg file with our $destination_filename parameter
+		// add '.jpg' to file path, save it as a .jpg file with our $destination_filename parameter
+		$destination .= '.jpg';
 		imagejpeg($thumb, $destination, $quality);
 
 		// delete "working copy"
