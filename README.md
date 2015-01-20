@@ -9,6 +9,8 @@ be renamed to HUGE (in combination to TINY, MINI and MINI2).
 ### Development info
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/php-login/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/panique/php-login/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
+[![Build Status](https://scrutinizer-ci.com/g/panique/php-login/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/build-status/develop)
 
 THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
 For a stable version use the 2.0 release.
