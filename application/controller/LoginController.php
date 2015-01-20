@@ -23,7 +23,7 @@ class LoginController extends Controller
     {
         // if user is logged in redirect to main-page, if not show the view
         if (LoginModel::isUserLoggedIn()) {
-            header("location: " . URL);
+            Redirect::home();
         } else {
             $this->View->render('login/index');
         }
@@ -39,11 +39,11 @@ class LoginController extends Controller
             Request::post('user_name'), Request::post('user_password'), Request::post('set_remember_me_cookie')
         );
 
-        // check login status: if true, then redirect user to dashboard/index, if false, then to login form again
+        // check login status: if true, then redirect user login/showProfile, if false, then to login form again
         if ($login_successful) {
-            header('location: ' . URL . 'login/showProfile');
+            Redirect::to('login/showProfile');
         } else {
-            header('location: ' . URL . 'login/index');
+            Redirect::to('login/index');
         }
     }
 
@@ -54,7 +54,7 @@ class LoginController extends Controller
     public function logout()
     {
         LoginModel::logout();
-        header('location: ' . URL);
+        Redirect::home();
     }
 
     /**
