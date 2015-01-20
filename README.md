@@ -119,7 +119,7 @@ If you think this script is useful and saves you a lot of work, then think about
    or [GitTip](https://www.gittip.com/Panique/)
 3. Contribute to this project.
 
-## Found a bug ?
+## Found a bug (Responsible Disclosure) ?
 
 Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
 big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
