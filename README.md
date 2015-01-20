@@ -6,8 +6,12 @@ This is the development branch of php-login, currently under heavy action for th
 2.1 will be much improved version of 2.0 with lots of architecture changes, refactorings, etc., "php-login" will also 
 be renamed to HUGE (in combination to TINY, MINI and MINI2).
 
+### Development info
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/php-login/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
+
 THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
-For a stable version use the 2.0 version.
+For a stable version use the 2.0 release.
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 
