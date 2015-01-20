@@ -216,11 +216,7 @@ class PasswordResetModel
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_MISSING);
 			return false;
 		}
-		if (empty($user_password_new)) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
-			return false;
-		}
-		if (empty($user_password_repeat)) {
+		if (empty($user_password_new) || empty($user_password_repeat)) {
 			Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
 			return false;
 		}
