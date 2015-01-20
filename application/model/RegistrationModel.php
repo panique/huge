@@ -20,13 +20,11 @@ class RegistrationModel
 		// clean the input
 		$user_name = strip_tags(Request::post('user_name'));
 		$user_email = strip_tags(Request::post('user_email'));
-
-		$captcha = Request::post('captcha');
 		$user_password_new = Request::post('user_password_new');
 		$user_password_repeat = Request::post('user_password_repeat');
 
 		// stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
-		$validation_result = RegistrationModel::registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email);
+		$validation_result = RegistrationModel::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email);
 		if (!$validation_result) {
 			return false;
 		}
@@ -49,11 +47,9 @@ class RegistrationModel
 
 		// generate random hash for email verification (40 char string)
 		$user_activation_hash = sha1(uniqid(mt_rand(), true));
-		// generate integer-timestamp for saving of account-creating date
-		$user_creation_timestamp = time();
 
 		// write user data to database
-		if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)) {
+		if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
 			Session::add('feedback_negative', FEEDBACK_ACCOUNT_CREATION_FAILED);
 		}
 
