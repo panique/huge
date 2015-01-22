@@ -2,6 +2,8 @@
 
 [![Donate by server affiliate sale](_tutorial/support-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/panique/php-login?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # php-login 2.0
 
 *Thanks for 1.400+ stars and 650+ forks. Wow!*
