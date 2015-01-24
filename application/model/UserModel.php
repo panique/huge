@@ -238,15 +238,15 @@ class UserModel
             return false;
         }
 
-        // user's email must be in valid email format
+        // user's email must be in valid email format, also checks the length
+        // @see http://stackoverflow.com/questions/21631366/php-filter-validate-email-max-length
+        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         if (!filter_var($new_user_email, FILTER_VALIDATE_EMAIL)) {
             Session::add('feedback_negative', FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN);
             return false;
         }
 
-        // cut email length (everything else is spam and should later be deleted)
-        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-        // TODO is this even necessary anymore as we use FILTER_VALIDATE_EMAIL above ?
+        // strip tags, just to be sure
         $new_user_email = substr(strip_tags($new_user_email), 0, 254);
 
         // check if user's email already exists
