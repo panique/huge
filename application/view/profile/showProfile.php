@@ -18,7 +18,6 @@
                         <td>Username</td>
                         <td>User's email</td>
                         <td>Activated ?</td>
-                        <td>Link to user's profile</td>
                     </tr>
                     </thead>
                     <tbody>
