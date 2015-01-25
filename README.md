@@ -12,6 +12,9 @@ additional features.
 
 TODO linked index / jump-lists!
 
++ 1. [Features](#markdown-header-features)
++ 2. [Live-Demo](#markdown-header-live-demo)
+
 ### The History of HUGE
 
 This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
