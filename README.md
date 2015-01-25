@@ -10,7 +10,20 @@ additional features.
 [![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 
-TODO linked index / jump-lists!
+#### Quick-Index 
+
++ [Features](#features)
++ [Live-Demo](#live-demo)
++ [Support](#support)
++ [Follow the project](#follow)
++ [License](#license)
++ [Requirements](#requirements)
++ [Auto-Installation in Vagrant](#auto-installation)
++ [Installation](#installation)
+    - [Quick Installation (Ubuntu 14.04 LTS)](#quick-installation)
+    - [Detailed Installation](#detailed-installation)
++ [Contribute](#contribute)
++ [Report a bug](#bug-report)
 
 ### The History of HUGE
 
@@ -23,7 +36,7 @@ Why the name "HUGE" ? It's a nice combination to
 [MINI](https://github.com/panique/mini) and 
 [MINI2](https://github.com/panique/mini2), my other projects :)
 
-### Features
+### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * [planned: OAuth2 implementation for proper future-proof 3rd party auth]
@@ -44,11 +57,11 @@ Why the name "HUGE" ? It's a nice combination to
 * masses of comments
 * is actively developed, maintained and bug-fixed
 
-### Live-Demo
+### Live-Demo <a name="live-demo"></a>
 
 TODO
 
-### Support the project
+### Support the project <a name="support"></a>
 
 There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
@@ -63,17 +76,17 @@ You can also rent your next server at [DigitalOcean](https://www.digitalocean.co
 [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
 Feel free to contribute to this project.
 
-### Follow the project
+### Follow the project <a name="follow"></a>
 
 Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
 I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
-### License
+### License <a name="license"></a>
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). 
 Totally free for private or commercial projects.
 
-### Requirements
+### Requirements <a name="requirements"></a>
 
 Make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
 used Composer before. This script is not for beginners.
@@ -85,7 +98,7 @@ used Composer before. This script is not for beginners.
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the install guideline shows how to do)
 
-### Auto-Installation (with Vagrant)
+### Auto-Installation (with Vagrant) <a name="auto-installation"></a>
 
 If you are using Vagrant for your development, then simply 
 
@@ -96,11 +109,11 @@ If you are using Vagrant for your development, then simply
 5 minutes later you'll have a fully installed HUGE inside Ubuntu 14.04 LTS. The full code will be auto-synced with
 the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*.  
 
-### Installation
+### Installation <a name="installation"></a>
 
 This script is very fresh, so the install guidelines are not perfect yet. 
 
-#### Quick guide:
+#### Quick guide: <a name="quick-installation"></a>
 
 0. Make sure you have Apache, PHP, MySQL installed. [Tutorial](http://www.dev-metal.com/installsetup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-14-04-lts/). 
 1. Clone the repo to a folder on your server
@@ -114,7 +127,7 @@ This script is very fresh, so the install guidelines are not perfect yet.
 
 "Email does not work" ? See the troubleshooting below. TODO
 
-#### Detailed guide (Ubuntu 14.04 LTS):
+#### Detailed guide (Ubuntu 14.04 LTS): <a name="detailed-installation"></a>
 
 This is just a quick guideline for easy setup of a development environment!
 
@@ -200,7 +213,7 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
-### Zero tolerance for idiots, trolls and vandals!
+### Zero tolerance for idiots, trolls and vandals! <a name="detailed-installation"></a>
 
 Harsh words, but as basically every public internet project gets harassed, vandalized and trolled these days by very 
 strange people: Some simple rules. 
@@ -219,11 +232,11 @@ strange people: Some simple rules.
 
 Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 
-### Contribute
+### Contribute <a name="contribute"></a>
 
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
 
-### Found a bug (Responsible Disclosure) ?
+### Found a bug (Responsible Disclosure) ? <a name="bug-report"></a>
 
 Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
 big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
