@@ -12,8 +12,8 @@ additional features.
 
 TODO linked index / jump-lists!
 
-+ 1. [Features](#markdown-header-features)
-+ 2. [Live-Demo](#markdown-header-live-demo)
++ 1. [Features](#features)
++ 2. [Live-Demo](#live-demo)
 
 ### The History of HUGE
 
@@ -26,7 +26,7 @@ Why the name "HUGE" ? It's a nice combination to
 [MINI](https://github.com/panique/mini) and 
 [MINI2](https://github.com/panique/mini2), my other projects :)
 
-### Features
+### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * [planned: OAuth2 implementation for proper future-proof 3rd party auth]
@@ -47,7 +47,7 @@ Why the name "HUGE" ? It's a nice combination to
 * masses of comments
 * is actively developed, maintained and bug-fixed
 
-### Live-Demo
+### Live-Demo <a name="live-demo"></a>
 
 TODO
 
