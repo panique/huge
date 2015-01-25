@@ -107,7 +107,8 @@ If you are using Vagrant for your development, then simply
 3. Do `vagrant up` in that folder.
 
 5 minutes later you'll have a fully installed HUGE inside Ubuntu 14.04 LTS. The full code will be auto-synced with
-the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*.  
+the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*. By default
+192.168.33.111 is the IP of your new box.
 
 ### Installation <a name="installation"></a>
 
