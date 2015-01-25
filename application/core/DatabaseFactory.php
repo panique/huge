@@ -26,8 +26,9 @@ class DatabaseFactory
 
 	public static function getFactory()
 	{
-		if (!self::$factory)
+		if (!self::$factory) {
 			self::$factory = new DatabaseFactory();
+		}
 		return self::$factory;
 	}
 
@@ -35,8 +36,9 @@ class DatabaseFactory
 		if (!$this->database) {
 			$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
 			$this->database = new PDO(
-				DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME . ';port=' . DB_PORT . ';charset=' . DB_CHARSET,
-				DB_USER, DB_PASS, $options
+				Config::get('DB_TYPE') . ':host=' . Config::get('DB_HOST') . ';dbname=' .
+				Config::get('DB_NAME') . ';port=' . Config::get('DB_PORT') . ';charset=' . Config::get('DB_CHARSET'),
+				Config::get('DB_USER'), Config::get('DB_PASS'), $options
 			);
 		}
 		return $this->database;

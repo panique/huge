@@ -17,14 +17,14 @@ class PasswordResetModel
 	public static function requestPasswordReset($user_name_or_email)
 	{
 		if (empty($user_name_or_email)) {
-			Session::add('feedback_negative', FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY);
+			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY'));
 			return false;
 		}
 
 		// check if that username exists
 		$result = UserModel::getUserDataByUserNameOrEmail($user_name_or_email);
 		if (!$result) {
-			Session::add('feedback_negative', FEEDBACK_USER_DOES_NOT_EXIST);
+			Session::add('feedback_negative', Text::get('FEEDBACK_USER_DOES_NOT_EXIST'));
 			return false;
 		}
 
@@ -79,7 +79,7 @@ class PasswordResetModel
 		}
 
 		// fallback
-		Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_FAIL);
+		Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_TOKEN_FAIL'));
 		return false;
 	}
 
@@ -95,21 +95,26 @@ class PasswordResetModel
 	public static function sendPasswordResetMail($user_name, $user_password_reset_hash, $user_email)
 	{
 		// create email body
-		$body = EMAIL_PASSWORD_RESET_CONTENT . ' ' . EMAIL_PASSWORD_RESET_URL . '/' . urlencode($user_name) . '/'
-		        . urlencode($user_password_reset_hash);
+		$body = Config::get('EMAIL_PASSWORD_RESET_CONTENT') . ' ' . Config::get('URL') .
+		        Config::get('EMAIL_PASSWORD_RESET_URL') . '/' . urlencode($user_name) . '/' .
+		        urlencode($user_password_reset_hash);
 
 		// create instance of Mail class, try sending and check
 		$mail = new Mail;
 		$mail_sent = $mail->sendMail(
-			$user_email, EMAIL_PASSWORD_RESET_FROM_EMAIL, EMAIL_PASSWORD_RESET_FROM_NAME, EMAIL_PASSWORD_RESET_SUBJECT, $body
+			$user_email,
+			Config::get('EMAIL_PASSWORD_RESET_FROM_EMAIL'),
+			Config::get('EMAIL_PASSWORD_RESET_FROM_NAME'),
+			Config::get('EMAIL_PASSWORD_RESET_SUBJECT'),
+			$body
 		);
 
 		if ($mail_sent) {
-			Session::add('feedback_positive', FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL);
+			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_RESET_MAIL_SENDING_SUCCESSFUL'));
 			return true;
 		}
 
-		Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR . $mail->getError() );
+		Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_MAIL_SENDING_ERROR') . $mail->getError() );
 		return false;
 	}
 
@@ -138,7 +143,7 @@ class PasswordResetModel
 
 		// if this user with exactly this verification hash code does NOT exist
 		if ($query->rowCount() != 1) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST'));
 			return false;
 		}
 
@@ -151,10 +156,10 @@ class PasswordResetModel
 		// if password reset request was sent within the last hour (this timeout is for security reasons)
 		if ($result_user_row->user_password_reset_timestamp > $timestamp_one_hour_ago) {
 			// verification was successful
-			Session::add('feedback_positive', FEEDBACK_PASSWORD_RESET_LINK_VALID);
+			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_RESET_LINK_VALID'));
 			return true;
 		} else {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_LINK_EXPIRED);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_LINK_EXPIRED'));
 			return false;
 		}
 	}
@@ -209,19 +214,19 @@ class PasswordResetModel
 	public static function setNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)
 	{
 		if (empty($user_name)) {
-			Session::add('feedback_negative', FEEDBACK_USERNAME_FIELD_EMPTY);
+			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
 			return false;
 		} else if (empty($user_password_reset_hash)) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_RESET_TOKEN_MISSING);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_TOKEN_MISSING'));
 			return false;
 		} else if (empty($user_password_new) || empty($user_password_repeat)) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_FIELD_EMPTY);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_FIELD_EMPTY'));
 			return false;
 		} else if ($user_password_new !== $user_password_repeat) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_REPEAT_WRONG);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_REPEAT_WRONG'));
 			return false;
 		} else if (strlen($user_password_new) < 6) {
-			Session::add('feedback_negative', FEEDBACK_PASSWORD_TOO_SHORT);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_TOO_SHORT'));
 			return false;
 		}
 
@@ -230,12 +235,12 @@ class PasswordResetModel
 
 		// write user's new password hash into database, reset user_password_reset_hash
 		if (PasswordResetModel::saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
-			Session::add('feedback_positive', FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL);
+			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
 			return true;
 		}
 
 		// default return
-		Session::add('feedback_negative', FEEDBACK_PASSWORD_CHANGE_FAILED);
+		Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_CHANGE_FAILED'));
 		return false;
 	}
 }

@@ -28,7 +28,7 @@
  
  - TODO: split model stuff into real login code and "public" stuff, like getting all profiles, getting an avatar etc.
  
- - TODO: make everything RESTful(ler)
+ - TODO: make everything RESTful(ler) / ...PostRequest
  
  - TODO: affiliate-links direkt ins frontend. prominent platzieren, klar kommunizieren. kein gebullshitte.
  

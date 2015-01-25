@@ -24,12 +24,12 @@ class AccountTypeModel
 		if ($query->rowCount() == 1) {
 			// set account type in session to 2
 			Session::set('user_account_type', 2);
-			Session::add('feedback_positive', FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL);
+			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL'));
 			return true;
 		}
 
 		// default return
-		Session::add('feedback_negative', FEEDBACK_ACCOUNT_UPGRADE_FAILED);
+		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_UPGRADE_FAILED'));
 		return false;
 	}
 
@@ -50,12 +50,12 @@ class AccountTypeModel
 		if ($query->rowCount() == 1) {
 			// set account type in session to 1
 			Session::set('user_account_type', 1);
-			Session::add('feedback_positive', FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL);
+			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL'));
 			return true;
 		}
 
 		// default return
-		Session::add('feedback_negative', FEEDBACK_ACCOUNT_DOWNGRADE_FAILED);
+		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_FAILED'));
 		return false;
 	}
 

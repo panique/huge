@@ -22,7 +22,7 @@ class AvatarModel
 	{
 		return 'http://www.gravatar.com/avatar/' .
 		       md5( strtolower( trim( $email ) ) ) .
-		       '?s=' . AVATAR_SIZE . '&d=' . GRAVATAR_DEFAULT_IMAGESET . '&r=' . GRAVATAR_RATING;
+		       '?s=' . Config::get('AVATAR_SIZE') . '&d=' . Config::get('GRAVATAR_DEFAULT_IMAGESET') . '&r=' . Config::get('GRAVATAR_RATING');
 	}
 
 	/**
@@ -34,10 +34,10 @@ class AvatarModel
 	public static function getPublicAvatarFilePathOfUser($user_has_avatar, $user_id)
 	{
 		if ($user_has_avatar) {
-			return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
+			return Config::get('URL') . Config::get('PATH_AVATARS_PUBLIC') . $user_id . '.jpg';
 		}
 
-		return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
+		return Config::get('URL') . Config::get('PATH_AVATARS_PUBLIC') . Config::get('AVATAR_DEFAULT_IMAGE');
 	}
 
 	/**
@@ -53,10 +53,10 @@ class AvatarModel
 		$query->execute(array(':user_id' => $user_id));
 
 		if ($query->fetch()->user_has_avatar) {
-			return URL . PATH_AVATARS_PUBLIC . $user_id . '.jpg';
+			return Config::get('URL') . Config::get('PATH_AVATARS_PUBLIC') . $user_id . '.jpg';
 		}
 
-		return URL . PATH_AVATARS_PUBLIC . AVATAR_DEFAULT_IMAGE;
+		return Config::get('URL') . Config::get('PATH_AVATARS_PUBLIC') . Config::get('AVATAR_DEFAULT_IMAGE');
 	}
 
 	/**
@@ -72,11 +72,11 @@ class AvatarModel
 		AvatarModel::validateImageFile();
 
 		// create a jpg file in the avatar folder, write marker to database
-		$target_file_path = PATH_AVATARS . Session::get('user_id');
-		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, AVATAR_SIZE, AVATAR_SIZE, AVATAR_JPEG_QUALITY);
+		$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
+		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
 		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
 		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-		Session::add('feedback_positive', FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL);
+		Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
 		return true;
 	}
 
@@ -88,15 +88,15 @@ class AvatarModel
 	 */
 	public static function validateImageFile()
 	{
-		if (!is_dir(PATH_AVATARS) OR !is_writable(PATH_AVATARS)) {
-			Session::add('feedback_negative', FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE);
+		if (!is_dir(Config::get('PATH_AVATARS')) OR !is_writable(Config::get('PATH_AVATARS'))) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
 			return false;
 		} else if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
-			Session::add('feedback_negative', FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED);
+			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
 			return false;
 		} else if ($_FILES['avatar_file']['size'] > 5000000) {
 			// if input file too big (>5MB)
-			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_BIG);
+			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_BIG'));
 			return false;
 		}
 
@@ -104,11 +104,11 @@ class AvatarModel
 		$image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
 		// if input file too small
-		if ($image_proportions[0] < AVATAR_SIZE OR $image_proportions[1] < AVATAR_SIZE) {
-			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_TOO_SMALL);
+		if ($image_proportions[0] < Config::get('AVATAR_SIZE') OR $image_proportions[1] < Config::get('AVATAR_SIZE')) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_SMALL'));
 			return false;
 		} else if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
-			Session::add('feedback_negative', FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE);
+			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
 			return false;
 		}
 	}

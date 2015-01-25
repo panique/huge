@@ -9,7 +9,7 @@
         realize there's a new image as new and old one have the same filename.
     </div>
 
-    <form action="<?php echo URL; ?>login/uploadAvatar_action" method="post" enctype="multipart/form-data">
+    <form action="<?php echo Config::get('URL'); ?>login/uploadAvatar_action" method="post" enctype="multipart/form-data">
         <label for="avatar_file">Select an avatar image from your hard-disk (will be scaled to 44x44 px):</label>
         <input type="file" name="avatar_file" required />
         <!-- max size 5 MB (as many people directly upload high res pictures from their digital cameras) -->

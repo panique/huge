@@ -18,43 +18,33 @@ class Application
     /** @var string Just the name of the controller's method, useful for checks inside the view ("where am I ?") */
     private $action_name;
 
-    /** @var string Environment name, "development" by default  */
-    private $environment_name;
-
     /**
      * Start the application, analyze URL elements, call according controller/method or relocate to fallback location
      */
     public function __construct()
     {
-        // get environment name (sets $this->environment_name to "development" unless something else has been
-        // configured in Apache/nginx/etc settings)
-        $this->getEnvironment();
-
-        // load the config file according to environment, by default application/config.development.php will be loaded
-        $this->loadConfig();
-
         // create array with URL parts in $url
         $this->splitUrl();
 
         // check for controller: no controller given ? then make controller = default controller (from config)
         if (!$this->controller_name) {
-            $this->controller_name = DEFAULT_CONTROLLER;
+            $this->controller_name = Config::get('DEFAULT_CONTROLLER');
         }
 
         // check for action: no action given ? then make action = default action (from config)
         if (!$this->action_name OR (strlen($this->action_name) == 0)) {
-            $this->action_name = DEFAULT_ACTION;
+            $this->action_name = Config::get('DEFAULT_ACTION');
         }
 
         // rename controller name to real controller class/file name ("index" to "IndexController")
         $this->controller_name = ucwords($this->controller_name) . 'Controller';
 
         // does such a controller exist ?
-        if (file_exists(PATH_CONTROLLER . $this->controller_name . '.php')) {
+        if (file_exists(Config::get('PATH_CONTROLLER') . $this->controller_name . '.php')) {
 
             // load this file and create this controller
             // example: if controller would be "car", then this line would translate into: $this->car = new car();
-            require PATH_CONTROLLER . $this->controller_name . '.php';
+            require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
 
             // check for method: does such a method exist in the controller ?
@@ -67,10 +57,10 @@ class Application
                     $this->controller->{$this->action_name}();
                 }
             } else {
-                header('location: ' . URL . 'error');
+                header('location: ' . Config::get('URL') . 'error');
             }
         } else {
-            header('location: ' . URL . 'error');
+            header('location: ' . Config::get('URL') . 'error');
         }
     }
 
@@ -96,24 +86,5 @@ class Application
             // rebase array keys and store the URL parameters
             $this->parameters = array_values($url);
         }
-    }
-
-    /**
-     * Gets the environment setting. If APPLICATION_ENV is defined in Apache's / nginx's / whatever's settings
-     * then return this, otherwise return "development".
-     */
-    private function getEnvironment()
-    {
-        $this->environment_name = (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : "development");
-    }
-
-    /**
-     * Loads the config file according to the environment name.
-     * The path is relative to /public/index.php !
-     */
-    private function loadConfig()
-    {
-        // note that we cannot PATH_APPLICATION here as this constant is not know yet (is defined in config) :)
-        require('../application/config/config.' . $this->environment_name . '.php');
     }
 }

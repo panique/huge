@@ -5,7 +5,7 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <?php if ($this->note) { ?>
-        <form method="post" action="<?php echo URL; ?>note/editSave">
+        <form method="post" action="<?php echo Config::get('URL'); ?>note/editSave">
             <label>Change text of note: </label>
             <!-- we use htmlentities() here to prevent user input with " etc. break the HTML -->
             <input type="hidden" name="note_id" value="<?php echo htmlentities($this->note->note_id); ?>" />

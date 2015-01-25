@@ -15,12 +15,12 @@
     <h2>Currently your account type is: <?php echo Session::get('user_account_type'); ?></h2>
     <!-- basic implementation for two account types: type 1 and type 2 -->
     <?php if (Session::get('user_account_type') == 1) { ?>
-    <form action="<?php echo URL; ?>login/changeAccountType_action" method="post">
+    <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
         <label></label>
         <input type="submit" name="user_account_upgrade" value="Upgrade my account" />
     </form>
     <?php } elseif (Session::get('user_account_type') == 2) { ?>
-    <form action="<?php echo URL; ?>login/changeAccountType_action" method="post">
+    <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
         <label></label>
         <input type="submit" name="user_account_downgrade" value="Downgrade my account" />
     </form>

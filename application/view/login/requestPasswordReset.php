@@ -5,7 +5,7 @@
     <?php $this->renderFeedbackMessages(); ?>
 
     <!-- request password reset form box -->
-    <form method="post" action="<?php echo URL; ?>login/requestPasswordReset_action">
+    <form method="post" action="<?php echo Config::get('URL'); ?>login/requestPasswordReset_action">
         <label>
             Enter your username or email and you'll get a mail with instructions:
             <input type="text" name="user_name_or_email" required />

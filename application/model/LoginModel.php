@@ -20,7 +20,7 @@ class LoginModel
     {
         // we do negative-first checks here, for simplicity empty username and empty password in one line
         if (empty($user_name) OR empty($user_password)) {
-            Session::add('feedback_negative', FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY);
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY'));
             return false;
         }
 
@@ -29,13 +29,13 @@ class LoginModel
 
         // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
         if (!$result) {
-            Session::add('feedback_negative', FEEDBACK_LOGIN_FAILED);
+            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
             return false;
         }
 
         // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
         if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
-            Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG_3_TIMES);
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
             return false;
         }
 
@@ -43,7 +43,7 @@ class LoginModel
         if (!password_verify($user_password, $result->user_password_hash)) {
             LoginModel::incrementFailedLoginCounterOfUser($user_name);
             // we say "password wrong" here, but less details like "login failed" would be better (= less information)
-            Session::add('feedback_negative', FEEDBACK_PASSWORD_WRONG);
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG'));
             return false;
         }
 
@@ -51,7 +51,7 @@ class LoginModel
 
         // if user is not active (= has not verified account by verification mail)
         if ($result->user_active != 1) {
-            Session::add('feedback_negative', FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET);
+            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
             return false;
         }
 
@@ -90,20 +90,20 @@ class LoginModel
     {
         // do we have a cookie ?
         if (!$cookie) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
         // check cookie's contents, check if cookie contents belong together
         list ($user_id, $token, $hash) = explode(':', $cookie);
         if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
         // do not log in when token is empty
         if (empty($token)) {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
@@ -123,10 +123,10 @@ class LoginModel
             // be invalid after a certain amount of time, so the user has to login with username/password
             // again from time to time. This is good and safe ! ;)
 
-            Session::add('feedback_positive', FEEDBACK_COOKIE_LOGIN_SUCCESSFUL);
+            Session::add('feedback_positive', Text::get('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
             return true;
         } else {
-            Session::add('feedback_negative', FEEDBACK_COOKIE_INVALID);
+            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
     }
@@ -240,7 +240,7 @@ class LoginModel
         $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
 
         // set cookie
-        setcookie('remember_me', $cookie_string, time() + COOKIE_RUNTIME, COOKIE_PATH);
+        setcookie('remember_me', $cookie_string, time() + Config::get('COOKIE_RUNTIME'), Config::get('COOKIE_PATH'));
     }
 
     /**
@@ -251,7 +251,7 @@ class LoginModel
      */
     public static function deleteCookie()
     {
-        setcookie('remember_me', false, time() - (3600 * 24 * 3650), COOKIE_PATH);
+        setcookie('remember_me', false, time() - (3600 * 24 * 3650), Config::get('COOKIE_PATH'));
     }
 
     /**

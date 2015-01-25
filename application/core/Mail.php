@@ -51,26 +51,26 @@ class Mail
 		$mail = new PHPMailer;
 
 		// if you want to send mail via PHPMailer using SMTP credentials
-		if (EMAIL_USE_SMTP) {
+		if (Config::get('EMAIL_USE_SMTP')) {
 			// set PHPMailer to use SMTP
 			$mail->IsSMTP();
 			// 0 = off, 1 = commands, 2 = commands and data, perfect to see SMTP errors
 			$mail->SMTPDebug = 0;
 			// enable SMTP authentication
-			$mail->SMTPAuth = EMAIL_SMTP_AUTH;
-			// enable encryption, usually SSL/TLS
-			if (defined('EMAIL_SMTP_ENCRYPTION')) {
-				$mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
+			$mail->SMTPAuth = Config::get('EMAIL_SMTP_AUTH');
+			// encryption
+			if (Config::get('EMAIL_SMTP_ENCRYPTION')) {
+				$mail->SMTPSecure = Config::get('EMAIL_SMTP_ENCRYPTION');
 			}
 			// set SMTP provider's credentials
-			$mail->Host = EMAIL_SMTP_HOST;
-			$mail->Username = EMAIL_SMTP_USERNAME;
-			$mail->Password = EMAIL_SMTP_PASSWORD;
-			$mail->Port = EMAIL_SMTP_PORT;
+			$mail->Host = Config::get('EMAIL_SMTP_HOST');
+			$mail->Username = Config::get('EMAIL_SMTP_USERNAME');
+			$mail->Password = Config::get('EMAIL_SMTP_PASSWORD');
+			$mail->Port = Config::get('EMAIL_SMTP_PORT');
 		}
 
 		// if you want to send mail via PHPMailer using native mail()
-		if (!EMAIL_USE_SMTP) {
+		if (!Config::get('EMAIL_USE_SMTP')) {
 			$mail->IsMail();
 		}
 
@@ -94,18 +94,18 @@ class Mail
 
 	public function sendMail($user_email, $from_email, $from_name, $subject, $body)
 	{
-		if (EMAIL_USED_MAILER == "phpmailer") {
+		if (Config::get('EMAIL_USED_MAILER') == "phpmailer") {
 			// returns true if successful, false if not
 			return $this->sendMailWithPHPMailer(
 				$user_email, $from_email, $from_name, $subject, $body
 			);
 		}
 
-		if (EMAIL_USED_MAILER == "swiftmailer") {
+		if (Config::get('EMAIL_USED_MAILER') == "swiftmailer") {
 			return $this->sendMailWithSwiftMailer();
 		}
 
-		if (EMAIL_USED_MAILER == "native") {
+		if (Config::get('EMAIL_USED_MAILER') == "native") {
 			return $this->sendMailWithNativeMailFunction();
 		}
 	}

@@ -7,7 +7,7 @@
     <div>Your username: <?= $this->user_name; ?></div>
     <div>Your email: <?= $this->user_email; ?></div>
     <div>Your avatar image:
-        <?php if (USE_GRAVATAR) { ?>
+        <?php if (Config::get('USE_GRAVATAR')) { ?>
             Your gravatar pic (on gravatar.com): <img src='<?= $this->user_gravatar_image_url; ?>' />
         <?php } else { ?>
             Your avatar pic (saved locally): <img src='<?= $this->user_avatar_file; ?>' />

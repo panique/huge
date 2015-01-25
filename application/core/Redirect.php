@@ -12,7 +12,7 @@ class Redirect
 	 */
 	public static function home()
 	{
-		header("location: " . URL);
+		header("location: " . Config::get('URL'));
 	}
 
 	/**
@@ -22,6 +22,6 @@ class Redirect
 	 */
 	public static function to($path)
 	{
-		header("location: " . URL . $path);
+		header("location: " . Config::get('URL') . $path);
 	}
 }

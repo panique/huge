@@ -34,7 +34,7 @@
                         <td><?= $user->user_email; ?></td>
                         <td><?= ($user->user_active == 0 ? 'No' : 'Yes'); ?></td>
                         <td>
-                            <a href="<?= URL . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
+                            <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
                         </td>
                     </tr>
                 <?php } ?>

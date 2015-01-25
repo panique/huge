@@ -18,7 +18,7 @@ class Auth
         if (!Session::userIsLoggedIn()) {
             // ... then treat user as "not logged in", destroy session, redirect to login page
             Session::destroy();
-            header('location: ' . URL . 'login');
+            header('location: ' . Config::get('URL') . 'login');
             // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
             // the hard way, via exit(). @see https://github.com/panique/php-login/issues/453
             // this is not optimal and will be fixed in future releases
