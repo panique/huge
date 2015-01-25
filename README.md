@@ -2,31 +2,80 @@
 
 # HUGE
 
-This is the development branch of php-login, currently under heavy action for the upcoming 2.1 version.
-2.1 will be much improved version of 2.0 with lots of architecture changes, refactorings, etc., "php-login" will also 
-be renamed to HUGE (in combination to TINY, MINI and MINI2).
+Just a simple user authentication solution inside a simple framework skeleton that works out-of-the-box.
+Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some nice
+additional features.
 
-### Development info
+TODO fix these links after release
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/php-login/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
 [![Code Coverage](https://scrutinizer-ci.com/g/panique/php-login/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
 [![Build Status](https://scrutinizer-ci.com/g/panique/php-login/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/build-status/develop)
 
-THIS MIGHT BE BROKEN, as it's just a snapshot of current development. Please keep that in mind.
-For a stable version use the 2.0 release.
+### The History of HUGE
+
+This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
+scripts of The PHP Login Project (a collection of simple login scripts, made to prevent people from using totally
+outdated and insecure MD5 password hashing, which was still very popular in the PHP world back in 2012).
+
+Why the name "HUGE" ? It's a nice combination to 
+[TINY](https://github.com/panique/tiny), 
+[MINI](https://github.com/panique/mini) and 
+[MINI2](https://github.com/panique/tiny), my other projects :)
+
+### Features
+* built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
+* users can register, login, logout (with username, email, password)
+* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
+* password-forget / reset
+* remember-me (login via cookie)
+* account verification via mail
+* captcha
+* failed-login-throttling
+* user profiles
+* account upgrade / downgrade
+* supports local avatars and remote Gravatars
+* supports native mail and SMTP sending (via PHPMailer and other tools)
+* uses PDO for database access for sure, has nice DatabaseFactory (in case your project goes big) 
+* uses URL rewriting ("beautiful URLs")
+* proper split of application and public files (requests only go into /public)
+* uses Composer to load external dependencies (PHPMailer, Captcha-Generator, etc.)
+* fits PSR-0/1/2/4 coding guidelines
+* masses of comments
+* is actively developed, maintained and bug-fixed
+
+### Support the project
+
+There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
+in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
+HUGE is totally free to private and commercial use.
+
+TODO new banners
 
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
-
 [![Donate by server affiliate sale](_tutorial/support-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
+
+### Follow the project
+
+Here on **[Twitter](https://twitter.com/simplephplogin)** or  
+**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
+I'm also blogging on **[Dev Metal](http://www.dev-metal.com)**.
+
+
+
+
+
+
+
+
+
 
 ### A PHP & MySQL login script built into a skeleton MVC application
 
 This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
 This script here is the MVC framework version.
 Find the official portal page of the project here: **[php-login.net](http://www.php-login.net)**.
-Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
-**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** 
-have a look on the official support blog **[Dev Metal](http://www.dev-metal.com)**.
+
 Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
 
 ### MVC Framework Version 2.1
@@ -35,31 +84,7 @@ Ask questions in the **[Official Support Forum](http://support-forum.php-login.n
 <Directory "/var/www/html"> to <Directory "/var/www/html/public">. Don't forget to restart.
 http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
 
-### MVC Framework Version 2.0 (older version of this one here)
-* built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
-* users can register, login, logout (with username, email, password)
-* users can register and login via Facebook (official Facebook PHP SDK used)
-* [planned: users can register/login via Twitter, Google+, etc.]
-* password-forget/reset
-* remember-me (login via cookie)
-* account verification via mail
-* captcha
-* failed-login-throttling
-* user profiles
-* account upgrade/downgrade
-* supports local avatars and remote Gravatars
-* supports native mail and SMTP sending (via PHPMailer)
-* comes with a super-sexy Model-View-Controller (MVC) barebone-application structure
-* uses PDO for database access
-* uses URL rewriting ("beautiful URLs")
-* file- and folder protection via .htaccess
-* uses Composer to load external dependencies (PHPMailer, Facebook SDK, Captcha-Generator, etc.)
-* can be installed via Composer
-* fits PSR-1/2 coding guidelines
-* fully commented
-* is actively developed, maintained and bug-fixed
-* has detailed tutorials
-* [planned: ready-to-go PuPHPet files and Vagrant boxes]
+
 
 ### Other (smaller) versions of this script
 
