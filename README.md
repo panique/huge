@@ -6,11 +6,9 @@ Just a simple user authentication solution inside a simple framework skeleton th
 Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some nice
 additional features.
 
-TODO fix these links after release
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/php-login/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
-[![Code Coverage](https://scrutinizer-ci.com/g/panique/php-login/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
-[![Build Status](https://scrutinizer-ci.com/g/panique/php-login/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/build-status/develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 
 TODO linked index / jump-lists!
 
@@ -49,7 +47,7 @@ Why the name "HUGE" ? It's a nice combination to
 ### Live-Demo
 
 TODO
-See a [live demonstration](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://phpinfo.php-login.net/).
+See a [live demonstration](http://php-login.net/demo5.html) or [see the server's phpinfo()](http://phpinfo.php-login.net/).
 
 ### Support the project
 
@@ -70,11 +68,12 @@ Feel free to contribute to this project.
 
 Here on **[Twitter](https://twitter.com/simplephplogin)** or  
 **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
-I'm also blogging on **[Dev Metal](http://www.dev-metal.com)**.
+I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
 ### License
 
-Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). Totally free for private or commercial projects.
+Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). 
+Totally free for private or commercial projects.
 
 ### Requirements
 
@@ -90,15 +89,126 @@ used Composer before. This script is not for beginners.
 
 ### Installation
 
-TODO
+This script is very fresh, so the install guidelines are not perfect yet. 
 
-* Change the VirtualHost file from DocumentRoot /var/www/html to DocumentRoot /var/www/html/public and from 
-<Directory "/var/www/html"> to <Directory "/var/www/html/public">. Don't forget to restart.
-http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
+#### Quick guide:
 
-### Testing with demo user
+0. Make sure you have Apache, PHP, MySQL installed. [Tutorial](http://www.dev-metal.com/installsetup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-14-04-lts/). 
+1. Clone the repo to a folder on your server
+2. Activate mod_rewrite, route all traffic to application's /public folder. [Tutorial](http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/).
+3. Edit application/config: Set your database credentials
+4. Execute SQL statements from application/_installation to setup database tables
+5. [Install Composer](http://www.dev-metal.com/install-update-composer-windows-7-ubuntu-debian-centos/),
+   run `Composer install` on application's root folder to install dependencies
+6. Make avatar folder (application/public/avatars) writable
+7. For proper email usage: Set SMTP credentials in config file, set EMAIL_USE_SMTP to true
+
+"Email does not work" ? See the troubleshooting below. TODO
+
+#### Detailed guide (Ubuntu 14.04 LTS):
+
+This is just a quick guideline for easy setup of a development environment!
+
+Make sure you have Apache, PHP 5.5+ and MySQL installed. [Tutorial here](http://www.dev-metal.com/installsetup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-14-04-lts/). 
+Nginx will work for sure too, but no install guidelines are available yet. 
+
+Edit vhost to make clean URLs possible and route all traffic to /public folder of your project:
+```bash
+sudo nano /etc/apache2/sites-available/000-default.conf
+```
+
+and make the file look like
+```
+<VirtualHost *:80>
+    DocumentRoot "/var/www/html/public"
+    <Directory "/var/www/html/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+Enable mod_rewrite and restart apache.
+```bash
+sudo a2enmod rewrite
+service apache2 restart
+```
+
+Install curl (needed to use git), openssl (needed to clone from GitHub, as github is https only),
+PHP GD, the graphic lib (we create captchas and avatars), and git.
+```bash
+sudo apt-get -y install curl
+sudo apt-get -y install php5-curl
+sudo apt-get -y install openssl
+sudo apt-get -y install php5-gd
+sudo apt-get -y install git
+```
+
+git clone HUGE
+```bash
+sudo git clone https://github.com/panique/huge "/var/www/html"
+```
+
+Install Composer
+```bash
+curl -s https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+```
+
+Go to project folder, load Composer packages (--dev is optional, you know the deal)
+```bash
+cd /var/www/html
+composer install --dev
+```
+
+Execute the SQL statements. Via phpmyadmin or via the command line for example. 12345678 is the example password.
+Note that this is written without a space.
+```bash
+sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_installation/01-create-database.sql"
+sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_installation/02-create-table-users.sql"
+sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_installation/03-create-table-notes.sql"
+```
+
+Make avatar folder writable
+```bash
+sudo chmod 0777 -R "/var/www/html/public/avatars"
+```
+
+Remove Apache's default demo file
+```bash
+sudo rm "/var/www/html/index.html"
+```
+
+Edit the application's config in application/config.development.php and put in your database credentials.
+
+Last part (not needed for a first test): Set your SMTP credentials in the same file and set EMAIL_USE_SMTP to true, so
+you can send proper emails. It's highly recommended to use SMTP for mail sending! Native sending via PHP's mail() will
+not work in nearly every case (spam blocking). I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal).
+
+Then check your server's IP / domain. Everything should work fine.
+
+#### Testing with demo user
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
+
+### Zero tolerance for idiots, trolls and vandals!
+
+Harsh words, but as basically every public internet project gets harassed, vandalized and trolled these days by very 
+strange people: Some simple rules. 
+
+1. Respect that this is just a simple script written by unpaid volunteers in their free-time. 
+   There's no reason to complain (!) about free open-source software. The attitude against free software
+   is really frustrating these days, people take everything for granted without realizing the work behind it, and the
+   fact they they get serious software totally for free, saving thousands of dollars. If you don't like it, then don't 
+   use it. If you want a feature, try to take part in the process, maybe even build it by yourself and add it to the 
+   project! Be nice and respectful. Constructive criticism is for sure always welcome!
+   
+2. Don't bash, don't hate, don't spam, don't vandalize. Don't ask for personal free support, don't ask if somebody 
+   could do your work for you.     
+   Before you ask something, make sure you've read the README, followed every tutorial, double-checked the code and
+   tried to solve the problem by yourself.
+
+Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 
 ### Contribute
 
@@ -110,81 +220,12 @@ Due to the possible consequences when publishing a bug on a public open-source p
 big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
 an normal GitHub issue.
 
-## Current and further development
+### Current and further development
 
 See active issues and requested features here:
 https://github.com/panique/php-login/issues?state=open
 
-
-
-
-
-
-
-
-## Installation on Ubuntu 12.04 LTS
-
-This installation guideline uses Ubuntu 12.04 LTS (as it is the standard and by far the most long-term supported
-mainstream server OS (supported until 2017). For more, see the
-[Wikipedia page of Ubuntu versions](http://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Table_of_versions).
-
-When developing in a Vagrant box: please note that it's quite difficult to identify a Vagrant box to Facebook's App API,
-so currently there's no guideline on how to use the Facebook login-feature when using a LOCAL Vagrant box.
-For more, see [this StackOverflow question](http://stackoverflow.com/questions/20615924/how-to-run-a-facebook-app-on-an-ip-domain-works-localhost-works-ip-does-not).
-
-#### ON YOUR SERVER (we use Ubuntu 12.04 LTS here):
-1. install Apache, MySQL, PHP and eventually PHPMyAdmin: [How to setup a LAMP stack on Ubuntu 12.04](http://www.dev-metal.com/setup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-12-04/)
-2. install mod_rewrite and activate it: [How to enable mod_rewrite in Ubuntu 12.04 LTS](http://www.dev-metal.com/enable-mod_rewrite-ubuntu-12-04-lts/)
-3. install Composer: [How to install Composer on Ubuntu](http://www.dev-metal.com/install-update-composer-windows-7-ubuntu-debian-centos/)
-4. install GD (for the Captcha): `sudo apt-get install php5-gd`, restart Apache `sudo service apache2 restart`
-5. install OpenSSL (to send mails): `sudo apt-get install openssl`, restart Apache `sudo service apache2 restart`
-6. remove all files from the */var/www* (should only be Apache's index.html and your phpinfo()-containing .php right now) with `rm -r /var/www/*`,
-otherwise things will get messy and git won't download the repo into a non-empty folder
-7. copy the contents of the extracted php-login repository into /var/www ! In this tutorial we don't use a sub-folder,  so your index.php should go into /var/www !
-Best way to do is cloning via git: `git clone https://github.com/panique/php-login.git /var/www` or by creating the
-project via Composer: `composer create-project panique/php-login /var/www dev-master`
-8. Make the repo's folder *public/avatars* writable via `chmod 775 /var/www/public/avatars` and check its rights with `stat /var/www/public/avatars`
-9. Run the three SQL statements in the *application/_installation/sql_statements* folder (the installation folder has an underscore in front of its name, but GitHub doesn't show this due to
-a bug in its README-parser), via PHPMyAdmin (look at the files directly on https://github.com/panique/php-login/) or do it via mysql command-line
-
-#### CONFIGS IN THE CODE:
-
-In *application/config/config.php*:
-
-11. enter your database credentials in DB_USER, DB_PASS etc.
-12. enter your project URL into URL, don't forget the trailing slash!
-13. edit COOKIE_DOMAIN to the above URL
-14. in the SMTP block, set EMAIL_USE_SMTP tp `true` and put in your SMTP provider credentials ((I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))). Please remember:
-You cannot simply send emails with PHP's mail() function, this does not really work due to a lot of reasons.
-For development it could make sense to set PHPMAILER_DEBUG_MODE to 2 as this will echo out errors and notices when sending mails.
-15. OPTIONAL for development (better leave it like it is !), but necessary for production environments: Change the text,
-reply-mail-address etc. of the EMAIL_PASSWORD_RESET_SUBJECT etc.
-
-In *.htaccess*:
-
-1. Change the RewriteBase: when using the script within a sub-folder, put this path here, like */mysubfolder/* !
-If your app is in the root of your web folder, then delete this line or comment it out.
-
-#### RUN COMPOSER:
-1. go into the base folder of your application (where composer.json is) (`cd /var/www`) and do `composer install` on the command line
-
-**Voila!** You app should now run fine.
-
-#### To use the (optional) Facebook login
-
-Note: Facebook changes the look, the UI and the way the Facebook App pages work permanently. But you'll find out what's
-meant. Go to https://developers.facebook.com/apps/ and create a new app.
-Go to "preferences" or whatever it is called, enter your email adress, leave "App Domain" empty, click on "Add platform"
-and put your URL in "Site URL" (completely with "http://www."), save. For local development "localhost" works.
-Things like "127.0.0.1" don't seem work. In earlier version of Facebook's App API you needed to set "sandbox mode" to
-"deactivated", now... well... I don't know, they have removed the button but the app still says "in development mode".
-
-Set `FACEBOOK_LOGIN` in *application/config/config.php* to `true` and put your Facebook app id and the secret token
-in `FACEBOOK_LOGIN_APP_ID` and `FACEBOOK_LOGIN_APP_SECRET`.
-
-You should see the Facebook login / register buttons on the login / register page of your php-login app now.
-
-## Useful links
+### Useful links
 
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 - [A short guideline on how to use the PHP 5.5 password hashing functions and its PHP 5.3 & 5.4 implementations](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
@@ -193,43 +234,3 @@ You should see the Facebook login / register buttons on the login / register pag
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
-
-You can find more in the project's [github wiki](https://github.com/panique/php-login/wiki).
-
-#### If you like the folder/file structure
-
-Then have a look into the partner project PHP-MVC on http://www.php-mvc.net and https://github.com/panique/php-mvc.
-A super-reduced and naked bare-bone application.
-
-## How the facebook login process works
-
-https://github.com/facebook/facebook-php-sdk
-
-https://developers.facebook.com/docs/php/gettingstarted/
-
-## Used packages (via composer)
-
-PHPMailer
-https://packagist.org/packages/phpmailer/phpmailer
-
-PHP password compatibility library
-https://packagist.org/packages/ircmaxell/password-compat
-
-Facebook SDK
-https://packagist.org/packages/facebook/php-sdk
-
-Gregwar's Captcha
-https://packagist.org/packages/gregwar/captcha
-
-Kint (a better var_dump)
-https://packagist.org/packages/raveren/kint
-
-## Thanks
-
-This project is kindly powered by **[PHPStorm](http://www.jetbrains.com/phpstorm/)**.
-A big "Thank You!" to IntelliJ for giving php-login free licenses of this wonderful IDE.
-
-## Hire me
-
-I'm available for freelance work, mainly PHP and frontend. Remote worldwide or locally around Central Europe.
-Please send a mail if you like, you can find out my email address easily.
