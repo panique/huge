@@ -90,7 +90,7 @@ used Composer before. This script is not for beginners.
 If you are using Vagrant for your development, then simply 
 
 1. Add the official Ubuntu 14.04 LTS box to your Vagrant: `vagrant box add ubuntu/trusty64`
-2. Move *Vagrantfile* and *bootstrap.sh* to a folder where you want to initialize your project.
+2. Move *Vagrantfile* and *bootstrap.sh* (from *_one-click-installation* folder) to a folder where you want to initialize your project.
 3. Do `vagrant up` in that folder.
 
 5 minutes later you'll have a fully installed HUGE inside Ubuntu 14.04 LTS. The full code will be auto-synced with
