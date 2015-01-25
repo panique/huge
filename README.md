@@ -85,6 +85,17 @@ used Composer before. This script is not for beginners.
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the install guideline shows how to do)
 
+### Auto-Installation (with Vagrant)
+
+If you are using Vagrant for your development, then simply 
+
+1. Add the official Ubuntu 14.04 LTS box to your Vagrant: `vagrant box add ubuntu/trusty64`
+2. Move *Vagrantfile* and *bootstrap.sh* to a folder where you want to initialize your project.
+3. Do `vagrant up` in that folder.
+
+5 minutes later you'll have a fully installed HUGE inside Ubuntu 14.04 LTS. The full code will be auto-synced with
+the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*.  
+
 ### Installation
 
 This script is very fresh, so the install guidelines are not perfect yet. 
