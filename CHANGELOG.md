@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-## 2.1
+## 3.0
 
 **January 2015**
 
