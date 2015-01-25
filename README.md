@@ -21,7 +21,7 @@ outdated and insecure MD5 password hashing, which was still very popular in the 
 Why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
 [MINI](https://github.com/panique/mini) and 
-[MINI2](https://github.com/panique/tiny), my other projects :)
+[MINI2](https://github.com/panique/mini2), my other projects :)
 
 ### Features
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
@@ -47,7 +47,6 @@ Why the name "HUGE" ? It's a nice combination to
 ### Live-Demo
 
 TODO
-See a [live demonstration](http://php-login.net/demo5.html) or [see the server's phpinfo()](http://phpinfo.php-login.net/).
 
 ### Support the project
 
@@ -66,8 +65,7 @@ Feel free to contribute to this project.
 
 ### Follow the project
 
-Here on **[Twitter](https://twitter.com/simplephplogin)** or  
-**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
+Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
 I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
 ### License
