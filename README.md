@@ -8,8 +8,6 @@
 
 *Thanks for 1.400+ stars and 650+ forks. Wow!*
 
-Version 2.1 incl. massive rewrite, renaming and total makeover will come soon, have a preview look in [develop branch](https://github.com/panique/php-login/tree/develop).
-
 ### A PHP & MySQL login script built into a skeleton MVC application
 
 This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
