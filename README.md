@@ -12,6 +12,8 @@ TODO fix these links after release
 [![Code Coverage](https://scrutinizer-ci.com/g/panique/php-login/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/?branch=develop)
 [![Build Status](https://scrutinizer-ci.com/g/panique/php-login/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/panique/php-login/build-status/develop)
 
+TODO linked index / jump-lists!
+
 ### The History of HUGE
 
 This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
@@ -44,6 +46,11 @@ Why the name "HUGE" ? It's a nice combination to
 * masses of comments
 * is actively developed, maintained and bug-fixed
 
+### Live-Demo
+
+TODO
+See a [live demonstration](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://phpinfo.php-login.net/).
+
 ### Support the project
 
 There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
@@ -55,102 +62,49 @@ TODO new banners
 [![Donate with PayPal banner](_tutorial/donate-with-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 [![Donate by server affiliate sale](_tutorial/support-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
 
+You can also rent your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) or donate via 
+[PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
+Feel free to contribute to this project.
+
 ### Follow the project
 
 Here on **[Twitter](https://twitter.com/simplephplogin)** or  
 **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
 I'm also blogging on **[Dev Metal](http://www.dev-metal.com)**.
 
+### License
 
+Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). Totally free for private or commercial projects.
 
-
-
-
-
-
-
-
-### A PHP & MySQL login script built into a skeleton MVC application
-
-This script is part of the **PHP Login Project**, a collection of four similar login scripts for different use-cases.
-This script here is the MVC framework version.
-Find the official portal page of the project here: **[php-login.net](http://www.php-login.net)**.
-
-Ask questions in the **[Official Support Forum](http://support-forum.php-login.net/)**.
-
-### MVC Framework Version 2.1
-
-* Change the VirtualHost file from DocumentRoot /var/www/html to DocumentRoot /var/www/html/public and from 
-<Directory "/var/www/html"> to <Directory "/var/www/html/public">. Don't forget to restart.
-http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
-
-
-
-### Other (smaller) versions of this script
-
-#### One File Version [https://github.com/panique/php-login-one-file]
-Full login script in one file. Uses a one-file SQLite database (no MySQL needed) and PDO. Features: Register,
-login, logout.
-
-#### Minimal Version [https://github.com/panique/php-login-minimal]
-All the basic functions in a clean file structure, uses MySQL and mysqli. Register, login, logout.
-
-#### Advanced Version [https://github.com/panique/php-login-advanced]
-Same like minimal (uses MySQL and PDO), but much more features:
-Register, login, logout, email verification, password reset, edit user data, gravatars, captchas,
-remember me / stay logged in cookies, "remember me" supports parallel login from multiple devices,
-login with email, i18n/internationalization, mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail).
-
-## What's new in version 3.0 ?
-
-TODO
-
-## What's new in version 2.0 ?
-
-- professional file/folder structure
-- Composer
-- Facebook login/registration
-- mostly implemented the "always return something" rule, with default return
-- if/else nesting as flat as possible
-- implemented dependency injected database connection (we open just one connection, use it for all models)
-- multiple models allowed per controller
-- everything is "as manual as possible"
-- massive refactoring
-
-## Live Demo
-
-See a [live demonstration](http://php-login.net/demo4.html) or [see the server's phpinfo()](http://phpinfo.php-login.net/).
-
-## Requirements
+### Requirements
 
 Make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
 used Composer before. This script is not for beginners.
 
 * **PHP 5.5+**
 * **MySQL 5** database (better use versions 5.5+ as very old versions have a [PDO injection bug](http://stackoverflow.com/q/134099/1114320)
-* installed PHP extensions: pdo, gd, openssl (the tutorial shows how to do)
-* installed tools on your server: git, curl, composer (the tutorial shows how to do)
+* installed PHP extensions: pdo, gd, openssl (the install guideline shows how to do)
+* installed tools on your server: git, curl, composer (the install guideline shows how to do)
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
-* activated mod_rewrite on your server (the tutorial shows how to do)
+* activated mod_rewrite on your server (the install guideline shows how to do)
 
-## License
+### Installation
 
-Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). Totally free for private or commercial projects.
+TODO
 
-## Contribute
+* Change the VirtualHost file from DocumentRoot /var/www/html to DocumentRoot /var/www/html/public and from 
+<Directory "/var/www/html"> to <Directory "/var/www/html/public">. Don't forget to restart.
+http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
+
+### Testing with demo user
+
+By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
+
+### Contribute
 
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
 
-## Support / Donate
-
-If you think this script is useful and saves you a lot of work, then think about supporting the project:
-
-1. Rent your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
-2. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
-   or [GitTip](https://www.gittip.com/Panique/)
-3. Contribute to this project.
-
-## Found a bug (Responsible Disclosure) ?
+### Found a bug (Responsible Disclosure) ?
 
 Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
 big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
@@ -161,14 +115,12 @@ an normal GitHub issue.
 See active issues and requested features here:
 https://github.com/panique/php-login/issues?state=open
 
-See the milestone tracking of 2.0 and the upcoming 3.0 (early 2015) here:
-https://github.com/panique/php-login/issues/milestones
 
-## External installation guidelines
 
-* [How to install php-login on Ubuntu 12.04 LTS](http://www.dev-metal.com/install-php-login-nets-4-full-mvc-framework-login-script-ubuntu/)
-* [How to install php-login on Ubuntu 14.04 LTS](http://www.dev-metal.com/install-php-login-nets-php-login-script-mvc-version-ubuntu-14-04-lts/)
-* [How to install php-login on Windows 7 / 8 (for development)](http://www.dev-metal.com/install-php-login-windows-7-8/)
+
+
+
+
 
 ## Installation on Ubuntu 12.04 LTS
 
