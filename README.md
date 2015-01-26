@@ -271,7 +271,7 @@ an normal GitHub issue.
 ### Current and further development
 
 See active issues and requested features here:
-https://github.com/panique/php-login/issues?state=open
+https://github.com/panique/huge/issues?state=open
 
 ### Useful links
 
