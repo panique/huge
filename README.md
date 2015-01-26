@@ -18,7 +18,8 @@ additional features.
 + [Follow the project](#follow)
 + [License](#license)
 + [Requirements](#requirements)
-+ [Auto-Installation in Vagrant](#auto-installation)
++ [Auto-Installation in Vagrant](#auto-installation-vagrant)
++ [Auto-Installation in Ubuntu 14.04 LTS server](#auto-installation-ubuntu)
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
@@ -98,7 +99,7 @@ used Composer before. This script is not for beginners.
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the install guideline shows how to do)
 
-### Auto-Installation (with Vagrant) <a name="auto-installation"></a>
+### Auto-Installation (in Vagrant) <a name="auto-installation-vagrant"></a>
 
 If you are using Vagrant for your development, then simply 
 
@@ -110,6 +111,24 @@ If you are using Vagrant for your development, then simply
 the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*. By default
 192.168.33.111 is the IP of your new box.
 
+### Auto-Installation in a naked Ubuntu 14.04 LTS server <a name="auto-installation-ubuntu"></a>
+
+Extremely simple installation in a fresh and naked typical Ubuntu 14.04 LTS server:
+
+Download the installer script
+```bash
+wget https://raw.githubusercontent.com/panique/huge/master/_one-click-installation/bootstrap.sh
+```
+
+Make it executable
+```bash
+chmod +x bootstrap.sh
+```
+
+Run it! Give it some minutes to perform all the tasks. And yes, you can thank me later :)
+```bash
+sudo ./bootstrap.sh
+```
 ### Installation <a name="installation"></a>
 
 This script is very fresh, so the install guidelines are not perfect yet. 
