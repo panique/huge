@@ -77,9 +77,10 @@ TODO new banners
 [![Donate with PayPal banner](_pictures/support-via-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 [![Donate by server affiliate sale](_pictures/support-via-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
 
-You can also rent your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) or donate via 
-[PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
-Feel free to contribute to this project.
+You can also rent your next $5 server at [Virpus](http://my.virpus.com/aff.php?aff=1836) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) 
+or donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
+
+Also feel free to contribute to this project.
 
 ### Follow the project <a name="follow"></a>
 
