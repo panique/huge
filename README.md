@@ -10,20 +10,38 @@ additional features.
 [![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 
-TODO linked index / jump-lists!
+#### Quick-Index 
+
++ [Features](#features)
++ [Live-Demo](#live-demo)
++ [Support](#support)
++ [Follow the project](#follow)
++ [License](#license)
++ [Requirements](#requirements)
++ [Auto-Installation](#auto-installation)
+    - [Auto-Installation in Vagrant](#auto-installation-vagrant)
+    - [Auto-Installation in Ubuntu 14.04 LTS server](#auto-installation-ubuntu)
++ [Installation (Ubuntu 14.04 LTS)](#installation)
+    - [Quick Installation](#quick-installation)
+    - [Detailed Installation](#detailed-installation)
++ [Why is there no support forum anymore ?](#why-no-support-forum)
++ [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
++ [Contribute](#contribute)
++ [Report a bug](#bug-report)
 
 ### The History of HUGE
 
 This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
-scripts of The PHP Login Project (a collection of simple login scripts, made to prevent people from using totally
-outdated and insecure MD5 password hashing, which was still very popular in the PHP world back in 2012).
+scripts of [The PHP Login Project](http://www.php-login.net) (a collection of simple login scripts, made to prevent 
+people from using totally outdated and insecure MD5 password hashing, which was still very popular in the PHP world 
+back in 2012).
 
 Why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
 [MINI](https://github.com/panique/mini) and 
 [MINI2](https://github.com/panique/mini2), my other projects :)
 
-### Features
+### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
 * users can register, login, logout (with username, email, password)
 * [planned: OAuth2 implementation for proper future-proof 3rd party auth]
@@ -44,11 +62,11 @@ Why the name "HUGE" ? It's a nice combination to
 * masses of comments
 * is actively developed, maintained and bug-fixed
 
-### Live-Demo
+### Live-Demo <a name="live-demo"></a>
 
-TODO
+See a [live demo here](http://104.131.8.128) and [the server's phpinfo() here](http://104.131.8.128/info.php).
 
-### Support the project
+### Support the project <a name="support"></a>
 
 There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
@@ -59,21 +77,22 @@ TODO new banners
 [![Donate with PayPal banner](_pictures/support-via-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
 [![Donate by server affiliate sale](_pictures/support-via-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
 
-You can also rent your next server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) or donate via 
-[PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
-Feel free to contribute to this project.
+You can also rent your next $5 server at [Virpus](http://my.virpus.com/aff.php?aff=1836) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) 
+or donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
 
-### Follow the project
+Also feel free to contribute to this project.
+
+### Follow the project <a name="follow"></a>
 
 Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
 I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
-### License
+### License <a name="license"></a>
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). 
 Totally free for private or commercial projects.
 
-### Requirements
+### Requirements <a name="requirements"></a>
 
 Make sure you know the basics of object-oriented programming and MVC, are able to use the command line and have
 used Composer before. This script is not for beginners.
@@ -85,11 +104,46 @@ used Composer before. This script is not for beginners.
 * for professional mail sending: an SMTP account (I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal))
 * activated mod_rewrite on your server (the install guideline shows how to do)
 
-### Installation
+### Auto-Installations <a name="auto-installation"></a>
+
+Yo, fully automatic. Why ? Because I always hated it to spend days trying to find out how to install a thing.
+This will save you masses of time and nerves. Donate a coffee if you like it.
+
+#### Auto-Installation (in Vagrant) <a name="auto-installation-vagrant"></a>
+
+If you are using Vagrant for your development, then simply 
+
+1. Add the official Ubuntu 14.04 LTS box to your Vagrant: `vagrant box add ubuntu/trusty64`
+2. Move *Vagrantfile* and *bootstrap.sh* (from *_one-click-installation* folder) to a folder where you want to initialize your project.
+3. Do `vagrant up` in that folder.
+
+5 minutes later you'll have a fully installed HUGE inside Ubuntu 14.04 LTS. The full code will be auto-synced with
+the current folder. MySQL root password and the PHPMyAdmin root password are set to *12345678*. By default
+192.168.33.111 is the IP of your new box.
+
+#### Auto-Installation in a naked Ubuntu 14.04 LTS server <a name="auto-installation-ubuntu"></a>
+
+Extremely simple installation in a fresh and naked typical Ubuntu 14.04 LTS server:
+
+Download the installer script
+```bash
+wget https://raw.githubusercontent.com/panique/huge/master/_one-click-installation/bootstrap.sh
+```
+
+Make it executable
+```bash
+chmod +x bootstrap.sh
+```
+
+Run it! Give it some minutes to perform all the tasks. And yes, you can thank me later :)
+```bash
+sudo ./bootstrap.sh
+```
+### Installation <a name="installation"></a>
 
 This script is very fresh, so the install guidelines are not perfect yet. 
 
-#### Quick guide:
+#### Quick guide: <a name="quick-installation"></a>
 
 0. Make sure you have Apache, PHP, MySQL installed. [Tutorial](http://www.dev-metal.com/installsetup-basic-lamp-stack-linux-apache-mysql-php-ubuntu-14-04-lts/). 
 1. Clone the repo to a folder on your server
@@ -103,7 +157,7 @@ This script is very fresh, so the install guidelines are not perfect yet.
 
 "Email does not work" ? See the troubleshooting below. TODO
 
-#### Detailed guide (Ubuntu 14.04 LTS):
+#### Detailed guide (Ubuntu 14.04 LTS): <a name="detailed-installation"></a>
 
 This is just a quick guideline for easy setup of a development environment!
 
@@ -189,10 +243,26 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
-### Zero tolerance for idiots, trolls and vandals!
+### Why is there no support forum ? <a name="why-no-support-forum"></a>
+
+There were two (!) support forums for v1 and v2 of this project (HUGE is v3), and both were vandalized by people who
+didn't even read the readme and / or the install guidelines. Most asked question was "script does not work plz help"
+without giving any useful information (like code or server setup or even the version used). While I'm writing these 
+lines somebody just asked via Twitter "how to install without Composer". You know what I mean :) ... Beside, 140 
+characters on Twitter are not a clever way to ask for / describe a complex development situation. 99% of the questions 
+were not necessary if the people would had read the guidelines, do a minimal research on their own or would stop making 
+things so unnecessarily complicated. And even when writing detailed answers most of them still messed it up, resulting 
+in rants and complaints (for free support for a free software!). It was just frustrating to deal with this every day, 
+especially when people take it for totally granted that *it's the duty* of open-source developers to give detailed, 
+free and personal support for every stupid "plz help"-request.
+ 
+So I decided to completely stop any free support. For serious questions about real problems inside the script please
+use the GitHub issues feature.
+
+### Zero tolerance for idiots, trolls and vandals! <a name="zero-tolerance"></a>
 
 Harsh words, but as basically every public internet project gets harassed, vandalized and trolled these days by very 
-strange people: Some simple rules. 
+strange people it's necessary: Some simple rules. 
 
 1. Respect that this is just a simple script written by unpaid volunteers in their free-time. 
    There's no reason to complain (!) about free open-source software. The attitude against free software
@@ -202,17 +272,16 @@ strange people: Some simple rules.
    project! Be nice and respectful. Constructive criticism is for sure always welcome!
    
 2. Don't bash, don't hate, don't spam, don't vandalize. Don't ask for personal free support, don't ask if somebody 
-   could do your work for you.     
-   Before you ask something, make sure you've read the README, followed every tutorial, double-checked the code and
-   tried to solve the problem by yourself.
+   could do your work for you. Before you ask something, make sure you've read the README, followed every tutorial, 
+   double-checked the code and tried to solve the problem by yourself.
 
 Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 
-### Contribute
+### Contribute <a name="contribute"></a>
 
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
 
-### Found a bug (Responsible Disclosure) ?
+### Found a bug (Responsible Disclosure) ? <a name="bug-report"></a>
 
 Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
 big bugs to my email address, not posting this here. If the bug is not interesting for attackers: Feel free to create
@@ -221,7 +290,7 @@ an normal GitHub issue.
 ### Current and further development
 
 See active issues and requested features here:
-https://github.com/panique/php-login/issues?state=open
+https://github.com/panique/huge/issues?state=open
 
 ### Useful links
 
@@ -229,6 +298,6 @@ https://github.com/panique/php-login/issues?state=open
 - [A short guideline on how to use the PHP 5.5 password hashing functions and its PHP 5.3 & 5.4 implementations](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
 - [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/)
 - [How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
-- [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
-- [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
+- [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
+- [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
