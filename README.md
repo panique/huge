@@ -32,8 +32,9 @@ additional features.
 ### The History of HUGE
 
 This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
-scripts of The PHP Login Project (a collection of simple login scripts, made to prevent people from using totally
-outdated and insecure MD5 password hashing, which was still very popular in the PHP world back in 2012).
+scripts of [The PHP Login Project](http://www.php-login.net) (a collection of simple login scripts, made to prevent 
+people from using totally outdated and insecure MD5 password hashing, which was still very popular in the PHP world 
+back in 2012).
 
 Why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
