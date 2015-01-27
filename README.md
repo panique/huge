@@ -2,6 +2,8 @@
 
 # HUGE
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/panique/huge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Just a simple user authentication solution inside a simple framework skeleton that works out-of-the-box.
 Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some nice
 additional features.
