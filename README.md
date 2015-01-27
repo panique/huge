@@ -24,6 +24,8 @@ additional features.
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
++ [Why is there no support forum anymore ?](#why-no-support-forum)
++ [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
 + [Report a bug](#bug-report)
 
@@ -239,10 +241,26 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
-### Zero tolerance for idiots, trolls and vandals! <a name="detailed-installation"></a>
+### Why is there no support forum ? <a name="why-no-support-forum"></a>
+
+There were two (!) support forums for v1 and v2 of this project (HUGE is v3), and both were vandalized by people who
+didn't even read the readme and / or the install guidelines. Most asked question was "script does not work plz help"
+without giving any useful information (like code or server setup or even the version used). While I'm writing these 
+lines somebody just asked via Twitter "how to install without Composer". You know what I mean :) ... Beside, 140 
+characters on Twitter are not a clever way to ask for / describe a complex development situation. 99% of the questions 
+were not necessary if the people would had read the guidelines, do a minimal research on their own or would stop making 
+things so unnecessarily complicated. And even when writing detailed answers most of them still messed it up, resulting 
+in rants and complaints (for free support for a free software!). It was just frustrating to deal with this every day, 
+especially when people take it for totally granted that *it's the duty* of open-source developers to give detailed, 
+free and personal support for every stupid "plz help"-request.
+ 
+So I decided to completely stop any free support. For serious questions about real problems inside the script please
+use the GitHub issues feature.
+
+### Zero tolerance for idiots, trolls and vandals! <a name="zero-tolerance"></a>
 
 Harsh words, but as basically every public internet project gets harassed, vandalized and trolled these days by very 
-strange people: Some simple rules. 
+strange people it's necessary: Some simple rules. 
 
 1. Respect that this is just a simple script written by unpaid volunteers in their free-time. 
    There's no reason to complain (!) about free open-source software. The attitude against free software
@@ -252,9 +270,8 @@ strange people: Some simple rules.
    project! Be nice and respectful. Constructive criticism is for sure always welcome!
    
 2. Don't bash, don't hate, don't spam, don't vandalize. Don't ask for personal free support, don't ask if somebody 
-   could do your work for you.     
-   Before you ask something, make sure you've read the README, followed every tutorial, double-checked the code and
-   tried to solve the problem by yourself.
+   could do your work for you. Before you ask something, make sure you've read the README, followed every tutorial, 
+   double-checked the code and tried to solve the problem by yourself.
 
 Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 
