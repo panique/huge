@@ -24,14 +24,17 @@ additional features.
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
++ [Why is there no support forum anymore ?](#why-no-support-forum)
++ [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
 + [Report a bug](#bug-report)
 
 ### The History of HUGE
 
 This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
-scripts of The PHP Login Project (a collection of simple login scripts, made to prevent people from using totally
-outdated and insecure MD5 password hashing, which was still very popular in the PHP world back in 2012).
+scripts of [The PHP Login Project](http://www.php-login.net) (a collection of simple login scripts, made to prevent 
+people from using totally outdated and insecure MD5 password hashing, which was still very popular in the PHP world 
+back in 2012).
 
 Why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
@@ -239,10 +242,26 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
-### Zero tolerance for idiots, trolls and vandals! <a name="detailed-installation"></a>
+### Why is there no support forum ? <a name="why-no-support-forum"></a>
+
+There were two (!) support forums for v1 and v2 of this project (HUGE is v3), and both were vandalized by people who
+didn't even read the readme and / or the install guidelines. Most asked question was "script does not work plz help"
+without giving any useful information (like code or server setup or even the version used). While I'm writing these 
+lines somebody just asked via Twitter "how to install without Composer". You know what I mean :) ... Beside, 140 
+characters on Twitter are not a clever way to ask for / describe a complex development situation. 99% of the questions 
+were not necessary if the people would had read the guidelines, do a minimal research on their own or would stop making 
+things so unnecessarily complicated. And even when writing detailed answers most of them still messed it up, resulting 
+in rants and complaints (for free support for a free software!). It was just frustrating to deal with this every day, 
+especially when people take it for totally granted that *it's the duty* of open-source developers to give detailed, 
+free and personal support for every stupid "plz help"-request.
+ 
+So I decided to completely stop any free support. For serious questions about real problems inside the script please
+use the GitHub issues feature.
+
+### Zero tolerance for idiots, trolls and vandals! <a name="zero-tolerance"></a>
 
 Harsh words, but as basically every public internet project gets harassed, vandalized and trolled these days by very 
-strange people: Some simple rules. 
+strange people it's necessary: Some simple rules. 
 
 1. Respect that this is just a simple script written by unpaid volunteers in their free-time. 
    There's no reason to complain (!) about free open-source software. The attitude against free software
@@ -252,9 +271,8 @@ strange people: Some simple rules.
    project! Be nice and respectful. Constructive criticism is for sure always welcome!
    
 2. Don't bash, don't hate, don't spam, don't vandalize. Don't ask for personal free support, don't ask if somebody 
-   could do your work for you.     
-   Before you ask something, make sure you've read the README, followed every tutorial, double-checked the code and
-   tried to solve the problem by yourself.
+   could do your work for you. Before you ask something, make sure you've read the README, followed every tutorial, 
+   double-checked the code and tried to solve the problem by yourself.
 
 Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 
@@ -271,7 +289,7 @@ an normal GitHub issue.
 ### Current and further development
 
 See active issues and requested features here:
-https://github.com/panique/php-login/issues?state=open
+https://github.com/panique/huge/issues?state=open
 
 ### Useful links
 
@@ -279,6 +297,6 @@ https://github.com/panique/php-login/issues?state=open
 - [A short guideline on how to use the PHP 5.5 password hashing functions and its PHP 5.3 & 5.4 implementations](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
 - [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/)
 - [How to setup latest version of PHP 5.5 on Debian Wheezy 7.0/7.1 (and how to fix the GPG key error)](http://www.dev-metal.com/setup-latest-version-php-5-5-debian-wheezy-7-07-1-fix-gpg-key-error/)
-- [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
-- [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
+- [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
+- [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
