@@ -65,7 +65,7 @@ Why the name "HUGE" ? It's a nice combination to
 
 ### Live-Demo <a name="live-demo"></a>
 
-See a [live demo here](http://104.131.8.128) and [the server's phpinfo() here](http://104.131.8.128/info.php).
+See a [live demo here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
 
 ### Support the project <a name="support"></a>
 
