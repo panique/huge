@@ -3,8 +3,8 @@
 # HUGE
 
 Just a simple user authentication solution inside a simple framework skeleton that works out-of-the-box.
-Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some nice
-additional features.
+Nothing more. Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some 
+nice additional features.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
