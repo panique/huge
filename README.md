@@ -2,12 +2,16 @@
 
 # HUGE
 
-Just a simple user authentication solution inside a simple framework skeleton that works out-of-the-box.
-Nothing more. Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some 
-nice additional features.
+Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
+(and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
+PHP 5.5+, plus some nice features that will speed up the time from idea to first usable prototype application 
+dramatically. Nothing more. This project has its focus on hardcore simplicity. Everything is as simple as possible, 
+made for smaller projects and typical agency work. If you want to build massive corporate applications with all the 
+features modern frameworks have, then have a look at [Laravel](http://laravel.com), [Symfony](http://symfony.com) or 
+[Yii](http://www.yiiframework.com), but if you just want to create quickly small to mid-size applications, then HUGE 
+might be interesting for you.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 [![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
 
