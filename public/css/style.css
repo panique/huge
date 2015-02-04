@@ -261,3 +261,8 @@ body {
     background-color: #ffffff;
     color: #252525;
 }
+
+/* error page */
+.red-text {
+    color: red;
+}
