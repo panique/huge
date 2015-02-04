@@ -2,12 +2,16 @@
 
 # HUGE
 
-Just a simple user authentication solution inside a simple framework skeleton that works out-of-the-box.
-Uses future-proof official bcrypt password hashing/salting implementation of PHP 5.5+ and comes with some nice
-additional features.
+Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
+(and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
+PHP 5.5+, plus some nice features that will speed up the time from idea to first usable prototype application 
+dramatically. Nothing more. This project has its focus on hardcore simplicity. Everything is as simple as possible, 
+made for smaller projects and typical agency work. If you want to build massive corporate applications with all the 
+features modern frameworks have, then have a look at [Laravel](http://laravel.com), [Symfony](http://symfony.com) or 
+[Yii](http://www.yiiframework.com), but if you just want to create quickly small to mid-size applications, then HUGE 
+might be interesting for you.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/panique/huge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 [![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
 
@@ -25,6 +29,7 @@ additional features.
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
++ [Documentation](#documentation)    
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -244,7 +249,16 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
-### Why is there no support forum ? <a name="why-no-support-forum"></a>
+#### Documentation <a name="documentation"></a>
+
+A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
+features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
+how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare :)
+ 
+ TODO: Full documentation
+ TODO: Basic examples on how to do things
+
+### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
 There were two (!) support forums for v1 and v2 of this project (HUGE is v3), and both were vandalized by people who
 didn't even read the readme and / or the install guidelines. Most asked question was "script does not work plz help"
@@ -255,7 +269,7 @@ were not necessary if the people would had read the guidelines, do a minimal res
 things so unnecessarily complicated. And even when writing detailed answers most of them still messed it up, resulting 
 in rants and complaints (for free support for a free software!). It was just frustrating to deal with this every day, 
 especially when people take it for totally granted that *it's the duty* of open-source developers to give detailed, 
-free and personal support for every stupid "plz help"-request.
+free and personal support for every "plz help"-request.
  
 So I decided to completely stop any free support. For serious questions about real problems inside the script please
 use the GitHub issues feature.
@@ -266,6 +280,7 @@ Harsh words, but as basically every public internet project gets harassed, vanda
 strange people it's necessary: Some simple rules. 
 
 1. Respect that this is just a simple script written by unpaid volunteers in their free-time. 
+   This is NOT business-software you've bought for $10.000.
    There's no reason to complain (!) about free open-source software. The attitude against free software
    is really frustrating these days, people take everything for granted without realizing the work behind it, and the
    fact they they get serious software totally for free, saving thousands of dollars. If you don't like it, then don't 

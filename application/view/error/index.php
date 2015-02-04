@@ -1,5 +1,6 @@
-<div class="content">
-    <h1 style="color: red;">
-        This page does not exist.
-    </h1>
+<div class="container">
+    <h1>Page not found</h1>
+    <div class="box">
+        <p class="red-text">This page does not exist.</p>
+    </div>
 </div>

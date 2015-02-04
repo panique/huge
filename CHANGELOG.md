@@ -2,6 +2,11 @@
 
 ## 3.0
 
+**February 2015**
+
+- [PR](https://github.com/panique/huge/pull/587) [upperwood] Facebook stuff completely removed from SQL
+- tiny text changes
+
 **January 2015**
 
 - [panique] added static Text class (gets the messages etc)
