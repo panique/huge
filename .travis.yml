@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 5.5
+  - 5.6
+  - hhvm
+
+matrix:
+    allow_failures:
+        - php: hhvm
+
+before_script:
+    - travis_retry composer self-update
+    - travis_retry composer --prefer-source --dev install
+
+script:
+    - phpunit --coverage-text tests
