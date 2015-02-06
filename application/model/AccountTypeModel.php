@@ -23,21 +23,9 @@ class AccountTypeModel
 			return false;
 		}
 
-		$database = DatabaseFactory::getFactory()->getConnection();
+		if (AccountTypeModel::saveNewAccountType($type)) {
 
-		$query = $database->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
-		$query->execute(array(
-			':new_type' => $type,
-			':user_id' => Session::get('user_id')
-		));
-
-		// feedback message
-		$feedback = "";
-
-		if ($query->rowCount() == 1) {
-
-			// set account type in session
-			Session::set('user_account_type', $type);
+			$feedback = "";
 
 			switch ($type) {
 				case 1:
@@ -57,4 +45,29 @@ class AccountTypeModel
 		return false;
 	}
 
+	/**
+	 * Writes the new account type marker to the database and to the session
+	 *
+	 * @param $type
+	 *
+	 * @return bool
+	 */
+	public static function saveNewAccountType($type)
+	{
+		$database = DatabaseFactory::getFactory()->getConnection();
+
+		$query = $database->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
+		$query->execute(array(
+			':new_type' => $type,
+			':user_id' => Session::get('user_id')
+		));
+
+		if ($query->rowCount() == 1) {
+			// set account type in session
+			Session::set('user_account_type', $type);
+			return true;
+		}
+
+		return false;
+	}
 }
