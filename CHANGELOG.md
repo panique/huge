@@ -4,8 +4,9 @@
 
 **February 2015**
 
+- [panique] AccountTypeModel reduced to one method (removed duplicate code)
 - [PR](https://github.com/panique/huge/pull/587) [upperwood] Facebook stuff completely removed from SQL
-- tiny text changes
+- [panique] tiny text changes
 
 **January 2015**
 
