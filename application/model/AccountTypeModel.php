@@ -18,7 +18,8 @@ class AccountTypeModel
 	 */
 	public static function changeAccountType($type)
 	{
-		if (!$type OR $type !== 1 OR $type !== 2) {
+		// this is error-prone, let's rewrite it
+		if (!$type OR ($type !== 1 AND $type !== 2)) {
 			return false;
 		}
 
