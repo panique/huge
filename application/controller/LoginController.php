@@ -178,10 +178,12 @@ class LoginController extends Controller
         Auth::checkAuthentication();
 
         if (Request::post('user_account_upgrade')) {
-            AccountTypeModel::changeAccountTypeUpgrade();
+            // "2" is quick & dirty account type 2, something like "premium user" maybe. you got the idea :)
+            AccountTypeModel::changeAccountType(2);
         }
         if (Request::post('user_account_downgrade')) {
-            AccountTypeModel::changeAccountTypeDowngrade();
+            // "1" is quick & dirty account type 1, something like "basic user" maybe.
+            AccountTypeModel::changeAccountType(1);
         }
 
         Redirect::to('login/changeAccountType');
