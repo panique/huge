@@ -31,27 +31,29 @@ class AccountTypeModel
 			':user_id' => Session::get('user_id')
 		));
 
+		// feedback message
+		$feedback = "";
+
 		if ($query->rowCount() == 1) {
 
 			// set account type in session
 			Session::set('user_account_type', $type);
 
-			// hmmm this is not good code style
-			if ($type == 2) {
-				Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL'));
-			} else if ($type == 1) {
-				Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL'));
+			switch ($type) {
+				case 1:
+					$feedback = Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL');
+					break;
+				case 2:
+					$feedback = Text::get('FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL');
+					break;
 			}
 
+			Session::add('feedback_positive', $feedback);
 			return true;
 		}
 
 		// default return
-		if ($type == 2) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_UPGRADE_FAILED'));
-		} else if ($type == 1) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_FAILED'));
-		}
+		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
 		return false;
 	}
 

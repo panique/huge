@@ -58,6 +58,7 @@ return array(
 	"FEEDBACK_ACCOUNT_UPGRADE_FAILED" => "Account upgrade failed.",
 	"FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL" => "Account downgrade was successful.",
 	"FEEDBACK_ACCOUNT_DOWNGRADE_FAILED" => "Account downgrade failed.",
+	"FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED" => "Account type change failed",
 	"FEEDBACK_NOTE_CREATION_FAILED" => "Note creation failed.",
 	"FEEDBACK_NOTE_EDITING_FAILED" => "Note editing failed.",
 	"FEEDBACK_NOTE_DELETION_FAILED" => "Note deletion failed.",
