@@ -1,12 +1,12 @@
-<div class="container">
-    <h1>LoginController/editUsername</h1>
+<div class="content">
+    <div class="page-header text-center">
+        <h1>LoginController/editUsername<small></small></h1>
+    </div>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
-
-    <div class="box">
-        <h2>Change your username</h2>
-
+    <div class="well">
+        <h3>Change your username</h3>
         <form action="<?php echo Config::get('URL'); ?>login/editUserName_action" method="post">
             <!-- btw http://stackoverflow.com/questions/774054/should-i-put-input-tag-inside-label-tag -->
             <label>

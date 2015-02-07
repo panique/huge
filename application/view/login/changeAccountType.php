@@ -1,10 +1,11 @@
-<div class="container">
-    <h1>LoginController/changeAccountType</h1>
+<div class="content">
+    <div class="page-header text-center">
+        <h1>LoginController/changeAccountType<small></small></h1>
+    </div>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
-
-    <div class="box">
+    <div class="well">
         <h2>Change account type</h2>
         <p>
             This page is a basic implementation of the upgrade-process.
@@ -18,15 +19,16 @@
         <h2>Currently your account type is: <?php echo Session::get('user_account_type'); ?></h2>
         <!-- basic implementation for two account types: type 1 and type 2 -->
         <?php if (Session::get('user_account_type') == 1) { ?>
-        <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
-            <label></label>
-            <input type="submit" name="user_account_upgrade" value="Upgrade my account" />
-        </form>
+            <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
+                <label></label>
+                <input type="submit" name="user_account_upgrade" value="Upgrade my account" />
+            </form>
         <?php } elseif (Session::get('user_account_type') == 2) { ?>
-        <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
-            <label></label>
-            <input type="submit" name="user_account_downgrade" value="Downgrade my account" />
-        </form>
+            <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
+                <label></label>
+                <input type="submit" name="user_account_downgrade" value="Downgrade my account" />
+            </form>
         <?php } ?>
     </div>
 </div>
+

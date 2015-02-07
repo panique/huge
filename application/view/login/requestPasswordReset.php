@@ -1,11 +1,12 @@
-<div class="container">
-    <h1>Request a password reset</h1>
-    <div class="box">
+<div class="content">
+    <div class="page-header text-center">
+        <h1>Login/requestPasswordReset<small></small></h1>
+    </div>
 
-        <!-- echo out the system feedback (error and success messages) -->
-        <?php $this->renderFeedbackMessages(); ?>
-
-        <!-- request password reset form box -->
+    <!-- echo out the system feedback (error and success messages) -->
+     <?php $this->renderFeedbackMessages(); ?>
+    <div class="well">
+        <h3>Request a password reset</h3>
         <form method="post" action="<?php echo Config::get('URL'); ?>login/requestPasswordReset_action">
             <label>
                 Enter your username or email and you'll get a mail with instructions:
@@ -13,6 +14,5 @@
             </label>
             <input type="submit" value="Send me a password-reset mail" />
         </form>
-
     </div>
 </div>

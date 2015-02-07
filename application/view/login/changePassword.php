@@ -1,15 +1,12 @@
-<div class="container">
-    <h1>LoginController/changePassword</h1>
+<div class="content">
+    <div class="page-header text-center">
+        <h1>LoginController/changePassword<small></small></h1>
+    </div>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
-
-    <div class="box">
-        <h2>Set new password</h2>
-
-        <p>FYI: ... Idenfitication process works via password-reset-token (hidden input field)</p>
-
-        <!-- new password form box -->
+    <div class="well">
+        <h3>Set new password</h3>
         <form method="post" action="<?php echo Config::get('URL'); ?>login/setNewPassword" name="new_password_form">
             <input type='hidden' name='user_name' value='<?php echo $this->user_name; ?>' />
             <input type='hidden' name='user_password_reset_hash' value='<?php echo $this->user_password_reset_hash; ?>' />
@@ -25,3 +22,6 @@
         <a href="<?php echo Config::get('URL'); ?>login/index">Back to Login Page</a>
     </div>
 </div>
+
+
+
