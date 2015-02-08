@@ -5,11 +5,15 @@
     <meta charset="utf-8">
     <!-- CSS -->
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/style.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 <body>
     <!-- wrapper, to center website -->
     <div class="wrapper">
 
+        
+        
+        
         <!-- logo -->
         <div class="logo"></div>
 

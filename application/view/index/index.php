@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container"><!--
     <h1>IndexController/index</h1>
     <div class="box">
 
-        <!-- echo out the system feedback (error and success messages) -->
-        <?php $this->renderFeedbackMessages(); ?>
+         echo out the system feedback (error and success messages) 
+    <?php $this->renderFeedbackMessages(); ?>
 
         <h3>What happens here ?</h3>
         <p>
@@ -15,11 +15,11 @@
             this text you are reading right now.
         </p>
     </div>
-</div>
+    -->
+    <div class="row">
+        <div class="col-md-4">1</div>
+        <div class="col-md-4">2</div>
+        <div class="col-md-4">3</div>
+    </div>
 
-
-<div class="row">
-    <div class="col-md-4">1</div>
-    <div class="col-md-4">2</div>
-    <div class="col-md-4">3</div>
 </div>
