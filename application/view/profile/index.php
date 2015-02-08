@@ -1,17 +1,17 @@
-<div class="container">
-    <h1>ProfileController/index</h1>
-    <div class="box">
+<div class="content">
+    <div class="page-header text-center">
+        <h1>ProfileController/index<small></small></h1>
+    </div>
 
-        <!-- echo out the system feedback (error and success messages) -->
-        <?php $this->renderFeedbackMessages(); ?>
-
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
+    <div class="well">
         <h3>What happens here ?</h3>
-        <div>
-            This controller/action/view shows a list of all users in the system. You could use the underlying code to
+                    This controller/action/view shows a list of all users in the system. You could use the underlying code to
             build things that use profile information of one or multiple/all users.
-        </div>
+    </div>
         <div>
-            <table class="overview-table">
+            <table class="table">
                 <thead>
                 <tr>
                     <td>Id</td>

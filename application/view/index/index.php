@@ -1,25 +1,17 @@
-<div class="container"><!--
-    <h1>IndexController/index</h1>
-    <div class="box">
+<div class="content">
+    <div class="page-header text-center">
+        <h1>IndexController/index<small>Home Page</small></h1>
+    </div>
 
-         echo out the system feedback (error and success messages) 
-    <?php $this->renderFeedbackMessages(); ?>
-
+    <!-- echo out the system feedback (error and success messages) -->
+     <?php $this->renderFeedbackMessages(); ?>
+    <div class="well">
         <h3>What happens here ?</h3>
-        <p>
             This is the homepage. As no real URL-route (like /login/register) is provided, the app uses the default
             controller and the default action, defined in application/config/config.php, by default it's
             IndexController and index()-method. So, the app will load application/controller/IndexController.php and
             run index() from that file. Easy. That index()-method (= the action) has just one line of code inside
             ($this->view->render('index/index');) that loads application/view/index/index.php, which is basically
             this text you are reading right now.
-        </p>
     </div>
-    -->
-    <div class="row">
-        <div class="col-md-4">1</div>
-        <div class="col-md-4">2</div>
-        <div class="col-md-4">3</div>
-    </div>
-
 </div>

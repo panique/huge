@@ -1,14 +1,14 @@
-<div class="container">
-    <h1>NoteController/edit/:note_id</h1>
+<div class="content">
+    <div class="page-header text-center">
+        <h1>NoteController/edit/:note_id<small></small></h1>
+    </div>
 
-    <div class="box">
-        <h2>Edit a note</h2>
-
-        <!-- echo out the system feedback (error and success messages) -->
-        <?php $this->renderFeedbackMessages(); ?>
-
+    <!-- echo out the system feedback (error and success messages) -->
+    <?php $this->renderFeedbackMessages(); ?>
+    <div class="well well-sm">
+        <h3>Edit a note</h3>
         <?php if ($this->note) { ?>
-            <form method="post" action="<?php echo Config::get('URL'); ?>note/editSave">
+            <form class="text-center" method="post" action="<?php echo Config::get('URL'); ?>note/editSave">
                 <label>Change text of note: </label>
                 <!-- we use htmlentities() here to prevent user input with " etc. break the HTML -->
                 <input type="hidden" name="note_id" value="<?php echo htmlentities($this->note->note_id); ?>" />
@@ -19,9 +19,8 @@
             <p>This note does not exist.</p>
         <?php } ?>
     </div>
+
 </div>
-<div class="row">
-    <div class="col-md-4">1</div>
-    <div class="col-md-4">2</div>
-    <div class="col-md-4">3</div>
 </div>
+
+
