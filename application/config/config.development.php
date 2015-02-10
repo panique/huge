@@ -7,8 +7,8 @@
 
 /**
  * Configuration for: Error reporting
- * Useful to show every little problem during development, but only show hard errors in production.
- * It's a little bit dirty to put this here, but who cares.
+ * Useful to show every little problem during development, but only show hard / no errors in production.
+ * It's a little bit dirty to put this here, but who cares. For development purposes it's totally okay.
  */
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
