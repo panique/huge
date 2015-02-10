@@ -6,10 +6,19 @@ Just a simple user authentication solution inside a super-simple framework skele
 (and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
 PHP 5.5+, plus some nice features that will speed up the time from idea to first usable prototype application 
 dramatically. Nothing more. This project has its focus on hardcore simplicity. Everything is as simple as possible, 
-made for smaller projects and typical agency work. If you want to build massive corporate applications with all the 
-features modern frameworks have, then have a look at [Laravel](http://laravel.com), [Symfony](http://symfony.com) or 
-[Yii](http://www.yiiframework.com), but if you just want to create quickly small to mid-size applications, then HUGE 
-might be interesting for you.
+made for smaller projects, typical agency work and quick pitch drafts. If you want to build massive corporate 
+applications with all the features modern frameworks have, then have a look at [Laravel](http://laravel.com), 
+[Symfony](http://symfony.com) or [Yii](http://www.yiiframework.com), but if you just want to quickly create something
+that just works, then HUGE might be interesting for you.
+
+HUGE's simple-as-possible architecture was inspired by several conference talks, slides and articles about huge 
+applications that - surprisingly and intentionally - go back to the basics of programming, using procedural programming, 
+static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
+([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud). Plus, my experience 
+with several agencies and startups that built small applications for 100.000s of users with just a handful of files 
+within a few days, usually *without* a team of highly experienced senior developers. 
+Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), 
+[YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it). 
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
