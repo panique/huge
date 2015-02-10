@@ -14,9 +14,7 @@ that just works, then this script might be interesting for you.
 HUGE's simple-as-possible architecture was inspired by several conference talks, slides and articles about huge 
 applications that - surprisingly and intentionally - go back to the basics of programming, using procedural programming, 
 static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
-([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud). Plus, my experience 
-with several agencies and startups that built small applications for 100.000s of users with just a handful of files 
-within a few days, usually *without* a team of highly experienced senior developers. 
+([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud).
 
 Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it). 
 
