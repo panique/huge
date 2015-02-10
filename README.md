@@ -21,7 +21,6 @@ within a few days, usually *without* a team of highly experienced senior develop
 Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it). 
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/panique/huge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/build-status/master)
 [![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
 [![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
 
