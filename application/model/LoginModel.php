@@ -32,6 +32,16 @@ class LoginModel
             Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
             return false;
         }
+        
+        if($result->user_deleted == 1){
+            Session::add('feedback_negative', Text::get('FEEDBACK_DELETED'));
+            return false;
+        }
+        
+        if($result->user_suspension_timestamp - time() > 0){
+            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60),2) . 'minuets left';
+            return false;
+        }
 
         // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
         if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
