@@ -39,7 +39,8 @@ class LoginModel
         }
         
         if($result->user_suspension_timestamp - time() > 0){
-            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60),2) . 'minuets left';
+            $suspensionTimer =  Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60,2) . " hours left";
+            Session::add('feedback_negative', $suspensionTimer);
             return false;
         }
 
