@@ -1,11 +1,16 @@
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 # list any PHP version you want to test against
+
 php:
 # using major version aliases
 # aliased to a recent 5.5.x version
 - 5.5
 # aliased to a recent 5.6.x version
 - 5.6
+
+# elegant and simple solution to run tests from ./tests folder :)
+before_script: cd tests
+
 # omitting "script:" will default to phpunit
-script: phpunit --configuration ./tests/phpunit.xml.dist --coverage-text
+script: phpunit --configuration phpunit.xml.dist --coverage-text
