@@ -39,25 +39,6 @@
             <?php } ?>
         </ul>
 
-        <!--
-        <?php if (Session::userIsLoggedIn()) : ?>
-            <div class="header_right_box">
-                <div class="namebox">
-                    Hello <?php echo Session::get('user_name'); ?> !
-                </div>
-                <div class="avatar">
-                    <?php if (Config::get('USE_GRAVATAR')) { ?>
-                        <img src='<?php echo Session::get('user_gravatar_image_url'); ?>'
-                             style='width:<?php echo Config::get('AVATAR_SIZE'); ?>px; height:<?php echo Config::get('AVATAR_SIZE'); ?>px;' />
-                    <?php } else { ?>
-                        <img src='<?php echo Session::get('user_avatar_file'); ?>'
-                             style='width:<?php echo Config::get('AVATAR_SIZE'); ?>px; height:<?php echo Config::get('AVATAR_SIZE'); ?>px;' />
-                    <?php } ?>
-                </div>
-            </div>
-        <?php endif; ?>
-        -->
-
         <!-- my account -->
         <ul class="navigation right">
         <?php if (Session::userIsLoggedIn()) : ?>
