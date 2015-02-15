@@ -1,0 +1,5 @@
+# This file just tells the wonderful code quality analyzer Scrutinizer (https://scrutinizer-ci.com/g/panique/huge/)
+# that we are using external services (Travis) to generate code coverage stats
+# TODO is this correct ?
+tools:
+    external_code_coverage: true
