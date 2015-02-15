@@ -1,10 +1,16 @@
 # CHANGE LOG
 
+## 3.1 (currently in develop branch)
+
+**February 2015**
+
+- [panique] renamed AccountType stuff to UserRole, minor changes 
+
 ## 3.0
 
 **February 2015**
 
-- [panique] AccountTypeModel reduced to one method (removed duplicate code)
+- [panique] removed duplicate code in AccountTypeModel
 - [PR](https://github.com/panique/huge/pull/587) [upperwood] Facebook stuff completely removed from SQL
 - [panique] tiny text changes
 

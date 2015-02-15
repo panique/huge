@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class AccountTypeModel
+ * Class UserRoleModel
  *
  * This class contains everything that is related to up- and downgrading accounts.
  */
-class AccountTypeModel
+class UserRoleModel
 {
 	/**
 	 * Upgrades / downgrades the user's account. Currently it's just the field user_account_type in the database that
@@ -16,14 +16,18 @@ class AccountTypeModel
 	 *
 	 * @return bool
 	 */
-	public static function changeAccountType($type)
+	public static function changeUserRole($type)
 	{
 		// this is error-prone, let's rewrite it
 		if (!$type OR ($type !== 1 AND $type !== 2)) {
 			return false;
 		}
 
-		if (AccountTypeModel::saveNewAccountType($type)) {
+		// if user want to upgrade to a higher role (from basic to premium) you could add a role-check and a payment
+		// process here
+
+		// save new role to database
+		if (UserRoleModel::saveRoleToDatabase($type)) {
 
 			$feedback = "";
 
@@ -52,8 +56,10 @@ class AccountTypeModel
 	 *
 	 * @return bool
 	 */
-	public static function saveNewAccountType($type)
+	public static function saveRoleToDatabase($type)
 	{
+		// you should make sure that it's not possible to set non-existing user types (other than 1 or 2)
+
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		$query = $database->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
