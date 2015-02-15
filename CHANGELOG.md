@@ -4,6 +4,7 @@
 
 **February 2015**
 
+- [panique] avatarModel code improvements
 - [panique] renamed AccountType stuff to UserRole, minor changes 
 
 ## 3.0
