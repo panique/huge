@@ -13,4 +13,4 @@ php:
 before_script: cd tests
 
 # omitting "script:" will default to phpunit
-script: phpunit --configuration phpunit.xml.dist --coverage-text
+script: phpunit
