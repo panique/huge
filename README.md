@@ -2,6 +2,11 @@
 
 # HUGE
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/huge/?branch=develop)
+[![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
+[![Travis CI](https://travis-ci.org/panique/huge.svg?branch=develop)](https://travis-ci.org/panique/huge)
+[![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
+
 Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
 (and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
 PHP 5.5+, plus some nice features that will speed up the time from idea to first usable prototype application 
@@ -16,12 +21,7 @@ applications that - surprisingly and intentionally - go back to the basics of pr
 static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
 ([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud).
 
-Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it). 
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/huge/?branch=develop)
-[![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
-[![Travis CI](https://travis-ci.org/panique/huge.svg?branch=develop)](https://travis-ci.org/panique/huge)
-[![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
+Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
 
 #### Quick-Index 
 
