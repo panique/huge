@@ -10,7 +10,10 @@ php:
 - 5.6
 
 # elegant and simple solution to run tests from ./tests folder :)
-before_script: cd tests
+before_script:
+- sudo a2enmod rewrite
+- sudo service apache2 restart
+- cd tests
 
 # omitting "script:" will default to phpunit
 script: phpunit
