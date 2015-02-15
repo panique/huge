@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    DocumentRoot "%TRAVIS_BUILD_DIR%/public"
+    <Directory "%TRAVIS_BUILD_DIR%/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
