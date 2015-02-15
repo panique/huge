@@ -9,6 +9,8 @@ php:
 # aliased to a recent 5.6.x version
 - 5.6
 
+sudo: true
+
 # elegant and simple solution to run tests from ./tests folder :)
 before_script:
 - sudo a2enmod rewrite
