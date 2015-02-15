@@ -177,25 +177,18 @@ class PasswordResetModel
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
 
-		$sql = "UPDATE users
-                   SET user_password_hash = :user_password_hash,
-                       user_password_reset_hash = NULL,
+		$sql = "UPDATE users SET user_password_hash = :user_password_hash, user_password_reset_hash = NULL,
                        user_password_reset_timestamp = NULL
-                 WHERE user_name = :user_name
-                       AND user_password_reset_hash = :user_password_reset_hash
-                       AND user_provider_type = :user_provider_type
-                 LIMIT 1";
+                 WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash
+                       AND user_provider_type = :user_provider_type LIMIT 1";
 		$query = $database->prepare($sql);
 		$query->execute(array(
 			':user_password_hash' => $user_password_hash, ':user_name' => $user_name,
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_provider_type' => 'DEFAULT'
 		));
 
-		// if successful
-		if ($query->rowCount() == 1) {
-			return true;
-		}
-		return false;
+		// if one result exists, return true, else false. Could be written even shorter btw.
+		return ($query->rowCount() == 1 ? true : false);
 	}
 
 	/**
