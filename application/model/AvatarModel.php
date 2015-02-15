@@ -61,23 +61,36 @@ class AvatarModel
 
 	/**
 	 * Create an avatar picture (and checks all necessary things too)
-	 * TODO decoupling
-	 * TODO total rebuild, this is too quick & dirty
-	 *
-	 * @return bool success status
+	 * TODO decouple
+	 * TODO total rebuild
 	 */
 	public static function createAvatar()
 	{
-		// check if upload fits all rules
-		AvatarModel::validateImageFile();
+		// check avatar folder writing rights, check if upload fits all rules
+		if (AvatarModel::isAvatarFolderWritable() AND AvatarModel::validateImageFile()) {
 
-		// create a jpg file in the avatar folder, write marker to database
-		$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
-		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
-		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
-		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-		Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
-		return true;
+			// create a jpg file in the avatar folder, write marker to database
+			$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
+			AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
+			AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
+			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
+			Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
+		}
+	}
+
+	/**
+	 * Checks if the avatar folder exists and is writable
+	 *
+	 * @return bool success status
+	 */
+	public static function isAvatarFolderWritable()
+	{
+		if (is_dir(Config::get('PATH_AVATARS')) AND is_writable(Config::get('PATH_AVATARS'))) {
+			return true;
+		}
+
+		Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
+		return false;
 	}
 
 	/**
@@ -88,11 +101,6 @@ class AvatarModel
 	 */
 	public static function validateImageFile()
 	{
-		if (!is_dir(Config::get('PATH_AVATARS')) OR !is_writable(Config::get('PATH_AVATARS'))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
-			return false;
-		}
-
 		if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
 			return false;
@@ -117,6 +125,8 @@ class AvatarModel
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
 			return false;
 		}
+
+		return true;
 	}
 
 	/**
