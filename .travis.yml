@@ -3,8 +3,24 @@ php:
     - 5.5
     - 5.6
     - hhvm
+
+matrix:
+  allow_failures:
+  - php: hhvm
+
+before_install:
+- sudo apt-get update > /dev/null
+
 before_script:
-    - composer self-update
-    - composer install --prefer-source --no-interaction --dev
-    - cd tests
+   - sudo apt-get install apache2
+   - sudo a2enmod rewrite
+   # configure apache virtual hosts
+   - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
+   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+   - sudo service apache2 restart
+   # composer
+   - composer self-update
+   - composer install --prefer-source --no-interaction --dev
+   - cd tests
+
 script: phpunit --configuration phpunit.xml --coverage-text
