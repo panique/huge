@@ -14,9 +14,24 @@ before_install:
 before_script:
    - sudo apt-get install apache2
    - sudo a2enmod rewrite
+
+  # setup hosts file
+  - VHOST=$(cat <<EOF
+  <VirtualHost *:80>
+      DocumentRoot "%TRAVIS_BUILD_DIR%/public"
+      <Directory "%TRAVIS_BUILD_DIR%/public">
+          AllowOverride All
+          Require all granted
+      </Directory>
+  </VirtualHost>
+  EOF
+  )
+  - echo "${VHOST}" > /etc/apache2/sites-available/default
+
    # configure apache virtual hosts
-   - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
+   #- sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+
    - sudo service apache2 restart
    # composer
    - composer self-update
