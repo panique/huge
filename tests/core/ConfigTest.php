@@ -35,8 +35,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		// fake application constants
 		putenv('APPLICATION_ENV=foobar');
 
-		var_dump(Environment::get());
-
 		// call for environment should return false because config.foobar.php does not exist
 		$this->assertEquals(false, Config::get('DEFAULT_ACTION'));
 	}
