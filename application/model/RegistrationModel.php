@@ -166,7 +166,8 @@ class RegistrationModel
 	}
 
 	/**
-	 * Sends the verification email (to confirm the account)
+	 * Sends the verification email (to confirm the account).
+	 * The construction of the mail $body looks weird at first, but it's really just a simple string.
 	 *
 	 * @param int $user_id user's id
 	 * @param string $user_email user's email
@@ -176,27 +177,21 @@ class RegistrationModel
 	 */
 	public static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
 	{
-		// create email body
 		$body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
 		        . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
 
-		// create instance of Mail class, try sending and check
 		$mail = new Mail;
-		$mail_sent = $mail->sendMail(
-			$user_email,
-			Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
-			Config::get('EMAIL_VERIFICATION_FROM_NAME'),
-			Config::get('EMAIL_VERIFICATION_SUBJECT'),
-			$body
+		$mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
+			Config::get('EMAIL_VERIFICATION_FROM_NAME'), Config::get('EMAIL_VERIFICATION_SUBJECT'), $body
 		);
 
 		if ($mail_sent) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL'));
 			return true;
+		} else {
+			Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
+			return false;
 		}
-
-		Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
-		return false;
 	}
 
 	/**
