@@ -41,7 +41,7 @@ class LoginModel
 
         // if hash of provided password does NOT match the hash in the database: +1 failed-login counter
         if (!password_verify($user_password, $result->user_password_hash)) {
-            LoginModel::incrementFailedLoginCounterOfUser($user_name);
+            self::incrementFailedLoginCounterOfUser($user_name);
             // we say "password wrong" here, but less details like "login failed" would be better (= less information)
             Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG'));
             return false;
@@ -57,19 +57,19 @@ class LoginModel
 
         // reset the failed login counter for that user (if necessary)
         if ($result->user_last_failed_login > 0) {
-            LoginModel::resetFailedLoginCounterOfUser($user_name);
+            self::resetFailedLoginCounterOfUser($user_name);
         }
 
         // save timestamp of this login in the database line of that user
-        LoginModel::saveTimestampOfLoginOfUser($user_name);
+        self::saveTimestampOfLoginOfUser($user_name);
 
         // if user has checked the "remember me" checkbox, then write token into database and into cookie
         if ($set_remember_me_cookie) {
-            LoginModel::setRememberMeInDatabaseAndCookie($result->user_id);
+            self::setRememberMeInDatabaseAndCookie($result->user_id);
         }
 
         // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-        LoginModel::setSuccessfulLoginIntoSession(
+        self::setSuccessfulLoginIntoSession(
             $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
         );
 
@@ -113,11 +113,11 @@ class LoginModel
         // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-            LoginModel::setSuccessfulLoginIntoSession(
+            self::setSuccessfulLoginIntoSession(
                 $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
             );
             // save timestamp of this login in the database line of that user
-            LoginModel::saveTimestampOfLoginOfUser($result->user_name);
+            self::saveTimestampOfLoginOfUser($result->user_name);
 
             // NOTE: we don't set another remember_me-cookie here as the current cookie should always
             // be invalid after a certain amount of time, so the user has to login with username/password
@@ -136,7 +136,7 @@ class LoginModel
      */
     public static function logout()
     {
-        LoginModel::deleteCookie();
+        self::deleteCookie();
         Session::destroy();
     }
 
