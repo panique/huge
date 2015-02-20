@@ -159,6 +159,17 @@ class LoginController extends Controller
     }
 
     /**
+     * Delete the current user's avatar
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
+     */
+    public function deleteAvatar_action()
+    {
+        Auth::checkAuthentication();
+        AvatarModel::deleteAvatar(Session::get("user_id"));
+        Redirect::to('login/showProfile');
+    }
+
+    /**
      * Show the change-account-type page
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
