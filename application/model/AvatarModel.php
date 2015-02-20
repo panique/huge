@@ -232,7 +232,7 @@ class AvatarModel
 
                 if ($sth->rowCount() == 1) {
                         // Reset avatar file path session
-                        Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($userId));
+                        Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId($userId));
 
                         Session::add("feedback_positive", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
                         return true;
