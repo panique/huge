@@ -49,7 +49,7 @@
                         <a href="<?php echo Config::get('URL'); ?>login/changeUserRole">Change account type</a>
                     </li>
                     <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
-                        <a href="<?php echo Config::get('URL'); ?>login/uploadavatar">Upload an avatar</a>
+                        <a href="<?php echo Config::get('URL'); ?>login/editAvatar">Edit your avatar</a>
                     </li>
                     <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                         <a href="<?php echo Config::get('URL'); ?>login/editusername">Edit my username</a>
