@@ -18,8 +18,7 @@ class UserRoleModel
 	 */
 	public static function changeUserRole($type)
 	{
-		// this is error-prone, let's rewrite it
-		if (!$type OR ($type !== 1 AND $type !== 2)) {
+		if (!$type) {
 			return false;
 		}
 
@@ -42,7 +41,9 @@ class UserRoleModel
 	 */
 	public static function saveRoleToDatabase($type)
 	{
-		// you should make sure that it's not possible to set non-existing user types (other than 1 or 2)
+		if ($type !== 1 AND $type !== 2) {
+			return false;
+		}
 
 		$database = DatabaseFactory::getFactory()->getConnection();
 
