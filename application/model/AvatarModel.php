@@ -101,7 +101,7 @@ class AvatarModel
 	 */
 	public static function validateImageFile()
 	{
-		if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
+		if (!isset($_FILES['avatar_file'])) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
 			return false;
 		}
@@ -121,7 +121,7 @@ class AvatarModel
 			return false;
 		}
 
-		if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
+		if (!($image_proportions['mime'] == 'image/jpeg')) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
 			return false;
 		}
@@ -153,7 +153,7 @@ class AvatarModel
 	 * @param int $final_height The desired height of the new image.
 	 * @param int $quality The quality of the JPG to produce 1 - 100
 	 *
-	 * TODO currently we just allow .jpg / .png
+	 * TODO currently we just allow .jpg
 	 *
 	 * @return bool success state
 	 */
