@@ -23,7 +23,7 @@ class UserRoleModel
 		}
 
 		// save new role to database
-		if (UserRoleModel::saveRoleToDatabase($type)) {
+		if (self::saveRoleToDatabase($type)) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL'));
 			return true;
 		} else {
@@ -41,7 +41,8 @@ class UserRoleModel
 	 */
 	public static function saveRoleToDatabase($type)
 	{
-		if ($type !== 1 AND $type !== 2) {
+		// if $type is not 1 or 2
+		if (!in_array($type, [1, 2])) {
 			return false;
 		}
 
