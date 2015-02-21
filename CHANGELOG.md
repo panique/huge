@@ -2,6 +2,8 @@
 
 ## 3.1 (currently in develop branch)
 
+Code Quality at Scrutinizer 9.6 / 10, at Code Climate 3.9 / 10
+
 **February 2015**
 
 - [panique] lots of code refactorings and simplifications all over the project
@@ -12,6 +14,8 @@
 - [panique] renamed AccountType stuff to UserRole, minor changes 
 
 ## 3.0
+
+Code Quality at Scrutinizer 9.3 / 10, at Code Climate 3.9 / 10 
 
 **February 2015**
 
