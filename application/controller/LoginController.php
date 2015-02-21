@@ -135,13 +135,13 @@ class LoginController extends Controller
     }
 
     /**
-     * Upload avatar
+     * Edit avatar
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    public function uploadAvatar()
+    public function editAvatar()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/uploadAvatar', array(
+        $this->View->render('login/editAvatar', array(
             'avatar_file_path' => AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
         ));
     }
@@ -155,7 +155,18 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         AvatarModel::createAvatar();
-        Redirect::to('login/uploadAvatar');
+        Redirect::to('login/editAvatar');
+    }
+
+    /**
+     * Delete the current user's avatar
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
+     */
+    public function deleteAvatar_action()
+    {
+        Auth::checkAuthentication();
+        AvatarModel::deleteAvatar(Session::get("user_id"));
+        Redirect::to('login/editAvatar');
     }
 
     /**

@@ -196,4 +196,49 @@ class AvatarModel
 		// default return
 		return false;
 	}
+
+        /**
+         * Delete a user's avatar
+         *
+         * @param int $userId
+         *
+         * @return bool success
+         */
+        public static function deleteAvatar($userId)
+        {
+                if (!ctype_digit($userId)) {
+                        Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+                        return false;
+                }
+
+                // Check if file exists
+                if (!file_exists(Config::get('PATH_AVATARS').$userId.".jpg")) {
+                        Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_NO_FILE"));
+                        return false;
+                }
+
+                // Delete avatar file
+                if (!unlink(Config::get('PATH_AVATARS').$userId.".jpg")) {
+                        Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+                        return false;
+                }
+
+                $database = DatabaseFactory::getFactory()->getConnection();
+
+                // Set user_has_avatar back to 0
+                $sth = $database->prepare("UPDATE users SET user_has_avatar = 0 WHERE user_id = :user_id LIMIT 1");
+                $sth->bindValue(":user_id", (int)$userId, PDO::PARAM_INT);
+                $sth->execute();
+
+                if ($sth->rowCount() == 1) {
+                        // Reset avatar file path session
+                        Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId($userId));
+
+                        Session::add("feedback_positive", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
+                        return true;
+                } else {
+                        Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+                        return false;
+                }
+        }
 }
