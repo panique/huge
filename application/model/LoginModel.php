@@ -94,15 +94,9 @@ class LoginModel
             return false;
         }
 
-        // check cookie's contents, check if cookie contents belong together
+        // check cookie's contents, check if cookie contents belong together or token is empty
         list ($user_id, $token, $hash) = explode(':', $cookie);
-        if ($hash !== hash('sha256', $user_id . ':' . $token)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
-            return false;
-        }
-
-        // do not log in when token is empty
-        if (empty($token)) {
+        if ($hash !== hash('sha256', $user_id . ':' . $token) OR empty($token)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
