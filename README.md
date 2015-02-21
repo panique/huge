@@ -257,6 +257,23 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
+### What the hell are .travis.yml, .scrutinizer.yml etc. ?
+
+There are several files in the root folder of the project that might be irritating:
+
+ - *.htaccess* (optionally) routes all traffic to /public/index.php! If you installed this project correctly, then this
+   file is not necessary, but as lots of people have problems setting up the vhost correctly, .htaccess it still there
+   to increase security, even on partly-broken-installations.
+ - *.scrutinizer.yml* (can be deleted): Configs for the external code quality analyzer Scrutinizer, just used here on
+   GitHub, you don't need this for your project.
+ - *.travis.yml* (can be deleted): Same like above. Travis is an external service that creates installations of this
+   repo after each code change to make sure everything runs fine. Also runs the unit tests. You don't need this inside
+   your project.
+ - *composer.json* (important): You should know what this does. ;) This file says what external dependencies are used.  
+ - *travis-ci-apache* (can be deleted): Config file for Travis, see above, so Travis knows how to setup the Apache.    
+    
+*README* and *CHANGELOG* are self-explaining.
+
 #### Documentation <a name="documentation"></a>
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
