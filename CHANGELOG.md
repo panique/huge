@@ -4,6 +4,7 @@
 
 **February 2015**
 
+- [panique] lots of code refactorings and simplifications all over the project
 - [PR](https://github.com/panique/huge/pull/615) [Dominic28] Avatar can now be deleted by the user
 - [panique] First Unit tests :)
 - [panique] several code quality improvements all over the project
