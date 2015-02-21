@@ -88,7 +88,6 @@ class LoginModel
      */
     public static function loginWithCookie($cookie)
     {
-        // do we have a cookie ?
         if (!$cookie) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
@@ -103,19 +102,11 @@ class LoginModel
 
         // get data of user that has this id and this token
         $result = UserModel::getUserDataByUserIdAndToken($user_id, $token);
-
-        // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
-            self::setSuccessfulLoginIntoSession(
-                $result->user_id, $result->user_name, $result->user_email, $result->user_account_type
-            );
+            self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type);
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
-
-            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
-            // be invalid after a certain amount of time, so the user has to login with username/password
-            // again from time to time. This is good and safe ! ;)
 
             Session::add('feedback_positive', Text::get('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
             return true;
