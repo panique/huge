@@ -23,30 +23,14 @@ class UserRoleModel
 			return false;
 		}
 
-		// if user want to upgrade to a higher role (from basic to premium) you could add a role-check and a payment
-		// process here
-
 		// save new role to database
 		if (UserRoleModel::saveRoleToDatabase($type)) {
-
-			$feedback = "";
-
-			switch ($type) {
-				case 1:
-					$feedback = Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL');
-					break;
-				case 2:
-					$feedback = Text::get('FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL');
-					break;
-			}
-
-			Session::add('feedback_positive', $feedback);
+			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL'));
 			return true;
+		} else {
+			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
+			return false;
 		}
-
-		// default return
-		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
-		return false;
 	}
 
 	/**
