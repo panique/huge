@@ -24,44 +24,20 @@ class LoginModel
             return false;
         }
 
-        // get all data of that user (to later check if password and password_hash fit)
-        $result = UserModel::getUserDataByUsername($user_name);
+	    // checks if user exists, if login is not blocked (due to failed logins) and if password fits the hash
+	    $result = self::validateAndGetUser($user_name, $user_password);
 
-        // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
-        if (!$result) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
-            return false;
-        }
-
-        // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-        if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
-            return false;
-        }
-
-        // if hash of provided password does NOT match the hash in the database: +1 failed-login counter
-        if (!password_verify($user_password, $result->user_password_hash)) {
-            self::incrementFailedLoginCounterOfUser($user_name);
-            // we say "password wrong" here, but less details like "login failed" would be better (= less information)
-            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG'));
-            return false;
-        }
-
-        // from here we assume that the password hash fits the database password hash, as password_verify() was true
-
-        // if user is not active (= has not verified account by verification mail)
-        if ($result->user_active != 1) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
-            return false;
-        }
+	    if (!$result) {
+		    return false;
+	    }
 
         // reset the failed login counter for that user (if necessary)
         if ($result->user_last_failed_login > 0) {
-            self::resetFailedLoginCounterOfUser($user_name);
+            self::resetFailedLoginCounterOfUser($result->user_name);
         }
 
         // save timestamp of this login in the database line of that user
-        self::saveTimestampOfLoginOfUser($user_name);
+        self::saveTimestampOfLoginOfUser($result->user_name);
 
         // if user has checked the "remember me" checkbox, then write token into database and into cookie
         if ($set_remember_me_cookie) {
@@ -77,6 +53,49 @@ class LoginModel
         // maybe do this in dependence of setSuccessfulLoginIntoSession ?
         return true;
     }
+
+	/**
+	 * Validates the inputs of the users, checks if password is correct etc.
+	 * If successful, user is returned
+	 *
+	 * @param $user_name
+	 * @param $user_password
+	 *
+	 * @return bool|mixed
+	 */
+	private static function validateAndGetUser($user_name, $user_password)
+	{
+		// get all data of that user (to later check if password and password_hash fit)
+		$result = UserModel::getUserDataByUsername($user_name);
+
+		// Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
+		if (!$result) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
+			return false;
+		}
+
+		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+		if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
+			return false;
+		}
+
+		// if hash of provided password does NOT match the hash in the database: +1 failed-login counter
+		if (!password_verify($user_password, $result->user_password_hash)) {
+			self::incrementFailedLoginCounterOfUser($result->user_name);
+			// we say "password wrong" here, but less details like "login failed" would be better (= less information)
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG'));
+			return false;
+		}
+
+		// if user is not active (= has not verified account by verification mail)
+		if ($result->user_active != 1) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
+			return false;
+		}
+
+		return $result;
+	}
 
     /**
      * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
