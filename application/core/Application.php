@@ -26,13 +26,15 @@ class Application
         // create array with URL parts in $url
         $this->splitUrl();
 
-	    // controller_name = if controller_name exists = controller_name, else default controller
-	    // btw we are using the shorthand ternary operator syntax here
-	    // @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-	    $this->controller_name = ($this->controller_name) ? $this->controller_name : Config::get('DEFAULT_CONTROLLER');
+        // check for controller: no controller given ? then make controller = default controller (from config)
+        if (!$this->controller_name) {
+            $this->controller_name = Config::get('DEFAULT_CONTROLLER');
+        }
 
-        // check for action: no action given or empty string ? then make action = default action (from config), else given action
-	    $this->action_name = (!$this->action_name OR (strlen($this->action_name) == 0)) ? Config::get('DEFAULT_ACTION') : $this->action_name;
+        // check for action: no action given ? then make action = default action (from config)
+        if (!$this->action_name OR (strlen($this->action_name) == 0)) {
+            $this->action_name = Config::get('DEFAULT_ACTION');
+        }
 
         // rename controller name to real controller class/file name ("index" to "IndexController")
         $this->controller_name = ucwords($this->controller_name) . 'Controller';
