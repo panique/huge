@@ -89,34 +89,91 @@ class RegistrationModel
 		// perform all necessary checks
 		if (!CaptchaModel::checkCaptcha($captcha)) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
-		} else if (empty($user_name)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
-		} else if (empty($user_password_new) OR empty($user_password_repeat)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_FIELD_EMPTY'));
-		} else if ($user_password_new !== $user_password_repeat) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_REPEAT_WRONG'));
-		} else if (strlen($user_password_new) < 6) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_TOO_SHORT'));
-		} else if (strlen($user_name) > 64 OR strlen($user_name) < 2) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG'));
-		} else if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN'));
-		} else if (empty($user_email)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_FIELD_EMPTY'));
-		} else if (strlen($user_email) > 254) {
-			// @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-			Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_TOO_LONG'));
-		} else if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN'));
-		} else {
-			// if no validation failed, return true
-			// hmmm... maybe this could be written in a better way
-			return true;
+            return false;
 		}
+
+        // if username, email and password are all correctly validated
+        if (self::validateUserName($user_name) AND self::validateUserEmail($user_email) AND self::validateUserPassword($user_password_new, $user_password_repeat)) {
+            return true;
+        }
 
 		// otherwise, return false
 		return false;
 	}
+
+    /**
+     * @param $user_name
+     * @return bool
+     */
+    public static function validateUserName($user_name)
+    {
+        if (empty($user_name)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
+            return false;
+        }
+
+        if (strlen($user_name) > 64 OR strlen($user_name) < 2) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG'));
+            return false;
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN'));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $user_email
+     * @return bool
+     */
+    public static function validateUserEmail($user_email)
+    {
+        if (empty($user_email)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_FIELD_EMPTY'));
+            return false;
+        }
+
+        if (strlen($user_email) > 254) {
+            // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_TOO_LONG'));
+            return false;
+        }
+
+        if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN'));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $user_password_new
+     * @param $user_password_repeat
+     * @return bool
+     */
+    public static function validateUserPassword($user_password_new, $user_password_repeat)
+    {
+        if (empty($user_password_new) OR empty($user_password_repeat)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_FIELD_EMPTY'));
+            return false;
+        }
+
+        if ($user_password_new !== $user_password_repeat) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_REPEAT_WRONG'));
+            return false;
+        }
+
+        if (strlen($user_password_new) < 6) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_TOO_SHORT'));
+            return false;
+        }
+
+        return true;
+    }
 
 	/**
 	 * Writes the new user's data to the database
