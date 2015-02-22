@@ -148,6 +148,8 @@ class RegistrationModel
     }
 
     /**
+     * Validates the password
+     *
      * @param $user_password_new
      * @param $user_password_repeat
      * @return bool
