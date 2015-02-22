@@ -102,6 +102,8 @@ class RegistrationModel
 	}
 
     /**
+     * Validates the username
+     *
      * @param $user_name
      * @return bool
      */
@@ -112,11 +114,7 @@ class RegistrationModel
             return false;
         }
 
-        if (strlen($user_name) > 64 OR strlen($user_name) < 2) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG'));
-            return false;
-        }
-
+        // if username is too short (2), too long (64) or does not fit the pattern (aZ09)
         if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN'));
             return false;
@@ -126,6 +124,8 @@ class RegistrationModel
     }
 
     /**
+     * Validates the email
+     *
      * @param $user_email
      * @return bool
      */
@@ -136,12 +136,9 @@ class RegistrationModel
             return false;
         }
 
-        if (strlen($user_email) > 254) {
-            // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_TOO_LONG'));
-            return false;
-        }
-
+        // validate the email with PHP's internal filter
+        // side-fact: Max length seems to be 254 chars
+        // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN'));
             return false;
