@@ -178,12 +178,6 @@ class UserModel
      */
     public static function editUserName($new_user_name)
     {
-        // new username provided ?
-        if (empty($new_user_name)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
-            return false;
-        }
-
         // new username same as old one ?
         if ($new_user_name == Session::get('user_name')) {
             Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_SAME_AS_OLD_ONE'));
@@ -210,11 +204,10 @@ class UserModel
             Session::set('user_name', $new_user_name);
             Session::add('feedback_positive', Text::get('FEEDBACK_USERNAME_CHANGE_SUCCESSFUL'));
             return true;
+        } else {
+            Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
+            return false;
         }
-
-        // default fallback
-        Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
-        return false;
     }
 
     /**
