@@ -67,10 +67,7 @@ class Mail
 			$mail->Username = Config::get('EMAIL_SMTP_USERNAME');
 			$mail->Password = Config::get('EMAIL_SMTP_PASSWORD');
 			$mail->Port = Config::get('EMAIL_SMTP_PORT');
-		}
-
-		// if you want to send mail via PHPMailer using native mail()
-		if (!Config::get('EMAIL_USE_SMTP')) {
+		} else {
 			$mail->IsMail();
 		}
 
@@ -81,15 +78,16 @@ class Mail
 		$mail->Subject = $subject;
 		$mail->Body = $body;
 
-		// send mail
+		// try to send mail
 		$mail->Send();
+
 		if ($mail) {
 			return true;
+		} else {
+			// if not successful, copy errors into Mail's error property
+			$this->error = $mail->ErrorInfo;
+			return false;
 		}
-
-		// if not successful, copy errors into Mail's error property
-		$this->error = $mail->ErrorInfo;
-		return false;
 	}
 
 	public function sendMail($user_email, $from_email, $from_name, $subject, $body)

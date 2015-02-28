@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class AccountTypeModel
+ * Class UserRoleModel
  *
  * This class contains everything that is related to up- and downgrading accounts.
  */
-class AccountTypeModel
+class UserRoleModel
 {
 	/**
 	 * Upgrades / downgrades the user's account. Currently it's just the field user_account_type in the database that
@@ -16,33 +16,20 @@ class AccountTypeModel
 	 *
 	 * @return bool
 	 */
-	public static function changeAccountType($type)
+	public static function changeUserRole($type)
 	{
-		// this is error-prone, let's rewrite it
-		if (!$type OR ($type !== 1 AND $type !== 2)) {
+		if (!$type) {
 			return false;
 		}
 
-		if (AccountTypeModel::saveNewAccountType($type)) {
-
-			$feedback = "";
-
-			switch ($type) {
-				case 1:
-					$feedback = Text::get('FEEDBACK_ACCOUNT_DOWNGRADE_SUCCESSFUL');
-					break;
-				case 2:
-					$feedback = Text::get('FEEDBACK_ACCOUNT_UPGRADE_SUCCESSFUL');
-					break;
-			}
-
-			Session::add('feedback_positive', $feedback);
+		// save new role to database
+		if (self::saveRoleToDatabase($type)) {
+			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL'));
 			return true;
+		} else {
+			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
+			return false;
 		}
-
-		// default return
-		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
-		return false;
 	}
 
 	/**
@@ -52,8 +39,13 @@ class AccountTypeModel
 	 *
 	 * @return bool
 	 */
-	public static function saveNewAccountType($type)
+	public static function saveRoleToDatabase($type)
 	{
+		// if $type is not 1 or 2
+		if (!in_array($type, [1, 2])) {
+			return false;
+		}
+
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		$query = $database->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
