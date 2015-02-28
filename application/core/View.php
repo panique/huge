@@ -27,32 +27,6 @@ class View
     }
 
     /**
-     * Similar to render, but accepts an array of separate views to render between the header and footer. Use like 
-     * the following: $this->view->renderMulti(array('help/index', 'help/banner')); 
-     * @param array $filenames Array of the paths of the to-be-rendered view, usually folder/file(.php) for each
-     * @param array $data Data to be used in the view
-     */
-    public function renderMulti($filenames, $data = null)
-    {
-        if(!is_array($filenames)) {
-            self::render($filenames, $data); 
-            return false;
-        }
-
-        if ($data) {
-            foreach ($data as $key => $value) {
-                $this->{$key} = $value;
-            }
-        }
-
-        require Config::get('PATH_VIEW') . '_templates/header.php';
-        foreach($filenames as $filename) {
-            require Config::get('PATH_VIEW') . $filename . '.php';
-        }
-        require Config::get('PATH_VIEW') . '_templates/footer.php';
-    }
-
-    /**
      * Same like render(), but does not include header and footer
      * @param string $filename Path of the to-be-rendered view, usually folder/file(.php)
      * @param mixed $data Data to be used in the view
