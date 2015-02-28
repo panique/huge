@@ -23,19 +23,15 @@ class UserModel
         $all_users_profiles = array();
 
         foreach ($query->fetchAll() as $user) {
-            // a new object for every user. This is eventually not really optimal when it comes
-            // to performance, but it fits the view style better
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
 
             if (Config::get('USE_GRAVATAR')) {
-                $all_users_profiles[$user->user_id]->user_avatar_link =
-                    AvatarModel::getGravatarLinkByEmail($user->user_email);
+                $all_users_profiles[$user->user_id]->user_avatar_link = AvatarModel::getGravatarLinkByEmail($user->user_email);
             } else {
-                $all_users_profiles[$user->user_id]->user_avatar_link =
-                    AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
+                $all_users_profiles[$user->user_id]->user_avatar_link = AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
             }
 
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
