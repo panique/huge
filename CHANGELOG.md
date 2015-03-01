@@ -6,6 +6,7 @@ Code Quality at Scrutinizer 9.6 / 10, at Code Climate 3.9 / 10
 
 **February 2015**
 
+- [panique] several code quality improvements (and line reductions :) ) all over the project
 - [PR](https://github.com/panique/huge/pull/620) [owenr88] view rending now possible with multiple view files
 - [panique] lots of code refactorings and simplifications all over the project
 - [PR](https://github.com/panique/huge/pull/615) [Dominic28] Avatar can now be deleted by the user
