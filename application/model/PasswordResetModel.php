@@ -63,10 +63,8 @@ class PasswordResetModel
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		$sql = "UPDATE users
-                SET user_password_reset_hash = :user_password_reset_hash,
-                    user_password_reset_timestamp = :user_password_reset_timestamp
-                WHERE user_name = :user_name AND user_provider_type = :provider_type
-                LIMIT 1";
+                SET user_password_reset_hash = :user_password_reset_hash, user_password_reset_timestamp = :user_password_reset_timestamp
+                WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1";
 		$query = $database->prepare($sql);
 		$query->execute(array(
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
