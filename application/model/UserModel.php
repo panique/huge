@@ -10,6 +10,9 @@ class UserModel
     /**
      * Gets an array that contains all the users in the database. The array's keys are the user ids.
      * Each array element is an object, containing a specific user's data.
+     * The avatar line is built using Ternary Operators, have a look here for more:
+     * @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
+     *
      * @return array The profiles of all users
      */
     public static function getPublicProfilesOfAllUsers()
@@ -27,14 +30,8 @@ class UserModel
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
-
-            if (Config::get('USE_GRAVATAR')) {
-                $all_users_profiles[$user->user_id]->user_avatar_link = AvatarModel::getGravatarLinkByEmail($user->user_email);
-            } else {
-                $all_users_profiles[$user->user_id]->user_avatar_link = AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
-            }
-
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
+            $all_users_profiles[$user->user_id]->user_avatar_link = (Config::get('USE_GRAVATAR') ? AvatarModel::getGravatarLinkByEmail($user->user_email) : AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id));
         }
 
         return $all_users_profiles;
