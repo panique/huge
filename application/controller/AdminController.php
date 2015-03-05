@@ -16,6 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+	    If(Session::get('user_account_type') != 2) Redirect::home();
 	    $this->View->render('admin/index', array(
 			    'users' => UserModel::getPublicProfilesOfAllUsers())
 	    );
@@ -23,6 +24,7 @@ class AdminController extends Controller
 
 	public function actionAccountSettings()
 	{
+		If(Session::get('user_account_type') != 2) Redirect::home();
 		AdminModel::setAccountSusspensionAndDeletetionStatus(
 			Request::post('suspension'), Request::post('softDelete'), Request::post('user_id')
 		);

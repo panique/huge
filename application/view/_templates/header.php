@@ -107,7 +107,7 @@
 		</li>
 	</ul>
 	<ul class="navigation right">
-		<?php if (Session::get("user_account_type")) : ?>
+		<?php if (Session::get("user_account_type") == 2) : ?>
 		<li <?php if (View::checkForActiveController($filename, "admin")) {
 			echo ' class="active" ';
 		} ?> >
