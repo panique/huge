@@ -1,8 +1,10 @@
 # CHANGE LOG
 
-## 3.1 (currently in develop branch)
+For the newest (und unstable) version always check the develop branch.
 
-Code Quality at Scrutinizer 9.6 / 10, at Code Climate 3.9 / 10
+## 3.1
+
+Code Quality at Scrutinizer 9.7/10, at Code Climate 3.9/4
 
 **February 2015**
 
@@ -17,7 +19,7 @@ Code Quality at Scrutinizer 9.6 / 10, at Code Climate 3.9 / 10
 
 ## 3.0
 
-Code Quality at Scrutinizer 9.3 / 10, at Code Climate 3.9 / 10 
+Code Quality at Scrutinizer 9.3/10, at Code Climate 3.9/4
 
 **February 2015**
 
