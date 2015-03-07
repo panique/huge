@@ -342,3 +342,12 @@ https://github.com/panique/huge/issues?state=open
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
+
+### Side-facts
+
+1. Weird! When I renamed php-login to HUGE (to get rid off the too generic project name and to make it fitting nicely
+   to MINI, TINY and MINI2, my other projects) I had a research if the word "huge" is already used in the php world for 
+   sure. Nothing came up. Then, weeks later, I stumbled upon this: https://github.com/ffremont/HugeRest
+   I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
+   professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
+   for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.
