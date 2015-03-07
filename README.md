@@ -2,9 +2,9 @@
 
 # HUGE
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/panique/huge/?branch=develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
-[![Travis CI](https://travis-ci.org/panique/huge.svg?branch=develop)](https://travis-ci.org/panique/huge)
+[![Travis CI](https://travis-ci.org/panique/huge.svg?branch=master)](https://travis-ci.org/panique/huge)
 [![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
 
 Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
