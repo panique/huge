@@ -63,10 +63,8 @@ class PasswordResetModel
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		$sql = "UPDATE users
-                SET user_password_reset_hash = :user_password_reset_hash,
-                    user_password_reset_timestamp = :user_password_reset_timestamp
-                WHERE user_name = :user_name AND user_provider_type = :provider_type
-                LIMIT 1";
+                SET user_password_reset_hash = :user_password_reset_hash, user_password_reset_timestamp = :user_password_reset_timestamp
+                WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1";
 		$query = $database->prepare($sql);
 		$query->execute(array(
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
@@ -96,17 +94,12 @@ class PasswordResetModel
 	{
 		// create email body
 		$body = Config::get('EMAIL_PASSWORD_RESET_CONTENT') . ' ' . Config::get('URL') .
-		        Config::get('EMAIL_PASSWORD_RESET_URL') . '/' . urlencode($user_name) . '/' .
-		        urlencode($user_password_reset_hash);
+		        Config::get('EMAIL_PASSWORD_RESET_URL') . '/' . urlencode($user_name) . '/' . urlencode($user_password_reset_hash);
 
 		// create instance of Mail class, try sending and check
 		$mail = new Mail;
-		$mail_sent = $mail->sendMail(
-			$user_email,
-			Config::get('EMAIL_PASSWORD_RESET_FROM_EMAIL'),
-			Config::get('EMAIL_PASSWORD_RESET_FROM_NAME'),
-			Config::get('EMAIL_PASSWORD_RESET_SUBJECT'),
-			$body
+		$mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_PASSWORD_RESET_FROM_EMAIL'), 
+            Config::get('EMAIL_PASSWORD_RESET_FROM_NAME'), Config::get('EMAIL_PASSWORD_RESET_SUBJECT'), $body
 		);
 
 		if ($mail_sent) {
@@ -177,25 +170,18 @@ class PasswordResetModel
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
 
-		$sql = "UPDATE users
-                   SET user_password_hash = :user_password_hash,
-                       user_password_reset_hash = NULL,
+		$sql = "UPDATE users SET user_password_hash = :user_password_hash, user_password_reset_hash = NULL,
                        user_password_reset_timestamp = NULL
-                 WHERE user_name = :user_name
-                       AND user_password_reset_hash = :user_password_reset_hash
-                       AND user_provider_type = :user_provider_type
-                 LIMIT 1";
+                 WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash
+                       AND user_provider_type = :user_provider_type LIMIT 1";
 		$query = $database->prepare($sql);
 		$query->execute(array(
 			':user_password_hash' => $user_password_hash, ':user_name' => $user_name,
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_provider_type' => 'DEFAULT'
 		));
 
-		// if successful
-		if ($query->rowCount() == 1) {
-			return true;
-		}
-		return false;
+		// if one result exists, return true, else false. Could be written even shorter btw.
+		return ($query->rowCount() == 1 ? true : false);
 	}
 
 	/**
@@ -212,6 +198,36 @@ class PasswordResetModel
 	 * @return bool success state of the password reset
 	 */
 	public static function setNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)
+	{
+		// validate the password
+		if (!self::validateNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)) {
+			return false;
+		}
+
+		// crypt the password (with the PHP 5.5+'s password_hash() function, result is a 60 character hash string)
+		$user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
+
+		// write the password to database (as hashed and salted string), reset user_password_reset_hash
+		if (PasswordResetModel::saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
+			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
+			return true;
+		} else {
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_CHANGE_FAILED'));
+			return false;
+		}
+	}
+
+	/**
+	 * Validate the password submission
+	 *
+	 * @param $user_name
+	 * @param $user_password_reset_hash
+	 * @param $user_password_new
+	 * @param $user_password_repeat
+	 *
+	 * @return bool
+	 */
+	public static function validateNewPassword($user_name, $user_password_reset_hash, $user_password_new, $user_password_repeat)
 	{
 		if (empty($user_name)) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
@@ -230,17 +246,6 @@ class PasswordResetModel
 			return false;
 		}
 
-		// crypt the user's password with the PHP 5.5+'s password_hash() function, result is a 60 character hash string
-		$user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
-
-		// write user's new password hash into database, reset user_password_reset_hash
-		if (PasswordResetModel::saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
-			return true;
-		}
-
-		// default return
-		Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_CHANGE_FAILED'));
-		return false;
+		return true;
 	}
 }

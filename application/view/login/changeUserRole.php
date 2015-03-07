@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>LoginController/changeAccountType</h1>
+    <h1>LoginController/changeUserRole</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>
@@ -14,19 +14,18 @@
             In a real world application you would implement something like a
             pay-process.
         </p>
+	    <p>
+		    Please note: This whole process has been renamed from AccountType (v3.0) to UserRole (v3.1).
+	    </p>
 
         <h2>Currently your account type is: <?php echo Session::get('user_account_type'); ?></h2>
         <!-- basic implementation for two account types: type 1 and type 2 -->
-        <?php if (Session::get('user_account_type') == 1) { ?>
-        <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
-            <label></label>
-            <input type="submit" name="user_account_upgrade" value="Upgrade my account" />
-        </form>
-        <?php } elseif (Session::get('user_account_type') == 2) { ?>
-        <form action="<?php echo Config::get('URL'); ?>login/changeAccountType_action" method="post">
-            <label></label>
-            <input type="submit" name="user_account_downgrade" value="Downgrade my account" />
-        </form>
-        <?php } ?>
+	    <form action="<?php echo Config::get('URL'); ?>login/changeUserRole_action" method="post">
+            <?php if (Session::get('user_account_type') == 1) { ?>
+                <input type="submit" name="user_account_upgrade" value="Upgrade my account (to Premium User)" />
+	        <?php } else if (Session::get('user_account_type') == 2) { ?>
+	            <input type="submit" name="user_account_downgrade" value="Downgrade my account (to Basic User)" />
+	        <?php } ?>
+	    </form>
     </div>
 </div>

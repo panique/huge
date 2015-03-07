@@ -82,15 +82,12 @@ class NoteModel
 
         $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
         $query = $database->prepare($sql);
-        $query->execute(
-            array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => Session::get('user_id'))
-        );
+        $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => Session::get('user_id')));
 
         if ($query->rowCount() == 1) {
             return true;
         }
 
-        // default return
         Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_EDITING_FAILED'));
         return false;
     }

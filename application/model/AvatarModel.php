@@ -61,23 +61,36 @@ class AvatarModel
 
 	/**
 	 * Create an avatar picture (and checks all necessary things too)
-	 * TODO decoupling
-	 * TODO total rebuild, this is too quick & dirty
-	 *
-	 * @return bool success status
+	 * TODO decouple
+	 * TODO total rebuild
 	 */
 	public static function createAvatar()
 	{
-		// check if upload fits all rules
-		AvatarModel::validateImageFile();
+		// check avatar folder writing rights, check if upload fits all rules
+		if (AvatarModel::isAvatarFolderWritable() AND AvatarModel::validateImageFile()) {
 
-		// create a jpg file in the avatar folder, write marker to database
-		$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
-		AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
-		AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
-		Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-		Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
-		return true;
+			// create a jpg file in the avatar folder, write marker to database
+			$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
+			AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
+			AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
+			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
+			Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
+		}
+	}
+
+	/**
+	 * Checks if the avatar folder exists and is writable
+	 *
+	 * @return bool success status
+	 */
+	public static function isAvatarFolderWritable()
+	{
+		if (is_dir(Config::get('PATH_AVATARS')) AND is_writable(Config::get('PATH_AVATARS'))) {
+			return true;
+		}
+
+		Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
+		return false;
 	}
 
 	/**
@@ -88,12 +101,7 @@ class AvatarModel
 	 */
 	public static function validateImageFile()
 	{
-		if (!is_dir(Config::get('PATH_AVATARS')) OR !is_writable(Config::get('PATH_AVATARS'))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
-			return false;
-		}
-
-		if (!isset($_FILES['avatar_file']) OR empty ($_FILES['avatar_file']['tmp_name'])) {
+		if (!isset($_FILES['avatar_file'])) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
 			return false;
 		}
@@ -113,10 +121,12 @@ class AvatarModel
 			return false;
 		}
 
-		if (!($image_proportions['mime'] == 'image/jpeg' || $image_proportions['mime'] == 'image/png')) {
+		if (!($image_proportions['mime'] == 'image/jpeg')) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
 			return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -143,7 +153,7 @@ class AvatarModel
 	 * @param int $final_height The desired height of the new image.
 	 * @param int $quality The quality of the JPG to produce 1 - 100
 	 *
-	 * TODO currently we just allow .jpg / .png
+	 * TODO currently we just allow .jpg
 	 *
 	 * @return bool success state
 	 */
@@ -186,4 +196,59 @@ class AvatarModel
 		// default return
 		return false;
 	}
+
+    /**
+     * Delete a user's avatar
+     *
+     * @param int $userId
+     * @return bool success
+     */
+    public static function deleteAvatar($userId)
+    {
+        if (!ctype_digit($userId)) {
+            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            return false;
+        }
+
+        // try to delete image, but still go on regardless of file deletion result
+        self::deleteAvatarImageFile($userId);
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sth = $database->prepare("UPDATE users SET user_has_avatar = 0 WHERE user_id = :user_id LIMIT 1");
+        $sth->bindValue(":user_id", (int)$userId, PDO::PARAM_INT);
+        $sth->execute();
+
+        if ($sth->rowCount() == 1) {
+            Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId($userId));
+            Session::add("feedback_positive", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
+            return true;
+        } else {
+            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            return false;
+        }
+    }
+
+    /**
+     * Removes the avatar image file from the filesystem
+     *
+     * @param $userId
+     * @return bool
+     */
+    public static function deleteAvatarImageFile($userId)
+    {
+        // Check if file exists
+        if (!file_exists(Config::get('PATH_AVATARS') . $userId . ".jpg")) {
+            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_NO_FILE"));
+            return false;
+        }
+
+        // Delete avatar file
+        if (!unlink(Config::get('PATH_AVATARS') . $userId . ".jpg")) {
+            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            return false;
+        }
+
+        return true;
+    }
 }

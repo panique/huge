@@ -1,10 +1,29 @@
 # CHANGE LOG
 
-## 3.0
+For the newest (und unstable) version always check the develop branch.
+
+## 3.1
+
+Code Quality at Scrutinizer 9.7/10, at Code Climate 3.9/4
 
 **February 2015**
 
-- [panique] AccountTypeModel reduced to one method (removed duplicate code)
+- [panique] several code quality improvements (and line reductions :) ) all over the project
+- [PR](https://github.com/panique/huge/pull/620) [owenr88] view rending now possible with multiple view files
+- [panique] lots of code refactorings and simplifications all over the project
+- [PR](https://github.com/panique/huge/pull/615) [Dominic28] Avatar can now be deleted by the user
+- [panique] First Unit tests :)
+- [panique] several code quality improvements all over the project
+- [panique] avatarModel code improvements
+- [panique] renamed AccountType stuff to UserRole, minor changes 
+
+## 3.0
+
+Code Quality at Scrutinizer 9.3/10, at Code Climate 3.9/4
+
+**February 2015**
+
+- [panique] removed duplicate code in AccountTypeModel
 - [PR](https://github.com/panique/huge/pull/587) [upperwood] Facebook stuff completely removed from SQL
 - [panique] tiny text changes
 

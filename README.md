@@ -2,6 +2,11 @@
 
 # HUGE
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
+[![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
+[![Travis CI](https://travis-ci.org/panique/huge.svg?branch=master)](https://travis-ci.org/panique/huge)
+[![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
+
 Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
 (and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
 PHP 5.5+, plus some nice features that will speed up the time from idea to first usable prototype application 
@@ -16,11 +21,7 @@ applications that - surprisingly and intentionally - go back to the basics of pr
 static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
 ([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud).
 
-Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it). 
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
-[![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
-[![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
+Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
 
 #### Quick-Index 
 
@@ -256,6 +257,23 @@ Then check your server's IP / domain. Everything should work fine.
 
 By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
 
+### What the hell are .travis.yml, .scrutinizer.yml etc. ?
+
+There are several files in the root folder of the project that might be irritating:
+
+ - *.htaccess* (optionally) routes all traffic to /public/index.php! If you installed this project correctly, then this
+   file is not necessary, but as lots of people have problems setting up the vhost correctly, .htaccess it still there
+   to increase security, even on partly-broken-installations.
+ - *.scrutinizer.yml* (can be deleted): Configs for the external code quality analyzer Scrutinizer, just used here on
+   GitHub, you don't need this for your project.
+ - *.travis.yml* (can be deleted): Same like above. Travis is an external service that creates installations of this
+   repo after each code change to make sure everything runs fine. Also runs the unit tests. You don't need this inside
+   your project.
+ - *composer.json* (important): You should know what this does. ;) This file says what external dependencies are used.  
+ - *travis-ci-apache* (can be deleted): Config file for Travis, see above, so Travis knows how to setup the Apache.    
+    
+*README* and *CHANGELOG* are self-explaining.
+
 #### Documentation <a name="documentation"></a>
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
@@ -324,3 +342,12 @@ https://github.com/panique/huge/issues?state=open
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
+
+### Side-facts
+
+1. Weird! When I renamed php-login to HUGE (to get rid off the too generic project name and to make it fitting nicely
+   to MINI, TINY and MINI2, my other projects) I had a research if the word "huge" is already used in the php world for 
+   sure. Nothing came up. Then, weeks later, I stumbled upon this: https://github.com/ffremont/HugeRest
+   I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
+   professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
+   for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.

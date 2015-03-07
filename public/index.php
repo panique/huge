@@ -1,20 +1,17 @@
 <?php
 
 /**
- * A simple, clean and secure login / user authentication solution embedded into a small PHP framework.
- * Part of a set of login scripts, more on http://www.php-login.net
+ * A super-simple user-authentication solution, embedded into a small framework.
  *
- * PHP LOGIN (FRAMEWORK VERSION) 2.1 (in development)
+ * HUGE
  *
- * @author Panique
- * @link http://www.php-login.net/
- * @link https://github.com/panique/php-login/
+ * @link https://github.com/panique/huge
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-// Auto-loading the classes (currently only from application/libs) via Composer's PSR-4 autoloader
-// Later it might be useful to use a namespace here, but for now let's keep it as simple as possible
+// auto-loading the classes (currently only from application/libs) via Composer's PSR-4 auto-loader
+// later it might be useful to use a namespace here, but for now let's keep it as simple as possible
 require '../vendor/autoload.php';
 
-// Start our application
+// start our application
 new Application();

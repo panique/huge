@@ -1,0 +1,30 @@
+language: php
+
+php:
+    - 5.5
+    - 5.6
+    - hhvm
+
+before_install:
+- sudo apt-get update > /dev/null
+
+before_script:
+   - sudo apt-get install apache2
+   - sudo a2enmod rewrite
+   # configure apache virtual hosts, create vhost via travis-ci-apache file template
+   - sudo cp -f travis-ci-apache /etc/apache2/sites-available/default
+   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+   - sudo service apache2 restart
+   # composer
+   - composer self-update
+   - composer install --prefer-source --no-interaction --dev
+   # go to tests folder
+   - cd tests
+
+# run unit tests, create result file
+script: phpunit --configuration phpunit.xml --coverage-text --coverage-clover=coverage.clover
+
+# gets tools from Scrutinizer, uploads unit tests results to Scrutinizer (?)
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

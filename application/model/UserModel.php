@@ -10,6 +10,9 @@ class UserModel
     /**
      * Gets an array that contains all the users in the database. The array's keys are the user ids.
      * Each array element is an object, containing a specific user's data.
+     * The avatar line is built using Ternary Operators, have a look here for more:
+     * @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
+     *
      * @return array The profiles of all users
      */
     public static function getPublicProfilesOfAllUsers()
@@ -23,22 +26,12 @@ class UserModel
         $all_users_profiles = array();
 
         foreach ($query->fetchAll() as $user) {
-            // a new object for every user. This is eventually not really optimal when it comes
-            // to performance, but it fits the view style better
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
-
-            if (Config::get('USE_GRAVATAR')) {
-                $all_users_profiles[$user->user_id]->user_avatar_link =
-                    AvatarModel::getGravatarLinkByEmail($user->user_email);
-            } else {
-                $all_users_profiles[$user->user_id]->user_avatar_link =
-                    AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id);
-            }
-
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
+            $all_users_profiles[$user->user_id]->user_avatar_link = (Config::get('USE_GRAVATAR') ? AvatarModel::getGravatarLinkByEmail($user->user_email) : AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id));
         }
 
         return $all_users_profiles;
@@ -178,12 +171,6 @@ class UserModel
      */
     public static function editUserName($new_user_name)
     {
-        // new username provided ?
-        if (empty($new_user_name)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
-            return false;
-        }
-
         // new username same as old one ?
         if ($new_user_name == Session::get('user_name')) {
             Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_SAME_AS_OLD_ONE'));
@@ -210,11 +197,10 @@ class UserModel
             Session::set('user_name', $new_user_name);
             Session::add('feedback_positive', Text::get('FEEDBACK_USERNAME_CHANGE_SUCCESSFUL'));
             return true;
+        } else {
+            Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
+            return false;
         }
-
-        // default fallback
-        Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
-        return false;
     }
 
     /**

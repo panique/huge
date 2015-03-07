@@ -135,13 +135,13 @@ class LoginController extends Controller
     }
 
     /**
-     * Upload avatar
+     * Edit avatar
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    public function uploadAvatar()
+    public function editAvatar()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/uploadAvatar', array(
+        $this->View->render('login/editAvatar', array(
             'avatar_file_path' => AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
         ));
     }
@@ -155,17 +155,28 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         AvatarModel::createAvatar();
-        Redirect::to('login/uploadAvatar');
+        Redirect::to('login/editAvatar');
+    }
+
+    /**
+     * Delete the current user's avatar
+     * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
+     */
+    public function deleteAvatar_action()
+    {
+        Auth::checkAuthentication();
+        AvatarModel::deleteAvatar(Session::get("user_id"));
+        Redirect::to('login/editAvatar');
     }
 
     /**
      * Show the change-account-type page
      * Auth::checkAuthentication() makes sure that only logged in users can use this action and see this page
      */
-    public function changeAccountType()
+    public function changeUserRole()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/changeAccountType');
+        $this->View->render('login/changeUserRole');
     }
 
     /**
@@ -173,20 +184,21 @@ class LoginController extends Controller
      * Auth::checkAuthentication() makes sure that only logged in users can use this action
      * POST-request
      */
-    public function changeAccountType_action()
+    public function changeUserRole_action()
     {
         Auth::checkAuthentication();
 
         if (Request::post('user_account_upgrade')) {
             // "2" is quick & dirty account type 2, something like "premium user" maybe. you got the idea :)
-            AccountTypeModel::changeAccountType(2);
-        }
-        if (Request::post('user_account_downgrade')) {
-            // "1" is quick & dirty account type 1, something like "basic user" maybe.
-            AccountTypeModel::changeAccountType(1);
+            UserRoleModel::changeUserRole(2);
         }
 
-        Redirect::to('login/changeAccountType');
+        if (Request::post('user_account_downgrade')) {
+            // "1" is quick & dirty account type 1, something like "basic user" maybe.
+            UserRoleModel::changeUserRole(1);
+        }
+
+        Redirect::to('login/changeUserRole');
     }
 
     /**
