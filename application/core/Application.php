@@ -47,10 +47,10 @@ class Application
                     $this->controller->{$this->action_name}();
                 }
             } else {
-                header('location: ' . Config::get('URL') . 'error');
+                $this->return404andErrorPage();
             }
         } else {
-            header('location: ' . Config::get('URL') . 'error');
+            $this->return404andErrorPage();
         }
     }
 
@@ -97,4 +97,15 @@ class Application
 		// rename controller name to real controller class/file name ("index" to "IndexController")
 		$this->controller_name = ucwords($this->controller_name) . 'Controller';
 	}
+
+    private function return404andErrorPage()
+    {
+        // return proper 404 http response, true means to replace the header of the missing page/file,
+        // and 404 is the http error code
+        header('HTTP/1.0 404 Not Found', true, 404);
+        // additionally, load the
+        require Config::get('PATH_CONTROLLER') . 'ErrorController.php';
+        $this->controller = new ErrorController;
+        $this->controller->index();
+    }
 }

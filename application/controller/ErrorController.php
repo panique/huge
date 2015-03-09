@@ -15,11 +15,11 @@ class ErrorController extends Controller
     }
 
     /**
-     * This method controls what happens / what the user sees when a page does not exist (404)
+     * This is the error page, usually seen by the user when he/she gets an 404.
+     * Also see Application -> __construct for more and look for return404andErrorPage()
      */
     public function index()
     {
-        header('HTTP/1.0 404 Not Found');
         $this->View->render('error/index');
     }
 }
