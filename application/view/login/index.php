@@ -1,8 +1,5 @@
 <div class="container">
 
-    <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
-
     <div class="login-page-box">
         <div class="table-wrapper">
 

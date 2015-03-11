@@ -64,3 +64,6 @@
             </li>
         <?php endif; ?>
         </ul>
+    
+        <!-- echo out the system feedback (error and success messages) -->
+        <?php $this->renderFeedbackMessages(); ?>

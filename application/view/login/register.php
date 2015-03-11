@@ -1,8 +1,5 @@
 <div class="container">
-
-    <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
-
+  
     <!-- login box on left side -->
     <div class="login-box" style="width: 50%; display: block;">
         <h2>Register a new account</h2>
