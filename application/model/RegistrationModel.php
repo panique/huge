@@ -87,7 +87,7 @@ class RegistrationModel
 	public static function registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email)
 	{
 		// perform all necessary checks
-		if (!CaptchaModel::checkCaptcha($captcha)) {
+		if (Config::get('USE_CAPTCHA') AND !CaptchaModel::checkCaptcha($captcha)) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
             return false;
 		}
