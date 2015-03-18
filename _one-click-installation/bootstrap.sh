@@ -12,6 +12,7 @@ sudo apt-get -y upgrade
 
 sudo apt-get install -y apache2
 sudo apt-get install -y php5
+sudo apt-get install -y php5-cli
 
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $PASSWORD"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $PASSWORD"
