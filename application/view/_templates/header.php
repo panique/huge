@@ -18,7 +18,7 @@
             <li <?php if (View::checkForActiveController($filename, "index")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo Config::get('URL'); ?>index/index">Index</a>
             </li>
-            <li <?php if (View::checkForActiveController($filename, "overview")) { echo ' class="active" '; } ?> >
+            <li <?php if (View::checkForActiveController($filename, "profile")) { echo ' class="active" '; } ?> >
                 <a href="<?php echo Config::get('URL'); ?>profile/index">Profiles</a>
             </li>
             <?php if (Session::userIsLoggedIn()) { ?>
