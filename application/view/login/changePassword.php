@@ -1,9 +1,6 @@
 <div class="container">
     <h1>LoginController/changePassword</h1>
 
-    <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
-
     <div class="box">
         <h2>Set new password</h2>
 

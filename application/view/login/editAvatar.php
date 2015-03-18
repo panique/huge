@@ -1,9 +1,6 @@
 <div class="container">
     <h1>Edit your avatar</h1>
 
-    <!-- echo out the system feedback (error and success messages) -->
-    <?php $this->renderFeedbackMessages(); ?>
-
     <div class="box">
         <h3>Upload an Avatar</h3>
 
