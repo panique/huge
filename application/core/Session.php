@@ -39,8 +39,13 @@ class Session
     public static function get($key)
     {
         if (isset($_SESSION[$key])) {
-            return $_SESSION[$key];
-        }
+			if (is_string($_SESSION[$key])) {
+				return htmlspecialchars($_SESSION[$key], ENT_QUOTES, 'UTF-8');
+			}
+			else {
+				return $_SESSION[$key];
+			}
+		}
     }
 
     /**

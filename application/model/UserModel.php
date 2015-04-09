@@ -26,6 +26,10 @@ class UserModel
         $all_users_profiles = array();
 
         foreach ($query->fetchAll() as $user) {
+			
+			// all elements of array passed to self::XSSFilter for XSS sanitation.
+			array_walk_recursive($user, 'self::XSSFilter');
+			
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
@@ -62,6 +66,9 @@ class UserModel
         } else {
             Session::add('feedback_negative', Text::get('FEEDBACK_USER_DOES_NOT_EXIST'));
         }
+		
+		// all elements of array passed to self::XSSFilter for XSS sanitation.
+		array_walk_recursive($user, 'self::XSSFilter');
 
         return $user;
     }
@@ -328,4 +335,14 @@ class UserModel
         // return one row (we only have one result or nothing)
         return $query->fetch();
     }
+	
+	/**
+	* Passes value through htmlspecialchars, for XSS prevention.
+	*/
+	public static function XSSFilter(&$value)
+	{
+		if (is_string($value)) {
+			$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+		}
+	}
 }
