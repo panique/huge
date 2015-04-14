@@ -187,12 +187,12 @@ class UserModel
         $new_user_name = substr(strip_tags($new_user_name), 0, 64);
 
         // check if new username already exists
-        if (UserModel::doesUsernameAlreadyExist($new_user_name)) {
+        if (self::doesUsernameAlreadyExist($new_user_name)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_ALREADY_TAKEN'));
             return false;
         }
 
-        $status_of_action = UserModel::saveNewUserName(Session::get('user_id'), $new_user_name);
+        $status_of_action = self::saveNewUserName(Session::get('user_id'), $new_user_name);
         if ($status_of_action) {
             Session::set('user_name', $new_user_name);
             Session::add('feedback_positive', Text::get('FEEDBACK_USERNAME_CHANGE_SUCCESSFUL'));
@@ -236,14 +236,14 @@ class UserModel
         $new_user_email = substr(strip_tags($new_user_email), 0, 254);
 
         // check if user's email already exists
-        if (UserModel::doesEmailAlreadyExist($new_user_email)) {
+        if (self::doesEmailAlreadyExist($new_user_email)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_USER_EMAIL_ALREADY_TAKEN'));
             return false;
         }
 
         // write to database, if successful ...
         // ... then write new email to session, Gravatar too (as this relies to the user's email address)
-        if (UserModel::saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
+        if (self::saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
             Session::set('user_email', $new_user_email);
             Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($new_user_email));
             Session::add('feedback_positive', Text::get('FEEDBACK_EMAIL_CHANGE_SUCCESSFUL'));
