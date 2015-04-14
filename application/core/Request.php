@@ -28,6 +28,17 @@ class Request
     }
 
     /**
+     * Returns the state of a checkbox.
+     *
+     * @param mixed $key key
+     * @return mixed state of the checkbox
+     */
+    public static function postCheckbox($key)
+    {
+        return isset($_POST[$key]) ? 1 : NULL;
+    }
+
+    /**
      * gets/returns the value of a specific key of the GET super-global
      * @param mixed $key key
      * @return mixed the key's value or nothing
