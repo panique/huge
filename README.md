@@ -237,7 +237,7 @@ sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_i
 
 Make avatar folder writable
 ```bash
-sudo chmod 0777 -R "/var/www/html/public/avatars"
+sudo chown -R www-data "/var/www/html/public/avatars"
 ```
 
 Remove Apache's default demo file
