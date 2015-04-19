@@ -7,6 +7,10 @@
  */
 class LoginModel
 {
+    public static $incrementFailedQuery = null;
+    public static $resetFailedQuery = null;
+    public static $saveTimeStampQuery = null;
+    public static $setRememberMeQuery = null;
     /**
      * Login process (for DEFAULT user accounts).
      *
@@ -177,14 +181,15 @@ class LoginModel
      */
     public static function incrementFailedLoginCounterOfUser($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "UPDATE users
+        if(self::$incrementFailedQuery === null) {
+            self::$incrementFailedQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users
                    SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login
                  WHERE user_name = :user_name OR user_email = :user_name
-                 LIMIT 1";
-        $sth = $database->prepare($sql);
-        $sth->execute(array(':user_name' => $user_name, ':user_last_failed_login' => time() ));
+                 LIMIT 1");
+        }
+        self::$incrementFailedQuery->execute(array(':user_name' => $user_name, ':user_last_failed_login' => time() ));
     }
 
     /**
@@ -194,14 +199,15 @@ class LoginModel
      */
     public static function resetFailedLoginCounterOfUser($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "UPDATE users
+        if(self::$resetFailedQuery) {
+            self::$resetFailedQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users
                    SET user_failed_logins = 0, user_last_failed_login = NULL
                  WHERE user_name = :user_name AND user_failed_logins != 0
-                 LIMIT 1";
-        $sth = $database->prepare($sql);
-        $sth->execute(array(':user_name' => $user_name));
+                 LIMIT 1");
+        }
+        self::$resetFailedQuery->execute(array(':user_name' => $user_name));
     }
 
     /**
@@ -212,12 +218,13 @@ class LoginModel
      */
     public static function saveTimestampOfLoginOfUser($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp
-                WHERE user_name = :user_name LIMIT 1";
-        $sth = $database->prepare($sql);
-        $sth->execute(array(':user_name' => $user_name, ':user_last_login_timestamp' => time()));
+        if(self::$saveTimeStampQuery === null) {
+            self::$saveTimeStampQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_last_login_timestamp = :user_last_login_timestamp
+                WHERE user_name = :user_name LIMIT 1");
+        }
+        self::$saveTimeStampQuery->execute(array(':user_name' => $user_name, ':user_last_login_timestamp' => time()));
     }
 
     /**
@@ -228,15 +235,17 @@ class LoginModel
      */
     public static function setRememberMeInDatabaseAndCookie($user_id)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
+        if(self::$setRememberMeQuery === null) {
+            self::$setRememberMeQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1");
+        }
 
         // generate 64 char random string
         $random_token_string = hash('sha256', mt_rand());
 
         // write that token into database
-        $sql = "UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1";
-        $sth = $database->prepare($sql);
-        $sth->execute(array(':user_remember_me_token' => $random_token_string, ':user_id' => $user_id));
+        self::$setRememberMeQuery->execute(array(':user_remember_me_token' => $random_token_string, ':user_id' => $user_id));
 
         // generate cookie string that consists of user id, random string and combined hash of both
         $cookie_string_first_part = $user_id . ':' . $random_token_string;

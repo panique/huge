@@ -7,6 +7,9 @@
  */
 class RegistrationModel
 {
+    public static $newUserQuery = null;
+    public static $rollbackQuery = null;
+    public static $verifyQuery = null;
 	/**
 	 * Handles the entire registration process for DEFAULT users (not for people who register with
 	 * 3rd party services, like facebook) and creates a new user in the database if everything is fine
@@ -187,19 +190,19 @@ class RegistrationModel
 	 */
 	public static function writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		// write new users data into database
-		$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
-		$query = $database->prepare($sql);
-		$query->execute(array(':user_name' => $user_name,
+        if(self::$newUserQuery === null) {
+            self::$newUserQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)");
+        }
+		self::$newUserQuery->execute(array(':user_name' => $user_name,
 		                      ':user_password_hash' => $user_password_hash,
 		                      ':user_email' => $user_email,
 		                      ':user_creation_timestamp' => $user_creation_timestamp,
 		                      ':user_activation_hash' => $user_activation_hash,
 		                      ':user_provider_type' => 'DEFAULT'));
-		$count =  $query->rowCount();
+		$count =  self::$newUserQuery->rowCount();
 		if ($count == 1) {
 			return true;
 		}
@@ -215,10 +218,12 @@ class RegistrationModel
 	 */
 	public static function rollbackRegistrationByUserId($user_id)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		$query = $database->prepare("DELETE FROM users WHERE user_id = :user_id");
-		$query->execute(array(':user_id' => $user_id));
+        if(self::$rollbackQuery === null) {
+            self::$rollbackQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("DELETE FROM users WHERE user_id = :user_id");
+        }
+		self::$rollbackQuery->execute(array(':user_id' => $user_id));
 	}
 
 	/**
@@ -260,14 +265,15 @@ class RegistrationModel
 	 */
 	public static function verifyNewUser($user_id, $user_activation_verification_code)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
+        if(self::$verifyQuery === null) {
+            self::$verifyQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_active = 1, user_activation_hash = NULL
+                WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1");
+        }
+		self::$verifyQuery->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
-		$sql = "UPDATE users SET user_active = 1, user_activation_hash = NULL
-                WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1";
-		$query = $database->prepare($sql);
-		$query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
-
-		if ($query->rowCount() == 1) {
+		if (self::$verifyQuery->rowCount() == 1) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL'));
 			return true;
 		}

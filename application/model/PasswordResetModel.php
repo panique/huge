@@ -7,6 +7,9 @@
  */
 class PasswordResetModel
 {
+    public static $setResetTokenQuery = null;
+    public static $verifyResetQuery = null;
+    public static $saveNewPasswordQuery = null;
 	/**
 	 * Perform the necessary actions to send a password reset mail
 	 *
@@ -60,19 +63,20 @@ class PasswordResetModel
 	 */
 	public static function setPasswordResetDatabaseToken($user_name, $user_password_reset_hash, $temporary_timestamp)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		$sql = "UPDATE users
+        if(self::$setResetTokenQuery === null) {
+            self::$setResetTokenQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users
                 SET user_password_reset_hash = :user_password_reset_hash, user_password_reset_timestamp = :user_password_reset_timestamp
-                WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1";
-		$query = $database->prepare($sql);
-		$query->execute(array(
+                WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
+        }
+		self::$setResetTokenQuery->execute(array(
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_name' => $user_name,
 			':user_password_reset_timestamp' => $temporary_timestamp, ':provider_type' => 'DEFAULT'
 		));
 
 		// check if exactly one row was successfully changed
-		if ($query->rowCount() == 1) {
+		if (self::$setResetTokenQuery->rowCount() == 1) {
 			return true;
 		}
 
@@ -119,29 +123,29 @@ class PasswordResetModel
 	 */
 	public static function verifyPasswordReset($user_name, $verification_code)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		// check if user-provided username + verification code combination exists
-		$sql = "SELECT user_id, user_password_reset_timestamp
+        if(self::$verifyResetQuery === null) {
+            self::$verifyResetQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_password_reset_timestamp
                   FROM users
                  WHERE user_name = :user_name
                        AND user_password_reset_hash = :user_password_reset_hash
                        AND user_provider_type = :user_provider_type
-                 LIMIT 1";
-		$query = $database->prepare($sql);
-		$query->execute(array(
+                 LIMIT 1");
+        }
+		self::$verifyResetQuery->execute(array(
 			':user_password_reset_hash' => $verification_code, ':user_name' => $user_name,
 			':user_provider_type' => 'DEFAULT'
 		));
 
 		// if this user with exactly this verification hash code does NOT exist
-		if ($query->rowCount() != 1) {
+		if (self::$verifyResetQuery->rowCount() != 1) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST'));
 			return false;
 		}
 
 		// get result row (as an object)
-		$result_user_row = $query->fetch();
+		$result_user_row = self::$verifyResetQuery->fetch();
 
 		// 3600 seconds are 1 hour
 		$timestamp_one_hour_ago = time() - 3600;
@@ -168,20 +172,21 @@ class PasswordResetModel
 	 */
 	public static function saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		$sql = "UPDATE users SET user_password_hash = :user_password_hash, user_password_reset_hash = NULL,
+        if(self::$saveNewPasswordQuery === null) {
+            self::$saveNewPasswordQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_password_hash = :user_password_hash, user_password_reset_hash = NULL,
                        user_password_reset_timestamp = NULL
                  WHERE user_name = :user_name AND user_password_reset_hash = :user_password_reset_hash
-                       AND user_provider_type = :user_provider_type LIMIT 1";
-		$query = $database->prepare($sql);
-		$query->execute(array(
+                       AND user_provider_type = :user_provider_type LIMIT 1");
+        }
+		self::$saveNewPasswordQuery->execute(array(
 			':user_password_hash' => $user_password_hash, ':user_name' => $user_name,
 			':user_password_reset_hash' => $user_password_reset_hash, ':user_provider_type' => 'DEFAULT'
 		));
 
 		// if one result exists, return true, else false. Could be written even shorter btw.
-		return ($query->rowCount() == 1 ? true : false);
+		return (self::$saveNewPasswordQuery->rowCount() == 1 ? true : false);
 	}
 
 	/**

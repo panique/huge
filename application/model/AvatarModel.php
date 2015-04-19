@@ -2,6 +2,9 @@
 
 class AvatarModel
 {
+    public static $getPublicAvatarQuery = null;
+    public static $writeAvatarQuery = null;
+    public static $deleteAvatarQuery = null;
 	/**
 	 * Gets a gravatar image link from given email address
 	 *
@@ -47,12 +50,14 @@ class AvatarModel
 	 */
 	public static function getPublicUserAvatarFilePathByUserId($user_id)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
+        if(self::$getPublicAvatarQuery === null) {
+            self::$getPublicAvatarQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
+        }
+		self::$getPublicAvatarQuery->execute(array(':user_id' => $user_id));
 
-		$query = $database->prepare("SELECT user_has_avatar FROM users WHERE user_id = :user_id LIMIT 1");
-		$query->execute(array(':user_id' => $user_id));
-
-		if ($query->fetch()->user_has_avatar) {
+		if (self::$getPublicAvatarQuery->fetch()->user_has_avatar) {
 			return Config::get('URL') . Config::get('PATH_AVATARS_PUBLIC') . $user_id . '.jpg';
 		}
 
@@ -136,10 +141,14 @@ class AvatarModel
 	 */
 	public static function writeAvatarToDatabase($user_id)
 	{
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		$query = $database->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
-		$query->execute(array(':user_id' => $user_id));
+        //Set the Prepare Statment if not already set (only executed once)
+        if(self::$writeAvatarQuery === null) {
+            self::$writeAvatarQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_has_avatar = TRUE WHERE user_id = :user_id LIMIT 1");
+        }
+        //Execute the query (done every time)
+		self::$writeAvatarQuery->execute(array(':user_id' => $user_id));
 	}
 
 	/**
@@ -213,13 +222,17 @@ class AvatarModel
         // try to delete image, but still go on regardless of file deletion result
         self::deleteAvatarImageFile($userId);
 
-        $database = DatabaseFactory::getFactory()->getConnection();
+        //Prepare Database Query (Executed once)
+        if(self::$deleteAvatarQuery === null) {
+            self::$deleteAvatarQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_has_avatar = 0 WHERE user_id = :user_id LIMIT 1");
+        }
+        //Perform Queries.
+        self::$deleteAvatarQuery->bindValue(":user_id", (int)$userId, PDO::PARAM_INT);
+        self::$deleteAvatarQuery->execute();
 
-        $sth = $database->prepare("UPDATE users SET user_has_avatar = 0 WHERE user_id = :user_id LIMIT 1");
-        $sth->bindValue(":user_id", (int)$userId, PDO::PARAM_INT);
-        $sth->execute();
-
-        if ($sth->rowCount() == 1) {
+        if (self::$deleteAvatarQuery->rowCount() == 1) {
             Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId($userId));
             Session::add("feedback_positive", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
             return true;
