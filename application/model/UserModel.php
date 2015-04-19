@@ -7,6 +7,16 @@
  */
 class UserModel
 {
+    public static $getPublicOfAllQuery = null;
+    public static $getPublicOfUserQuery = null;
+    public static $getUserByEmailQuery = null;
+    public static $usernameExistQuery = null;
+    public static $emailExistQuery = null;
+    public static $saveNewUsernameQuery = null;
+    public static $saveNewEmailQuery = null;
+    public static $getIDByUsernameQuery = null;
+    public static $getDataByUsernameQuery = null;
+    public static $getDataByIDAndTokenQuery = null;
     /**
      * Gets an array that contains all the users in the database. The array's keys are the user ids.
      * Each array element is an object, containing a specific user's data.
@@ -17,15 +27,16 @@ class UserModel
      */
     public static function getPublicProfilesOfAllUsers()
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users";
-        $query = $database->prepare($sql);
-        $query->execute();
+        if(self::$getPublicOfAllQuery === null) {
+            self::$getPublicOfAllQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar FROM users");
+        }
+        self::$getPublicOfAllQuery->execute();
 
         $all_users_profiles = array();
 
-        foreach ($query->fetchAll() as $user) {
+        foreach (self::$getPublicOfAllQuery->fetchAll() as $user) {
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
@@ -44,16 +55,17 @@ class UserModel
      */
     public static function getPublicProfileOfUser($user_id)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
+        if(self::$getPublicOfUserQuery === null) {
+            self::$getPublicOfUserQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_name, user_email, user_active, user_has_avatar
+                FROM users WHERE user_id = :user_id LIMIT 1");
+        }
+        self::$getPublicOfUserQuery->execute(array(':user_id' => $user_id));
 
-        $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar
-                FROM users WHERE user_id = :user_id LIMIT 1";
-        $query = $database->prepare($sql);
-        $query->execute(array(':user_id' => $user_id));
+        $user = self::$getPublicOfUserQuery->fetch();
 
-        $user = $query->fetch();
-
-        if ($query->rowCount() == 1) {
+        if (self::$getPublicOfUserQuery->rowCount() == 1) {
             if (Config::get('USE_GRAVATAR')) {
                 $user->user_avatar_link = AvatarModel::getGravatarLinkByEmail($user->user_email);
             } else {
@@ -73,14 +85,16 @@ class UserModel
      */
     public static function getUserDataByUserNameOrEmail($user_name_or_email)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
+        if(self::$getUserByEmailQuery === null) {
+            self::$getUserByEmailQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_name, user_email FROM users
+                          WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
+                          AND user_provider_type = :provider_type LIMIT 1");
+        }
+        self::$getUserByEmailQuery->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
 
-        $query = $database->prepare("SELECT user_id, user_name, user_email FROM users
-                                     WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
-                                           AND user_provider_type = :provider_type LIMIT 1");
-        $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
-
-        return $query->fetch();
+        return self::$getPublicOfUserQuery->fetch();
     }
 
     /**
@@ -92,11 +106,13 @@ class UserModel
      */
     public static function doesUsernameAlreadyExist($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $query = $database->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
-        $query->execute(array(':user_name' => $user_name));
-        if ($query->rowCount() == 0) {
+        if(self::$usernameExistQuery === null) {
+            self::$usernameExistQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id FROM users WHERE user_name = :user_name LIMIT 1");
+        }
+        self::$usernameExistQuery->execute(array(':user_name' => $user_name));
+        if (self::$usernameExistQuery->rowCount() == 0) {
             return false;
         }
         return true;
@@ -111,11 +127,13 @@ class UserModel
      */
     public static function doesEmailAlreadyExist($user_email)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $query = $database->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
-        $query->execute(array(':user_email' => $user_email));
-        if ($query->rowCount() == 0) {
+        if(self::$emailExistQuery === null) {
+            self::$emailExistQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id FROM users WHERE user_email = :user_email LIMIT 1");
+        }
+        self::$emailExistQuery->execute(array(':user_email' => $user_email));
+        if (self::$emailExistQuery->rowCount() == 0) {
             return false;
         }
         return true;
@@ -131,11 +149,13 @@ class UserModel
      */
     public static function saveNewUserName($user_id, $new_user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $query = $database->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_name' => $new_user_name, ':user_id' => $user_id));
-        if ($query->rowCount() == 1) {
+        if(self::$saveNewUsernameQuery === null) {
+            self::$saveNewUsernameQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_name = :user_name WHERE user_id = :user_id LIMIT 1");
+        }
+        self::$saveNewUsernameQuery->execute(array(':user_name' => $new_user_name, ':user_id' => $user_id));
+        if (self::$saveNewUsernameQuery->rowCount() == 1) {
             return true;
         }
         return false;
@@ -151,11 +171,13 @@ class UserModel
      */
     public static function saveNewEmailAddress($user_id, $new_user_email)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $query = $database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
-        $query->execute(array(':user_email' => $new_user_email, ':user_id' => $user_id));
-        $count =  $query->rowCount();
+        if(self::$saveNewEmailQuery === null) {
+            self::$saveNewEmailQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
+        }
+        self::$saveNewEmailQuery->execute(array(':user_email' => $new_user_email, ':user_id' => $user_id));
+        $count =  self::$saveNewEmailQuery->rowCount();
         if ($count == 1) {
             return true;
         }
@@ -263,17 +285,17 @@ class UserModel
      */
     public static function getUserIdByUsername($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "SELECT user_id FROM users WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1";
-        $query = $database->prepare($sql);
-
+        if(self::$getIDByUsernameQuery === null) {
+            self::$getIDByUsernameQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id FROM users WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1");
+        }
         // DEFAULT is the marker for "normal" accounts (that have a password etc.)
         // There are other types of accounts that don't have passwords etc. (FACEBOOK)
-        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
+        self::$getIDByUsernameQuery->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
 
         // return one row (we only have one result or nothing)
-        return $query->fetch()->user_id;
+        return self::$getIDByUsernameQuery->fetch()->user_id;
     }
 
     /**
@@ -285,22 +307,23 @@ class UserModel
      */
     public static function getUserDataByUsername($user_name)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
+        if(self::$getDataByUsernameQuery === null) {
+            self::$getDataByUsernameQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active, user_account_type,
                        user_failed_logins, user_last_failed_login
                   FROM users
                  WHERE (user_name = :user_name OR user_email = :user_name)
                        AND user_provider_type = :provider_type
-                 LIMIT 1";
-        $query = $database->prepare($sql);
+                 LIMIT 1");
+        }
 
         // DEFAULT is the marker for "normal" accounts (that have a password etc.)
         // There are other types of accounts that don't have passwords etc. (FACEBOOK)
-        $query->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
+        self::$getDataByUsernameQuery->execute(array(':user_name' => $user_name, ':provider_type' => 'DEFAULT'));
 
         // return one row (we only have one result or nothing)
-        return $query->fetch();
+        return self::$getDataByUsernameQuery->fetch();
     }
 
     /**
@@ -313,19 +336,20 @@ class UserModel
      */
     public static function getUserDataByUserIdAndToken($user_id, $token)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        // get real token from database (and all other data)
-        $query = $database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
+        if(self::$getDataByIDAndTokenQuery === null) {
+            self::$getDataByIDAndTokenQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
                                           user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
                                      FROM users
                                      WHERE user_id = :user_id
                                        AND user_remember_me_token = :user_remember_me_token
                                        AND user_remember_me_token IS NOT NULL
                                        AND user_provider_type = :provider_type LIMIT 1");
-        $query->execute(array(':user_id' => $user_id, ':user_remember_me_token' => $token, ':provider_type' => 'DEFAULT'));
+        }
+        self::$getDataByIDAndTokenQuery->execute(array(':user_id' => $user_id, ':user_remember_me_token' => $token, ':provider_type' => 'DEFAULT'));
 
         // return one row (we only have one result or nothing)
-        return $query->fetch();
+        return self::$getDataByIDAndTokenQuery->fetch();
     }
 }
