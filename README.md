@@ -37,7 +37,8 @@ Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YAGNI](http://e
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
-+ [Documentation](#documentation)    
++ [Documentation](#documentation)  
++ [Community-provided features & feature discussions](#community)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -282,6 +283,13 @@ how data is shown in the view files. A big sorry that there's no documentation y
  
  TODO: Full documentation
  TODO: Basic examples on how to do things
+ 
+#### Community-provided features & feature discussions <a name="community"></a>
+
+There are some awesome features or feature ideas build by awesome people, but these features are too special-interest
+to go into the main version of HUGE, but have a look into these tickets if you are interested:
+
+ - [Caching system](https://github.com/panique/huge/issues/643)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
