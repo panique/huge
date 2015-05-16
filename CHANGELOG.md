@@ -2,6 +2,10 @@
 
 For the newest (und unstable) version always check the develop branch.
 
+## develop branch
+
+- [panique] [#654](https://github.com/panique/huge/issues/654) little frontend navi bug fixed 
+
 ## 3.1
 
 Code Quality at Scrutinizer 9.7/10, at Code Climate 3.9/4
