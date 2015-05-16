@@ -5,7 +5,8 @@ For the newest (und unstable) version always check the develop branch.
 ## develop branch
 
 - [panique] [#654](https://github.com/panique/huge/issues/654) little frontend navi bug fixed
-- [Dominic28] [PR](https://github.com/panique/huge/pull/645) added checkboxes to request class 
+- [Dominic28] [PR](https://github.com/panique/huge/pull/645) added checkboxes to request class
+- [modInfo/panique] [PR](https://github.com/panique/huge/pull/647) added missing view table column  
 
 ## 3.1
 
