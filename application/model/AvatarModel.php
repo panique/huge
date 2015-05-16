@@ -67,13 +67,12 @@ class AvatarModel
 	public static function createAvatar()
 	{
 		// check avatar folder writing rights, check if upload fits all rules
-		if (AvatarModel::isAvatarFolderWritable() AND AvatarModel::validateImageFile()) {
-
+		if (self::isAvatarFolderWritable() AND self::validateImageFile()) {
 			// create a jpg file in the avatar folder, write marker to database
 			$target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
-			AvatarModel::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
-			AvatarModel::writeAvatarToDatabase(Session::get('user_id'));
-			Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
+			self::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
+			self::writeAvatarToDatabase(Session::get('user_id'));
+			Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
 			Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
 		}
 	}
