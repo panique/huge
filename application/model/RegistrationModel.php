@@ -24,7 +24,7 @@ class RegistrationModel
 		$user_password_repeat = Request::post('user_password_repeat');
 
 		// stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
-		$validation_result = RegistrationModel::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email);
+		$validation_result = self::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email);
 		if (!$validation_result) {
 			return false;
 		}
@@ -49,7 +49,7 @@ class RegistrationModel
 		$user_activation_hash = sha1(uniqid(mt_rand(), true));
 
 		// write user data to database
-		if (!RegistrationModel::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
+		if (!self::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_CREATION_FAILED'));
 		}
 
@@ -62,13 +62,13 @@ class RegistrationModel
 		}
 
 		// send verification email
-		if (RegistrationModel::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+		if (self::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED'));
 			return true;
 		}
 
 		// if verification email sending failed: instantly delete the user
-		RegistrationModel::rollbackRegistrationByUserId($user_id);
+		self::rollbackRegistrationByUserId($user_id);
 		Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED'));
 		return false;
 	}
