@@ -3,6 +3,8 @@
 RewriteEngine on
 RewriteRule ^(.*) public/$1 [L]
 
+# Everything from is for browser caching and is totally optional
+
 # Deflate Compression by FileType
 <IfModule mod_deflate.c>
  AddOutputFilterByType DEFLATE text/plain
@@ -19,7 +21,7 @@ RewriteRule ^(.*) public/$1 [L]
  AddOutputFilterByType DEFLATE application/x-shockwave-flash
 </IfModule>
 
-#set Browser Caching to 1 month
+# Set browser caching to 1 month
 <IfModule mod_expires.c>
  ExpiresActive On
  ExpiresByType text/css "access plus 1 month"
@@ -31,6 +33,7 @@ RewriteRule ^(.*) public/$1 [L]
  ExpiresByType image/png "access plus 1 month"
  ExpiresByType image/x-icon "access plus 1 month"
 </IfModule>
+
 <ifmodule mod_headers.c>
  <filesmatch "\\.(ico|jpe?g|png|gif|swf)$">
   Header set Cache-Control "max-age=2592000, public"
