@@ -6,20 +6,26 @@
  */
 class NoteModel
 {
+    public static $getAllNotesQuery = null;
+    public static $getNoteQuery = null;
+    public static $createNoteQuery = null;
+    public static $updateNoteQuery = null;
+    public static $deleteNoteQuery = null;
     /**
      * Get all notes (notes are just example data that the user has created)
      * @return array an array with several objects (the results)
      */
     public static function getAllNotes()
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id";
-        $query = $database->prepare($sql);
-        $query->execute(array(':user_id' => Session::get('user_id')));
+        if(self::$getAllNotesQuery === null) {
+            self::$getAllNotesQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id");
+        }
+        self::$getAllNotesQuery->execute(array(':user_id' => Session::get('user_id')));
 
         // fetchAll() is the PDO method that gets all result rows
-        return $query->fetchAll();
+        return self::$getAllNotesQuery->fetchAll();
     }
 
     /**
@@ -29,14 +35,15 @@ class NoteModel
      */
     public static function getNote($note_id)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id LIMIT 1";
-        $query = $database->prepare($sql);
-        $query->execute(array(':user_id' => Session::get('user_id'), ':note_id' => $note_id));
+        if(self::$getNoteQuery === null) {
+            self::$getNoteQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id LIMIT 1");
+        }
+        self::$getNoteQuery->execute(array(':user_id' => Session::get('user_id'), ':note_id' => $note_id));
 
         // fetch() is the PDO method that gets a single result
-        return $query->fetch();
+        return self::$getNoteQuery->fetch();
     }
 
     /**
@@ -50,14 +57,14 @@ class NoteModel
             Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
             return false;
         }
+        if(self::$createNoteQuery === null) {
+            self::$createNoteQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("INSERT INTO notes (note_text, user_id) VALUES (:note_text, :user_id)");
+        }
+        self::$createNoteQuery->execute(array(':note_text' => $note_text, ':user_id' => Session::get('user_id')));
 
-        $database = DatabaseFactory::getFactory()->getConnection();
-
-        $sql = "INSERT INTO notes (note_text, user_id) VALUES (:note_text, :user_id)";
-        $query = $database->prepare($sql);
-        $query->execute(array(':note_text' => $note_text, ':user_id' => Session::get('user_id')));
-
-        if ($query->rowCount() == 1) {
+        if (self::$createNoteQuery->rowCount() == 1) {
             return true;
         }
 
@@ -77,14 +84,15 @@ class NoteModel
         if (!$note_id || !$note_text) {
             return false;
         }
+        if(self::$updateNoteQuery === null) {
+            self::$updateNoteQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id LIMIT 1");
+        }
 
-        $database = DatabaseFactory::getFactory()->getConnection();
+        self::$updateNoteQuery->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => Session::get('user_id')));
 
-        $sql = "UPDATE notes SET note_text = :note_text WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
-        $query = $database->prepare($sql);
-        $query->execute(array(':note_id' => $note_id, ':note_text' => $note_text, ':user_id' => Session::get('user_id')));
-
-        if ($query->rowCount() == 1) {
+        if (self::$updateNoteQuery->rowCount() == 1) {
             return true;
         }
 
@@ -102,14 +110,15 @@ class NoteModel
         if (!$note_id) {
             return false;
         }
+        if(self::$deleteNoteQuery === null) {
+            self::$deleteNoteQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id LIMIT 1");
+        }
 
-        $database = DatabaseFactory::getFactory()->getConnection();
+        self::$deleteNoteQuery->execute(array(':note_id' => $note_id, ':user_id' => Session::get('user_id')));
 
-        $sql = "DELETE FROM notes WHERE note_id = :note_id AND user_id = :user_id LIMIT 1";
-        $query = $database->prepare($sql);
-        $query->execute(array(':note_id' => $note_id, ':user_id' => Session::get('user_id')));
-
-        if ($query->rowCount() == 1) {
+        if (self::$deleteNoteQuery->rowCount() == 1) {
             return true;
         }
 

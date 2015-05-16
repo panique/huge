@@ -7,6 +7,7 @@
  */
 class UserRoleModel
 {
+    public static $saveRoleQuery = null;
 	/**
 	 * Upgrades / downgrades the user's account. Currently it's just the field user_account_type in the database that
 	 * can be 1 or 2 (maybe "basic" or "premium"). Put some more complex stuff in here, maybe a pay-process or whatever
@@ -45,16 +46,17 @@ class UserRoleModel
 		if (!in_array($type, [1, 2])) {
 			return false;
 		}
-
-		$database = DatabaseFactory::getFactory()->getConnection();
-
-		$query = $database->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
-		$query->execute(array(
+        if(self::$saveRoleQuery === null) {
+            self::$saveRoleQuery = DatabaseFactory::getFactory()
+                ->getConnection()
+                ->prepare("UPDATE users SET user_account_type = :new_type WHERE user_id = :user_id LIMIT 1");
+        }
+		self::$saveRoleQuery->execute(array(
 			':new_type' => $type,
 			':user_id' => Session::get('user_id')
 		));
 
-		if ($query->rowCount() == 1) {
+		if (self::$saveRoleQuery->rowCount() == 1) {
 			// set account type in session
 			Session::set('user_account_type', $type);
 			return true;
