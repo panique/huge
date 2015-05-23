@@ -21,7 +21,7 @@ applications that - surprisingly and intentionally - go back to the basics of pr
 static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
 ([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud).
 
-Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
+Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
 
 #### Quick-Index 
 
@@ -37,7 +37,8 @@ Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YASNI](http://e
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
-+ [Documentation](#documentation)    
++ [Documentation](#documentation)  
++ [Community-provided features & feature discussions](#community)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -86,13 +87,10 @@ There a lot of work behind this project. I might save you hundreds, maybe thousa
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
-TODO new banners
+[![Support via affiliate](_pictures/support-via-host1plus.png)](https://affiliates.host1plus.com/ref/devmetal/36f4d828.html)
 
-[![Donate with PayPal banner](_pictures/support-via-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
-[![Donate by server affiliate sale](_pictures/support-via-a2hosting.png)](https://affiliates.a2hosting.com/idevaffiliate.php?id=4471&url=579)
-
-You can also rent your next $5 server at [Virpus](http://my.virpus.com/aff.php?aff=1836) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) 
-or donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG).
+Support the project by renting a server at [Host1Plus](https://affiliates.host1plus.com/ref/devmetal/36f4d828.html) or
+or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
 
 Also feel free to contribute to this project.
 
@@ -282,14 +280,20 @@ how data is shown in the view files. A big sorry that there's no documentation y
  
  TODO: Full documentation
  TODO: Basic examples on how to do things
+ 
+#### Community-provided features & feature discussions <a name="community"></a>
+
+There are some awesome features or feature ideas build by awesome people, but these features are too special-interest
+to go into the main version of HUGE, but have a look into these tickets if you are interested:
+
+ - [Caching system](https://github.com/panique/huge/issues/643)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
 There were two (!) support forums for v1 and v2 of this project (HUGE is v3), and both were vandalized by people who
 didn't even read the readme and / or the install guidelines. Most asked question was "script does not work plz help"
 without giving any useful information (like code or server setup or even the version used). While I'm writing these 
-lines somebody just asked via Twitter "how to install without Composer". You know what I mean :) ... Beside, 140 
-characters on Twitter are not a clever way to ask for / describe a complex development situation. 99% of the questions 
+lines somebody just asked via Twitter "how to install without Composer". You know what I mean :) - 99% of the questions 
 were not necessary if the people would had read the guidelines, do a minimal research on their own or would stop making 
 things so unnecessarily complicated. And even when writing detailed answers most of them still messed it up, resulting 
 in rants and complaints (for free support for a free software!). It was just frustrating to deal with this every day, 
@@ -308,13 +312,13 @@ strange people it's necessary: Some simple rules.
    This is NOT business-software you've bought for $10.000.
    There's no reason to complain (!) about free open-source software. The attitude against free software
    is really frustrating these days, people take everything for granted without realizing the work behind it, and the
-   fact they they get serious software totally for free, saving thousands of dollars. If you don't like it, then don't 
+   fact that they get serious software totally for free, saving thousands of dollars. If you don't like it, then don't 
    use it. If you want a feature, try to take part in the process, maybe even build it by yourself and add it to the 
    project! Be nice and respectful. Constructive criticism is for sure always welcome!
    
-2. Don't bash, don't hate, don't spam, don't vandalize. Don't ask for personal free support, don't ask if somebody 
-   could do your work for you. Before you ask something, make sure you've read the README, followed every tutorial, 
-   double-checked the code and tried to solve the problem by yourself.
+2. Don't bash, don't hate, don't spam, don't vandalize. Please don't ask for personal free support, don't ask if 
+   somebody could do your work for you. Before you ask something, make sure you've read the README, followed every 
+   tutorial, double-checked the code and tried to solve the problem by yourself.
 
 Trolls and very annoying people will get a permanent ban / block. GitHub has a very powerful anti-abuse team.
 

@@ -29,6 +29,7 @@
                 <tbody>
                     <?php foreach($this->notes as $key => $value) { ?>
                         <tr>
+                            <td><?= $value->note_id; ?></td>
                             <td><?= htmlentities($value->note_text); ?></td>
                             <td><a href="<?= Config::get('URL') . 'note/edit/' . $value->note_id; ?>">Edit</a></td>
                             <td><a href="<?= Config::get('URL') . 'note/delete/' . $value->note_id; ?>">Delete</a></td>

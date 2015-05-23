@@ -34,13 +34,13 @@ class PasswordResetModel
 		$user_password_reset_hash = sha1(uniqid(mt_rand(), true));
 
 		// set token (= a random hash string and a timestamp) into database ...
-		$token_set = PasswordResetModel::setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);
+		$token_set = self::setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);
 		if (!$token_set) {
 			return false;
 		}
 
 		// ... and send a mail to the user, containing a link with username and token hash string
-		$mail_sent = PasswordResetModel::sendPasswordResetMail($result->user_name, $user_password_reset_hash, $result->user_email);
+		$mail_sent = self::sendPasswordResetMail($result->user_name, $user_password_reset_hash, $result->user_email);
 		if ($mail_sent) {
 			return true;
 		}
@@ -208,7 +208,7 @@ class PasswordResetModel
 		$user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
 
 		// write the password to database (as hashed and salted string), reset user_password_reset_hash
-		if (PasswordResetModel::saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
+		if (self::saveNewUserPassword($user_name, $user_password_hash, $user_password_reset_hash)) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
 			return true;
 		} else {
