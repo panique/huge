@@ -28,7 +28,7 @@ class UserModel
         foreach ($query->fetchAll() as $user) {
 			
 			// all elements of array passed to self::XSSFilter for XSS sanitation.
-			@array_walk_recursive($user, 'self::XSSFilter');
+			array_walk_recursive($user, 'self::XSSFilter');
 			
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
@@ -68,7 +68,7 @@ class UserModel
         }
 		
 		// all elements of array passed to self::XSSFilter for XSS sanitation.
-		@array_walk_recursive($user, 'self::XSSFilter');
+		array_walk_recursive($user, 'self::XSSFilter');
 
         return $user;
     }
