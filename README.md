@@ -23,7 +23,7 @@ static classes, extremely simple constructs, not-totally-DRY code etc. while kee
 
 Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/KISS_principle), 
 [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
-[Minimum viable product ](https://en.wikipedia.org/wiki/Minimum_viable_product).
+[Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
 #### Quick-Index 
 
