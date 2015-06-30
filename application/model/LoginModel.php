@@ -65,11 +65,30 @@ class LoginModel
 	 */
 	private static function validateAndGetUser($user_name, $user_password)
 	{
+		// brute force attack mitigation: use session failed login count and last failed login for not found users.
+		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+		// (limits user searches in database)
+		if(Session::get('failed-login-count')>=3 AND (Session::get('last-failed-login') > (time() - 30))) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
+			return false;
+		}
+		
 		// get all data of that user (to later check if password and password_hash fit)
 		$result = UserModel::getUserDataByUsername($user_name);
-
+		
+		//brute force attack mitigation: reset failed login counter because of found user
+		if($result){
+			Session::set('failed-login-count',0);				
+			Session::set('last-failed-login','');
+		}
+		
 		// Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
 		if (!$result) {
+			
+			// brute force attack mitigation: set session failed logins count and last failed login for users not found.
+			Session::set('failed-login-count',Session::get('failed-login-count')+1);				
+			Session::set('last-failed-login',time());
+			
 			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
 			return false;
 		}
