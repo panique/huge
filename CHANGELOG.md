@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [oisian/ldmusic] [#608] Deletion / suspension of users, Admin menu
 - [panique] [#654](https://github.com/panique/huge/issues/654) little frontend navi bug fixed
 - [Dominic28] [PR](https://github.com/panique/huge/pull/645) added checkboxes to request class
 - [Dominic28] [PR](https://github.com/panique/huge/pull/644) code style fixes
