@@ -27,9 +27,22 @@ class LoginModel
 	    // checks if user exists, if login is not blocked (due to failed logins) and if password fits the hash
 	    $result = self::validateAndGetUser($user_name, $user_password);
 
-	    if (!$result) {
-		    return false;
-	    }
+        // Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
+        if (!$result) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
+            return false;
+        }
+        //Stop the users login if they have been soft deleted 
+        if($result->user_deleted == 1){
+            Session::add('feedback_negative', Text::get('FEEDBACK_DELETED'));
+            return false;
+        }
+        //Stop the user from logging in if they have a suspension. Display how long they have left in the feedback.
+        if($result->user_suspension_timestamp - time() > 0){
+            $suspensionTimer =  Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60,2) . " hours left";
+            Session::add('feedback_negative', $suspensionTimer);
+            return false;
+        }
 
         // reset the failed login counter for that user (if necessary)
         if ($result->user_last_failed_login > 0) {
@@ -107,6 +120,7 @@ class LoginModel
      */
     public static function loginWithCookie($cookie)
     {
+        // do we have a cookie ?
         if (!$cookie) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
@@ -121,11 +135,17 @@ class LoginModel
 
         // get data of user that has this id and this token
         $result = UserModel::getUserDataByUserIdAndToken($user_id, $token);
+
+        // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
             self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type);
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
+
+            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
+            // be invalid after a certain amount of time, so the user has to login with username/password
+            // again from time to time. This is good and safe ! ;)
 
             Session::add('feedback_positive', Text::get('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
             return true;
