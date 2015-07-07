@@ -8,15 +8,17 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
+
+        // special authentication check for the entire controller: Note the check-ADMIN-authentication!
+        // All methods inside this controller are only accessible for admins (= users that have role type 7)
+        Auth::checkAdminAuthentication();
     }
 
     /**
-     * This method controls what happens when you move to /overview/index in your app.
-     * Shows a list of all users.
+     * This method controls what happens when you move to /admin or /admin/index in your app.
      */
     public function index()
     {
-	    If(Session::get('user_account_type') != 2) Redirect::home();
 	    $this->View->render('admin/index', array(
 			    'users' => UserModel::getPublicProfilesOfAllUsers())
 	    );
@@ -24,11 +26,10 @@ class AdminController extends Controller
 
 	public function actionAccountSettings()
 	{
-		If(Session::get('user_account_type') != 2) Redirect::home();
-		AdminModel::setAccountSusspensionAndDeletetionStatus(
+		AdminModel::setAccountSuspensionAndDeletionStatus(
 			Request::post('suspension'), Request::post('softDelete'), Request::post('user_id')
 		);
-		redirect::to("admin");
-	}
 
+		Redirect::to("admin");
+	}
 }

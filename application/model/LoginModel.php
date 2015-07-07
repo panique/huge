@@ -32,14 +32,16 @@ class LoginModel
             Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
             return false;
         }
-        //Stop the users login if they have been soft deleted 
-        if($result->user_deleted == 1){
+
+        // stop the user's login if account has been soft deleted
+        if ($result->user_deleted == 1) {
             Session::add('feedback_negative', Text::get('FEEDBACK_DELETED'));
             return false;
         }
-        //Stop the user from logging in if they have a suspension. Display how long they have left in the feedback.
-        if($result->user_suspension_timestamp - time() > 0){
-            $suspensionTimer =  Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60,2) . " hours left";
+
+        // stop the user from logging in if user has a suspension, display how long they have left in the feedback.
+        if ($result->user_suspension_timestamp != null && $result->user_suspension_timestamp - time() > 0) {
+            $suspensionTimer = Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60, 2) . " hours left";
             Session::add('feedback_negative', $suspensionTimer);
             return false;
         }
