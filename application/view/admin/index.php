@@ -41,12 +41,13 @@
                         <td>
                             <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
                         </td>
-
                         <form action="<?= config::get("URL"); ?>admin/actionAccountSettings" method="post">
-                            <td><input type="number" name="suspension"></td>
-                            <td><input type="checkbox" name="softDelete"</td>
-                            <input type="hidden" name="user_id" value="<?= $user->user_id; ?>">
-                            <td><input type="submit"></td>
+                            <td><input type="number" name="suspension" /></td>
+                            <td><input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> /></td>
+                            <td>
+                                <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />
+                                <input type="submit" />
+                            </td>
                         </form>
                     </tr>
                 <?php } ?>
