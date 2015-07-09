@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [panique/tankerkiller125] avatars folder now does not run any PHP code (security improvement) 
 - [tysonlist] [#657] send user back to last-visited page after successful login (when not being logged in first)
 - [sandropons] anti-brute-force feature for login process
 - [panique] removed old Facebook texts (as Login-via-Facebook feature was removed since 3.0)
