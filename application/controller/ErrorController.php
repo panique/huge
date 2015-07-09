@@ -2,7 +2,8 @@
 
 /**
  * Class Error
- * This controller simply shows a page that will be displayed when a controller/method is not found. Simple 404.
+ * This controller simply contains some methods that can be used to give proper feedback in certain error scenarios,
+ * like a proper 404 response with an additional HTML page behind when something does not exist.
  */
 class ErrorController extends Controller
 {
@@ -15,11 +16,13 @@ class ErrorController extends Controller
     }
 
     /**
-     * This is the error page, usually seen by the user when he/she gets an 404.
-     * Also see Application -> __construct for more and look for return404andErrorPage()
+     * Use this when something is not found. Gives back a proper 404 header response plus a normal page (where you could
+     * show a well-designed error message or something more useful for your users).
+     * You can see this in action in action in /core/Application.php -> __construct
      */
-    public function index()
+    public function error404()
     {
-        $this->View->render('error/index');
+        header('HTTP/1.0 404 Not Found', true, 404);
+        $this->View->render('error/404');
     }
 }
