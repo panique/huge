@@ -15,6 +15,7 @@ return array(
 	"FEEDBACK_PASSWORD_WRONG" => "Password was wrong.",
 	"FEEDBACK_USER_DOES_NOT_EXIST" => "This user does not exist.",
 	"FEEDBACK_LOGIN_FAILED" => "Login failed.",
+	"FEEDBACK_LOGIN_FAILED_3_TIMES" => "Login failed 3 or more times already. Please wait 30 seconds to try again.",
 	"FEEDBACK_USERNAME_FIELD_EMPTY" => "Username field was empty.",
 	"FEEDBACK_PASSWORD_FIELD_EMPTY" => "Password field was empty.",
 	"FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY" => "Username or password field was empty.",
