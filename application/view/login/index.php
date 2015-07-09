@@ -16,6 +16,14 @@
                         <input type="checkbox" name="set_remember_me_cookie" class="remember-me-checkbox" />
                         Remember me for 2 weeks
                     </label>
+                    <!-- when a user navigates to a page that's only accessible for logged a logged-in user, then
+                         the user is sent to this page here, also having the page he/she came from in the URL parameter
+                         (have a look). This "where did you came from" value is put into this form to sent the user back
+                         there after being logged in successfully.
+                         Simple but powerful feature, big thanks to @tysonlist. -->
+                    <?php if (!empty($this->redirect)) { ?>
+                        <input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+                    <?php } ?>
                     <input type="submit" class="login-submit-button" value="Log in"/>
                 </form>
                 <div class="link-forgot-my-password">

@@ -25,7 +25,8 @@ class LoginController extends Controller
         if (LoginModel::isUserLoggedIn()) {
             Redirect::home();
         } else {
-            $this->View->render('login/index');
+            $data = array('redirect' => Request::get('redirect') ? Request::get('redirect') : NULL);
+            $this->View->render('login/index', $data);
         }
     }
 
@@ -41,7 +42,11 @@ class LoginController extends Controller
 
         // check login status: if true, then redirect user login/showProfile, if false, then to login form again
         if ($login_successful) {
-            Redirect::to('login/showProfile');
+            if (Request::post('redirect')) {
+                Redirect::to(ltrim(urldecode(Request::post('redirect')), '/'));
+            } else {
+                Redirect::to('login/showProfile');
+            }
         } else {
             Redirect::to('login/index');
         }

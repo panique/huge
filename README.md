@@ -21,7 +21,9 @@ applications that - surprisingly and intentionally - go back to the basics of pr
 static classes, extremely simple constructs, not-totally-DRY code etc. while keeping the code extremely readable 
 ([StackOverflow](http://www.dev-metal.com/architecture-stackoverflow/), Wikipedia, SoundCloud).
 
-Buzzwords: [KISS](http://en.wikipedia.org/wiki/KISS_principle), [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
+Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/KISS_principle), 
+[YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
+[Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
 #### Quick-Index 
 

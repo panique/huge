@@ -59,12 +59,6 @@ return array(
 	'DB_PORT' => '3306',
 	'DB_CHARSET' => 'utf8',
 	/**
-	 * Configuration for: Additional login providers: Facebook
-	 * CURRENTLY REMOVED (as Facebook has removed support for the used API version).
-	 * Another, better and up-to-date implementation might come soon.
-	 */
-	'FACEBOOK_LOGIN' => false,
-	/**
 	 * Configuration for: Captcha size
 	 * The currently used Captcha generator (https://github.com/Gregwar/Captcha) also runs without giving a size,
 	 * so feel free to use ->build(); inside CaptchaModel.

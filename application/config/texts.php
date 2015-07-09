@@ -7,11 +7,15 @@
  */
 return array(
 	"FEEDBACK_UNKNOWN_ERROR" => "Unknown error occurred!",
+	"FEEDBACK_DELETED" => "Your account has been deleted.",
+	"FEEDBACK_ACCOUNT_SUSPENDED" => "Account Suspended for ",
+	"FEEDBACK_ACCOUNT_SUSPENSION_DELETION_STATUS" => "This user's suspension / deletion status has been edited.",
 	"FEEDBACK_PASSWORD_WRONG_3_TIMES" => "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.",
 	"FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET" => "Your account is not activated yet. Please click on the confirm link in the mail.",
 	"FEEDBACK_PASSWORD_WRONG" => "Password was wrong.",
 	"FEEDBACK_USER_DOES_NOT_EXIST" => "This user does not exist.",
 	"FEEDBACK_LOGIN_FAILED" => "Login failed.",
+	"FEEDBACK_LOGIN_FAILED_3_TIMES" => "Login failed 3 or more times already. Please wait 30 seconds to try again.",
 	"FEEDBACK_USERNAME_FIELD_EMPTY" => "Username field was empty.",
 	"FEEDBACK_PASSWORD_FIELD_EMPTY" => "Password field was empty.",
 	"FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY" => "Username or password field was empty.",
@@ -63,11 +67,4 @@ return array(
 	"FEEDBACK_NOTE_DELETION_FAILED" => "Note deletion failed.",
 	"FEEDBACK_COOKIE_INVALID" => "Your remember-me-cookie is invalid.",
 	"FEEDBACK_COOKIE_LOGIN_SUCCESSFUL" => "You were successfully logged in via the remember-me-cookie.",
-	"FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED" => "Sorry, you don't have an account here. Please register first.",
-	"FEEDBACK_FACEBOOK_EMAIL_NEEDED" => "Sorry, but you need to allow us to see your email address to register.",
-	"FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook ID exists in our database).",
-	"FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook email exists in our database).",
-	"FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook username exists in our database).",
-	"FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL" => "You have been successfully registered with Facebook.",
-	"FEEDBACK_FACEBOOK_OFFLINE" => "We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).",
 );

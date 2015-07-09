@@ -62,5 +62,12 @@
                     </li>
                 </ul>
             </li>
+            <?php if (Session::get("user_account_type") == 7) : ?>
+                <li <?php if (View::checkForActiveController($filename, "admin")) {
+                    echo ' class="active" ';
+                } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>admin/">Admin</a>
+                </li>
+            <?php endif; ?>
         <?php endif; ?>
         </ul>

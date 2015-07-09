@@ -27,9 +27,24 @@ class LoginModel
 	    // checks if user exists, if login is not blocked (due to failed logins) and if password fits the hash
 	    $result = self::validateAndGetUser($user_name, $user_password);
 
-	    if (!$result) {
-		    return false;
-	    }
+        // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
+        if (!$result) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
+            return false;
+        }
+
+        // stop the user's login if account has been soft deleted
+        if ($result->user_deleted == 1) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_DELETED'));
+            return false;
+        }
+
+        // stop the user from logging in if user has a suspension, display how long they have left in the feedback.
+        if ($result->user_suspension_timestamp != null && $result->user_suspension_timestamp - time() > 0) {
+            $suspensionTimer = Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60, 2) . " hours left";
+            Session::add('feedback_negative', $suspensionTimer);
+            return false;
+        }
 
         // reset the failed login counter for that user (if necessary)
         if ($result->user_last_failed_login > 0) {
@@ -65,12 +80,27 @@ class LoginModel
 	 */
 	private static function validateAndGetUser($user_name, $user_password)
 	{
+		// brute force attack mitigation: use session failed login count and last failed login for not found users.
+		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+		// (limits user searches in database)
+		if (Session::get('failed-login-count') >= 3 AND (Session::get('last-failed-login') > (time() - 30))) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
+			return false;
+		}
+		
 		// get all data of that user (to later check if password and password_hash fit)
 		$result = UserModel::getUserDataByUsername($user_name);
 
-		// Check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
-		if (!$result) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
+        // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
+		// brute force attack mitigation: reset failed login counter because of found user
+		if ($result){
+			Session::set('failed-login-count', 0);
+			Session::set('last-failed-login', '');
+		} else {
+			// brute force attack mitigation: set session failed login count and last failed login for users not found
+			Session::set('failed-login-count', Session::get('failed-login-count') + 1);
+			Session::set('last-failed-login', time());
+            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
 			return false;
 		}
 
@@ -107,6 +137,7 @@ class LoginModel
      */
     public static function loginWithCookie($cookie)
     {
+        // do we have a cookie ?
         if (!$cookie) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
@@ -121,11 +152,17 @@ class LoginModel
 
         // get data of user that has this id and this token
         $result = UserModel::getUserDataByUserIdAndToken($user_id, $token);
+
+        // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
             self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type);
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
+
+            // NOTE: we don't set another remember_me-cookie here as the current cookie should always
+            // be invalid after a certain amount of time, so the user has to login with username/password
+            // again from time to time. This is good and safe ! ;)
 
             Session::add('feedback_positive', Text::get('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
             return true;
