@@ -278,7 +278,7 @@ There are several files in the root folder of the project that might be irritati
     
 *README* and *CHANGELOG* are self-explaining.
 
-#### Documentation <a name="documentation"></a>
+### Documentation <a name="documentation"></a>
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
@@ -302,13 +302,25 @@ registered users are normal users with user role 1 for sure.
 
 See the "Testing with demo users" section of this readme for more info.
  
-#### Community-provided features & feature discussions <a name="community"></a>
+### Community-provided features & feature discussions <a name="community"></a>
 
 There are some awesome features or feature ideas build by awesome people, but these features are too special-interest
 to go into the main version of HUGE, but have a look into these tickets if you are interested:
 
  - [Caching system](https://github.com/panique/huge/issues/643)
  - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
+ 
+### Future of the project: As simple as possible!
+ 
+The idea of this project was (or is) to provide a super-simple barebone application with a full user authentication
+system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
+this project simple, clean and minimal with these few "rules": :)
+
+1. Reduce features to the bare minimum.
+2. Don't implement features that are not needed by most users.
+3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
+ 
+More on this ticket: [Keep the project as simple as possible](https://github.com/panique/huge/issues/664). 
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
