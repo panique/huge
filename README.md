@@ -39,6 +39,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
+    - [NGINX setup](#nginx-setup)
 + [Documentation](#documentation)  
 + [Community-provided features & feature discussions](#community)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
@@ -252,6 +253,45 @@ you can send proper emails. It's highly recommended to use SMTP for mail sending
 not work in nearly every case (spam blocking). I use [SMTP2GO](http://www.smtp2go.com/?s=devmetal).
 
 Then check your server's IP / domain. Everything should work fine.
+
+#### NGINX setup: <a name="nginx-setup"></a>
+
+This is an untested NGINX setup. Please comment [on the ticket](https://github.com/panique/huge/issues/622) if you see 
+issues.
+ 
+```
+server {
+    # your listening port
+    listen 80;
+
+    # your server name
+    server_name example.com;
+
+    # your path to access log files
+    access_log /srv/www/example.com/logs/access.log;
+    error_log /srv/www/example.com/logs/error.log;
+
+    # your root
+    root /srv/www/example.com/public_html;
+
+    # huge
+    index index.php;
+
+    # huge
+    location / {
+        try_files $uri /index.php?url=$uri&$args;
+    }
+
+    # your PHP config
+    location ~ \.php$ {
+        try_files $uri  = 401;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass unix:/var/run/php-fastcgi/php-fastcgi.socket;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+```
 
 #### Testing with demo users
 
