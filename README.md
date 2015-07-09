@@ -289,6 +289,7 @@ There are some awesome features or feature ideas build by awesome people, but th
 to go into the main version of HUGE, but have a look into these tickets if you are interested:
 
  - [Caching system](https://github.com/panique/huge/issues/643)
+ - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
