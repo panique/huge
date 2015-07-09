@@ -16,6 +16,9 @@
                         <input type="checkbox" name="set_remember_me_cookie" class="remember-me-checkbox" />
                         Remember me for 2 weeks
                     </label>
+                    <?php if(isset($this->redirect) && $this->redirect != ''):?>
+                      <input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+                    <?php endif; ?>
                     <input type="submit" class="login-submit-button" value="Log in"/>
                 </form>
                 <div class="link-forgot-my-password">
