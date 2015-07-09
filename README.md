@@ -420,6 +420,20 @@ an normal GitHub issue.
 See active issues and requested features here:
 https://github.com/panique/huge/issues?state=open
 
+### Why you should use a favicon.ico in your project :)
+
+Interesting issue: When a user hits your website, the user's browser will also request one or more (!) favicons 
+(different sizes). If these static files don't exist, your application will start to generate a 404 response and a 404 
+page for each file. This wastes a lot of server power and is also useless, therefore make sure you always have favicons
+or handle this from Apache/nginx level.
+
+HUGE tries to handle this by sending an empty image in the head of the view/_templates/header.php !
+
+More inside this ticket: [Return proper 404 for missing favicon.ico, missing images etc.](https://github.com/panique/huge/issues/530)
+
+More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests),
+[Isn't it silly that a tiny favicon requires yet another HTTP request? How to make favicon go into a sprite?](http://stackoverflow.com/questions/5199902/isnt-it-silly-that-a-tiny-favicon-requires-yet-another-http-request-how-to-mak?lq=1).
+
 ### Useful links
 
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
