@@ -45,6 +45,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
++ [Code-Quality scanner links](#code-quality)
 + [Report a bug](#bug-report)
 
 ### The History of HUGE
@@ -399,6 +400,14 @@ Trolls and very annoying people will get a permanent ban / block. GitHub has a v
 ### Contribute <a name="contribute"></a>
 
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
+
+### Code-Quality scanner links <a name="code-quality"></a>
+
+[Scrutinizer (master branch)](https://scrutinizer-ci.com/g/panique/huge/?branch=master),
+[Scrutinizer (develop branch)](https://scrutinizer-ci.com/g/panique/huge/?branch=develop),
+[Code Climate](https://codeclimate.com/github/panique/huge),
+[Codacy](https://www.codacy.com/public/panique/phplogin/dashboard?bid=789836), 
+[SensioLabs Insight](https://insight.sensiolabs.com/projects/d4f4e3c0-1445-4245-8cb2-d75026c11fa7/analyses/2).
 
 ### Found a bug (Responsible Disclosure) ? <a name="bug-report"></a>
 
