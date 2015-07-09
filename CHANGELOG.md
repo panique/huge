@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [sandropons] anti-brute-force feature for login process
 - [panique] removed old Facebook texts (as Login-via-Facebook feature was removed since 3.0)
 - [oisian/ldmusic] [#608] Deletion / suspension of users, Admin menu
 - [panique] [#654](https://github.com/panique/huge/issues/654) little frontend navi bug fixed
