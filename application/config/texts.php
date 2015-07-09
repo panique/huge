@@ -66,11 +66,4 @@ return array(
 	"FEEDBACK_NOTE_DELETION_FAILED" => "Note deletion failed.",
 	"FEEDBACK_COOKIE_INVALID" => "Your remember-me-cookie is invalid.",
 	"FEEDBACK_COOKIE_LOGIN_SUCCESSFUL" => "You were successfully logged in via the remember-me-cookie.",
-	"FEEDBACK_FACEBOOK_LOGIN_NOT_REGISTERED" => "Sorry, you don't have an account here. Please register first.",
-	"FEEDBACK_FACEBOOK_EMAIL_NEEDED" => "Sorry, but you need to allow us to see your email address to register.",
-	"FEEDBACK_FACEBOOK_UID_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook ID exists in our database).",
-	"FEEDBACK_FACEBOOK_EMAIL_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook email exists in our database).",
-	"FEEDBACK_FACEBOOK_USERNAME_ALREADY_EXISTS" => "Sorry, but you have already registered here (your Facebook username exists in our database).",
-	"FEEDBACK_FACEBOOK_REGISTER_SUCCESSFUL" => "You have been successfully registered with Facebook.",
-	"FEEDBACK_FACEBOOK_OFFLINE" => "We could not reach the Facebook servers. Maybe Facebook is offline (that really happens sometimes).",
 );
