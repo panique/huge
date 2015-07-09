@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [panique] avatar upload feature can now handle jpg, png, gif
 - [panique/tankerkiller125] avatars folder now does not run any PHP code (security improvement) 
 - [tysonlist] [#657] send user back to last-visited page after successful login (when not being logged in first)
 - [sandropons] anti-brute-force feature for login process
