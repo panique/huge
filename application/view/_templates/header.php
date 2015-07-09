@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <title>HUGE</title>
     <!-- META -->
     <meta charset="utf-8">
     <!-- CSS -->
