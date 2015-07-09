@@ -39,11 +39,13 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
+    - [NGINX setup](#nginx-setup)
 + [Documentation](#documentation)  
 + [Community-provided features & feature discussions](#community)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
++ [Code-Quality scanner links](#code-quality)
 + [Report a bug](#bug-report)
 
 ### The History of HUGE
@@ -253,9 +255,52 @@ not work in nearly every case (spam blocking). I use [SMTP2GO](http://www.smtp2g
 
 Then check your server's IP / domain. Everything should work fine.
 
-#### Testing with demo user
+#### NGINX setup: <a name="nginx-setup"></a>
 
-By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
+This is an untested NGINX setup. Please comment [on the ticket](https://github.com/panique/huge/issues/622) if you see 
+issues.
+ 
+```
+server {
+    # your listening port
+    listen 80;
+
+    # your server name
+    server_name example.com;
+
+    # your path to access log files
+    access_log /srv/www/example.com/logs/access.log;
+    error_log /srv/www/example.com/logs/error.log;
+
+    # your root
+    root /srv/www/example.com/public_html;
+
+    # huge
+    index index.php;
+
+    # huge
+    location / {
+        try_files $uri /index.php?url=$uri&$args;
+    }
+
+    # your PHP config
+    location ~ \.php$ {
+        try_files $uri  = 401;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass unix:/var/run/php-fastcgi/php-fastcgi.socket;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+```
+
+#### Testing with demo users
+
+By default there are two demo users, a normal user and an admin user. For more info on that please have a look on the
+user role part of the small documentation block inside this readme.
+ 
+Normal user: Username is `demo2`, password is `12345678`. The user is already activated.
+Admin user (can delete and suspend other users): Username is `demo`, password is `12345678`. The user is already activated.
 
 ### What the hell are .travis.yml, .scrutinizer.yml etc. ?
 
@@ -274,7 +319,7 @@ There are several files in the root folder of the project that might be irritati
     
 *README* and *CHANGELOG* are self-explaining.
 
-#### Documentation <a name="documentation"></a>
+### Documentation <a name="documentation"></a>
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
@@ -283,12 +328,40 @@ how data is shown in the view files. A big sorry that there's no documentation y
  TODO: Full documentation
  TODO: Basic examples on how to do things
  
-#### Community-provided features & feature discussions <a name="community"></a>
+#### The different user roles
+
+Currently there are two types of users: Normal users and admins. There are exactly the same, but...
+ 
+1. Admin users can delete and suspend other users, they have an additional button "admin" in the navigation. Admin users
+have a value of `7` inside the database table field `user_account_type`. They cannot upgrade or downgrade their accounts 
+(as this wouldn't make sense).
+
+2. Normal users don't have admin features for sure. But they can upgrade and downgrade their accounts (try it out via
+/login/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
+Normal users have a value of `1` or `2` inside the database table field `user_account_type`. By default all new 
+registered users are normal users with user role 1 for sure.
+
+See the "Testing with demo users" section of this readme for more info.
+ 
+### Community-provided features & feature discussions <a name="community"></a>
 
 There are some awesome features or feature ideas build by awesome people, but these features are too special-interest
 to go into the main version of HUGE, but have a look into these tickets if you are interested:
 
  - [Caching system](https://github.com/panique/huge/issues/643)
+ - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
+ 
+### Future of the project: As simple as possible!
+ 
+The idea of this project was (or is) to provide a super-simple barebone application with a full user authentication
+system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
+this project simple, clean and minimal with these few "rules": :)
+
+1. Reduce features to the bare minimum.
+2. Don't implement features that are not needed by most users.
+3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
+ 
+More on this ticket: [Keep the project as simple as possible](https://github.com/panique/huge/issues/664). 
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
@@ -328,6 +401,14 @@ Trolls and very annoying people will get a permanent ban / block. GitHub has a v
 
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
 
+### Code-Quality scanner links <a name="code-quality"></a>
+
+[Scrutinizer (master branch)](https://scrutinizer-ci.com/g/panique/huge/?branch=master),
+[Scrutinizer (develop branch)](https://scrutinizer-ci.com/g/panique/huge/?branch=develop),
+[Code Climate](https://codeclimate.com/github/panique/huge),
+[Codacy](https://www.codacy.com/public/panique/phplogin/dashboard?bid=789836), 
+[SensioLabs Insight](https://insight.sensiolabs.com/projects/d4f4e3c0-1445-4245-8cb2-d75026c11fa7/analyses/2).
+
 ### Found a bug (Responsible Disclosure) ? <a name="bug-report"></a>
 
 Due to the possible consequences when publishing a bug on a public open-source project I'd kindly ask you to send really
@@ -338,6 +419,20 @@ an normal GitHub issue.
 
 See active issues and requested features here:
 https://github.com/panique/huge/issues?state=open
+
+### Why you should use a favicon.ico in your project :)
+
+Interesting issue: When a user hits your website, the user's browser will also request one or more (!) favicons 
+(different sizes). If these static files don't exist, your application will start to generate a 404 response and a 404 
+page for each file. This wastes a lot of server power and is also useless, therefore make sure you always have favicons
+or handle this from Apache/nginx level.
+
+HUGE tries to handle this by sending an empty image in the head of the view/_templates/header.php !
+
+More inside this ticket: [Return proper 404 for missing favicon.ico, missing images etc.](https://github.com/panique/huge/issues/530)
+
+More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests),
+[Isn't it silly that a tiny favicon requires yet another HTTP request? How to make favicon go into a sprite?](http://stackoverflow.com/questions/5199902/isnt-it-silly-that-a-tiny-favicon-requires-yet-another-http-request-how-to-mak?lq=1).
 
 ### Useful links
 

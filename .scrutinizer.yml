@@ -4,5 +4,6 @@ checks:
     php:
         code_rating: true
         duplication: true
-tools:
-    external_code_coverage: true
+# test coverage is commented out as this does not seem to work properly right now
+#tools:
+#    external_code_coverage: true

@@ -94,19 +94,20 @@ class AvatarModel
 
 	/**
 	 * Validates the image
-	 * TODO totally decouple
+     * Only accepts gif, jpg, png types
+     * @see http://php.net/manual/en/function.image-type-to-mime-type.php
 	 *
 	 * @return bool
 	 */
 	public static function validateImageFile()
 	{
-		if (!isset($_FILES['avatar_file'])) {
+        if (!isset($_FILES['avatar_file'])) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
 			return false;
 		}
 
+        // if input file too big (>5MB)
 		if ($_FILES['avatar_file']['size'] > 5000000) {
-			// if input file too big (>5MB)
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_BIG'));
 			return false;
 		}
@@ -114,13 +115,14 @@ class AvatarModel
 		// get the image width, height and mime type
 		$image_proportions = getimagesize($_FILES['avatar_file']['tmp_name']);
 
-		// if input file too small
+		// if input file too small, [0] is the width, [1] is the height
 		if ($image_proportions[0] < Config::get('AVATAR_SIZE') OR $image_proportions[1] < Config::get('AVATAR_SIZE')) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_SMALL'));
 			return false;
 		}
 
-		if (!($image_proportions['mime'] == 'image/jpeg')) {
+        // if file type is not jpg, gif or png
+		if (!in_array($image_proportions['mime'], array('image/jpeg', 'image/gif', 'image/png'))) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
 			return false;
 		}
@@ -142,7 +144,9 @@ class AvatarModel
 	}
 
 	/**
-	 * Resize avatar image (while keeping aspect ratio and cropping it off sexy)
+	 * Resize avatar image (while keeping aspect ratio and cropping it off in a clean way).
+     * Only works with gif, jpg and png file types. If you want to change this also have a look into
+     * method validateImageFile() inside this model.
 	 *
 	 * TROUBLESHOOTING: You don't see the new image ? Press F5 or CTRL-F5 to refresh browser cache.
 	 *
@@ -152,20 +156,31 @@ class AvatarModel
 	 * @param int $final_height The desired height of the new image.
 	 * @param int $quality The quality of the JPG to produce 1 - 100
 	 *
-	 * TODO currently we just allow .jpg
-	 *
 	 * @return bool success state
 	 */
 	public static function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44, $quality = 85)
 	{
-		list($width, $height) = getimagesize($source_image);
+        // fetch the image's meta data
+        // @see php.net/manual/en/function.getimagesize.php
+        $imageData = getimagesize($source_image);
+        $width = $imageData[0];
+        $height = $imageData[1];
+        $mimeType = $imageData['mime'];
 
 		if (!$width || !$height) {
 			return false;
 		}
 
 		//saving the image into memory (for manipulation with GD Library)
-		$myImage = imagecreatefromjpeg($source_image);
+        if ($mimeType == 'image/jpeg') {
+            $myImage = imagecreatefromjpeg($source_image);
+        } elseif ($mimeType == 'image/png') {
+            $myImage = imagecreatefrompng($source_image);
+        } elseif ($mimeType == 'image/gif') {
+            $myImage = imagecreatefromgif($source_image);
+        } else {
+            return false;
+        }
 
 		// calculating the part of the image to use for thumbnail
 		if ($width > $height) {
