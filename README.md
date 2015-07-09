@@ -253,9 +253,13 @@ not work in nearly every case (spam blocking). I use [SMTP2GO](http://www.smtp2g
 
 Then check your server's IP / domain. Everything should work fine.
 
-#### Testing with demo user
+#### Testing with demo users
 
-By default HUGE has a demo-user: username is `demo`, password is `12345678`. The user is already activated.
+By default there are two demo users, a normal user and an admin user. For more info on that please have a look on the
+user role part of the small documentation block inside this readme.
+ 
+Normal user: Username is `demo2`, password is `12345678`. The user is already activated.
+Admin user (can delete and suspend other users): Username is `demo`, password is `12345678`. The user is already activated.
 
 ### What the hell are .travis.yml, .scrutinizer.yml etc. ?
 
@@ -282,6 +286,21 @@ how data is shown in the view files. A big sorry that there's no documentation y
  
  TODO: Full documentation
  TODO: Basic examples on how to do things
+ 
+#### The different user roles
+
+Currently there are two types of users: Normal users and admins. There are exactly the same, but...
+ 
+1. Admin users can delete and suspend other users, they have an additional button "admin" in the navigation. Admin users
+have a value of `7` inside the database table field `user_account_type`. They cannot upgrade or downgrade their accounts 
+(as this wouldn't make sense).
+
+2. Normal users don't have admin features for sure. But they can upgrade and downgrade their accounts (try it out via
+/login/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
+Normal users have a value of `1` or `2` inside the database table field `user_account_type`. By default all new 
+registered users are normal users with user role 1 for sure.
+
+See the "Testing with demo users" section of this readme for more info.
  
 #### Community-provided features & feature discussions <a name="community"></a>
 
