@@ -27,8 +27,10 @@ class UserModel
 
         foreach ($query->fetchAll() as $user) {
 			
-			// all elements of array passed to self::XSSFilter for XSS sanitation.
-			array_walk_recursive($user, 'self::XSSFilter');
+			// all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+			// application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+			array_walk_recursive($user, 'Filter::XSSFilter');
 			
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
@@ -67,9 +69,11 @@ class UserModel
         } else {
             Session::add('feedback_negative', Text::get('FEEDBACK_USER_DOES_NOT_EXIST'));
         }
-		
-		// all elements of array passed to self::XSSFilter for XSS sanitation.
-		array_walk_recursive($user, 'self::XSSFilter');
+
+        // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+        // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+        // the user's values
+		array_walk_recursive($user, 'Filter::XSSFilter');
 
         return $user;
     }
@@ -336,14 +340,4 @@ class UserModel
         // return one row (we only have one result or nothing)
         return $query->fetch();
     }
-	
-	/**
-	* Passes value through htmlspecialchars, for XSS prevention.
-	*/
-	public static function XSSFilter(&$value)
-	{
-		if (is_string($value)) {
-			$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-		}
-	}
 }

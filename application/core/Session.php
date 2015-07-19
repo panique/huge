@@ -40,7 +40,9 @@ class Session
     {
         if (isset($_SESSION[$key])) {
 			if (is_string($_SESSION[$key])) {
-				return htmlspecialchars($_SESSION[$key], ENT_QUOTES, 'UTF-8');
+                // filter the value for XSS vulnerabilities
+                Filter::XSSFilter($_SESSION[$key]);
+				return $_SESSION[$key];
 			}
 			else {
 				return $_SESSION[$key];
