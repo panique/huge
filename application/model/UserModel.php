@@ -26,12 +26,12 @@ class UserModel
         $all_users_profiles = array();
 
         foreach ($query->fetchAll() as $user) {
-			
-			// all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
-			// application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
             // the user's values
-			array_walk_recursive($user, 'Filter::XSSFilter');
-			
+            array_walk_recursive($user, 'Filter::XSSFilter');
+
             $all_users_profiles[$user->user_id] = new stdClass();
             $all_users_profiles[$user->user_id]->user_id = $user->user_id;
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
@@ -73,7 +73,7 @@ class UserModel
         // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
         // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
         // the user's values
-		array_walk_recursive($user, 'Filter::XSSFilter');
+        array_walk_recursive($user, 'Filter::XSSFilter');
 
         return $user;
     }
@@ -167,7 +167,7 @@ class UserModel
 
         $query = $database->prepare("UPDATE users SET user_email = :user_email WHERE user_id = :user_id LIMIT 1");
         $query->execute(array(':user_email' => $new_user_email, ':user_id' => $user_id));
-        $count =  $query->rowCount();
+        $count = $query->rowCount();
         if ($count == 1) {
             return true;
         }
