@@ -70,7 +70,7 @@ class AvatarModel
         if (self::isAvatarFolderWritable() AND self::validateImageFile()) {
             // create a jpg file in the avatar folder, write marker to database
             $target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
-            self::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'), Config::get('AVATAR_JPEG_QUALITY'));
+            self::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'));
             self::writeAvatarToDatabase(Session::get('user_id'));
             Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
             Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
@@ -150,15 +150,14 @@ class AvatarModel
      *
      * TROUBLESHOOTING: You don't see the new image ? Press F5 or CTRL-F5 to refresh browser cache.
      *
-     * @param string $source_image The location to the original raw image.
-     * @param string $destination The location to save the new image.
+     * @param string $source_image The location to the original raw image
+     * @param string $destination The location to save the new image
      * @param int $final_width The desired width of the new image
-     * @param int $final_height The desired height of the new image.
-     * @param int $quality The quality of the JPG to produce 1 - 100
+     * @param int $final_height The desired height of the new image
      *
      * @return bool success state
      */
-    public static function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44, $quality = 85)
+    public static function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44)
     {
         // fetch the image's meta data
         // @see php.net/manual/en/function.getimagesize.php
@@ -199,7 +198,7 @@ class AvatarModel
 
         // add '.jpg' to file path, save it as a .jpg file with our $destination_filename parameter
         $destination .= '.jpg';
-        imagejpeg($thumb, $destination, $quality);
+        imagejpeg($thumb, $destination, Config::get('AVATAR_JPEG_QUALITY'));
 
         // delete "working copy"
         imagedestroy($thumb);
