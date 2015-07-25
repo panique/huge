@@ -3,7 +3,7 @@
 class FilterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * When argument contains bad code a encoded (and therefore un-dangerous) string should be returned
+     * When argument contains bad code the encoded (and therefore un-dangerous) string should be returned
      */
     public function testXSSFilterWithBadCode()
     {
