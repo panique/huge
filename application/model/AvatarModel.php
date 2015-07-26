@@ -235,7 +235,7 @@ class AvatarModel
     /**
      * Removes the avatar image file from the filesystem
      *
-     * @param $userId
+     * @param integer $userId
      * @return bool
      */
     public static function deleteAvatarImageFile($userId)
