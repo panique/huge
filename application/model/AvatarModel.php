@@ -172,7 +172,7 @@ class AvatarModel
             case 'image/jpeg': $myImage = imagecreatefromjpeg($source_image); break;
             case 'image/png': $myImage = imagecreatefrompng($source_image); break;
             case 'image/gif': $myImage = imagecreatefromgif($source_image); break;
-            default: return false; break;
+            default: return false;
         }
 
         // calculating the part of the image to use for thumbnail
