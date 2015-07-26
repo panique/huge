@@ -159,8 +159,6 @@ class AvatarModel
      */
     public static function resizeAvatarImage($source_image, $destination, $final_width = 44, $final_height = 44)
     {
-        // fetch the image's meta data
-        // @see php.net/manual/en/function.getimagesize.php
         $imageData = getimagesize($source_image);
         $width = $imageData[0];
         $height = $imageData[1];
@@ -170,43 +168,35 @@ class AvatarModel
             return false;
         }
 
-        //saving the image into memory (for manipulation with GD Library)
-        if ($mimeType == 'image/jpeg') {
-            $myImage = imagecreatefromjpeg($source_image);
-        } elseif ($mimeType == 'image/png') {
-            $myImage = imagecreatefrompng($source_image);
-        } elseif ($mimeType == 'image/gif') {
-            $myImage = imagecreatefromgif($source_image);
-        } else {
-            return false;
+        switch ($mimeType) {
+            case 'image/jpeg': $myImage = imagecreatefromjpeg($source_image); break;
+            case 'image/png': $myImage = imagecreatefrompng($source_image); break;
+            case 'image/gif': $myImage = imagecreatefromgif($source_image); break;
+            default: return false; break;
         }
 
         // calculating the part of the image to use for thumbnail
         if ($width > $height) {
-            $y = 0;
-            $x = ($width - $height) / 2;
+            $verticalCoordinateOfSource = 0;
+            $horizontalCoordinateOfSource = ($width - $height) / 2;
             $smallestSide = $height;
         } else {
-            $x = 0;
-            $y = ($height - $width) / 2;
+            $horizontalCoordinateOfSource = 0;
+            $verticalCoordinateOfSource = ($height - $width) / 2;
             $smallestSide = $width;
         }
 
         // copying the part into thumbnail, maybe edit this for square avatars
         $thumb = imagecreatetruecolor($final_width, $final_height);
-        imagecopyresampled($thumb, $myImage, 0, 0, $x, $y, $final_width, $final_height, $smallestSide, $smallestSide);
+        imagecopyresampled($thumb, $myImage, 0, 0, $horizontalCoordinateOfSource, $verticalCoordinateOfSource, $final_width, $final_height, $smallestSide, $smallestSide);
 
         // add '.jpg' to file path, save it as a .jpg file with our $destination_filename parameter
-        $destination .= '.jpg';
-        imagejpeg($thumb, $destination, Config::get('AVATAR_JPEG_QUALITY'));
-
-        // delete "working copy"
+        imagejpeg($thumb, $destination . '.jpg', Config::get('AVATAR_JPEG_QUALITY'));
         imagedestroy($thumb);
 
         if (file_exists($destination)) {
             return true;
         }
-        // default return
         return false;
     }
 
