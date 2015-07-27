@@ -92,11 +92,9 @@ class LoginModel
 		$result = UserModel::getUserDataByUsername($user_name);
 
         // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
-        // brute force attack mitigation: reset failed login counter because of found user
         if (!$result){
-            // brute force attack mitigation: set session failed login count and last failed login for users not found
-            Session::set('user-not-found-count', Session::get('user-not-found-count') + 1);
-            Session::set('last-user-not-found', time());
+            //Increment the user not found count. Helps mitigate user enumeration.
+            self::incrementUserNotFoundCounter();
             return false;
         }
 
@@ -124,6 +122,18 @@ class LoginModel
         self::resetUserNotFoundCounter();
 		return $result;
 	}
+
+    /**
+     * Increment the user-not-found-count by 1.
+     * Add timestamp to last-user-not-found.
+     *
+     */
+    private static function incrementUserNotFoundCounter()
+    {
+        // Username enumeration prevention: set session failed login count and last failed login for users not found
+        Session::set('user-not-found-count', Session::get('user-not-found-count') + 1);
+        Session::set('last-user-not-found', time());
+    }
 
     /**
      * Reset the user-not-found-count to 0.
