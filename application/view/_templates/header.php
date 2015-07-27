@@ -61,6 +61,9 @@
                         <a href="<?php echo Config::get('URL'); ?>login/edituseremail">Edit my email</a>
                     </li>
                     <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
+                        <a href="<?php echo Config::get('URL'); ?>login/changePassword">Change Password</a>
+                    </li>
+                    <li <?php if (View::checkForActiveController($filename, "login")) { echo ' class="active" '; } ?> >
                         <a href="<?php echo Config::get('URL'); ?>login/logout">Logout</a>
                     </li>
                 </ul>
