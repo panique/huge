@@ -277,7 +277,7 @@ class LoginController extends Controller
         // check if this the provided verification code fits the user's verification code
         if (PasswordResetModel::verifyPasswordReset($user_name, $verification_code)) {
             // pass URL-provided variable to view to display them
-            $this->View->render('login/changePassword', array(
+            $this->View->render('login/resetPassword', array(
                 'user_name' => $user_name,
                 'user_password_reset_hash' => $verification_code
             ));
@@ -301,6 +301,33 @@ class LoginController extends Controller
             Request::post('user_password_new'), Request::post('user_password_repeat')
         );
         Redirect::to('login/index');
+    }
+
+    /**
+     * Password Change Page
+     * Show the password form if user is logged in, otherwise redirect to login page
+     */
+    public function changePassword()
+    {
+        Auth::checkAuthentication();
+        $this->View->render('login/changePassword');
+    }
+
+    /**
+     * Password Change Action
+     * Submit form, if retured positive redirect to index, otherwise show the changePassword page again
+     */
+    public function changePassword_action()
+    {
+        $result = PasswordResetModel::changePassword_action(
+            Request::post('user_name'), Request::post('user_password_current'),
+            Request::post('user_password_new'), Request::post('user_password_repeat')
+        );
+
+        if($result)
+            Redirect::to('login/index');
+        else
+            Redirect::to('login/changePassword');
     }
 
     /**
