@@ -83,11 +83,11 @@ class LoginModel
 		// brute force attack mitigation: use session failed login count and last failed login for not found users.
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
 		// (limits user searches in database)
-		if (Session::get('failed-login-count') >= 3 AND (Session::get('last-failed-login') > (time() - 30))) {
+		if (Session::get('user-not-found-count') >= 3 AND (Session::get('last-user-not-found') > (time() - 30))) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
 			return false;
 		}
-		
+
 		// get all data of that user (to later check if password and password_hash fit)
 		$result = UserModel::getUserDataByUsername($user_name);
 
@@ -95,8 +95,8 @@ class LoginModel
         // brute force attack mitigation: reset failed login counter because of found user
         if (!$result){
             // brute force attack mitigation: set session failed login count and last failed login for users not found
-            Session::set('failed-login-count', Session::get('failed-login-count') + 1);
-            Session::set('last-failed-login', time());
+            Session::set('user-not-found-count', Session::get('user-not-found-count') + 1);
+            Session::set('last-user-not-found', time());
             return false;
         }
 
@@ -122,19 +122,18 @@ class LoginModel
 
         //Reset the user not found counter.
         self::resetUserNotFoundCounter();
-
 		return $result;
 	}
 
     /**
-     * Reset the failed-login-count to 0.
-     * Reset the last-failed-login to an empty string.
+     * Reset the user-not-found-count to 0.
+     * Reset the last-user-not-found to an empty string.
      *
      */
     private static function resetUserNotFoundCounter()
     {
-        Session::set('failed-login-count', 0);
-        Session::set('last-failed-login', '');
+        Session::set('user-not-found-count', 0);
+        Session::set('last-user-not-found', '');
     }
 
     /**
