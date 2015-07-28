@@ -64,7 +64,7 @@ class Auth
      */
     public static function checkPermission($permission_name){
         
-        checkAuthentication();
+        self::checkAuthentication();
         
         if (!UserRoleModel::getUserPermission(Session::get('user_id'),$permission_name)) {
             
