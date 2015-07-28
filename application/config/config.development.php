@@ -132,4 +132,10 @@ return array(
 	'EMAIL_VERIFICATION_FROM_NAME' => 'My Project',
 	'EMAIL_VERIFICATION_SUBJECT' => 'Account activation for PROJECT XY',
 	'EMAIL_VERIFICATION_CONTENT' => 'Please click on this link to activate your account: ',
+        /**
+         * User Permission Settings
+         */
+         'DEFAULT_GUEST_USER_ROLE' => 0,
+         'DEFAULT_BANNED_USER_ROLE' => 1,
+         'DEFAULT_NEW_USER_ROLE' => 2,
 );
