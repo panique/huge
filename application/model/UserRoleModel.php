@@ -71,6 +71,37 @@ class UserRoleModel{
         return null;
     }
     
+        /**
+     * Returns desired permission's granted value for user
+     * 
+     * @param type $user_id
+     * @param type $permission_name
+     * @return boolean
+     */
+    public static function getUserPermission($user_id, $permission_name){
+        if(!$user_id || !$permission_name){
+            return false;
+        }
+        
+        $permission = self::getRolePermission(self::getUserRole($user_id),$permission_name);
+        return $permission;
+    }
+    
+    /**
+     * Returns desired permissions for user
+     * 
+     * @param type $user_id
+     * @return mix
+     */
+    public static function getUserPermissions($user_id){
+        if(!$user_id){
+            return null;
+        }
+        
+        $permissions = self::getRolePermissions(self::getUserRole($user_id),$permission_name);
+        return $permission;
+    }
+    
     /**
      * This function takes whole permissions from database and return them
      *  for desired role_id
