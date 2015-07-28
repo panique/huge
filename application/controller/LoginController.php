@@ -195,12 +195,12 @@ class LoginController extends Controller
 
         if (Request::post('user_account_upgrade')) {
             // "2" is quick & dirty account type 2, something like "premium user" maybe. you got the idea :)
-            UserRoleModel::changeUserRole(2);
+            UserRoleModel::changeUserRole(Session::get('user_id'),2);
         }
 
         if (Request::post('user_account_downgrade')) {
             // "1" is quick & dirty account type 1, something like "basic user" maybe.
-            UserRoleModel::changeUserRole(1);
+            UserRoleModel::changeUserRole(Session::get('user_id'),1);
         }
 
         Redirect::to('login/changeUserRole');
