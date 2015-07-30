@@ -301,7 +301,7 @@ class PasswordResetModel
 			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
 			return true;
 		} else {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_CHANGE_FAILED').' '.$user_name.' '.$user_password_hash);
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_CHANGE_FAILED'));
 			return false;
 		}
 	}
