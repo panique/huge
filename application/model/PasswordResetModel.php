@@ -258,7 +258,7 @@ class PasswordResetModel
 	 *
 	 * @return bool
 	 */
-	public static function saveChangedPassword_action($user_name, $user_password_hash)
+	public static function saveChangedPassword($user_name, $user_password_hash)
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
 
@@ -286,7 +286,7 @@ class PasswordResetModel
 	 *
 	 * @return bool
 	 */
-	public static function changePassword_action($user_name, $user_password_current, $user_password_new, $user_password_repeat)
+	public static function changePassword($user_name, $user_password_current, $user_password_new, $user_password_repeat)
 	{
 		// validate the passwords
 		if (!self::validatePasswordChange($user_name, $user_password_current, $user_password_new, $user_password_repeat)) {
@@ -297,7 +297,7 @@ class PasswordResetModel
 		$user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
 
 		// write the password to database (as hashed and salted string)
-		if (self::saveChangedPassword_action($user_name, $user_password_hash)) {
+		if (self::saveChangedPassword($user_name, $user_password_hash)) {
 			Session::add('feedback_positive', Text::get('FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL'));
 			return true;
 		} else {

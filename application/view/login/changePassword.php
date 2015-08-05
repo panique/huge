@@ -22,6 +22,5 @@
             <input type="submit"  name="submit_new_password" value="Submit new password" />
         </form>
 
-        <a href="<?php echo Config::get('URL'); ?>login/index">Back to Login Page</a>
     </div>
 </div>

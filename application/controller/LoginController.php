@@ -319,7 +319,7 @@ class LoginController extends Controller
      */
     public function changePassword_action()
     {
-        $result = PasswordResetModel::changePassword_action(
+        $result = PasswordResetModel::changePassword(
             Request::post('user_name'), Request::post('user_password_current'),
             Request::post('user_password_new'), Request::post('user_password_repeat')
         );
