@@ -98,11 +98,6 @@ or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :
 
 Also feel free to contribute to this project.
 
-### Follow the project <a name="follow"></a>
-
-Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
-I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
-
 ### License <a name="license"></a>
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). 
@@ -452,3 +447,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
    I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
    professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
    for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.
+   
+### My blog
+
+I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**, have a visit if you like. Mostly PHP stuff, conference 
+talks and general IT issues.
