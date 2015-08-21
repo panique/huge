@@ -17,7 +17,9 @@ class Auth
     {
         // initialize the session (if not initialized yet)
         Session::init();
-
+        $param = isset($_SERVER['REDIRECT_QUERY_STRING']) ? urlencode(str_replace("url=", "", $_SERVER['REDIRECT_QUERY_STRING'])) : NULL;
+        $location = isset($param) ? "?redirect={$param}" : NULL;
+        
         // if user is NOT logged in...
         // (if user IS logged in the application will not run the code below and therefore just go on)
         if (!Session::userIsLoggedIn()) {
@@ -26,7 +28,7 @@ class Auth
             // send the user to the login form page, but also add the current page's URI (the part after the base URL)
             // as a parameter argument, making it possible to send the user back to where he/she came from after a
             // successful login
-            header('location: ' . Config::get('URL') . 'login?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+            header('location: ' . Config::get('URL') . $location);
             // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
             // the hard way, via exit(). @see https://github.com/panique/php-login/issues/453
             // this is not optimal and will be fixed in future releases
