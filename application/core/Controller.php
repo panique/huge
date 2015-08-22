@@ -28,4 +28,15 @@ class Controller
         // create a view object to be able to use it inside a controller, like $this->View->render();
         $this->View = new View();
     }
+    /**
+     * This functions allows you to use controller/methods within each other with a simple static call.
+     * The benefit is being able to use methods without the need to copy them into other controllers. Easier on maintainence too.
+	 * Controller::method('otherController', 'otherMethod');
+     */
+	public function method($controller, $method){
+		$newController = $controller.'Controller';
+		require Config::get('PATH_CONTROLLER') . $newController.'.php';
+		$this->newController = new $newController();
+		$this->newController->$method();
+	}
 }
