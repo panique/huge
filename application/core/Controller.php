@@ -12,6 +12,7 @@ class Controller
     public $View;
     /** @var newController The newController object */
     public $newController;
+
     /**
      * Construct the (base) controller. This happens when a real controller is constructed, like in
      * the constructor of IndexController when it says: parent::__construct();
@@ -22,7 +23,7 @@ class Controller
         Session::init();
 
         // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-        if (!Session::userIsLoggedIn() AND Request::cookie('remember_me')) {
+        if (!Session::userIsLoggedIn() && Request::cookie('remember_me')) {
             header('location: ' . Config::get('URL') . 'login/loginWithCookie');
         }
 
@@ -32,12 +33,13 @@ class Controller
     /**
      * This functions allows you to use controller/methods within each other with a simple static call.
      * The benefit is being able to use methods without the need to copy them into other controllers. Easier on maintainence too.
-	 * Controller::method('otherController', 'otherMethod');
+     * Controller::method('otherController', 'otherMethod');
      */
-	public function method($controller, $method){
-		$newController = $controller.'Controller';
-		require Config::get('PATH_CONTROLLER') . $newController.'.php';
-		$this->newController = new $newController();
-		$this->newController->$method();
-	}
+     public function method($controller, $method)
+     {
+	$controller = $controller.'Controller';
+	require Config::get('PATH_CONTROLLER') . $controller.'.php';
+	$this->newController = new $controller();
+	$this->newController->$method();
+     }
 }
