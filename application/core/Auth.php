@@ -30,7 +30,7 @@ class Auth
             // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
             // the hard way, via exit(). @see https://github.com/panique/php-login/issues/453
             // this is not optimal and will be fixed in future releases
-            exit();
+            require Config::get('PATH_VIEW') . 'nocurlallowed.php';
         }
     }
 
