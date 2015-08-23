@@ -8,9 +8,10 @@
  */
 class Controller
 {
-    /** @var View View The view object */
+    /** @var View The view object */
     public $View;
-
+    /** @var newController The newController object */
+    public $newController;
     /**
      * Construct the (base) controller. This happens when a real controller is constructed, like in
      * the constructor of IndexController when it says: parent::__construct();
