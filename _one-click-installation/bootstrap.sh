@@ -4,7 +4,9 @@
 PASSWORD='12345678'
 PROJECTFOLDER='myproject'
 
-# create project folder
+# Create project folder, written in 3 single mkdir-statements to make sure this runs everywhere without problems
+sudo mkdir "/var/www"
+sudo mkdir "/var/www/html"
 sudo mkdir "/var/www/html/${PROJECTFOLDER}"
 
 sudo apt-get update
