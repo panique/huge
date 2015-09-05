@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [panique] soft autoinstaller improvements
 - [panique] updated dependencies to current versions
 - [Kent55/panique] XSS protection filter
 - [FAlbanni] XSS protection with better session/cookie, now only allowed on used domain 
