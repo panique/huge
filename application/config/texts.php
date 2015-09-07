@@ -60,6 +60,8 @@ return array(
 	"FEEDBACK_PASSWORD_RESET_LINK_VALID" => "Password reset validation link is valid. Please change the password now.",
 	"FEEDBACK_PASSWORD_CHANGE_SUCCESSFUL" => "Password successfully changed.",
 	"FEEDBACK_PASSWORD_CHANGE_FAILED" => "Sorry, your password changing failed.",
+	"FEEDBACK_PASSWORD_NEW_SAME_AS_CURRENT" => "New password is the same as the current password.",
+	"FEEDBACK_PASSWORD_CURRENT_INCORRECT" => "Current password entered was incorrect.",
 	"FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL" => "Account type change successful",
 	"FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED" => "Account type change failed",
 	"FEEDBACK_NOTE_CREATION_FAILED" => "Note creation failed.",
