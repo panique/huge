@@ -34,7 +34,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 + [License](#license)
 + [Requirements](#requirements)
 + [Auto-Installation](#auto-installation)
-    - [Auto-Installation in Vagrant](#auto-installation-vagrant)
+    - [Auto-Installation in Vagrant](#auto-installation-vagrant) (also useful for 100% reproducible installation of HUGE)
     - [Auto-Installation in Ubuntu 14.04 LTS server](#auto-installation-ubuntu)
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
