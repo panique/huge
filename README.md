@@ -77,8 +77,8 @@ And why the name "HUGE" ? It's a nice combination to
 
 ### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
+* proper security features, like CSRF blocking (via form tokens), encryption of cookie contents etc.
 * users can register, login, logout (with username, email, password)
-* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
 * password-forget / reset
 * remember-me (login via cookie)
 * account verification via mail
@@ -86,19 +86,26 @@ And why the name "HUGE" ? It's a nice combination to
 * failed-login-throttling
 * user profiles
 * account upgrade / downgrade
+* simple user types (type 1, type 2, admin)
 * supports local avatars and remote Gravatars
 * supports native mail and SMTP sending (via PHPMailer and other tools)
 * uses PDO for database access for sure, has nice DatabaseFactory (in case your project goes big) 
 * uses URL rewriting ("beautiful URLs")
 * proper split of application and public files (requests only go into /public)
-* uses Composer to load external dependencies (PHPMailer, Captcha-Generator, etc.)
+* uses Composer to load external dependencies (PHPMailer, Captcha-Generator, etc.) for sure
 * fits PSR-0/1/2/4 coding guidelines
+* uses [Post-Redirect-Get pattern](https://en.wikipedia.org/wiki/Post/Redirect/Get) for nice application flow
 * masses of comments
 * is actively developed, maintained and bug-fixed
 
+### Planned features
+
+* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
+* a real documentation (currently there's none, but the code is well commented) 
+
 ### Live-Demo <a name="live-demo"></a>
 
-See a [live demo here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
+See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
 
 ### Support the project <a name="support"></a>
 
@@ -352,6 +359,28 @@ Normal users have a value of `1` or `2` inside the database table field `user_ac
 registered users are normal users with user role 1 for sure.
 
 See the "Testing with demo users" section of this readme for more info.
+
+#### An introduction into the CSRF features
+ 
+To prevent [CSRF attacks](https://en.wikipedia.org/wiki/Cross-site_request_forgery), HUGE does this in the most common 
+way, by using a security *token* when the user submits critical forms. This means: When PHP renders a form for the user, 
+the application puts a "random string" inside the form (as a hidden input field), generated via Csrf::makeToken() 
+(application/core/Csrf.php), which also saves this token to the session. When the form is submitted, the application 
+checks if the POST request contains exactly the form token that is inside the session.
+  
+This CSRF prevention feature is currently implemented on the login form process (see *application/view/login/index.php*)
+and user name change form process (see *application/view/login/editUsername.php*), most other forms are not security-
+critical and should stay as simple as possible.
+
+A big thanks to OmarElGabry for implementing this!
+
+#### Troubleshooting & Glitches
+
+* In 3.0 and 3.1 a user could log into the application from different devices / browsers / locations. This was intended
+  behaviour as this is standard in most web applications these days. In 3.2 still feature is "missing" by default, a 
+  user will only be able to log in from one browser at the same time. This is a security improvement, but for sure not 
+  optimal for many developers. The plan is to implement a config switch that will allow / disallow logins from multiple 
+  browsers.
  
 ### Community-provided features & feature discussions <a name="community"></a>
 
