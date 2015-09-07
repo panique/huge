@@ -92,14 +92,10 @@ class LoginModel
 		$result = UserModel::getUserDataByUsername($user_name);
 
         // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
-		// brute force attack mitigation: reset failed login counter because of found user
-		if ($result){
-			Session::set('failed-login-count', 0);
-			Session::set('last-failed-login', '');
-		} else {
-			// brute force attack mitigation: set session failed login count and last failed login for users not found
-			Session::set('failed-login-count', Session::get('failed-login-count') + 1);
-			Session::set('last-failed-login', time());
+        // brute force attack mitigation: reset failed login counter because of found user
+        if (!$result){
+            // increment the user not found count, helps mitigate user enumeration
+            self::incrementUserNotFoundCounter();
             // user does not exist, but we won't to give a potential attacker this details, so we just use a basic feedback message
             Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
 			return false;
@@ -124,8 +120,32 @@ class LoginModel
 			return false;
 		}
 
+        // reset the user not found counter
+        self::resetUserNotFoundCounter();
+
 		return $result;
 	}
+
+    /**
+     * Reset the failed-login-count to 0.
+     * Reset the last-failed-login to an empty string.
+     */
+    private static function resetUserNotFoundCounter()
+    {
+        Session::set('failed-login-count', 0);
+        Session::set('last-failed-login', '');
+    }
+
+    /**
+     * Increment the failed-login-count by 1.
+     * Add timestamp to last-failed-login.
+     */
+    private static function incrementUserNotFoundCounter()
+    {
+        // Username enumeration prevention: set session failed login count and last failed login for users not found
+        Session::set('failed-login-count', Session::get('failed-login-count') + 1);
+        Session::set('last-failed-login', time());
+    }
 
     /**
      * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
