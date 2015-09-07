@@ -4,6 +4,10 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) session id regeneration in certain situations
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) encrypted cookies
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) new encryption class
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) anti-CSRF feature (used in login and username change forms) 
 - [josh-bridge] [PR](https://github.com/panique/huge/pull/689) logged-in user can now change password
 - [justincdotme] [PR](https://github.com/panique/huge/pull/684) better code for brute-force blocking when logging in
 - [panique] soft autoinstaller improvements
