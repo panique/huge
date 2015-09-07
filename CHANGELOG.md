@@ -4,6 +4,8 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [josh-bridge] [PR](https://github.com/panique/huge/pull/689) logged-in user can now change password
+- [justincdotme] [PR](https://github.com/panique/huge/pull/684) better code for brute-force blocking when logging in
 - [panique] soft autoinstaller improvements
 - [panique] updated dependencies to current versions
 - [Kent55/panique] XSS protection filter
