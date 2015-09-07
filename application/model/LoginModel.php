@@ -100,8 +100,8 @@ class LoginModel
 			// brute force attack mitigation: set session failed login count and last failed login for users not found
 			Session::set('failed-login-count', Session::get('failed-login-count') + 1);
 			Session::set('last-failed-login', time());
-                        //Orginally username is wrong but we won't give any specific detail, less details like "login failed" would be better
-        	        Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG')); 
+            // user does not exist, but we won't to give a potential attacker this details, so we just use a basic feedback message
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
 			return false;
 		}
 
@@ -114,7 +114,6 @@ class LoginModel
 		// if hash of provided password does NOT match the hash in the database: +1 failed-login counter
 		if (!password_verify($user_password, $result->user_password_hash)) {
 			self::incrementFailedLoginCounterOfUser($result->user_name);
-			// we say "username or password wrong" here, but less details like "login failed" would be better (= less information)
 			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG')); 
 			return false;
 		}
