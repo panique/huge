@@ -56,4 +56,24 @@ class Auth
             exit();
         }
     }
+    
+    /**
+     * Inherits checkAuthentication
+     * The normal permission authentication flow, just check if the user is permitted or not.
+     * If user is not permitted then he will be redirected to home page and the application is hard-stopped via exit().
+     */
+    public static function checkPermission($permission_name){
+        
+        self::checkAuthentication();
+        
+        if (!UserRoleModel::getUserPermission(Session::get('user_id'),$permission_name)) {
+            
+            Redirect::home();
+            
+            // to prevent fetching views via cURL (which "ignores" the header-redirect above) we leave the application
+            // the hard way, via exit(). @see https://github.com/panique/php-login/issues/453
+            // this is not optimal and will be fixed in future releases
+            exit();
+        }
+    }
 }

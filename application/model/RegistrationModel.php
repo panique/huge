@@ -199,12 +199,13 @@ class RegistrationModel
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		// write new users data into database
-		$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
+		$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_role, user_creation_timestamp, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_role, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
 		$query = $database->prepare($sql);
 		$query->execute(array(':user_name' => $user_name,
 		                      ':user_password_hash' => $user_password_hash,
 		                      ':user_email' => $user_email,
+		                      ':user_role' => Config::get('DEFAULT_NEW_USER_ROLE'), //Setting default role
 		                      ':user_creation_timestamp' => $user_creation_timestamp,
 		                      ':user_activation_hash' => $user_activation_hash,
 		                      ':user_provider_type' => 'DEFAULT'));

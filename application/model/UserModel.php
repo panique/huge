@@ -299,7 +299,7 @@ class UserModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active,user_deleted, user_suspension_timestamp, user_account_type,
+        $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active,user_deleted, user_suspension_timestamp, user_role,
                        user_failed_logins, user_last_failed_login
                   FROM users
                  WHERE (user_name = :user_name OR user_email = :user_name)
@@ -329,7 +329,7 @@ class UserModel
 
         // get real token from database (and all other data)
         $query = $database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
-                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login
+                                          user_role,  user_has_avatar, user_failed_logins, user_last_failed_login
                                      FROM users
                                      WHERE user_id = :user_id
                                        AND user_remember_me_token = :user_remember_me_token
