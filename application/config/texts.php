@@ -12,7 +12,7 @@ return array(
 	"FEEDBACK_ACCOUNT_SUSPENSION_DELETION_STATUS" => "This user's suspension / deletion status has been edited.",
 	"FEEDBACK_PASSWORD_WRONG_3_TIMES" => "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.",
 	"FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET" => "Your account is not activated yet. Please click on the confirm link in the mail.",
-	"FEEDBACK_PASSWORD_WRONG" => "Password was wrong.",
+	"FEEDBACK_USERNAME_OR_PASSWORD_WRONG" => "The username or password is incorrect. Please try again.",
 	"FEEDBACK_USER_DOES_NOT_EXIST" => "This user does not exist.",
 	"FEEDBACK_LOGIN_FAILED" => "Login failed.",
 	"FEEDBACK_LOGIN_FAILED_3_TIMES" => "Login failed 3 or more times already. Please wait 30 seconds to try again.",
