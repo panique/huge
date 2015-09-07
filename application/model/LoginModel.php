@@ -163,9 +163,19 @@ class LoginModel
             return false;
         }
 
+        // before list(), check it can be split into 3 strings.
+        if(count (explode(':', $cookie)) !== 3){
+            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
+            return false;
+        }
+
         // check cookie's contents, check if cookie contents belong together or token is empty
         list ($user_id, $token, $hash) = explode(':', $cookie);
-        if ($hash !== hash('sha256', $user_id . ':' . $token) OR empty($token)) {
+
+        // decrypt user id
+        $user_id = Encryption::decrypt($user_id);
+
+        if ($hash !== hash('sha256', $user_id . ':' . $token) OR empty($token) OR empty($user_id)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
@@ -197,8 +207,12 @@ class LoginModel
      */
     public static function logout()
     {
-        self::deleteCookie();
+        $user_id = Session::get('user_id');
+
+        self::deleteCookie($user_id);
+
         Session::destroy();
+        Session::updateSessionId($user_id);
     }
 
     /**
@@ -213,6 +227,14 @@ class LoginModel
     public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type)
     {
         Session::init();
+
+        // remove old and regenerate session ID.
+        // It's important to regenerate session on sensitive actions,
+        // and to avoid fixated session.
+        // e.g. when a user logs in
+        session_regenerate_id(true);
+        $_SESSION = array();
+
         Session::set('user_id', $user_id);
         Session::set('user_name', $user_name);
         Session::set('user_email', $user_email);
@@ -225,6 +247,16 @@ class LoginModel
 
         // finally, set user as logged-in
         Session::set('user_logged_in', true);
+
+        // update session id in database
+        Session::updateSessionId($user_id, session_id());
+
+        // set session cookie setting manually,
+        // Why? because you need to explicitly set session expiry, path, domain, secure, and HTTP.
+        // @see https://www.owasp.org/index.php/PHP_Security_Cheat_Sheet#Cookies
+        setcookie(session_name(), session_id(), time() + Config::get('SESSION_RUNTIME'), Config::get('COOKIE_PATH'),
+            Config::get('COOKIE_DOMAIN'), Config::get('COOKIE_SECURE'), Config::get('COOKIE_HTTP'));
+
     }
 
     /**
@@ -296,15 +328,17 @@ class LoginModel
         $sth->execute(array(':user_remember_me_token' => $random_token_string, ':user_id' => $user_id));
 
         // generate cookie string that consists of user id, random string and combined hash of both
-        $cookie_string_first_part = $user_id . ':' . $random_token_string;
-        $cookie_string_hash = hash('sha256', $cookie_string_first_part);
-        $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
-
-        // set cookie, and make it available only for the domain created on (to avoid XSS attacks, where the
+        // never expose the original user id, instead, encrypt it.
+        $cookie_string_first_part = Encryption::encrypt($user_id) . ':' . $random_token_string;
+        $cookie_string_hash       = hash('sha256', $user_id . ':' . $random_token_string);
+        $cookie_string            = $cookie_string_first_part . ':' . $cookie_string_hash;
+		
+		// set cookie, and make it available only for the domain created on (to avoid XSS attacks, where the
         // attacker could steal your remember-me cookie string and would login itself).
         // If you are using HTTPS, then you should set the "secure" flag (the second one from right) to true, too.
         // @see http://www.php.net/manual/en/function.setcookie.php
-        setcookie('remember_me', $cookie_string, time() + Config::get('COOKIE_RUNTIME'), Config::get('COOKIE_PATH'), $_SERVER['HTTP_HOST'], false, true);
+        setcookie('remember_me', $cookie_string, time() + Config::get('COOKIE_RUNTIME'), Config::get('COOKIE_PATH'),
+            Config::get('COOKIE_DOMAIN'), Config::get('COOKIE_SECURE'), Config::get('COOKIE_HTTP'));
     }
 
     /**
@@ -312,10 +346,24 @@ class LoginModel
      * It's necessary to split deleteCookie() and logout() as cookies are deleted without logging out too!
      * Sets the remember-me-cookie to ten years ago (3600sec * 24 hours * 365 days * 10).
      * that's obviously the best practice to kill a cookie @see http://stackoverflow.com/a/686166/1114320
+     *
+     * @param string $user_id
      */
-    public static function deleteCookie()
+    public static function deleteCookie($user_id = null)
     {
-        setcookie('remember_me', false, time() - (3600 * 24 * 3650), Config::get('COOKIE_PATH'));
+        // is $user_id was set, then clear remember_me token in database
+        if(isset($user_id)){
+
+            $database = DatabaseFactory::getFactory()->getConnection();
+
+            $sql = "UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1";
+            $sth = $database->prepare($sql);
+            $sth->execute(array(':user_remember_me_token' => NULL, ':user_id' => $user_id));
+        }
+
+        // delete remember_me cookie in browser
+        setcookie('remember_me', false, time() - (3600 * 24 * 3650), Config::get('COOKIE_PATH'),
+            Config::get('COOKIE_DOMAIN'), Config::get('COOKIE_SECURE'), Config::get('COOKIE_HTTP'));
     }
 
     /**
