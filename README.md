@@ -50,15 +50,30 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 
 ### The History of HUGE
 
-This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
-scripts of [The PHP Login Project](http://www.php-login.net) (a collection of simple login scripts, made to prevent 
-people from using totally outdated and insecure MD5 password hashing, which was still very popular in the PHP world 
-back in 2012).
+Back in 2010/2011 there we no useful login solutions in the PHP world, at least not for non-experts. So I did the worst 
+mistake every young developer does: Trying to build something by myself without having any clue about security basics.
+What made it even worse was: The web was (and is) full of totally broken tutorials about building user authentication 
+systems, even the biggest companies in the world did this completely wrong (we are talking about SONY, LinkedIn and
+Adobe here), and also lots of major framework in all big programming languages (!) used totally outdated and insecure
+password saving technologies.
 
-Why the name "HUGE" ? It's a nice combination to 
+However, in 2012 security expert [Anthony Ferrara](https://github.com/ircmaxell) published a [little PHP library](https://github.com/ircmaxell/password_compat),
+allowing extremely secure, modern and correct hashing of passwords in PHP 5.3 and 5.4, usable by every developer without any stress and without any knowledge
+about security internals. The script was so awesome that it was written into the core of PHP 5.5, it's the de-facto standard these days.
+
+When this came out I tried to use this naked library to build a fully working out-of-the-box login system for several private and commercial projects,
+and put the code on GitHub. Lots of people found this useful, contributed and bugfixed the project, made forks, smaller and larger versions.
+The result is this project.
+ 
+Please note: Now, in 2015, most major frameworks have excellent user authentication logic embedded by default. This was 
+not the case years ago. So, from today's perspective it might be smarter to chose Laravel, Yii or Symfony for serious
+projects. But feel free to try out HUGE, the auto-installer will spin up a fully working installation within minutes and
+without any configuration.
+
+And why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
 [MINI](https://github.com/panique/mini) and 
-[MINI2](https://github.com/panique/mini2), my other projects :)
+[MINI2](https://github.com/panique/mini2), some of my other older projects. :)
 
 ### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
@@ -97,11 +112,6 @@ Support the project by renting a server at [Host1Plus](https://affiliates.host1p
 or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
 
 Also feel free to contribute to this project.
-
-### Follow the project <a name="follow"></a>
-
-Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
-I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
 ### License <a name="license"></a>
 
@@ -452,3 +462,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
    I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
    professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
    for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.
+   
+### My blog
+
+I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**, have a visit if you like. Mostly PHP stuff, conference 
+talks and general IT issues.

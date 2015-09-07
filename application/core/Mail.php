@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Mail
+ *
+ * Handles everything regarding mail-sending.
+ */
 class Mail
 {
 	/** @var mixed variable to collect errors */
@@ -90,6 +95,17 @@ class Mail
 		}
 	}
 
+    /**
+     * The main mail sending method, this simply calls a certain mail sending method depending on which mail provider
+     * you've selected in the application's config.
+     *
+     * @param $user_email string email
+     * @param $from_email string sender's email
+     * @param $from_name string sender's name
+     * @param $subject string subject
+     * @param $body string full mail body text
+     * @return bool the success status of the according mail sending method
+     */
 	public function sendMail($user_email, $from_email, $from_name, $subject, $body)
 	{
 		if (Config::get('EMAIL_USED_MAILER') == "phpmailer") {
@@ -108,6 +124,12 @@ class Mail
 		}
 	}
 
+    /**
+     * The different mail sending methods write errors to the error property $this->error,
+     * this method simply returns this error / error array.
+     *
+     * @return mixed
+     */
 	public function getError()
 	{
 		return $this->error;

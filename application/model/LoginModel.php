@@ -280,8 +280,11 @@ class LoginModel
         $cookie_string_hash = hash('sha256', $cookie_string_first_part);
         $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
 
-        // set cookie
-        setcookie('remember_me', $cookie_string, time() + Config::get('COOKIE_RUNTIME'), Config::get('COOKIE_PATH'));
+        // set cookie, and make it available only for the domain created on (to avoid XSS attacks, where the
+        // attacker could steal your remember-me cookie string and would login itself).
+        // If you are using HTTPS, then you should set the "secure" flag (the second one from right) to true, too.
+        // @see http://www.php.net/manual/en/function.setcookie.php
+        setcookie('remember_me', $cookie_string, time() + Config::get('COOKIE_RUNTIME'), Config::get('COOKIE_PATH'), $_SERVER['HTTP_HOST'], false, true);
     }
 
     /**

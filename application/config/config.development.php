@@ -14,6 +14,18 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 /**
+ * Configuration for cookie security
+ * Quote from PHP manual: Marks the cookie as accessible only through the HTTP protocol. This means that the cookie
+ * won't be accessible by scripting languages, such as JavaScript. This setting can effectively help to reduce identity
+ * theft through XSS attacks (although it is not supported by all browsers).
+ *
+ * IMPORTANT: This will
+ *
+ * @see php.net/manual/en/session.configuration.php#ini.session.cookie-httponly
+ */
+ini_set('session.cookie_httponly', 1);
+
+/**
  * Returns the full configuration.
  * This is used by the core/Config class.
  */

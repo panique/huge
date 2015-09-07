@@ -39,8 +39,15 @@ class Session
     public static function get($key)
     {
         if (isset($_SESSION[$key])) {
-            return $_SESSION[$key];
-        }
+			if (is_string($_SESSION[$key])) {
+                // filter the value for XSS vulnerabilities
+                Filter::XSSFilter($_SESSION[$key]);
+				return $_SESSION[$key];
+			}
+			else {
+				return $_SESSION[$key];
+			}
+		}
     }
 
     /**
