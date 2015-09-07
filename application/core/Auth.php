@@ -18,6 +18,8 @@ class Auth
         // initialize the session (if not initialized yet)
         Session::init();
 
+        // self::checkSessionConcurrency();
+
         // if user is NOT logged in...
         // (if user IS logged in the application will not run the code below and therefore just go on)
         if (!Session::userIsLoggedIn()) {
@@ -45,6 +47,8 @@ class Auth
         // initialize the session (if not initialized yet)
         Session::init();
 
+        // self::checkSessionConcurrency();
+
         // if user is not logged in or is not an admin (= not role type 7)
         if (!Session::userIsLoggedIn() || Session::get("user_account_type") != 7) {
             // ... then treat user as "not logged in", destroy session, redirect to login page
@@ -54,6 +58,21 @@ class Auth
             // the hard way, via exit(). @see https://github.com/panique/php-login/issues/453
             // this is not optimal and will be fixed in future releases
             exit();
+        }
+    }
+
+    /**
+     * Detects if there is concurrent session(i.e. another user logged in with the same current user credentials),
+     * If so, then logout.
+     *
+     */
+    public static function checkSessionConcurrency(){
+        if(Session::userIsLoggedIn()){
+            if(Session::isConcurrentSessionExists()){
+                LoginModel::logout();
+                Redirect::home();
+                exit();
+            }
         }
     }
 }

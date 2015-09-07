@@ -20,6 +20,9 @@ class Controller
         // always initialize a session
         Session::init();
 
+        // check session concurrency
+        Auth::checkSessionConcurrency();
+
         // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
         if (!Session::userIsLoggedIn() AND Request::cookie('remember_me')) {
             header('location: ' . Config::get('URL') . 'login/loginWithCookie');
