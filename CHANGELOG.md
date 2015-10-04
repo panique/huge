@@ -4,6 +4,7 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [panique] [#729] Fix, mail sending now returns true or false success status (https://github.com/panique/huge/issues/729)
 - [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) session id regeneration in certain situations
 - [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) encrypted cookies
 - [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) new encryption class
