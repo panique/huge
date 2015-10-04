@@ -83,10 +83,11 @@ class Mail
 		$mail->Subject = $subject;
 		$mail->Body = $body;
 
-		// try to send mail
-		$mail->Send();
+		// try to send mail, put result status (true/false into $wasSendingSuccessful)
+		// I'm unsure if mail->send really returns true or false every time, tis method in PHPMailer is quite complex
+		$wasSendingSuccessful = $mail->Send();
 
-		if ($mail) {
+		if ($wasSendingSuccessful) {
 			return true;
 		} else {
 			// if not successful, copy errors into Mail's error property
