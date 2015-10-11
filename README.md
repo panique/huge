@@ -409,15 +409,20 @@ this project simple, clean and minimal with these few "rules" (and more on this 
 2. Don't implement features that are not needed by most users.
 3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
  
-#### List of potential features
+#### List of feature ideas
 
 Open-source is a great thing, and projects live from community-contributed feature for sure. As this project is highly
-security-related and mainly just a free-time one-man show, new features mean a lot of reviewing, testing, corrections, 
-and making sure it runs perfectly in every possible scenario. As I simply don't have the time to do this, I would 
-kindly ask you **not** to commit new features when they are not really basic and very small. 
-Please let's keep this project very simple!
+security-related and mainly just a free-time one-man show, new features mean a lot of work, reviewing, testing, 
+corrections, and making sure it runs perfectly in every possible scenario. As I simply don't have the time to do this, 
+I would kindly ask you **not** to commit new features when they are not really basic, very small and well-written,
+and if you miss a feature, then please try to write this on your own and commit it to the project.
 
-However, here are the community-suggested possible features, taken from lots of tickets: 
+To avoid unnecessary work for all of us I would kindly recommend everybody to use HUGE for simple project that only
+need the features that already exist, and if you really need a RESTful architecture, migrations, routing, 2FA etc,
+then it's easier, cleaner and faster to simply use Laravel, Symfony or Zend.
+
+However, here are the community-suggested possible features, taken from lots of tickets. Feel free to implement them
+into your forks of the project: 
 
 * Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
 * RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
@@ -426,6 +431,7 @@ However, here are the community-suggested possible features, taken from lots of 
 * Logging
 * Two-Factor-Authentication (see [ticket #732](https://github.com/panique/huge/issues/732))
 * Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
+* Email-re-validation after email change (see [ticket #705](https://github.com/panique/huge/issues/705))
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
