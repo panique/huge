@@ -42,6 +42,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
     - [NGINX setup](#nginx-setup)
 + [Documentation](#documentation)  
 + [Community-provided features & feature discussions](#community)
++ [Potential features for the future (or your forks)](#future)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -344,8 +345,8 @@ A real documentation is in the making. Until then, please have a look at the cod
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
 how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare :)
  
- TODO: Full documentation
- TODO: Basic examples on how to do things
+ - TODO: Full documentation
+ - TODO: Basic examples on how to do things
  
 #### The different user roles
 
@@ -396,17 +397,29 @@ to go into the main version of HUGE, but have a look into these tickets if you a
  - [Caching system](https://github.com/panique/huge/issues/643)
  - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
  
-### Future of the project: As simple as possible!
+### Future of the project: As simple as possible! <a name="future"></a>
  
-The idea of this project was (or is) to provide a super-simple barebone application with a full user authentication
+The idea of this project was to provide a super-simple barebone application with a full user authentication
 system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
-this project simple, clean and minimal with these few "rules": :)
+this project simple, clean and minimal with these few "rules" (and more on this inside this ticket: 
+[Keep the project as simple as possible](https://github.com/panique/huge/issues/664).): 
 
 1. Reduce features to the bare minimum.
 2. Don't implement features that are not needed by most users.
 3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
  
-More on this ticket: [Keep the project as simple as possible](https://github.com/panique/huge/issues/664). 
+#### List of potential features
+
+Open-source is a great thing, and projects live from community-contributed feature for sure. As this project is highly
+security-related and mainly just a free-time one-man show, new features mean a lot of reviewing, testing, corrections, 
+and making sure it runs perfectly in every possible scenario. As I simply don't have the time to do this, I would 
+kindly ask you **not** to commit new features when they are not really basic and very small. 
+Please let's keep this project very simple!
+
+However, here are the community-suggested possible features, taken from lots of tickets: 
+
+* Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
+* 
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
