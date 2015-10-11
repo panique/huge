@@ -502,6 +502,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
 
+- [interesting article about password resets (by Troy Hunt, security expert)](http://www.troyhunt.com/2012/05/everything-you-ever-wanted-to-know.html)
+
 ### Side-facts
 
 1. Weird! When I renamed php-login to HUGE (to get rid off the too generic project name and to make it fitting nicely
