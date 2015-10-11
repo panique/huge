@@ -25,6 +25,12 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
 [Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
+#### Current releases
+
+* stable [v3.1](https://github.com/panique/huge/releases/tag/v3.1),
+* public beta branch: [master-branch](https://github.com/panique/huge)
+* public in-development branch (please commit new code here): [develop](https://github.com/panique/huge/tree/develop)
+
 #### Quick-Index 
 
 + [Features](#features)
@@ -42,6 +48,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
     - [NGINX setup](#nginx-setup)
 + [Documentation](#documentation)  
 + [Community-provided features & feature discussions](#community)
++ [Potential features for the future (or your forks)](#future)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -100,9 +107,8 @@ And why the name "HUGE" ? It's a nice combination to
 
 ### Planned features
 
-* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
-* a real documentation (currently there's none, but the code is well commented) 
-
+* A real documentation (currently there's none, but the code is well commented)
+  
 ### Live-Demo <a name="live-demo"></a>
 
 See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
@@ -342,8 +348,8 @@ A real documentation is in the making. Until then, please have a look at the cod
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
 how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare :)
  
- TODO: Full documentation
- TODO: Basic examples on how to do things
+ - TODO: Full documentation
+ - TODO: Basic examples on how to do things
  
 #### The different user roles
 
@@ -381,6 +387,10 @@ A big thanks to OmarElGabry for implementing this!
   user will only be able to log in from one browser at the same time. This is a security improvement, but for sure not 
   optimal for many developers. The plan is to implement a config switch that will allow / disallow logins from multiple 
   browsers.
+* Using this on a sub-domain ? You might get problems with the cookies in IE11. Fix this by replacing "/" with "./" of 
+  the cookie location COOKIE_PATH inside application/config/config.xxx.php! 
+  Check [ticket #733](https://github.com/panique/huge/issues/733) for more info. Thanks to jahbiuabft for figuring this
+  out. Update: There's another ticket focusing on the same issue: [ticket #681](https://github.com/panique/huge/issues/681)
  
 ### Community-provided features & feature discussions <a name="community"></a>
 
@@ -389,18 +399,50 @@ to go into the main version of HUGE, but have a look into these tickets if you a
 
  - [Caching system](https://github.com/panique/huge/issues/643)
  - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
+ - [Internationalization feature](https://github.com/panique/huge/issues/582)
+ - [Using controller A inside controller B](https://github.com/panique/huge/issues/706)
  
-### Future of the project: As simple as possible!
+### Future of the project: As simple as possible! <a name="future"></a>
  
-The idea of this project was (or is) to provide a super-simple barebone application with a full user authentication
+The idea of this project was to provide a super-simple barebone application with a full user authentication
 system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
-this project simple, clean and minimal with these few "rules": :)
+this project simple, clean and minimal with these few "rules" (and more on this inside this ticket: 
+[Keep the project as simple as possible](https://github.com/panique/huge/issues/664).): 
 
 1. Reduce features to the bare minimum.
 2. Don't implement features that are not needed by most users.
 3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
  
-More on this ticket: [Keep the project as simple as possible](https://github.com/panique/huge/issues/664). 
+#### List of feature ideas
+
+Open-source is a great thing, and projects live from community-contributed feature for sure. As this project is highly
+security-related and mainly just a free-time one-man show, new features mean a lot of work, reviewing, testing, 
+corrections, and making sure it runs perfectly in every possible scenario. As I simply don't have the time to do this, 
+I would kindly ask you **not** to commit new features when they are not really basic, very small and well-written,
+and if you miss a feature, then please try to write this on your own and commit it to the project.
+
+To avoid unnecessary work for all of us I would kindly recommend everybody to use HUGE for simple project that only
+need the features that already exist, and if you really need a RESTful architecture, migrations, routing, 2FA etc,
+then it's easier, cleaner and faster to simply use Laravel, Symfony or Zend.
+
+However, here are the community-suggested possible features, taken from lots of tickets. Feel free to implement them
+into your forks of the project: 
+
+* OAuth2 implementation (let your users create accounts and login via 3rd party auth, like Facebook, Twitter, GitHub, 
+  etc). As this is a lot of work and would make the project much more complicated it might make sense to do this in a 
+  fork or totally skip it. (see [Ticket #528](https://github.com/panique/huge/issues/528))
+* Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
+* RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
+* Horizontal MySQL scaling (see [ticket #423](https://github.com/panique/huge/issues/423) for discussion)
+* Modules / middleware
+* Logging
+* Two-Factor-Authentication (see [ticket #732](https://github.com/panique/huge/issues/732))
+* Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
+* Email-re-validation after email change (see [ticket #705](https://github.com/panique/huge/issues/705))
+* Connect to multiple databases (see [ticket #702](https://github.com/panique/huge/issues/702))
+* A deeper user role system (see [ticket #701](https://github.com/panique/huge/issues/701), 
+[pull-request #691](https://github.com/panique/huge/pull/691)), 
+[ticket #603](https://github.com/panique/huge/issues/603)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
@@ -482,6 +524,14 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
+
+## Interesting links regarding user authentication and application security
+
+- [interesting article about password resets (by Troy Hunt, security expert)](http://www.troyhunt.com/2012/05/everything-you-ever-wanted-to-know.html)
+- Password-Free Email Logins: [Ticket & discussion](https://github.com/panique/huge/issues/674), [article](http://techcrunch.com/2015/06/30/blogging-site-medium-rolls-out-password-free-email-logins/?ref=webdesignernews.com)
+- Logging in via QR code: [Ticket & discussion](https://github.com/panique/huge/issues/290), [english article](https://www.grc.com/sqrl/sqrl.htm), 
+  [german article](http://www.phpgangsta.de/sesam-oeffne-dich-sicher-einloggen-im-internetcafe), 
+  [repo](https://github.com/PHPGangsta/Sesame), [live-demo](http://sesame.phpgangsta.de/). Big thanks to *PHPGangsta* for writing this!
 
 ### Side-facts
 
