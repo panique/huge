@@ -420,6 +420,7 @@ Please let's keep this project very simple!
 However, here are the community-suggested possible features, taken from lots of tickets: 
 
 * Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
+* RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
 * Modules / middleware
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
