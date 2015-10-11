@@ -100,9 +100,11 @@ And why the name "HUGE" ? It's a nice combination to
 
 ### Planned features
 
-* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
-* a real documentation (currently there's none, but the code is well commented) 
-
+* A real documentation (currently there's none, but the code is well commented).
+* Eventually: OAuth2 implementation (let your users create accounts and login via 3rd party auth, like Facebook, 
+  Twitter, GitHub, etc). As this is a lot of work and would make the project much more complicated it might make sense
+  to do this in a fork or totally skip it.
+  
 ### Live-Demo <a name="live-demo"></a>
 
 See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
