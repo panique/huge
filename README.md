@@ -107,10 +107,7 @@ And why the name "HUGE" ? It's a nice combination to
 
 ### Planned features
 
-* A real documentation (currently there's none, but the code is well commented).
-* Eventually: OAuth2 implementation (let your users create accounts and login via 3rd party auth, like Facebook, 
-  Twitter, GitHub, etc). As this is a lot of work and would make the project much more complicated it might make sense
-  to do this in a fork or totally skip it.
+* A real documentation (currently there's none, but the code is well commented)
   
 ### Live-Demo <a name="live-demo"></a>
 
@@ -431,6 +428,9 @@ then it's easier, cleaner and faster to simply use Laravel, Symfony or Zend.
 However, here are the community-suggested possible features, taken from lots of tickets. Feel free to implement them
 into your forks of the project: 
 
+* OAuth2 implementation (let your users create accounts and login via 3rd party auth, like Facebook, Twitter, GitHub, 
+  etc). As this is a lot of work and would make the project much more complicated it might make sense to do this in a 
+  fork or totally skip it. (see [Ticket #528](https://github.com/panique/huge/issues/528))
 * Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
 * RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
 * Horizontal MySQL scaling (see [ticket #423](https://github.com/panique/huge/issues/423) for discussion)
