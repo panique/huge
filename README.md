@@ -383,6 +383,10 @@ A big thanks to OmarElGabry for implementing this!
   user will only be able to log in from one browser at the same time. This is a security improvement, but for sure not 
   optimal for many developers. The plan is to implement a config switch that will allow / disallow logins from multiple 
   browsers.
+* Using this on a sub-domain ? You might get problems with the cookies in IE11. Fix this by replacing "/" with "./" of 
+  the cookie location COOKIE_PATH inside application/config/config.xxx.php! 
+  Check [ticket #733](https://github.com/panique/huge/issues/733) for more info. Thanks to jahbiuabft for figuring this
+  out.
  
 ### Community-provided features & feature discussions <a name="community"></a>
 
