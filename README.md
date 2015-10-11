@@ -393,7 +393,7 @@ A big thanks to OmarElGabry for implementing this!
 * Using this on a sub-domain ? You might get problems with the cookies in IE11. Fix this by replacing "/" with "./" of 
   the cookie location COOKIE_PATH inside application/config/config.xxx.php! 
   Check [ticket #733](https://github.com/panique/huge/issues/733) for more info. Thanks to jahbiuabft for figuring this
-  out.
+  out. Update: There's another ticket focusing on the same issue: [ticket #681](https://github.com/panique/huge/issues/681)
  
 ### Community-provided features & feature discussions <a name="community"></a>
 
