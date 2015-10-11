@@ -502,7 +502,10 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
 
+## Interesting links regarding user authentication and application security
+
 - [interesting article about password resets (by Troy Hunt, security expert)](http://www.troyhunt.com/2012/05/everything-you-ever-wanted-to-know.html)
+- Password-Free Email Logins: [Ticket & discussion](https://github.com/panique/huge/issues/674), [article](http://techcrunch.com/2015/06/30/blogging-site-medium-rolls-out-password-free-email-logins/?ref=webdesignernews.com)
 
 ### Side-facts
 
