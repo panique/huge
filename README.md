@@ -425,6 +425,7 @@ However, here are the community-suggested possible features, taken from lots of 
 * Modules / middleware
 * Logging
 * Two-Factor-Authentication (see [ticket #732](https://github.com/panique/huge/issues/732))
+* Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
