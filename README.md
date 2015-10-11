@@ -25,6 +25,10 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
 [Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
+Current stable release: [v3.1](https://github.com/panique/huge/releases/tag/v3.1)
+Current public, but not properly tested branch: [master](https://github.com/panique/huge)
+Current public in-development branch (please commit new code here): [develop](https://github.com/panique/huge/tree/develop)
+
 #### Quick-Index 
 
 + [Features](#features)
