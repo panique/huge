@@ -433,7 +433,7 @@ into your forks of the project:
 * Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
 * Email-re-validation after email change (see [ticket #705](https://github.com/panique/huge/issues/705))
 * Connect to multiple databases (see [ticket #702](https://github.com/panique/huge/issues/702))
-* A deeper user role system (see [ticket #701](https://github.com/panique/huge/issues/701)) 
+* A deeper user role system (see [ticket #701](https://github.com/panique/huge/issues/701), [ticket #691](https://github.com/panique/huge/pull/691)) 
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
