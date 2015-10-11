@@ -432,6 +432,7 @@ into your forks of the project:
 * Two-Factor-Authentication (see [ticket #732](https://github.com/panique/huge/issues/732))
 * Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
 * Email-re-validation after email change (see [ticket #705](https://github.com/panique/huge/issues/705))
+* Connect to multiple databases (see [ticket #702](https://github.com/panique/huge/issues/702))
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
