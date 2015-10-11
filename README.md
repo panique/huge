@@ -396,6 +396,7 @@ to go into the main version of HUGE, but have a look into these tickets if you a
 
  - [Caching system](https://github.com/panique/huge/issues/643)
  - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
+ - [Internationalization feature](https://github.com/panique/huge/issues/582)
  
 ### Future of the project: As simple as possible! <a name="future"></a>
  
