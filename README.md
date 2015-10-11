@@ -423,6 +423,7 @@ However, here are the community-suggested possible features, taken from lots of 
 * RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
 * Horizontal MySQL scaling (see [ticket #423](https://github.com/panique/huge/issues/423) for discussion)
 * Modules / middleware
+* Logging
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
