@@ -57,7 +57,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 
 ### The History of HUGE
 
-Back in 2010/2011 there we no useful login solutions in the PHP world, at least not for non-experts. So I did the worst 
+Back in 2010/2011 there were no useful login solutions in the PHP world, at least not for non-experts. So I did the worst 
 mistake every young developer does: Trying to build something by myself without having any clue about security basics.
 What made it even worse was: The web was (and is) full of totally broken tutorials about building user authentication 
 systems, even the biggest companies in the world did this completely wrong (we are talking about SONY, LinkedIn and
@@ -115,7 +115,7 @@ See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and 
 
 ### Support the project <a name="support"></a>
 
-There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
+There is a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
