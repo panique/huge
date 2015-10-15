@@ -115,7 +115,7 @@ See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and 
 
 ### Support the project <a name="support"></a>
 
-There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
+There is a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
