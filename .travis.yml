@@ -3,8 +3,7 @@ language: php
 php:
     - 5.5
     - 5.6
-    # http://docs.travis-ci.com/user/languages/php/#PHP-nightly-builds
-    - '7.0'
+    - 7
     - hhvm
 
 # optional, define the environment, in this case useful to test stuff that only runs in development / production
