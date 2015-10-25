@@ -35,6 +35,12 @@ class LoginController extends Controller
      */
     public function login()
     {
+
+        // check if csrf token is valid
+        if (!Csrf::isTokenValid()) {
+            self::logout();
+        }
+
         // perform the login method, put result (true or false) into $login_successful
         $login_successful = LoginModel::login(
             Request::post('user_name'), Request::post('user_password'), Request::post('set_remember_me_cookie')
@@ -60,6 +66,7 @@ class LoginController extends Controller
     {
         LoginModel::logout();
         Redirect::home();
+        exit();
     }
 
     /**
@@ -113,6 +120,12 @@ class LoginController extends Controller
     public function editUsername_action()
     {
         Auth::checkAuthentication();
+
+        // check if csrf token is valid
+        if (!Csrf::isTokenValid()) {
+            self::logout();
+        }
+
         UserModel::editUserName(Request::post('user_name'));
         Redirect::to('login/index');
     }
