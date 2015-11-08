@@ -51,7 +51,9 @@ class UserController extends Controller
 
         // check if csrf token is valid
         if (!Csrf::isTokenValid()) {
-            self::logout();
+            LoginModel::logout();
+            Redirect::home();
+            exit();
         }
 
         UserModel::editUserName(Request::post('user_name'));
