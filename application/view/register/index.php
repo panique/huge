@@ -8,7 +8,7 @@
         <h2>Register a new account</h2>
 
         <!-- register form -->
-        <form method="post" action="<?php echo Config::get('URL'); ?>login/register_action">
+        <form method="post" action="<?php echo Config::get('URL'); ?>register/register_action">
             <!-- the user name input field uses a HTML5 pattern check -->
             <input type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" placeholder="Username (letters/numbers, 2-64 chars)" required />
             <input type="text" name="user_email" placeholder="email address (a real address)" required />
