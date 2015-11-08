@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/showProfile', array(
+        $this->View->render('user/index', array(
             'user_name' => Session::get('user_name'),
             'user_email' => Session::get('user_email'),
             'user_gravatar_image_url' => Session::get('user_gravatar_image_url'),
@@ -38,7 +38,7 @@ class UserController extends Controller
     public function editUsername()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/editUsername');
+        $this->View->render('user/editUsername');
     }
 
     /**
@@ -55,7 +55,7 @@ class UserController extends Controller
         }
 
         UserModel::editUserName(Request::post('user_name'));
-        Redirect::to('login/index');
+        Redirect::to('user/editUsername');
     }
 
     /**
@@ -65,7 +65,7 @@ class UserController extends Controller
     public function editUserEmail()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/editUserEmail');
+        $this->View->render('user/editUserEmail');
     }
 
     /**
@@ -77,7 +77,7 @@ class UserController extends Controller
     {
         Auth::checkAuthentication();
         UserModel::editUserEmail(Request::post('user_email'));
-        Redirect::to('login/editUserEmail');
+        Redirect::to('user/editUserEmail');
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends Controller
     public function editAvatar()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/editAvatar', array(
+        $this->View->render('user/editAvatar', array(
             'avatar_file_path' => AvatarModel::getPublicUserAvatarFilePathByUserId(Session::get('user_id'))
         ));
     }
@@ -101,7 +101,7 @@ class UserController extends Controller
     {
         Auth::checkAuthentication();
         AvatarModel::createAvatar();
-        Redirect::to('login/editAvatar');
+        Redirect::to('user/editAvatar');
     }
 
     /**
@@ -112,7 +112,7 @@ class UserController extends Controller
     {
         Auth::checkAuthentication();
         AvatarModel::deleteAvatar(Session::get("user_id"));
-        Redirect::to('login/editAvatar');
+        Redirect::to('user/editAvatar');
     }
 
     /**
@@ -122,7 +122,7 @@ class UserController extends Controller
     public function changeUserRole()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/changeUserRole');
+        $this->View->render('user/changeUserRole');
     }
 
     /**
@@ -144,7 +144,7 @@ class UserController extends Controller
             UserRoleModel::changeUserRole(1);
         }
 
-        Redirect::to('login/changeUserRole');
+        Redirect::to('user/changeUserRole');
     }
 
     /**
@@ -154,7 +154,7 @@ class UserController extends Controller
     public function changePassword()
     {
         Auth::checkAuthentication();
-        $this->View->render('login/changePassword');
+        $this->View->render('user/changePassword');
     }
 
     /**
@@ -169,8 +169,8 @@ class UserController extends Controller
         );
 
         if($result)
-            Redirect::to('login/index');
+            Redirect::to('user/index');
         else
-            Redirect::to('login/changePassword');
+            Redirect::to('user/changePassword');
     }
 }

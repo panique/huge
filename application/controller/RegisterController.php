@@ -25,7 +25,7 @@ class RegisterController extends Controller
         if (LoginModel::isUserLoggedIn()) {
             Redirect::home();
         } else {
-            $this->View->render('register/register');
+            $this->View->render('register/index');
         }
     }
 
@@ -40,7 +40,7 @@ class RegisterController extends Controller
         if ($registration_successful) {
             Redirect::to('login/index');
         } else {
-            Redirect::to('register');
+            Redirect::to('register/index');
         }
     }
 
