@@ -63,7 +63,6 @@ class Auth
             if(Session::isConcurrentSessionExists()){
                 LoginModel::logout();
                 Redirect::home();
-                exit();
             }
         }
     }
