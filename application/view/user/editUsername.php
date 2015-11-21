@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>LoginController/editUsername</h1>
+    <h1>UserController/editUsername</h1>
 
     <!-- echo out the system feedback (error and success messages) -->
     <?php $this->renderFeedbackMessages(); ?>

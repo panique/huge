@@ -30,7 +30,7 @@
 <div class="container">
     <p style="display: block; font-size: 11px; color: #999;">
         Please note: This captcha will be generated when the img tag requests the captcha-generation
-        (= a real image) from YOURURL/login/showcaptcha. As this is a client-side triggered request, a
+        (= a real image) from YOURURL/register/showcaptcha. As this is a client-side triggered request, a
         $_SESSION["captcha"] dump will not show the captcha characters. The captcha generation
         happens AFTER the request that generates THIS page has been finished.
     </p>
