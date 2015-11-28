@@ -22,7 +22,7 @@
                          there after being logged in successfully.
                          Simple but powerful feature, big thanks to @tysonlist. -->
                     <?php if (!empty($this->redirect)) { ?>
-                        <input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+                        <input type="hidden" name="redirect" value="<?php echo $this->encodeHTML($this->redirect); ?>" />
                     <?php } ?>
                     <input type="submit" class="login-submit-button" value="Log in"/>
                 </form>
