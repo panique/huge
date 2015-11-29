@@ -360,7 +360,7 @@ have a value of `7` inside the database table field `user_account_type`. They ca
 (as this wouldn't make sense).
 
 2. Normal users don't have admin features for sure. But they can upgrade and downgrade their accounts (try it out via
-/login/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
+/user/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
 Normal users have a value of `1` or `2` inside the database table field `user_account_type`. By default all new 
 registered users are normal users with user role 1 for sure.
 
@@ -375,7 +375,7 @@ the application puts a "random string" inside the form (as a hidden input field)
 checks if the POST request contains exactly the form token that is inside the session.
   
 This CSRF prevention feature is currently implemented on the login form process (see *application/view/login/index.php*)
-and user name change form process (see *application/view/login/editUsername.php*), most other forms are not security-
+and user name change form process (see *application/view/user/editUsername.php*), most other forms are not security-
 critical and should stay as simple as possible.
 
 A big thanks to OmarElGabry for implementing this!

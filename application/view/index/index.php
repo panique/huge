@@ -7,7 +7,7 @@
 
         <h3>What happens here ?</h3>
         <p>
-            This is the homepage. As no real URL-route (like /login/register) is provided, the app uses the default
+            This is the homepage. As no real URL-route (like /register/index) is provided, the app uses the default
             controller and the default action, defined in application/config/config.php, by default it's
             IndexController and index()-method. So, the app will load application/controller/IndexController.php and
             run index() from that file. Easy. That index()-method (= the action) has just one line of code inside
