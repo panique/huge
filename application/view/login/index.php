@@ -22,7 +22,7 @@
                          there after being logged in successfully.
                          Simple but powerful feature, big thanks to @tysonlist. -->
                     <?php if (!empty($this->redirect)) { ?>
-                        <input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+                        <input type="hidden" name="redirect" value="<?php echo $this->encodeHTML($this->redirect); ?>" />
                     <?php } ?>
 					<!-- 
 						set CSRF token in login form, although sending fake login requests mightn't be interesting gap here.
