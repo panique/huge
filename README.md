@@ -556,6 +556,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 
 ### Useful links
 
+- [How long will my session last?](http://stackoverflow.com/questions/1516266/how-long-will-my-session-last/1516338#1516338)
+- [How to do expire a PHP session after X minutes?](http://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes/1270960#1270960)
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 - [A short guideline on how to use the PHP 5.5 password hashing functions and its PHP 5.3 & 5.4 implementations](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
 - [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/)
