@@ -25,10 +25,31 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
 [Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
-#### Current releases
+#### HUGE has reached "soft End Of Life"
+
+To keep this project stable, secure, clean and minimal I've decided to reduce the development of HUGE to a 
+minimum. *Don't worry, this is actually a good thing:* New features usually mean new bugs, lots of testing, fixes, 
+incompatibilities, and for some people even hardcore update stress. As HUGE is a security-critical script new features 
+are not as important as a stable and secure core, this is why people use it. This means:
+
+- HUGE will not get new features
+- but will be maintained, so it will get bugfixes, corrections etc for sure, maybe for years
+
+And to be honest, maintaining a framework for free in my rare free-time is also not what I want to do permanently. :)
+
+Finally a little note: The PHP world has evolved dramatically, we have excellent frameworks with awesome features and 
+big professional teams behind, very well written documentations and large communities, so there's simply no reason 
+to put much work into another framework. Instead, please commit to the popular frameworks, then your work will have
+much more impact and is used by much more people!
+
+Thanks to everybody around this project, have a wonderful time! 
+XOXO,
+Chris
+
+#### Releases & development  
 
 * stable [v3.1](https://github.com/panique/huge/releases/tag/v3.1),
-* public beta branch: [master-branch](https://github.com/panique/huge)
+* public beta branch: [master](https://github.com/panique/huge)
 * public in-development branch (please commit new code here): [develop](https://github.com/panique/huge/tree/develop)
 
 #### Quick-Index 
@@ -48,7 +69,7 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
     - [NGINX setup](#nginx-setup)
 + [Documentation](#documentation)  
 + [Community-provided features & feature discussions](#community)
-+ [Potential features for the future (or your forks)](#future)
++ [Future of the project, announcing soft EOL](#future)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -103,7 +124,7 @@ And why the name "HUGE" ? It's a nice combination to
 * fits PSR-0/1/2/4 coding guidelines
 * uses [Post-Redirect-Get pattern](https://en.wikipedia.org/wiki/Post/Redirect/Get) for nice application flow
 * masses of comments
-* is actively developed, maintained and bug-fixed
+* is actively maintained and bug-fixed (however, no big new features as project slowly reaches End of Life)
 
 ### Planned features
 
@@ -346,7 +367,8 @@ There are several files in the root folder of the project that might be irritati
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
-how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare :)
+how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare and we are all
+doing this for free in our free time :)
  
  - TODO: Full documentation
  - TODO: Basic examples on how to do things
@@ -365,6 +387,10 @@ Normal users have a value of `1` or `2` inside the database table field `user_ac
 registered users are normal users with user role 1 for sure.
 
 See the "Testing with demo users" section of this readme for more info.
+
+There's also a very interesting [pull request adding user roles and user permissions](https://github.com/panique/huge/pull/691),
+which is not integrated into the project as it's too advanced and complex. But, this might be exactly what you need,
+feel free to try.
 
 #### An introduction into the CSRF features
  
@@ -402,25 +428,37 @@ to go into the main version of HUGE, but have a look into these tickets if you a
  - [Internationalization feature](https://github.com/panique/huge/issues/582)
  - [Using controller A inside controller B](https://github.com/panique/huge/issues/706)
  - [HTML mails](https://github.com/panique/huge/issues/738)
+ - [Deep user roles / user permission system](https://github.com/panique/huge/pull/691)
  
-### Future of the project: As simple as possible! <a name="future"></a>
+### Future of HUGE: Announcing "soft End Of Life" <a name="future"></a>
  
-The idea of this project was to provide a super-simple barebone application with a full user authentication
-system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
-this project simple, clean and minimal with these few "rules" (and more on this inside this ticket: 
-[Keep the project as simple as possible](https://github.com/panique/huge/issues/664).): 
+The idea of this project is and was to provide a super-simple barebone application with a full user authentication
+system inside that just works fine and stable. Due to the highly security-related nature of this script any changes 
+mean a lot of work, lots of testing, catching edge cases etc., and in the end I spent 90% of the time testing and fixing
+new features or new features break existing stuff, and doing this is really not what anybody wants to do for free in
+the rare free-time :)
+
+To keep the project stable, clean and maintainable, I would kindly announce the "soft-End of Life" for this project, 
+meaning:
+
+A. HUGE will not get any new features in the future, but ...
+B. bugfixes and corrections will be made, probably for years
+
+### Coding guideline behind HUGE
+
+While HUGE was in development, there were 3 main rules that helped me (and probably others) to write minimal, clean
+ and working code. Might be useful for you too:
 
 1. Reduce features to the bare minimum.
 2. Don't implement features that are not needed by most users.
 3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
- 
-#### List of feature ideas
 
-Open-source is a great thing, and projects live from community-contributed feature for sure. As this project is highly
-security-related and mainly just a free-time one-man show, new features mean a lot of work, reviewing, testing, 
-corrections, and making sure it runs perfectly in every possible scenario. As I simply don't have the time to do this, 
-I would kindly ask you **not** to commit new features when they are not really basic, very small and well-written,
-and if you miss a feature, then please try to write this on your own and commit it to the project.
+As noted in the intro of this README, there are also some powerful concepts that might help you when developing cool 
+stuff: [KISS](http://en.wikipedia.org/wiki/KISS_principle), 
+[YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
+[Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
+ 
+#### List of features / ideas provided in tickets / pull requests
 
 To avoid unnecessary work for all of us I would kindly recommend everybody to use HUGE for simple project that only
 need the features that already exist, and if you really need a RESTful architecture, migrations, routing, 2FA etc,
@@ -499,7 +537,7 @@ an normal GitHub issue.
 
 ### Current and further development
 
-See active issues and requested features here:
+See active issues here:
 https://github.com/panique/huge/issues?state=open
 
 ### Why you should use a favicon.ico in your project :)
