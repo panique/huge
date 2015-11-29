@@ -68,7 +68,7 @@ mv composer.phar /usr/local/bin/composer
 
 # go to project folder, load Composer packages
 cd "/var/www/html/${PROJECTFOLDER}"
-composer install --dev
+composer install
 
 # run SQL statements from install folder
 sudo mysql -h "localhost" -u "root" "-p${PASSWORD}" < "/var/www/html/${PROJECTFOLDER}/application/_installation/01-create-database.sql"

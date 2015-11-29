@@ -11,11 +11,17 @@ class PasswordResetModel
 	 * Perform the necessary actions to send a password reset mail
 	 *
 	 * @param $user_name_or_email string Username or user's email
+	 * @param $captcha string Captcha string
 	 *
 	 * @return bool success status
 	 */
-	public static function requestPasswordReset($user_name_or_email)
+	public static function requestPasswordReset($user_name_or_email, $captcha)
 	{
+		if (!CaptchaModel::checkCaptcha($captcha)) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
+			return false;
+		}
+
 		if (empty($user_name_or_email)) {
 			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_EMAIL_FIELD_EMPTY'));
 			return false;
