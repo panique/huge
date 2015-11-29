@@ -87,7 +87,7 @@ return array(
      * COOKIE_DOMAIN: The domain where the cookie is valid for. Usually this does not work with "localhost",
 	 * ".localhost", "127.0.0.1", or ".127.0.0.1". If so, leave it as empty string, false or null.
 	 * When using real domains make sure you have a dot (!) in front of the domain, like ".mydomain.com". This is
-	 * strange, but explained here: 
+	 * strange, but explained here:
 	 * @see http://stackoverflow.com/questions/2285010/php-setcookie-domain
      * @see http://stackoverflow.com/questions/1134290/cookies-on-localhost-with-explicit-domain
      * @see http://php.net/manual/en/function.setcookie.php#73107
@@ -117,7 +117,8 @@ return array(
 	'AVATAR_DEFAULT_IMAGE' => 'default.jpg',
     /**
      * Configuration for: Encryption Keys
-     * TODO: what is this, where is it used, and do we need to change it ?
+     * ENCRYPTION_KEY, HMAC_SALT: Currently used to encrypt and decrypt publicly visible values, like the user id in
+	 * the cookie. Change these values for increased security, but don't touch if you have no idea what this means.
      */
     'ENCRYPTION_KEY' => '6#x0gÊìf^25cL1f$08&',
     'HMAC_SALT' => '8qk9c^4L6d#15tM8z7n0%',
