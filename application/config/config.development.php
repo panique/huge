@@ -114,7 +114,7 @@ return array(
 	'AVATAR_DEFAULT_IMAGE' => 'default.jpg',
     /**
      * Configuration for: Encryption Keys
-     *
+     * TODO: what is this, where is it used, and do we need to change it ?
      */
     'ENCRYPTION_KEY' => '6#x0gÊìf^25cL1f$08&',
     'HMAC_SALT' => '8qk9c^4L6d#15tM8z7n0%',
