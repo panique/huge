@@ -408,10 +408,8 @@ A big thanks to OmarElGabry for implementing this!
 
 #### Can a user be logged in from multiple devices ?
 
-Yes, BUT by default this feature is deactivated (= commented out). To active, uncomment `self::checkSessionConcurrency();`
-in `checkAuthentication()` (normal users) and/or `checkAdminAuthentication` (admin users), both in `application/core/Auth.php`.
-If you like, feel free to write a config switch for this. For more info on this feature have a look into the [according
-ticket](https://github.com/panique/huge/pull/693). Thanks to OmarElGabry for the feature!
+In theory: Yes, but this feature didn't work in my tests. As it's an external feature please have a look into the 
+[according ticket](https://github.com/panique/huge/pull/693) for more.
 
 #### Troubleshooting & Glitches
 
