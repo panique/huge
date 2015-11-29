@@ -46,8 +46,8 @@ class RegistrationModel
 			$return = false;
 		}
 
-        	// if Username or Email were false, return false
-        	if(!$return) return false;
+        // if Username or Email were false, return false
+        if (!$return) return false;
 
 		// generate random hash for email verification (40 char string)
 		$user_activation_hash = sha1(uniqid(mt_rand(), true));
