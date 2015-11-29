@@ -19,8 +19,6 @@ ini_set("display_errors", 1);
  * won't be accessible by scripting languages, such as JavaScript. This setting can effectively help to reduce identity
  * theft through XSS attacks (although it is not supported by all browsers).
  *
- * IMPORTANT: This will
- *
  * @see php.net/manual/en/session.configuration.php#ini.session.cookie-httponly
  */
 ini_set('session.cookie_httponly', 1);
