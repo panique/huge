@@ -412,7 +412,7 @@ So, to do this with a normal form, simply: At your form, before the submit butto
 Then, in the controller action validate the CSRF token submitted with the form by doing:
 ```
 if (!Csrf::isTokenValid()) {
-    Login::logout();
+    LoginController::logout();
 }
 ```
 
