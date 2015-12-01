@@ -68,7 +68,9 @@ Chris
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
     - [NGINX setup](#nginx-setup)
-+ [Documentation](#documentation)  
++ [Documentation](#documentation)
+    - [How to use the user roles](#user_roles)
+    - [How to use the CSRF feature](#csrf)
 + [Community-provided features & feature discussions](#community)
 + [Future of the project, announcing soft EOL](#future)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
@@ -374,7 +376,7 @@ doing this for free in our free time :)
  - TODO: Full documentation
  - TODO: Basic examples on how to do things
  
-#### The different user roles
+#### How to use the different user roles <a name="user_roles"></a>
 
 Currently there are two types of users: Normal users and admins. There are exactly the same, but...
  
@@ -393,7 +395,7 @@ There's also a very interesting [pull request adding user roles and user permiss
 which is not integrated into the project as it's too advanced and complex. But, this might be exactly what you need,
 feel free to try.
 
-#### An introduction into the CSRF features
+#### How to use the CSRF feature <a name="csrf"></a>
  
 To prevent [CSRF attacks](https://en.wikipedia.org/wiki/Cross-site_request_forgery), HUGE does this in the most common 
 way, by using a security *token* when the user submits critical forms. This means: When PHP renders a form for the user, 
@@ -404,6 +406,15 @@ checks if the POST request contains exactly the form token that is inside the se
 This CSRF prevention feature is currently implemented on the login form process (see *application/view/login/index.php*)
 and user name change form process (see *application/view/user/editUsername.php*), most other forms are not security-
 critical and should stay as simple as possible.
+
+So, to do this with a normal form, simply: At your form, before the submit button put:
+`<input type="hidden" name="csrf_token" value="<?= Csrf::makeToken(); ?>" />`
+Then, in the controller action validate the CSRF token submitted with the form by doing:
+```
+if (!Csrf::isTokenValid()) {
+    Login::logout();
+}
+```
 
 A big thanks to OmarElGabry for implementing this!
 
