@@ -411,8 +411,11 @@ So, to do this with a normal form, simply: At your form, before the submit butto
 `<input type="hidden" name="csrf_token" value="<?= Csrf::makeToken(); ?>" />`
 Then, in the controller action validate the CSRF token submitted with the form by doing:
 ```
+// check if csrf token is valid
 if (!Csrf::isTokenValid()) {
-    LoginController::logout();
+    LoginModel::logout();
+    Redirect::home();
+    exit();
 }
 ```
 
