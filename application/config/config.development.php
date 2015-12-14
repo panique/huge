@@ -19,8 +19,6 @@ ini_set("display_errors", 1);
  * won't be accessible by scripting languages, such as JavaScript. This setting can effectively help to reduce identity
  * theft through XSS attacks (although it is not supported by all browsers).
  *
- * IMPORTANT: This will
- *
  * @see php.net/manual/en/session.configuration.php#ini.session.cookie-httponly
  */
 ini_set('session.cookie_httponly', 1);
@@ -84,10 +82,13 @@ return array(
 	 * @see http://stackoverflow.com/q/9618217/1114320
 	 * @see php.net/manual/en/function.setcookie.php
      *
-     * COOKIE_DOMAIN: The domain where the cookie is valid for.
-     *      COOKIE_DOMAIN mightn't work with "localhost", ".localhost", "127.0.0.1", or ".127.0.0.1". If so, leave it as empty string, false or null.
-     *      @see http://stackoverflow.com/questions/1134290/cookies-on-localhost-with-explicit-domain
-     *      @see http://php.net/manual/en/function.setcookie.php#73107
+     * COOKIE_DOMAIN: The domain where the cookie is valid for. Usually this does not work with "localhost",
+	 * ".localhost", "127.0.0.1", or ".127.0.0.1". If so, leave it as empty string, false or null.
+	 * When using real domains make sure you have a dot (!) in front of the domain, like ".mydomain.com". This is
+	 * strange, but explained here:
+	 * @see http://stackoverflow.com/questions/2285010/php-setcookie-domain
+     * @see http://stackoverflow.com/questions/1134290/cookies-on-localhost-with-explicit-domain
+     * @see http://php.net/manual/en/function.setcookie.php#73107
      *
      * COOKIE_SECURE: If the cookie will be transferred through secured connection(SSL). It's highly recommended to set it to true if you have secured connection.
      * COOKIE_HTTP: If set to true, Cookies that can't be accessed by JS - Highly recommended!
@@ -114,7 +115,8 @@ return array(
 	'AVATAR_DEFAULT_IMAGE' => 'default.jpg',
     /**
      * Configuration for: Encryption Keys
-     *
+     * ENCRYPTION_KEY, HMAC_SALT: Currently used to encrypt and decrypt publicly visible values, like the user id in
+	 * the cookie. Change these values for increased security, but don't touch if you have no idea what this means.
      */
     'ENCRYPTION_KEY' => '6#x0gÊìf^25cL1f$08&',
     'HMAC_SALT' => '8qk9c^4L6d#15tM8z7n0%',
@@ -146,7 +148,7 @@ return array(
 	'EMAIL_PASSWORD_RESET_FROM_NAME' => 'My Project',
 	'EMAIL_PASSWORD_RESET_SUBJECT' => 'Password reset for PROJECT XY',
 	'EMAIL_PASSWORD_RESET_CONTENT' => 'Please click on this link to reset your password: ',
-	'EMAIL_VERIFICATION_URL' => 'login/verify',
+	'EMAIL_VERIFICATION_URL' => 'register/verify',
 	'EMAIL_VERIFICATION_FROM_EMAIL' => 'no-reply@example.com',
 	'EMAIL_VERIFICATION_FROM_NAME' => 'My Project',
 	'EMAIL_VERIFICATION_SUBJECT' => 'Account activation for PROJECT XY',
