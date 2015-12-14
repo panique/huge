@@ -62,9 +62,8 @@ class Auth
     }
 
     /**
-     * Detects if there is concurrent session(i.e. another user logged in with the same current user credentials),
+     * Detects if there is concurrent session (i.e. another user logged in with the same current user credentials),
      * If so, then logout.
-     *
      */
     public static function checkSessionConcurrency(){
         if(Session::userIsLoggedIn()){

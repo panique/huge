@@ -23,7 +23,7 @@ before_script:
     - sudo service apache2 restart
     # composer
     - composer self-update
-    - composer install --prefer-source --no-interaction --dev
+    - composer install --prefer-source --no-interaction
     # go to tests folder
     - cd tests
 
