@@ -21,19 +21,19 @@
  */
 class DatabaseFactory
 {
-	private static $factory;
-	private $database;
+    private static $factory;
+    private $database;
 
-	public static function getFactory()
-	{
-		if (!self::$factory) {
-			self::$factory = new DatabaseFactory();
-		}
-		return self::$factory;
-	}
+    public static function getFactory()
+    {
+        if (!self::$factory) {
+            self::$factory = new DatabaseFactory();
+        }
+        return self::$factory;
+    }
 
-	public function getConnection() {
-		if (!$this->database) {
+    public function getConnection() {
+        if (!$this->database) {
 
             /**
              * Check DB connection in try/catch block. Also when PDO is not constructed properly,
