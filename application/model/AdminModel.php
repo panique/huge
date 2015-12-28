@@ -14,6 +14,14 @@ class AdminModel
 	 */
 	public static function setAccountSuspensionAndDeletionStatus($suspensionInDays, $softDelete, $userId)
 	{
+
+		// Prevent to suspend or delete own account.
+		// If admin suspend or delete own account will not be able to do any action.
+		if ($userId == Session::get('user_id')) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_CANT_DELETE_SUSPEND_OWN'));
+			return false;
+		}
+
 		if ($suspensionInDays > 0) {
 			$suspensionTime = time() + ($suspensionInDays * 60 * 60 * 24);
 		} else {
