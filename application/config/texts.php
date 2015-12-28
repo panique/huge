@@ -10,6 +10,7 @@ return array(
 	"FEEDBACK_DELETED" => "Your account has been deleted.",
 	"FEEDBACK_ACCOUNT_SUSPENDED" => "Account Suspended for ",
 	"FEEDBACK_ACCOUNT_SUSPENSION_DELETION_STATUS" => "This user's suspension / deletion status has been edited.",
+	"FEEDBACK_ACCOUNT_CANT_DELETE_SUSPEND_OWN" => "You can not delete or suspend your own account.",
 	"FEEDBACK_ACCOUNT_USER_SUCCESSFULLY_KICKED" => "The selected user has been successfully kicked out of the system (by resetting this user's session)",
 	"FEEDBACK_PASSWORD_WRONG_3_TIMES" => "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again.",
 	"FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET" => "Your account is not activated yet. Please click on the confirm link in the mail.",
