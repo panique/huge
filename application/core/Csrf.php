@@ -21,8 +21,8 @@
  *
  * To get simpler code it might be better to put the logout, redirect, exit into an own (static) method.
  */
-class Csrf {
-
+class Csrf
+{
     /**
      * get CSRF token and generate a new one if expired
      *
@@ -37,7 +37,7 @@ class Csrf {
         $stored_time = Session::get('csrf_token_time');
         $csrf_token  = Session::get('csrf_token');
 
-        if($max_time + $stored_time <= time() || empty($csrf_token)){
+        if ($max_time + $stored_time <= time() || empty($csrf_token)) {
             Session::set('csrf_token', md5(uniqid(rand(), true)));
             Session::set('csrf_token_time', time());
         }
