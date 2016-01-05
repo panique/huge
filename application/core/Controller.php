@@ -15,7 +15,7 @@ class Controller
      * Construct the (base) controller. This happens when a real controller is constructed, like in
      * the constructor of IndexController when it says: parent::__construct();
      */
-    function __construct()
+    public function __construct()
     {
         // always initialize a session
         Session::init();

@@ -36,7 +36,7 @@ class View
     public function renderMulti($filenames, $data = null)
     {
         if (!is_array($filenames)) {
-            self::render($filenames, $data); 
+            self::render($filenames, $data);
             return false;
         }
 
@@ -162,7 +162,7 @@ class View
 
         return false;
     }
-    
+
     /**
      * Converts characters to HTML entities
      * This is important to avoid XSS attacks, and attempts to inject malicious code in your page.
@@ -170,7 +170,8 @@ class View
      * @param  string $str The string.
      * @return string
      */
-    public function encodeHTML($str){
+    public function encodeHTML($str)
+    {
         return htmlentities($str, ENT_QUOTES, 'UTF-8');
     }
 }
