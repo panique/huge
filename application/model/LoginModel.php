@@ -24,12 +24,12 @@ class LoginModel
             return false;
         }
 
-	    // checks if user exists, if login is not blocked (due to failed logins) and if password fits the hash
-	    $result = self::validateAndGetUser($user_name, $user_password);
+        // checks if user exists, if login is not blocked (due to failed logins) and if password fits the hash
+        $result = self::validateAndGetUser($user_name, $user_password);
 
         // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
         if (!$result) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED'));
+            //No Need to give feedback here since whole validateAndGetUser controls gives a feedback
             return false;
         }
 
@@ -69,63 +69,85 @@ class LoginModel
         return true;
     }
 
-	/**
-	 * Validates the inputs of the users, checks if password is correct etc.
-	 * If successful, user is returned
-	 *
-	 * @param $user_name
-	 * @param $user_password
-	 *
-	 * @return bool|mixed
-	 */
-	private static function validateAndGetUser($user_name, $user_password)
-	{
-		// brute force attack mitigation: use session failed login count and last failed login for not found users.
-		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-		// (limits user searches in database)
-		if (Session::get('failed-login-count') >= 3 AND (Session::get('last-failed-login') > (time() - 30))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
-			return false;
-		}
-		
-		// get all data of that user (to later check if password and password_hash fit)
-		$result = UserModel::getUserDataByUsername($user_name);
+    /**
+     * Validates the inputs of the users, checks if password is correct etc.
+     * If successful, user is returned
+     *
+     * @param $user_name
+     * @param $user_password
+     *
+     * @return bool|mixed
+     */
+    private static function validateAndGetUser($user_name, $user_password)
+    {
+        // brute force attack mitigation: use session failed login count and last failed login for not found users.
+        // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+        // (limits user searches in database)
+        if (Session::get('failed-login-count') >= 3 AND (Session::get('last-failed-login') > (time() - 30))) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
+            return false;
+        }
+
+        // get all data of that user (to later check if password and password_hash fit)
+        $result = UserModel::getUserDataByUsername($user_name);
 
         // check if that user exists. We don't give back a cause in the feedback to avoid giving an attacker details.
-		// brute force attack mitigation: reset failed login counter because of found user
-		if ($result){
-			Session::set('failed-login-count', 0);
-			Session::set('last-failed-login', '');
-		} else {
-			// brute force attack mitigation: set session failed login count and last failed login for users not found
-			Session::set('failed-login-count', Session::get('failed-login-count') + 1);
-			Session::set('last-failed-login', time());
-            Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
-			return false;
-		}
+        // brute force attack mitigation: reset failed login counter because of found user
+        if (!$result) {
 
-		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-		if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
-			return false;
-		}
+            // increment the user not found count, helps mitigate user enumeration
+            self::incrementUserNotFoundCounter();
 
-		// if hash of provided password does NOT match the hash in the database: +1 failed-login counter
-		if (!password_verify($user_password, $result->user_password_hash)) {
-			self::incrementFailedLoginCounterOfUser($result->user_name);
-			// we say "password wrong" here, but less details like "login failed" would be better (= less information)
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG'));
-			return false;
-		}
+            // user does not exist, but we won't to give a potential attacker this details, so we just use a basic feedback message
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
+            return false;
+        }
 
-		// if user is not active (= has not verified account by verification mail)
-		if ($result->user_active != 1) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
-			return false;
-		}
+        // block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+        if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
+            return false;
+        }
 
-		return $result;
-	}
+        // if hash of provided password does NOT match the hash in the database: +1 failed-login counter
+        if (!password_verify($user_password, $result->user_password_hash)) {
+            self::incrementFailedLoginCounterOfUser($result->user_name);
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
+            return false;
+        }
+
+        // if user is not active (= has not verified account by verification mail)
+        if ($result->user_active != 1) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
+            return false;
+        }
+
+        // reset the user not found counter
+        self::resetUserNotFoundCounter();
+
+        return $result;
+    }
+
+    /**
+     * Reset the failed-login-count to 0.
+     * Reset the last-failed-login to an empty string.
+     */
+    private static function resetUserNotFoundCounter()
+    {
+        Session::set('failed-login-count', 0);
+        Session::set('last-failed-login', '');
+    }
+
+    /**
+     * Increment the failed-login-count by 1.
+     * Add timestamp to last-failed-login.
+     */
+    private static function incrementUserNotFoundCounter()
+    {
+        // Username enumeration prevention: set session failed login count and last failed login for users not found
+        Session::set('failed-login-count', Session::get('failed-login-count') + 1);
+        Session::set('last-failed-login', time());
+    }
 
     /**
      * performs the login via cookie (for DEFAULT user account, FACEBOOK-accounts are handled differently)
@@ -144,7 +166,7 @@ class LoginModel
         }
 
         // before list(), check it can be split into 3 strings.
-        if(count (explode(':', $cookie)) !== 3){
+        if (count (explode(':', $cookie)) !== 3) {
             Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
@@ -165,8 +187,10 @@ class LoginModel
 
         // if user with that id and exactly that cookie token exists in database
         if ($result) {
+
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
             self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type);
+
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
 
@@ -312,8 +336,8 @@ class LoginModel
         $cookie_string_first_part = Encryption::encrypt($user_id) . ':' . $random_token_string;
         $cookie_string_hash       = hash('sha256', $user_id . ':' . $random_token_string);
         $cookie_string            = $cookie_string_first_part . ':' . $cookie_string_hash;
-		
-		// set cookie, and make it available only for the domain created on (to avoid XSS attacks, where the
+
+        // set cookie, and make it available only for the domain created on (to avoid XSS attacks, where the
         // attacker could steal your remember-me cookie string and would login itself).
         // If you are using HTTPS, then you should set the "secure" flag (the second one from right) to true, too.
         // @see http://www.php.net/manual/en/function.setcookie.php
@@ -332,7 +356,7 @@ class LoginModel
     public static function deleteCookie($user_id = null)
     {
         // is $user_id was set, then clear remember_me token in database
-        if(isset($user_id)){
+        if (isset($user_id)) {
 
             $database = DatabaseFactory::getFactory()->getConnection();
 

@@ -22,9 +22,9 @@
                          there after being logged in successfully.
                          Simple but powerful feature, big thanks to @tysonlist. -->
                     <?php if (!empty($this->redirect)) { ?>
-                        <input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+                        <input type="hidden" name="redirect" value="<?php echo $this->encodeHTML($this->redirect); ?>" />
                     <?php } ?>
-					<!-- 
+					<!--
 						set CSRF token in login form, although sending fake login requests mightn't be interesting gap here.
 						If you want to get deeper, check these answers:
 							1. natevw's http://stackoverflow.com/questions/6412813/do-login-forms-need-tokens-against-csrf-attacks?rq=1
@@ -42,7 +42,7 @@
             <!-- register box on right side -->
             <div class="register-box">
                 <h2>No account yet ?</h2>
-                <a href="<?php echo Config::get('URL'); ?>login/register">Register</a>
+                <a href="<?php echo Config::get('URL'); ?>register/index">Register</a>
             </div>
 
         </div>

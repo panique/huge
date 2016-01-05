@@ -7,7 +7,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGet()
 	{
-		$this->assertEquals('Password was wrong.', Text::get('FEEDBACK_PASSWORD_WRONG'));
+		$this->assertEquals("The username or password is incorrect. Please try again.", Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
 	}
 
 	/**

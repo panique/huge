@@ -4,6 +4,15 @@ For the newest (und unstable) version always check the develop branch.
 
 ## develop branch
 
+- [panique] [#729] Fix, mail sending now returns true or false success status (https://github.com/panique/huge/issues/729)
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) session id regeneration in certain situations
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) encrypted cookies
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) new encryption class
+- [OmarElGabry] [PR](https://github.com/panique/huge/pull/693) anti-CSRF feature (used in login and username change forms) 
+- [josh-bridge] [PR](https://github.com/panique/huge/pull/689) logged-in user can now change password
+- [justincdotme] [PR](https://github.com/panique/huge/pull/684) better code for brute-force blocking when logging in
+- [panique] soft autoinstaller improvements
+- [panique] updated dependencies to current versions
 - [Kent55/panique] XSS protection filter
 - [FAlbanni] XSS protection with better session/cookie, now only allowed on used domain 
 - [panique] there's now a simple Favicon and a fallback to avoid browsers hammering the application requesting favicons

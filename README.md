@@ -4,6 +4,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
 [![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/a0534fce01a74d94a365592edf3c7ad6)](https://www.codacy.com/app/jaimefjorge/php-login)
 [![Travis CI](https://travis-ci.org/panique/huge.svg?branch=master)](https://travis-ci.org/panique/huge)
 [![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
 
@@ -25,6 +26,33 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 [YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
 [Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
+#### HUGE has reached "soft End Of Life"
+
+To keep this project stable, secure, clean and minimal I've decided to reduce the development of HUGE to a 
+minimum. *Don't worry, this is actually a good thing:* New features usually mean new bugs, lots of testing, fixes, 
+incompatibilities, and for some people even hardcore update stress. As HUGE is a security-critical script new features 
+are not as important as a stable and secure core, this is why people use it. This means:
+
+- HUGE will not get new features
+- but will be maintained, so it will get bugfixes, corrections etc for sure, maybe for years
+
+And to be honest, maintaining a framework for free in my rare free-time is also not what I want to do permanently. :)
+
+Finally a little note: The PHP world has evolved dramatically, we have excellent frameworks with awesome features and 
+big professional teams behind, very well written documentations and large communities, so there's simply no reason 
+to put much work into another framework. Instead, please commit to the popular frameworks, then your work will have
+much more impact and is used by much more people!
+
+Thanks to everybody around this project, have a wonderful time! 
+XOXO,
+Chris
+
+#### Releases & development  
+
+* stable [v3.1](https://github.com/panique/huge/releases/tag/v3.1),
+* public beta branch: [master](https://github.com/panique/huge)
+* public in-development branch (please commit new code here): [develop](https://github.com/panique/huge/tree/develop)
+
 #### Quick-Index 
 
 + [Features](#features)
@@ -34,14 +62,17 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 + [License](#license)
 + [Requirements](#requirements)
 + [Auto-Installation](#auto-installation)
-    - [Auto-Installation in Vagrant](#auto-installation-vagrant)
+    - [Auto-Installation in Vagrant](#auto-installation-vagrant) (also useful for 100% reproducible installation of HUGE)
     - [Auto-Installation in Ubuntu 14.04 LTS server](#auto-installation-ubuntu)
 + [Installation (Ubuntu 14.04 LTS)](#installation)
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
     - [NGINX setup](#nginx-setup)
-+ [Documentation](#documentation)  
++ [Documentation](#documentation)
+    - [How to use the user roles](#user_roles)
+    - [How to use the CSRF feature](#csrf)
 + [Community-provided features & feature discussions](#community)
++ [Future of the project, announcing soft EOL](#future)
 + [Why is there no support forum anymore ?](#why-no-support-forum)
 + [Zero tolerance for idiots, trolls and vandals](#zero-tolerance)
 + [Contribute](#contribute)
@@ -50,20 +81,35 @@ Some interesting Buzzwords in this context: [KISS](http://en.wikipedia.org/wiki/
 
 ### The History of HUGE
 
-This script was formerly named "php-login" and by far the most popular version of the 4 simple PHP user auth
-scripts of [The PHP Login Project](http://www.php-login.net) (a collection of simple login scripts, made to prevent 
-people from using totally outdated and insecure MD5 password hashing, which was still very popular in the PHP world 
-back in 2012).
+Back in 2010/2011 there were no useful login solutions in the PHP world, at least not for non-experts. So I did the worst 
+mistake every young developer does: Trying to build something by myself without having any clue about security basics.
+What made it even worse was: The web was (and is) full of totally broken tutorials about building user authentication 
+systems, even the biggest companies in the world did this completely wrong (we are talking about SONY, LinkedIn and
+Adobe here), and also lots of major framework in all big programming languages (!) used totally outdated and insecure
+password saving technologies.
 
-Why the name "HUGE" ? It's a nice combination to 
+However, in 2012 security expert [Anthony Ferrara](https://github.com/ircmaxell) published a [little PHP library](https://github.com/ircmaxell/password_compat),
+allowing extremely secure, modern and correct hashing of passwords in PHP 5.3 and 5.4, usable by every developer without any stress and without any knowledge
+about security internals. The script was so awesome that it was written into the core of PHP 5.5, it's the de-facto standard these days.
+
+When this came out I tried to use this naked library to build a fully working out-of-the-box login system for several private and commercial projects,
+and put the code on GitHub. Lots of people found this useful, contributed and bugfixed the project, made forks, smaller and larger versions.
+The result is this project.
+ 
+Please note: Now, in 2015, most major frameworks have excellent user authentication logic embedded by default. This was 
+not the case years ago. So, from today's perspective it might be smarter to chose Laravel, Yii or Symfony for serious
+projects. But feel free to try out HUGE, the auto-installer will spin up a fully working installation within minutes and
+without any configuration.
+
+And why the name "HUGE" ? It's a nice combination to 
 [TINY](https://github.com/panique/tiny), 
 [MINI](https://github.com/panique/mini) and 
-[MINI2](https://github.com/panique/mini2), my other projects :)
+[MINI2](https://github.com/panique/mini2), some of my other older projects. :)
 
 ### Features <a name="features"></a>
 * built with the official PHP password hashing functions, fitting the most modern password hashing/salting web standards
+* proper security features, like CSRF blocking (via form tokens), encryption of cookie contents etc.
 * users can register, login, logout (with username, email, password)
-* [planned: OAuth2 implementation for proper future-proof 3rd party auth]
 * password-forget / reset
 * remember-me (login via cookie)
 * account verification via mail
@@ -71,23 +117,29 @@ Why the name "HUGE" ? It's a nice combination to
 * failed-login-throttling
 * user profiles
 * account upgrade / downgrade
+* simple user types (type 1, type 2, admin)
 * supports local avatars and remote Gravatars
 * supports native mail and SMTP sending (via PHPMailer and other tools)
 * uses PDO for database access for sure, has nice DatabaseFactory (in case your project goes big) 
 * uses URL rewriting ("beautiful URLs")
 * proper split of application and public files (requests only go into /public)
-* uses Composer to load external dependencies (PHPMailer, Captcha-Generator, etc.)
+* uses Composer to load external dependencies (PHPMailer, Captcha-Generator, etc.) for sure
 * fits PSR-0/1/2/4 coding guidelines
+* uses [Post-Redirect-Get pattern](https://en.wikipedia.org/wiki/Post/Redirect/Get) for nice application flow
 * masses of comments
-* is actively developed, maintained and bug-fixed
+* is actively maintained and bug-fixed (however, no big new features as project slowly reaches End of Life)
 
+### Planned features
+
+* A real documentation (currently there's none, but the code is well commented)
+  
 ### Live-Demo <a name="live-demo"></a>
 
-See a [live demo here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
+See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
 
 ### Support the project <a name="support"></a>
 
-There a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
+There is a lot of work behind this project. I might save you hundreds, maybe thousands of hours of work (calculate that
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
@@ -97,11 +149,6 @@ Support the project by renting a server at [Host1Plus](https://affiliates.host1p
 or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
 
 Also feel free to contribute to this project.
-
-### Follow the project <a name="follow"></a>
-
-Here on **[Twitter](https://twitter.com/simplephplogin)** or **[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)**. 
-I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
 
 ### License <a name="license"></a>
 
@@ -323,12 +370,13 @@ There are several files in the root folder of the project that might be irritati
 
 A real documentation is in the making. Until then, please have a look at the code and use your IDE's code completion 
 features to get an idea how things work, it's quite obvious when you look at the controller files, the model files and
-how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare :)
+how data is shown in the view files. A big sorry that there's no documentation yet, but time is rare and we are all
+doing this for free in our free time :)
  
- TODO: Full documentation
- TODO: Basic examples on how to do things
+ - TODO: Full documentation
+ - TODO: Basic examples on how to do things
  
-#### The different user roles
+#### How to use the different user roles <a name="user_roles"></a>
 
 Currently there are two types of users: Normal users and admins. There are exactly the same, but...
  
@@ -337,11 +385,58 @@ have a value of `7` inside the database table field `user_account_type`. They ca
 (as this wouldn't make sense).
 
 2. Normal users don't have admin features for sure. But they can upgrade and downgrade their accounts (try it out via
-/login/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
+/user/changeUserRole), which is basically a super-simple implementation of the basic-user / premium-user concept. 
 Normal users have a value of `1` or `2` inside the database table field `user_account_type`. By default all new 
 registered users are normal users with user role 1 for sure.
 
 See the "Testing with demo users" section of this readme for more info.
+
+There's also a very interesting [pull request adding user roles and user permissions](https://github.com/panique/huge/pull/691),
+which is not integrated into the project as it's too advanced and complex. But, this might be exactly what you need,
+feel free to try.
+
+#### How to use the CSRF feature <a name="csrf"></a>
+ 
+To prevent [CSRF attacks](https://en.wikipedia.org/wiki/Cross-site_request_forgery), HUGE does this in the most common 
+way, by using a security *token* when the user submits critical forms. This means: When PHP renders a form for the user, 
+the application puts a "random string" inside the form (as a hidden input field), generated via Csrf::makeToken() 
+(application/core/Csrf.php), which also saves this token to the session. When the form is submitted, the application 
+checks if the POST request contains exactly the form token that is inside the session.
+  
+This CSRF prevention feature is currently implemented on the login form process (see *application/view/login/index.php*)
+and user name change form process (see *application/view/user/editUsername.php*), most other forms are not security-
+critical and should stay as simple as possible.
+
+So, to do this with a normal form, simply: At your form, before the submit button put:
+`<input type="hidden" name="csrf_token" value="<?= Csrf::makeToken(); ?>" />`
+Then, in the controller action validate the CSRF token submitted with the form by doing:
+```
+// check if csrf token is valid
+if (!Csrf::isTokenValid()) {
+    LoginModel::logout();
+    Redirect::home();
+    exit();
+}
+```
+
+A big thanks to OmarElGabry for implementing this!
+
+#### Can a user be logged in from multiple devices ?
+
+In theory: Yes, but this feature didn't work in my tests. As it's an external feature please have a look into the 
+[according ticket](https://github.com/panique/huge/pull/693) for more.
+
+#### Troubleshooting & Glitches
+
+* In 3.0 and 3.1 a user could log into the application from different devices / browsers / locations. This was intended
+  behaviour as this is standard in most web applications these days. In 3.2 still feature is "missing" by default, a 
+  user will only be able to log in from one browser at the same time. This is a security improvement, but for sure not 
+  optimal for many developers. The plan is to implement a config switch that will allow / disallow logins from multiple 
+  browsers.
+* Using this on a sub-domain ? You might get problems with the cookies in IE11. Fix this by replacing "/" with "./" of 
+  the cookie location COOKIE_PATH inside application/config/config.xxx.php! 
+  Check [ticket #733](https://github.com/panique/huge/issues/733) for more info. Thanks to jahbiuabft for figuring this
+  out. Update: There's another ticket focusing on the same issue: [ticket #681](https://github.com/panique/huge/issues/681)
  
 ### Community-provided features & feature discussions <a name="community"></a>
 
@@ -350,18 +445,63 @@ to go into the main version of HUGE, but have a look into these tickets if you a
 
  - [Caching system](https://github.com/panique/huge/issues/643)
  - [ReCaptcha as captcha](https://github.com/panique/huge/issues/665)
+ - [Internationalization feature](https://github.com/panique/huge/issues/582)
+ - [Using controller A inside controller B](https://github.com/panique/huge/issues/706)
+ - [HTML mails](https://github.com/panique/huge/issues/738)
+ - [Deep user roles / user permission system](https://github.com/panique/huge/pull/691)
  
-### Future of the project: As simple as possible!
+### Future of HUGE: Announcing "soft End Of Life" <a name="future"></a>
  
-The idea of this project was (or is) to provide a super-simple barebone application with a full user authentication
-system inside. For future development it might be cool to avoid feature hell and overbloated code, so please let's keep
-this project simple, clean and minimal with these few "rules": :)
+The idea of this project is and was to provide a super-simple barebone application with a full user authentication
+system inside that just works fine and stable. Due to the highly security-related nature of this script any changes 
+mean a lot of work, lots of testing, catching edge cases etc., and in the end I spent 90% of the time testing and fixing
+new features or new features break existing stuff, and doing this is really not what anybody wants to do for free in
+the rare free-time :)
+
+To keep the project stable, clean and maintainable, I would kindly announce the "soft-End of Life" for this project, 
+meaning:
+
+A. HUGE will not get any new features in the future, but ...
+B. bugfixes and corrections will be made, probably for years
+
+### Coding guideline behind HUGE
+
+While HUGE was in development, there were 3 main rules that helped me (and probably others) to write minimal, clean
+ and working code. Might be useful for you too:
 
 1. Reduce features to the bare minimum.
 2. Don't implement features that are not needed by most users.
 3. Only build everything for the most common use case (like MySQL, not PostGre, NoSQL etc).
+
+As noted in the intro of this README, there are also some powerful concepts that might help you when developing cool 
+stuff: [KISS](http://en.wikipedia.org/wiki/KISS_principle), 
+[YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), [Feature Creep](https://en.wikipedia.org/wiki/Feature_creep),
+[Minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product).
  
-More on this ticket: [Keep the project as simple as possible](https://github.com/panique/huge/issues/664). 
+#### List of features / ideas provided in tickets / pull requests
+
+To avoid unnecessary work for all of us I would kindly recommend everybody to use HUGE for simple project that only
+need the features that already exist, and if you really need a RESTful architecture, migrations, routing, 2FA etc,
+then it's easier, cleaner and faster to simply use Laravel, Symfony or Zend.
+
+However, here are the community-suggested possible features, taken from lots of tickets. Feel free to implement them
+into your forks of the project: 
+
+* OAuth2 implementation (let your users create accounts and login via 3rd party auth, like Facebook, Twitter, GitHub, 
+  etc). As this is a lot of work and would make the project much more complicated it might make sense to do this in a 
+  fork or totally skip it. (see [Ticket #528](https://github.com/panique/huge/issues/528))
+* Router (map all URLs to according controller-methods inside one file), [Ticket 727](https://github.com/panique/huge/issues/727)
+* RESTful architecture (see [ticket #488](https://github.com/panique/huge/issues/488) for discussion)
+* Horizontal MySQL scaling (see [ticket #423](https://github.com/panique/huge/issues/423) for discussion)
+* Modules / middleware
+* Logging
+* Two-Factor-Authentication (see [ticket #732](https://github.com/panique/huge/issues/732))
+* Controller-less URLs (see [ticket #704](https://github.com/panique/huge/issues/704))
+* Email-re-validation after email change (see [ticket #705](https://github.com/panique/huge/issues/705))
+* Connect to multiple databases (see [ticket #702](https://github.com/panique/huge/issues/702))
+* A deeper user role system (see [ticket #701](https://github.com/panique/huge/issues/701), 
+[pull-request #691](https://github.com/panique/huge/pull/691)), 
+[ticket #603](https://github.com/panique/huge/issues/603)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
@@ -417,7 +557,7 @@ an normal GitHub issue.
 
 ### Current and further development
 
-See active issues and requested features here:
+See active issues here:
 https://github.com/panique/huge/issues?state=open
 
 ### Why you should use a favicon.ico in your project :)
@@ -436,6 +576,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 
 ### Useful links
 
+- [How long will my session last?](http://stackoverflow.com/questions/1516266/how-long-will-my-session-last/1516338#1516338)
+- [How to do expire a PHP session after X minutes?](http://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes/1270960#1270960)
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 - [A short guideline on how to use the PHP 5.5 password hashing functions and its PHP 5.3 & 5.4 implementations](http://www.dev-metal.com/use-php-5-5-password-hashing-functions/)
 - [How to setup latest version of PHP 5.5 on Ubuntu 12.04 LTS](http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/)
@@ -443,6 +585,14 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/huge/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/huge/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 - [How to prevent PHP sessions being shared between different apache vhosts / different applications](http://www.dev-metal.com/prevent-php-sessions-shared-different-apache-vhosts-different-applications/)
+
+## Interesting links regarding user authentication and application security
+
+- [interesting article about password resets (by Troy Hunt, security expert)](http://www.troyhunt.com/2012/05/everything-you-ever-wanted-to-know.html)
+- Password-Free Email Logins: [Ticket & discussion](https://github.com/panique/huge/issues/674), [article](http://techcrunch.com/2015/06/30/blogging-site-medium-rolls-out-password-free-email-logins/?ref=webdesignernews.com)
+- Logging in via QR code: [Ticket & discussion](https://github.com/panique/huge/issues/290), [english article](https://www.grc.com/sqrl/sqrl.htm), 
+  [german article](http://www.phpgangsta.de/sesam-oeffne-dich-sicher-einloggen-im-internetcafe), 
+  [repo](https://github.com/PHPGangsta/Sesame), [live-demo](http://sesame.phpgangsta.de/). Big thanks to *PHPGangsta* for writing this!
 
 ### Side-facts
 
@@ -452,3 +602,8 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
    I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
    professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
    for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.
+   
+### My blog
+
+I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**, have a visit if you like. Mostly PHP stuff, conference 
+talks and general IT issues.
