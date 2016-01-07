@@ -43,8 +43,8 @@ class Encryption
     {
         if (!function_exists('openssl_cipher_iv_length') ||
             !function_exists('openssl_random_pseudo_bytes') ||
-            !function_exists('openssl_encrypt')
-        ) {
+            !function_exists('openssl_encrypt')) {
+
             throw new Exception("Encryption function don't exists");
         }
 
@@ -83,8 +83,8 @@ class Encryption
         }
 
         if (!function_exists('openssl_cipher_iv_length') ||
-            !function_exists('openssl_decrypt')
-        ) {
+            !function_exists('openssl_decrypt')) {
+
             throw new Exception("Encryption function don't exists");
         }
 
