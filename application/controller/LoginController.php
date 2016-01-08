@@ -55,7 +55,11 @@ class LoginController extends Controller
                 Redirect::to('user/index');
             }
         } else {
-            Redirect::to('login/index');
+            if (Request::post('redirect')) {
+                Redirect::to('login?redirect=' . ltrim(urlencode(Request::post('redirect')), '/'));
+            } else {
+                Redirect::to('login/index');
+            }
         }
     }
 
