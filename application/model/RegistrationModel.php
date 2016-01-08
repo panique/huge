@@ -15,16 +15,15 @@ class RegistrationModel
 	 */
 	public static function registerNewUser()
 	{
-		// TODO this could be written simpler and cleaner
-
 		// clean the input
 		$user_name = strip_tags(Request::post('user_name'));
 		$user_email = strip_tags(Request::post('user_email'));
+		$user_email_repeat = strip_tags(Request::post('user_email_repeat'));
 		$user_password_new = Request::post('user_password_new');
 		$user_password_repeat = Request::post('user_password_repeat');
 
 		// stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
-		$validation_result = self::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email);
+		$validation_result = self::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email, $user_email_repeat);
 		if (!$validation_result) {
 			return false;
 		}
@@ -48,8 +47,8 @@ class RegistrationModel
 			$return = false;
 		}
 
-        	// if Username or Email were false, return false
-        	if(!$return) return false;
+        // if Username or Email were false, return false
+        if (!$return) return false;
 
 		// generate random hash for email verification (40 char string)
 		$user_activation_hash = sha1(uniqid(mt_rand(), true));
@@ -88,10 +87,11 @@ class RegistrationModel
 	 * @param $user_password_new
 	 * @param $user_password_repeat
 	 * @param $user_email
+	 * @param $user_email_repeat
 	 *
 	 * @return bool
 	 */
-	public static function registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email)
+	public static function registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email, $user_email_repeat)
 	{
         $return = true;
 
@@ -102,7 +102,7 @@ class RegistrationModel
 		}
 
         // if username, email and password are all correctly validated, but make sure they all run on first sumbit
-        if (self::validateUserName($user_name) AND self::validateUserEmail($user_email) AND self::validateUserPassword($user_password_new, $user_password_repeat) AND $return) {
+        if (self::validateUserName($user_name) AND self::validateUserEmail($user_email, $user_email_repeat) AND self::validateUserPassword($user_password_new, $user_password_repeat) AND $return) {
             return true;
         }
 
@@ -136,14 +136,20 @@ class RegistrationModel
      * Validates the email
      *
      * @param $user_email
+	 * @param $user_email_repeat
      * @return bool
      */
-    public static function validateUserEmail($user_email)
+    public static function validateUserEmail($user_email, $user_email_repeat)
     {
         if (empty($user_email)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_FIELD_EMPTY'));
             return false;
         }
+
+		if ($user_email !== $user_email_repeat) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_REPEAT_WRONG'));
+			return false;
+		}
 
         // validate the email with PHP's internal filter
         // side-fact: Max length seems to be 254 chars
