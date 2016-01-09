@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `huge`.`users` (
  `user_activation_hash` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s email verification hash string',
  `user_password_reset_hash` char(40) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s password reset code',
  `user_password_reset_timestamp` bigint(20) DEFAULT NULL COMMENT 'timestamp of the password reset request',
+ `user_password_reset_attempts` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'user''s failed password reset attempts with current reset code',
  `user_provider_type` text COLLATE utf8_unicode_ci,
  PRIMARY KEY (`user_id`),
  UNIQUE KEY `user_name` (`user_name`),
