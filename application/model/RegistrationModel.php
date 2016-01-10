@@ -248,8 +248,14 @@ class RegistrationModel
      */
     public static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
+        // Hash user's id and user's activation hash together.
+        // We get nice looking hashed value without any special chars.
+        // Sha256 used because of discussion here https://github.com/panique/huge/issues/776 (not sure is it good or not yet)
+        // To be more secure, salt or secret key can be added to hash function.
+        $hashed_user_data = hash('sha256' , $user_id . $user_activation_hash);
+
         $body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
-                . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
+                . '/' . urlencode($hashed_user_data) . '/' . urlencode($user_activation_hash);
 
         $mail = new Mail;
         $mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
