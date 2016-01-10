@@ -50,7 +50,8 @@ class RegisterController extends Controller
      */
     public function verify($user_activation_verification_code)
     {
-		$user_id = Encryption::decrypt(Request::get("user_id"));
+	$user_id = Request::get("user_id");
+	$user_id = empty($user_id)? null: Encryption::decrypt($user_id);
 		
         if (isset($user_id) && isset($user_activation_verification_code)) {
             RegistrationModel::verifyNewUser($user_id, $user_activation_verification_code);
