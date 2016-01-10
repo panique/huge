@@ -340,4 +340,24 @@ class UserModel
         // return one row (we only have one result or nothing)
         return $query->fetch();
     }
+
+    /**
+     * Gets the user's data by user activation hash.
+     * @param  string $user_activation_hash_code Hash code generated in registration process.
+     * @return mixed Returns false if activation hash code does not exist, returns object with user's data
+     */
+    public static function getUserDataByUserActivationHash($user_activation_hash_code)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("SELECT user_id, user_activation_hash
+                                       FROM users
+                                      WHERE user_activation_hash = :user_activation_hash_code
+                                      LIMIT 1
+        ");
+        $query->execute(array(':user_activation_hash_code' => $user_activation_hash_code));
+
+        // return one row (we only have one result or nothing)
+        return $query->fetch();
+    }
 }
