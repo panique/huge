@@ -68,6 +68,7 @@ class AvatarModel
     {
         // check avatar folder writing rights, check if upload fits all rules
         if (self::isAvatarFolderWritable() AND self::validateImageFile()) {
+
             // create a jpg file in the avatar folder, write marker to database
             $target_file_path = Config::get('PATH_AVATARS') . Session::get('user_id');
             self::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'));
