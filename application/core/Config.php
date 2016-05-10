@@ -9,7 +9,7 @@ class Config
     {
         if (!self::$config) {
 
-	        $config_file = '../application/config/config.' . Environment::get() . '.php';
+	        $config_file = realpath(__DIR__) . '/../config/config.' . Environment::get() . '.php';
 
 			if (!file_exists($config_file)) {
 				return false;
