@@ -128,27 +128,40 @@ class PasswordResetModel
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		// check if user-provided username + verification code combination exists
-		$sql = "SELECT user_id, user_password_reset_timestamp
+		$sql = "SELECT user_id, user_password_reset_hash, user_password_reset_timestamp
                   FROM users
                  WHERE user_name = :user_name
-                       AND user_password_reset_hash = :user_password_reset_hash
                        AND user_provider_type = :user_provider_type
                  LIMIT 1";
 		$query = $database->prepare($sql);
 		$query->execute(array(
-			':user_password_reset_hash' => $verification_code, ':user_name' => $user_name,
+			':user_name' => $user_name,
 			':user_provider_type' => 'DEFAULT'
 		));
-
-		// if this user with exactly this verification hash code does NOT exist
-		if ($query->rowCount() != 1) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_COMBINATION_DOES_NOT_EXIST'));
+		
+		//if username does not exist
+		if($query->rowCount() != 1) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_USER_DOES_NOT_EXIST'));
 			return false;
 		}
 
 		// get result row (as an object)
 		$result_user_row = $query->fetch();
-
+		
+		// if this user's verification hash code does NOT exist
+		if ($result_user_row->user_password_reset_hash == NULL) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_TOKEN_INVALID'));
+			return false;
+		}
+		
+		// if this user's verification hash code does not match
+		// marks existing request as expired
+		if ($result_user_row->user_password_reset_hash != $verification_code) {
+			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_TOKEN_INVALID'));
+			self::expirePasswordReset($user_name);
+			return false;
+		}
+		
 		// 3600 seconds are 1 hour
 		$timestamp_one_hour_ago = time() - 3600;
 
@@ -161,6 +174,37 @@ class PasswordResetModel
 			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_RESET_LINK_EXPIRED'));
 			return false;
 		}
+	}
+	
+	/**
+	 * Marks existing password reset request as expired to prevent prevent guessing hash codes
+	 * @param string $user_name Username
+	 * @return bool Success status
+	 */
+	private static function expirePasswordReset($user_name) {
+		// 3600 seconds are 1 hour
+		$timestamp_one_hour_ago = time() - 3600;
+		
+		$database = DatabaseFactory::getFactory()->getConnection();
+
+		$sql = "UPDATE users
+                SET user_password_reset_timestamp = :user_password_reset_timestamp
+                WHERE user_name = :user_name AND user_provider_type = :provider_type LIMIT 1";
+		$query = $database->prepare($sql);
+		$query->execute(array(
+			':user_name' => $user_name,
+			':user_password_reset_timestamp' => $timestamp_one_hour_ago,
+			':provider_type' => 'DEFAULT'
+		));
+
+		// check if exactly one row was successfully changed
+		if ($query->rowCount() == 1) {
+			return true;
+		}
+
+		// user feedback not necessary here
+		// but adding a note in the logs may be useful
+		return false;
 	}
 
 	/**
