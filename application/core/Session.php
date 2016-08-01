@@ -40,8 +40,9 @@ class Session
     {
         if (isset($_SESSION[$key])) {
             $value = $_SESSION[$key];
-        	// filter the value for XSS vulnerabilities
-        	return Filter::XSSFilter($value);
+
+            // filter the value for XSS vulnerabilities
+            return Filter::XSSFilter($value);
         }
     }
 
@@ -74,8 +75,8 @@ class Session
      * @param  string $sessionId
      * @return string
      */
-    public static function updateSessionId($userId, $sessionId = null){
-
+    public static function updateSessionId($userId, $sessionId = null)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "UPDATE users SET session_id = :session_id WHERE user_id = :user_id";
 
@@ -102,12 +103,12 @@ class Session
      * @see Session::updateSessionId()
      * @see http://stackoverflow.com/questions/6126285/php-stop-concurrent-user-logins
      */
-    public static function isConcurrentSessionExists(){
-
+    public static function isConcurrentSessionExists()
+    {
         $session_id = session_id();
         $userId     = Session::get('user_id');
 
-        if(isset($userId) && isset($session_id)){
+        if (isset($userId) && isset($session_id)) {
 
             $database = DatabaseFactory::getFactory()->getConnection();
             $sql = "SELECT session_id FROM users WHERE user_id = :user_id LIMIT 1";
