@@ -1,4 +1,4 @@
-[![HUGE, formerly "php-login" logo](_pictures/huge-logo.png)](http://www.php-login.net)
+![HUGE, formerly "php-login" logo](_pictures/huge.png)
 
 # HUGE
 
