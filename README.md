@@ -294,7 +294,7 @@ Remove Apache's default demo file
 sudo rm "/var/www/html/index.html"
 ```
 
-Edit the application's config in application/config.development.php and put in your database credentials.
+Edit the application's config in application/config/config.development.php and put in your database credentials.
 
 Last part (not needed for a first test): Set your SMTP credentials in the same file and set EMAIL_USE_SMTP to true, so
 you can send proper emails. It's highly recommended to use SMTP for mail sending! Native sending via PHP's mail() will
