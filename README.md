@@ -143,10 +143,11 @@ There is a lot of work behind this project. I might save you hundreds, maybe tho
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
-[![Support via affiliate](_pictures/support-via-host1plus.png)](https://affiliates.host1plus.com/ref/devmetal/36f4d828.html)
+[![Support via affiliate](_pictures/banner-rackspace.png)](http://tracking.rackspace.com/SH1ES)
+![Support banner tracking pixel](http://tracking.rackspace.com/aff_i?offer_id=2&aff_id=3472)
 
-Support the project by renting a server at [Host1Plus](https://affiliates.host1plus.com/ref/devmetal/36f4d828.html) or
-or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
+Support the project by renting a server at [Rackspace](http://tracking.rackspace.com/SH1ES) or
+at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
 
 Also feel free to contribute to this project.
 
@@ -203,8 +204,6 @@ Run it! Give it some minutes to perform all the tasks. And yes, you can thank me
 sudo ./bootstrap.sh
 ```
 ### Installation <a name="installation"></a>
-
-This script is very fresh, so the install guidelines are not perfect yet. 
 
 #### Quick guide: <a name="quick-installation"></a>
 
@@ -593,17 +592,7 @@ More here on Stackflow: [How to prevent favicon.ico requests?](http://stackoverf
 - Logging in via QR code: [Ticket & discussion](https://github.com/panique/huge/issues/290), [english article](https://www.grc.com/sqrl/sqrl.htm), 
   [german article](http://www.phpgangsta.de/sesam-oeffne-dich-sicher-einloggen-im-internetcafe), 
   [repo](https://github.com/PHPGangsta/Sesame), [live-demo](http://sesame.phpgangsta.de/). Big thanks to *PHPGangsta* for writing this!
-
-### Side-facts
-
-1. Weird! When I renamed php-login to HUGE (to get rid off the too generic project name and to make it fitting nicely
-   to MINI, TINY and MINI2, my other projects) I had a research if the word "huge" is already used in the php world for 
-   sure. Nothing came up. Then, weeks later, I stumbled upon this: https://github.com/ffremont/HugeRest
-   I nice little framework in PHP, but it has only 1 star on Github, so it's obviously not so widely used. Looks very 
-   professional, too. Hmm.... The guy behind published the entire readme etc. in pure french (!), so it's hard to use 
-   for non-french-speaking people. However, I'm not related to him in any way, this is pure coincidence.
-   
+  
 ### My blog
 
-I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**, have a visit if you like. Mostly PHP stuff, conference 
-talks and general IT issues.
+I'm also blogging at **[Dev Metal](http://www.dev-metal.com)**.
