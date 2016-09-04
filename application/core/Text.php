@@ -19,7 +19,7 @@ class Text
 
         // load config file (this is only done once per application lifecycle)
         if (!self::$texts) {
-            self::$texts = require('../application/config/texts.php');
+            self::$texts = require(dirname(__DIR__) . '/config/texts.php');
         }
 
         // check if array key exists
