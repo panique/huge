@@ -143,10 +143,7 @@ There is a lot of work behind this project. I might save you hundreds, maybe tho
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
-[![Support via affiliate](_pictures/banner-rackspace.png)](http://tracking.rackspace.com/SH1ES)
-![Support banner tracking pixel](http://tracking.rackspace.com/aff_i?offer_id=2&aff_id=3472)
-
-Support the project by renting a server at [Rackspace](http://tracking.rackspace.com/SH1ES) or
+Support the project by renting a server at [1&1](http://www.jdoqocy.com/click-8225473-12015878-1477926464000) or
 at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
 
 Also feel free to contribute to this project.
