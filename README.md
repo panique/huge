@@ -135,7 +135,7 @@ And why the name "HUGE" ? It's a nice combination to
   
 ### Live-Demo <a name="live-demo"></a>
 
-See a [live demo of older 3.0 version here](http://demo-huge.php-login.net) and [the server's phpinfo() here](http://demo-huge.php-login.net/info.php).
+See a [live demo of older 3.0 version here](http://104.131.8.128) and [the server's phpinfo() here](104.131.8.128/info.php).
 
 ### Support the project <a name="support"></a>
 
@@ -290,7 +290,7 @@ Remove Apache's default demo file
 sudo rm "/var/www/html/index.html"
 ```
 
-Edit the application's config in application/config.development.php and put in your database credentials.
+Edit the application's config in application/config/config.development.php and put in your database credentials.
 
 Last part (not needed for a first test): Set your SMTP credentials in the same file and set EMAIL_USE_SMTP to true, so
 you can send proper emails. It's highly recommended to use SMTP for mail sending! Native sending via PHP's mail() will
