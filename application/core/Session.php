@@ -73,7 +73,6 @@ class Session
      * @static static method
      * @param  string $userId
      * @param  string $sessionId
-     * @return string
      */
     public static function updateSessionId($userId, $sessionId = null)
     {
@@ -82,7 +81,6 @@ class Session
 
         $query = $database->prepare($sql);
         $query->execute(array(':session_id' => $sessionId, ":user_id" => $userId));
-
     }
 
     /**
