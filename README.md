@@ -498,6 +498,7 @@ into your forks of the project:
 * A deeper user role system (see [ticket #701](https://github.com/panique/huge/issues/701), 
 [pull-request #691](https://github.com/panique/huge/pull/691)), 
 [ticket #603](https://github.com/panique/huge/issues/603)
+* How to run without using Composer [ticket #826](https://github.com/panique/huge/issues/826)
 
 ### Why is there no support forum (anymore) ? <a name="why-no-support-forum"></a>
 
