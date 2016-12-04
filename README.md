@@ -68,6 +68,7 @@ Chris
     - [Quick Installation](#quick-installation)
     - [Detailed Installation](#detailed-installation)
     - [NGINX setup](#nginx-setup)
+    - [IIS setup](#iis-setup)
 + [Documentation](#documentation)
     - [How to use the user roles](#user_roles)
     - [How to use the CSRF feature](#csrf)
@@ -336,6 +337,33 @@ server {
     }
 }
 ```
+
+#### IIS setup: <a name="iis-setup"></a>
+
+Big thanks to razuro for this fine setup: Put this inside your root folder, but don't put any web.config in your public 
+folder.
+
+```
+<?xml version="1.0" encoding="UTF-8"?><configuration>
+    <system.webServer>
+        <rewrite>
+            <rules>
+			
+                <rule name="Imported Rule 1" stopProcessing="true">
+                    <match url="^(.*)$" ignoreCase="false" />
+					<conditions logicalGrouping="MatchAll">
+                        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true" />
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="public/index.php?url={R:1}" />
+                </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>
+```
+
+Find the original [ticket here](https://github.com/panique/huge/issues/788).
 
 #### Testing with demo users
 
