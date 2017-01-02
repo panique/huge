@@ -54,6 +54,9 @@ class Mail
     public function sendMailWithPHPMailer($user_email, $from_email, $from_name, $subject, $body)
     {
         $mail = new PHPMailer;
+        
+        // you should use UTF-8 to avoid encoding issues
+        $mail->CharSet = 'UTF-8';
 
         // if you want to send mail via PHPMailer using SMTP credentials
         if (Config::get('EMAIL_USE_SMTP')) {
