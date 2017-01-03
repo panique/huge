@@ -37,7 +37,7 @@ class CaptchaModel
      */
     public static function checkCaptcha($captcha)
     {
-        if ($captcha == Session::get('captcha')) {
+        if (Session::get('captcha') && ($captcha == Session::get('captcha'))) {
             return true;
         }
 
