@@ -76,7 +76,9 @@ sudo mysql -h "localhost" -u "root" "-p${PASSWORD}" < "/var/www/html/${PROJECTFO
 sudo mysql -h "localhost" -u "root" "-p${PASSWORD}" < "/var/www/html/${PROJECTFOLDER}/application/_installation/03-create-table-notes.sql"
 
 # writing rights to avatar folder
-sudo chmod 0777 -R "/var/www/html/${PROJECTFOLDER}/public/avatars"
+sudo chown -R www-data "/var/www/html/${PROJECTFOLDER}/public/avatars"
+# if this didn't work for you, you can also try the hard way:
+#sudo chmod 0777 -R "/var/www/html/${PROJECTFOLDER}/public/avatars"
 
 # remove Apache's default demo file
 sudo rm "/var/www/html/index.html"
