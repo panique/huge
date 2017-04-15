@@ -284,7 +284,11 @@ sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_i
 sudo mysql -h "localhost" -u "root" "-p12345678" < "/var/www/html/application/_installation/03-create-table-notes.sql"
 ```
 
-Make avatar folder writable
+Make avatar folder writable (make sure it's the correct path!)
+```bash
+sudo chown -R www-data "/var/www/html/public/avatars"
+```
+If this doesn't work for you, then you might try the hard way by setting alternatively
 ```bash
 sudo chmod 0777 -R "/var/www/html/public/avatars"
 ```
