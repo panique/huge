@@ -21,10 +21,11 @@ class FilterTest extends PHPUnit_Framework_TestCase
         $integer = 123;
         $array = [1, 2, 3];
         $float = 17.001;
+        $null = null;
 
         $this->assertEquals($integer, Filter::XSSFilter($integer));
         $this->assertEquals($array, Filter::XSSFilter($array));
         $this->assertEquals($float, Filter::XSSFilter($float));
-        $this->assertNull(Filter::XSSFilter(null));
+        $this->assertNull(Filter::XSSFilter($null));
     }
 }
