@@ -19,7 +19,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     public function testXSSFilterWithNonStringArguments()
     {
         $integer = 123;
-        $array  = [1,2,3];
+        $array = [1, 2, 3];
         $float = 17.001;
 
         $this->assertEquals($integer, Filter::XSSFilter($integer));
