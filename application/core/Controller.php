@@ -8,8 +8,10 @@
  */
 class Controller
 {
-    /** @var View View The view object */
+    /** @var View The view object */
     public $View;
+    /** @var newController The newController object */
+    public $newController;
 
     /**
      * Construct the (base) controller. This happens when a real controller is constructed, like in
@@ -24,11 +26,23 @@ class Controller
         Auth::checkSessionConcurrency();
 
         // user is not logged in but has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-        if (!Session::userIsLoggedIn() AND Request::cookie('remember_me')) {
+        if (!Session::userIsLoggedIn() && Request::cookie('remember_me')) {
             header('location: ' . Config::get('URL') . 'login/loginWithCookie');
         }
 
         // create a view object to be able to use it inside a controller, like $this->View->render();
         $this->View = new View();
     }
+    /**
+     * This functions allows you to use controller/methods within each other with a simple static call.
+     * The benefit is being able to use methods without the need to copy them into other controllers. Easier on maintainence too.
+     * Controller::method('otherController', 'otherMethod');
+     */
+     public function method($controller, $method)
+     {
+	$controller = $controller.'Controller';
+	require Config::get('PATH_CONTROLLER') . $controller.'.php';
+	$this->newController = new $controller();
+	$this->newController->$method();
+     }
 }
