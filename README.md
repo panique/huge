@@ -290,7 +290,7 @@ sudo chown -R www-data "/var/www/html/public/avatars"
 ```
 If this doesn't work for you, then you might try the hard way by setting alternatively
 ```bash
-sudo chmod 0777 -R "/var/www/html/public/avatars"
+sudo chown -R www-data "/var/www/html/public/avatars"
 ```
 
 Remove Apache's default demo file
