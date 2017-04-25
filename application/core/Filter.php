@@ -54,7 +54,6 @@ class Filter
         // if argument is a string, filters that string
         if (is_string($value)) {
             $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-        }
 
         // if argument is an array or an object, 
         // recursivly filters its content 
