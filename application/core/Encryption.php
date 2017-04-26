@@ -45,7 +45,7 @@ class Encryption
             !function_exists('openssl_random_pseudo_bytes') ||
             !function_exists('openssl_encrypt')) {
 
-            throw new Exception("Encryption function don't exists");
+            throw new Exception('Encryption function doesn\'t exist');
         }
 
         // generate initialization vector,
@@ -79,13 +79,13 @@ class Encryption
     public static function decrypt($ciphertext)
     {
         if (empty($ciphertext)) {
-            throw new Exception("the string to decrypt can't be empty");
+            throw new Exception('The String to decrypt can\'t be empty');
         }
 
         if (!function_exists('openssl_cipher_iv_length') ||
             !function_exists('openssl_decrypt')) {
 
-            throw new Exception("Encryption function don't exists");
+            throw new Exception('Encryption function doesn\'t exist');
         }
 
         // generate key used for authentication using ENCRYPTION_KEY & HMAC_SALT
