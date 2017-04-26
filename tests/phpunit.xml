@@ -14,11 +14,4 @@
             <directory>./core/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../application/core</directory>
-            <directory suffix=".php">../application/model</directory>
-            <directory suffix=".php">../application/controller</directory>
-        </whitelist>
-    </filter>
 </phpunit>
