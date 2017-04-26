@@ -248,8 +248,14 @@ class RegistrationModel
      */
     public static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
+        // Hash user's id and user's activation hash together.
+        // We get nice looking hashed value without any special chars.
+        // Sha256 used because of discussion here https://github.com/panique/huge/issues/776 (not sure is it good or not yet)
+        // To be more secure, salt or secret key can be added to hash function.
+        $hashed_user_data = hash('sha256' , $user_id . $user_activation_hash);
+
         $body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
-                . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
+                . '/' . urlencode($hashed_user_data) . '/' . urlencode($user_activation_hash);
 
         $mail = new Mail;
         $mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
@@ -268,23 +274,47 @@ class RegistrationModel
     /**
      * checks the email/verification code combination and set the user's activation status to true in the database
      *
-     * @param int $user_id user id
+     * @param string $hashed_user_data Hashed user's id and user's activation verification code together.
      * @param string $user_activation_verification_code verification token
      *
      * @return bool success status
      */
-    public static function verifyNewUser($user_id, $user_activation_verification_code)
+    public static function verifyNewUser($hashed_user_data, $user_activation_verification_code)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "UPDATE users SET user_active = 1, user_activation_hash = NULL
-                WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1";
-        $query = $database->prepare($sql);
-        $query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
+        // Get user data (id and user_activation_hash) by activation code sent by email to user
+        // Data from DB wiil be checked with parameters passed to method.
+        $user_data = UserModel::getUserDataByUserActivationHash($user_activation_verification_code);
 
-        if ($query->rowCount() == 1) {
-            Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL'));
-            return true;
+        // No user with that verification code -> return false
+        if (!$user_data) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));
+            return false;
+        }
+
+        // Hash user_id and user_activation_hash from DB the same way as sent in email (see line 255 in this file)
+        $user_db_data_hash = hash('sha256', $user_data->user_id . $user_data->user_activation_hash);
+
+        if ($user_db_data_hash === $hashed_user_data) {
+
+            $sql = "UPDATE users
+                       SET user_active = 1,
+                           user_activation_hash = NULL
+                     WHERE user_id = :user_id
+                       AND user_activation_hash = :user_activation_hash
+                     LIMIT 1
+            ";
+            $query = $database->prepare($sql);
+            $query->execute(array(
+                                    ':user_id' => $user_data->user_id,
+                                    ':user_activation_hash' => $user_data->user_activation_hash
+            ));
+
+            if ($query->rowCount() == 1) {
+                Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL'));
+                return true;
+            }
         }
 
         Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));

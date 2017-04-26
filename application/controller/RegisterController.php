@@ -46,13 +46,13 @@ class RegisterController extends Controller
 
     /**
      * Verify user after activation mail link opened
-     * @param int $user_id user's id
+     * @param string $hashed_user_data Hashed user's id and user's activation verification code together.
      * @param string $user_activation_verification_code user's verification token
      */
-    public function verify($user_id, $user_activation_verification_code)
+    public function verify($hashed_user_data, $user_activation_verification_code)
     {
-        if (isset($user_id) && isset($user_activation_verification_code)) {
-            RegistrationModel::verifyNewUser($user_id, $user_activation_verification_code);
+        if (isset($hashed_user_data) && isset($user_activation_verification_code)) {
+            RegistrationModel::verifyNewUser($hashed_user_data, $user_activation_verification_code);
             $this->View->render('register/verify');
         } else {
             Redirect::to('login/index');
