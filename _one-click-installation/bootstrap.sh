@@ -78,7 +78,7 @@ sudo mysql -h "localhost" -u "root" "-p${PASSWORD}" < "/var/www/html/${PROJECTFO
 # writing rights to avatar folder
 sudo chown -R www-data "/var/www/html/${PROJECTFOLDER}/public/avatars"
 
-# If you are working with Vagrant, adding the www-data user to vagrant's group let you upload images to the avatars folder with 775 permissions.  Of course, it also applies to other folders.
+# If you are working with Vagrant, adding the www-data user to vagrant's group let you upload images to the avatars folder with 755 permissions.  Of course, it also applies to other folders.
 #sudo usermod -a -G vagrant www-data
 
 # if this didn't work for you, you can also try the hard way:
