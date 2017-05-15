@@ -62,6 +62,9 @@ sudo apt-get -y install git
 # git clone HUGE
 sudo git clone https://github.com/panique/huge "/var/www/html/${PROJECTFOLDER}"
 
+# install php cli
+sudo apt-get install php5-cli
+
 # install Composer
 curl -s https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
