@@ -36,7 +36,13 @@ class Application
             // example: if controller would be "car", then this line would translate into: $this->car = new car();
             require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
-
+            // check View is index and if are passing any value
+            if ((int) $this->action_name > 0) 
+            {
+                $this->parameters[] = (int) $this->action_name;
+                $this->action_name = 'index';
+            }
+            
             // check for method: does such a method exist in the controller ?
             if (method_exists($this->controller, $this->action_name)) {
                 if (!empty($this->parameters)) {
