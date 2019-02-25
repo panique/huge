@@ -37,8 +37,8 @@ class Application
             require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
 
-            // check for method: does such a method exist in the controller ?
-            if (method_exists($this->controller, $this->action_name)) {
+            // check are controller and method existing and callable?
+            if (is_callable(array($this->controller, $this->action_name))) {
                 if (!empty($this->parameters)) {
                     // call the method and pass arguments to it
                     call_user_func_array(array($this->controller, $this->action_name), $this->parameters);
