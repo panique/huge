@@ -1,5 +1,8 @@
 <?php
 
+/* Using PHPMailer's namespace */
+use PHPMailer\PHPMailer\PHPMailer;
+
 /**
  * Class Mail
  *
