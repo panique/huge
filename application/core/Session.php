@@ -15,7 +15,9 @@ class Session
     {
         // if no session exist, start the session
         if (session_id() == '') {
-            session_start();
+            session_start([
+                'name' => Config::get("COOKIE_NAME")
+            ]);
         }
     }
 

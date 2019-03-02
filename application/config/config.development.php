@@ -93,6 +93,7 @@ return array(
      * COOKIE_SECURE: If the cookie will be transferred through secured connection(SSL). It's highly recommended to set it to true if you have secured connection.
      * COOKIE_HTTP: If set to true, Cookies that can't be accessed by JS - Highly recommended!
      * SESSION_RUNTIME: How long should a session cookie be valid by seconds, 604800 = 1 week.
+     * COOKIE_NAME: Allows to change the default name of the cookie.
      */
     'COOKIE_RUNTIME' => 1209600,
     'COOKIE_PATH' => '/',
@@ -100,6 +101,7 @@ return array(
     'COOKIE_SECURE' => false,
     'COOKIE_HTTP' => true,
     'SESSION_RUNTIME' => 604800,
+    'COOKIE_NAME' => "PHPSESSID",
     /**
      * Configuration for: Avatars/Gravatar support
      * Set to true if you want to use "Gravatar(s)", a service that automatically gets avatar pictures via using email
