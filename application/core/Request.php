@@ -35,7 +35,7 @@ class Request
      */
     public static function postCheckbox($key)
     {
-        return isset($_POST[$key]) ? 1 : NULL;
+        return isset($_POST[$key]) ? 1 : null;
     }
 
     /**
