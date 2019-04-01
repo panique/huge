@@ -362,7 +362,7 @@ class LoginModel
 
             $sql = "UPDATE users SET user_remember_me_token = :user_remember_me_token WHERE user_id = :user_id LIMIT 1";
             $sth = $database->prepare($sql);
-            $sth->execute(array(':user_remember_me_token' => NULL, ':user_id' => $user_id));
+            $sth->execute(array(':user_remember_me_token' => null, ':user_id' => $user_id));
         }
 
         // delete remember_me cookie in browser

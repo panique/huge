@@ -25,7 +25,7 @@ class LoginController extends Controller
         if (LoginModel::isUserLoggedIn()) {
             Redirect::home();
         } else {
-            $data = array('redirect' => Request::get('redirect') ? Request::get('redirect') : NULL);
+            $data = array('redirect' => Request::get('redirect') ? Request::get('redirect') : null);
             $this->View->render('login/index', $data);
         }
     }
