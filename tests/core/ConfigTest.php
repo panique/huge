@@ -26,6 +26,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
 	public function testGetDefaultEnvironment()
 	{
+		// for testing
+		header_remove(); 
+
         // manually set environment to "development"
 		putenv('APPLICATION_ENV=development');
 
