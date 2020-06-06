@@ -8,13 +8,8 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('testing', Environment::get());
 
 		putenv('APPLICATION_ENV=');
-		$this->assertEquals('development', Environment::get());
-	}
 
-	public function testGetDevelopment()
-	{
-		putenv('APPLICATION_ENV=development');
-		// call for environment should return "development"
+		// call for environment should now return "development", the default value
 		$this->assertEquals('development', Environment::get());
 	}
 
@@ -24,5 +19,11 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('production', Environment::get());
 	}
 
+	public function testGetDevelopment()
+	{
+		putenv('APPLICATION_ENV=development');
+		// call for environment should return "development"
+		$this->assertEquals('development', Environment::get());
+	}
 	
 }
