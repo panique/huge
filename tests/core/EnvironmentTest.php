@@ -4,7 +4,10 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
 {
 	public function testGetDefault()
 	{
-		// call for environment should return "development"
+		// call for environment should return "testing" like set in .travis.yml
+		$this->assertEquals('testing', Environment::get());
+
+		putenv('APPLICATION_ENV=');
 		$this->assertEquals('development', Environment::get());
 	}
 
@@ -20,4 +23,6 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
 		putenv('APPLICATION_ENV=production');
 		$this->assertEquals('production', Environment::get());
 	}
+
+	
 }
