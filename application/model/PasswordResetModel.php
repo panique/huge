@@ -37,7 +37,7 @@ class PasswordResetModel
         // generate integer-timestamp (to see when exactly the user (or an attacker) requested the password reset mail)
         // generate random hash for email password reset verification (40 char string)
         $temporary_timestamp = time();
-        $user_password_reset_hash = sha1(uniqid(mt_rand(), true));
+        $user_password_reset_hash = random_bytes(40);
 
         // set token (= a random hash string and a timestamp) into database ...
         $token_set = self::setPasswordResetDatabaseToken($result->user_name, $user_password_reset_hash, $temporary_timestamp);

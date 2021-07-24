@@ -51,7 +51,7 @@ class RegistrationModel
         if (!$return) return false;
 
         // generate random hash for email verification (40 char string)
-        $user_activation_hash = sha1(uniqid(mt_rand(), true));
+        $user_activation_hash = random_bytes(40);
 
         // write user data to database
         if (!self::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
