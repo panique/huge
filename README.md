@@ -147,8 +147,9 @@ There is a lot of work behind this project. I might save you hundreds, maybe tho
 in developer costs). So when you are earning money by using HUGE, be fair and give something back to open-source.
 HUGE is totally free to private and commercial use.
 
-Support the project by renting a server at [1&1](http://www.jdoqocy.com/click-8225473-12015878-1477926464000) or
-at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20). Thanks! :)
+Support the project by renting a server at [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20) or just tipping a coffee at BuyMeACoffee.com. Thanks! :)
+
+<a href="https://www.buymeacoffee.com/panique" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 Also feel free to contribute to this project.
 
