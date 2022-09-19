@@ -30,7 +30,7 @@ before_script:
     - cd tests
 
 # run unit tests, create result file
-script: ../vendor/bin/phpunit --configuration phpunit.xml --coverage-text --coverage-clover=coverage.clover
+script: ../vendor/bin/phpunit --verbose --debug  --configuration phpunit.xml --coverage-text --coverage-clover=coverage.clover
 
 # gets tools from Scrutinizer, uploads unit tests results to Scrutinizer (?)
 after_script:
