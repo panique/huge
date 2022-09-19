@@ -36,15 +36,16 @@ class Application
             // example: if controller would be "car", then this line would translate into: $this->car = new car();
             require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
-
+            $action_name = str_replace("-", '', $this->action_name);
+            
             // check are controller and method existing and callable?
-            if (is_callable(array($this->controller, $this->action_name))) {
+            if (is_callable(array($this->controller, $action_name))) {
                 if (!empty($this->parameters)) {
                     // call the method and pass arguments to it
-                    call_user_func_array(array($this->controller, $this->action_name), $this->parameters);
+                    call_user_func_array(array($this->controller, $action_name), $this->parameters);
                 } else {
                     // if no parameters are given, just call the method without parameters, like $this->index->index();
-                    $this->controller->{$this->action_name}();
+                    $this->controller->{$action_name}();
                 }
             } else {
                 // load 404 error page
