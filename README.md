@@ -3,11 +3,7 @@
 # HUGE
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/panique/huge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/panique/huge/?branch=master)
-[![Code Climate](https://codeclimate.com/github/panique/huge/badges/gpa.svg)](https://codeclimate.com/github/panique/huge)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/01a221d168b04b1c94a85813519dab40)](https://www.codacy.com/app/panique/huge?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=panique/huge&amp;utm_campaign=Badge_Grade)
 [![Travis CI](https://travis-ci.org/panique/huge.svg?branch=master)](https://travis-ci.org/panique/huge)
-[![Dependency Status](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ca11fbde7924f81a000010)
-[![Support](https://supporterhq.com/api/b/9guz00i6rep05k1mwxyquz30k)](https://supporterhq.com/give/9guz00i6rep05k1mwxyquz30k)
 
 Just a simple user authentication solution inside a super-simple framework skeleton that works out-of-the-box
 (and comes with an auto-installer), using the future-proof official bcrypt password hashing/salting implementation of 
@@ -47,6 +43,14 @@ much more impact and is used by much more people!
 Thanks to everybody around this project, have a wonderful time! 
 XOXO,
 Chris
+
+#### What I’m building now
+
+A short word from the creator of this project. I'm not really doing PHP anymore, but building other things now:
+- [Blackout](https://blackoutapp.io) — turn off your MacBook’s built-in display automatically while using an external monitor, keeping the lid open.
+- [Notes Plus](https://notesplus.io) — an Apple Notes alternative built on local Markdown files, with code highlighting, LaTeX, mhchem, Kanban view etc. (macOS, Windows, Linuxes)
+  
+Maybe you find this useful ;)
 
 #### Releases & development  
 
