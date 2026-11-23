@@ -47,8 +47,8 @@ Chris
 #### What I’m building now
 
 A short word from the creator of this project. I'm not really doing PHP anymore, but building other things now:
-- [Blackout](https://blackoutapp.io) — turn off your MacBook’s built-in display automatically while using an external monitor, keeping the lid open.
-- [Notes Plus](https://notesplus.io) — an Apple Notes alternative built on local Markdown files, with code highlighting, LaTeX, mhchem, Kanban view etc. (macOS, Windows, Linuxes)
+- [Blackout](https://blackoutapp.io?utm_source=github) — turn off your MacBook’s built-in display automatically while using an external monitor, keeping the lid open.
+- [Notes Plus](https://notesplus.io?utm_source=github) — an Apple Notes alternative built on local Markdown files, with code highlighting, LaTeX, mhchem, Kanban view etc. (macOS, Windows, Linuxes)
   
 Maybe you find this useful ;)
 
