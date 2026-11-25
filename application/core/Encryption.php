@@ -62,7 +62,7 @@ class Encryption
         $ciphertext = $iv . $encrypted_string;
 
         // apply the HMAC
-        $hmac = hash_hmac('sha256', $ciphertext, $key);
+        $hmac = hash_hmac(self::HASH_FUNCTION, $ciphertext, $key);
 
         return $hmac . $ciphertext;
     }
@@ -97,7 +97,7 @@ class Encryption
         $iv_cipher = mb_substr($ciphertext, $macSize, null, '8bit');
 
         // generate original hmac & compare it with the one in $ciphertext
-        $originalHmac = hash_hmac('sha256', $iv_cipher, $key);
+        $originalHmac = hash_hmac(self::HASH_FUNCTION, $iv_cipher, $key);
         if (!self::hashEquals($hmac, $originalHmac)) {
             return false;
         }
