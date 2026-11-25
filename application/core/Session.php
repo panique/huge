@@ -84,8 +84,10 @@ class Session
     }
 
     /**
-     * checks for session concurrency
-     *
+     * checks for broken session 
+     * Session could be broken by Session concurrency or when user is deleted / suspended
+     * 
+     * - Session concurrency is done as the following:
      * This is done as the following:
      * UserA logs in with his session id('123') and it will be stored in the database.
      * Then, UserB logs in also using the same email and password of UserA from another PC,
@@ -94,6 +96,9 @@ class Session
      * Now, Whenever UserA performs any action,
      * You then check the session_id() against the last one stored in the database('456'),
      * If they don't match then log both of them out.
+     * 
+     * - Check for deleted / suspended users:
+     * Suspended/deleted users have no userSessionId anymore stored in database
      *
      * @access public
      * @static static method
@@ -101,7 +106,7 @@ class Session
      * @see Session::updateSessionId()
      * @see http://stackoverflow.com/questions/6126285/php-stop-concurrent-user-logins
      */
-    public static function isConcurrentSessionExists()
+    public static function isSessionBroken()
     {
         $session_id = session_id();
         $userId     = Session::get('user_id');
@@ -117,7 +122,7 @@ class Session
             $result = $query->fetch();
             $userSessionId = !empty($result)? $result->session_id: null;
 
-            return $session_id !== $userSessionId;
+            return empty($userSessionId) || $session_id !== $userSessionId;
         }
 
         return false;
